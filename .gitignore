@@ -1,0 +1,5 @@
+*.ds_store
+.env
+audit.html
+dev.ts
+node_modules/
