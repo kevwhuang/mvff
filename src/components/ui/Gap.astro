@@ -1,0 +1,23 @@
+---
+interface Props {
+    border?: boolean;
+}
+
+const { border } = Astro.props;
+---
+
+{border ? (
+    <div class="gap gap--border" aria-hidden="true"></div>
+) : (
+    <div class="gap" aria-hidden="true"></div>
+)}
+
+<style>
+    .gap {
+        height: var(--l-1);
+    }
+
+    .gap--border {
+        border-bottom: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
+    }
+</style>

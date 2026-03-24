@@ -1,3 +1,7 @@
+---
+
+---
+
 <section class="tagline text-center" data-scroll>
     <h1 class="sr-only">ATX Music Video Film Festival</h1>
     <p class="tagline__text">
@@ -8,6 +12,7 @@
         >
         <span
             class="tagline__typed block"
+            aria-label="An immersive production blending music and film, celebrating artists."
             data-text="An immersive production blending music and film, celebrating artists."
         >
         </span>
@@ -18,18 +23,17 @@
     .tagline {
         contain: layout style;
         margin: 0 auto;
-        max-width: var(--max-w);
-        padding: 0 var(--page-px);
+        max-width: var(--l-max);
+        padding: 0 var(--l-3);
     }
 
     .tagline__text {
-        color: var(--c-text-muted);
-        font-family: var(--f-display);
+        color: var(--c-muted);
+        font-family: var(--ff-heading);
         font-size: var(--fs-2);
         letter-spacing: 0.08em;
         line-height: 1.2;
         margin: 0 auto;
-        max-width: 1000px;
     }
 
     .tagline__highlight {
@@ -40,8 +44,8 @@
     }
 
     .tagline__word {
-        animation: gradient-shift 3s ease-in-out infinite;
-        background: linear-gradient(90deg, #fff, #a8b2c1, #fff);
+        animation: text-shimmer 3s ease-in-out infinite;
+        background: linear-gradient(90deg, var(--c-text), var(--c-muted), var(--c-text));
         background-clip: text;
         background-size: 200% 100%;
         -webkit-background-clip: text;
@@ -49,28 +53,18 @@
     }
 
     .tagline__word--accent {
-        background: linear-gradient(135deg, var(--c-accent), var(--c-highlight-purple), var(--c-highlight-cyan));
+        background: linear-gradient(135deg, var(--c-brand), var(--c-indigo), var(--c-cyan));
         background-clip: text;
-        filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.5))
-            drop-shadow(0 0 60px rgba(192, 132, 252, 0.25));
+        filter: drop-shadow(0 0 30px color-mix(in srgb, var(--c-brand) 50%, transparent))
+            drop-shadow(0 0 60px color-mix(in srgb, var(--c-indigo) 25%, transparent));
         text-shadow: none;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    @keyframes gradient-shift {
-        0%,
-        100% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-    }
-
     .tagline__arrow {
-        color: var(--c-text-muted);
-        font-size: 0.7em;
+        color: var(--c-muted);
+        font-size: var(--fs-1);
         margin: 0 0.1em;
         opacity: 0.6;
         vertical-align: middle;
@@ -81,15 +75,15 @@
         text-align: center;
     }
 
-    .tagline__typed-text::after {
+    .tagline__typed :global(.tagline__typed-text)::after {
         animation: blink 0.8s infinite;
-        color: var(--c-accent);
+        color: var(--c-brand);
         content: "|";
         font-weight: 300;
         margin-left: 2px;
     }
 
-    .tagline__typed--done .tagline__typed-text::after {
+    .tagline__typed[data-done] :global(.tagline__typed-text)::after {
         display: none;
     }
 
@@ -103,36 +97,50 @@
             opacity: 0;
         }
     }
+
+    @keyframes text-shimmer {
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
 </style>
 
-<script is:inline>
-    (() => {
-        const typed = document.querySelector('.tagline__typed');
-        if (typed) {
-            const text = typed.dataset.text;
-            const textSpan = document.createElement('span');
-            textSpan.className = 'tagline__typed-text';
-            typed.appendChild(textSpan);
-            let i = 0;
-            const typeWriter = () => {
-                if (i < text.length) {
-                    textSpan.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 25);
-                } else {
-                    typed.classList.add('tagline__typed--done');
-                }
-            };
-            const taglineObserver = new IntersectionObserver(
-                (entries) => {
-                    if (entries[0].isIntersecting) {
-                        setTimeout(typeWriter, 500);
-                        taglineObserver.disconnect();
-                    }
-                },
-                { threshold: 0.5 },
-            );
-            taglineObserver.observe(typed.closest('.tagline'));
+<script>
+    const CHAR_DELAY = 50;
+    const START_DELAY = 500;
+    const VISIBILITY_THRESHOLD = 0.5;
+
+    const typed = document.querySelector('.tagline__typed') as HTMLElement | null;
+
+    if (typed) {
+        const text = typed.dataset.text || '';
+        const textSpan = document.createElement('span');
+        textSpan.className = 'tagline__typed-text';
+        typed.appendChild(textSpan);
+        let charIndex = 0;
+
+        function typeNextChar(): void {
+            if (charIndex < text.length) {
+                textSpan.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeNextChar, CHAR_DELAY);
+            }
         }
-    })();
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setTimeout(typeNextChar, START_DELAY);
+                    observer.disconnect();
+                }
+            },
+            { threshold: VISIBILITY_THRESHOLD },
+        );
+
+        observer.observe(typed.closest('.tagline')!);
+    }
 </script>

@@ -22,6 +22,6 @@ test.describe('404 page', () => {
 
     test('return link navigates home', async ({ page }) => {
         await page.click('a[aria-label="Return to home"]');
-        await expect(page).toHaveTitle('ATX Music Video Film Festival | July 18, 2026');
+        await expect(page).toHaveTitle('ATX Music Video Film Festival');
     });
 });

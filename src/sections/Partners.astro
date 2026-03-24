@@ -3,7 +3,7 @@ import logoCabana from '@assets/images/logos/cabana.png';
 import logoMadewell from '@assets/images/logos/madewell.png';
 ---
 
-<section class="partners" data-scroll aria-label="Presented by">
+<section class="partners" aria-label="Presented by" data-scroll>
     <div class="partners__marquee overflow-hidden">
         <div class="partners__track flex items-center">
             <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="Madewell Productions" src={logoMadewell.src} />
@@ -20,8 +20,8 @@ import logoMadewell from '@assets/images/logos/madewell.png';
     .partners {
         contain: layout style;
         margin: 0 auto;
-        max-width: var(--max-w);
-        padding: 0 var(--page-px);
+        max-width: var(--l-max);
+        padding: 0 var(--l-3);
     }
 
     .partners__marquee {
@@ -33,16 +33,16 @@ import logoMadewell from '@assets/images/logos/madewell.png';
     .partners__track {
         animation: marquee 30s linear infinite;
         animation-play-state: paused;
-        gap: clamp(100px, calc(100px + 100 * (100vw - 320px) / 1216), 200px);
+        gap: var(--l-2);
         width: max-content;
     }
 
-    .partners__track--active {
+    .partners__track[data-active] {
         animation-play-state: running;
     }
 
     .partners__logo {
-        height: 150px;
+        height: var(--fs-1);
         width: auto;
     }
 
@@ -59,3 +59,19 @@ import logoMadewell from '@assets/images/logos/madewell.png';
         }
     }
 </style>
+
+<script>
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import gsap from 'gsap';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.create({
+        once: true,
+        onEnter: () => {
+            document.querySelector('.partners__track')?.setAttribute('data-active', '');
+        },
+        start: 'bottom bottom',
+        trigger: '.partners',
+    });
+</script>

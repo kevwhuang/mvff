@@ -1,0 +1,54 @@
+---
+
+---
+
+<div class="cursor fixed rounded-full pointer-events-none" aria-hidden="true"></div>
+<div class="cursor__dot fixed rounded-full pointer-events-none" aria-hidden="true"></div>
+
+<style>
+    .cursor {
+        backface-visibility: hidden;
+        background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--c-brand) 40%, transparent) 0%,
+            transparent 70%
+        );
+        height: 30px;
+        left: -15px;
+        top: -15px;
+        width: 30px;
+        will-change: transform;
+        z-index: 9998;
+    }
+
+    .cursor__dot {
+        backface-visibility: hidden;
+        background: var(--c-brand);
+        height: 6px;
+        left: -3px;
+        top: -3px;
+        width: 6px;
+        will-change: transform;
+        z-index: 9999;
+    }
+
+    .cursor[data-hover] {
+        height: 50px;
+        left: -25px;
+        top: -25px;
+        width: 50px;
+    }
+
+    @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+        .cursor,
+        .cursor__dot {
+            display: none;
+        }
+
+        :global(a),
+        :global(body),
+        :global(button) {
+            cursor: auto;
+        }
+    }
+</style>

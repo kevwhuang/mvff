@@ -1,215 +1,115 @@
 ---
 import DateIcon from '@components/icons/Date.astro';
+import DetailsCard from '@components/blocks/DetailsCard.astro';
 import TimeIcon from '@components/icons/Time.astro';
 import VenueIcon from '@components/icons/Venue.astro';
 ---
 
 <section class="details" aria-labelledby="details-heading">
-    <h2 id="details-heading" class="details__heading" data-scroll data-scramble>
+    <h2 id="details-heading" class="details__heading" data-scramble data-scroll>
         The Event
     </h2>
-    <div class="details__grid flex flex-col items-stretch">
-        <div class="details__item relative flex flex-col items-center text-center" data-scroll data-scroll-delay="0.1">
+    <ul class="details__grid flex flex-col items-stretch list-none">
+        <DetailsCard delay="0.1" label="Venue" value="Cabana Club">
             <VenueIcon class="details__icon relative" />
-            <span class="details__label relative uppercase">Venue</span>
-            <span class="details__value relative">Cabana Club</span>
-        </div>
-        <div class="details__item relative flex flex-col items-center text-center" data-scroll data-scroll-delay="0.2">
+        </DetailsCard>
+        <DetailsCard delay="0.2" label="Date" value="July 18">
             <DateIcon class="details__icon relative" />
-            <span class="details__label relative uppercase">Date</span>
-            <span class="details__value relative">July 18</span>
-        </div>
-        <div class="details__item relative flex flex-col items-center text-center" data-scroll data-scroll-delay="0.3">
+        </DetailsCard>
+        <DetailsCard delay="0.3" label="Time" value="7&nbsp;PM&nbsp;&rarr;&nbsp;2&nbsp;AM">
             <TimeIcon class="details__icon relative" />
-            <span class="details__label relative uppercase">Time</span>
-            <span class="details__value relative">7&nbsp;PM&nbsp;&rarr;&nbsp;2&nbsp;AM</span>
-        </div>
-    </div>
+        </DetailsCard>
+    </ul>
 </section>
 
-<style is:global>
+<style>
     .details {
         contain: layout style;
         margin: 0 auto;
-        max-width: var(--max-w);
-        padding: 0 var(--page-px);
+        max-width: var(--l-max);
+        padding: 0 var(--l-3);
     }
 
     .details__heading {
-        color: var(--c-accent);
-        font-family: var(--f-display);
+        color: var(--c-brand);
+        font-family: var(--ff-heading);
         font-size: var(--fs-1);
         letter-spacing: 0.02em;
-        margin-bottom: var(--s-2xl);
+        margin-bottom: var(--s-1);
         text-align: center;
         text-shadow:
-            0 0 60px rgba(255, 77, 109, 0.6),
-            0 0 120px rgba(255, 77, 109, 0.3);
+            0 0 60px color-mix(in srgb, var(--c-brand) 60%, transparent),
+            0 0 120px color-mix(in srgb, var(--c-brand) 30%, transparent);
     }
 
     .details__grid {
-        gap: var(--s-sm);
+        align-items: stretch;
+        flex-direction: column;
+        gap: var(--s-3);
+        justify-content: center;
     }
 
-    .details__item {
-        backdrop-filter: blur(8px);
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        contain: layout style paint;
-        padding: var(--s-md) var(--s-sm);
-        transform-style: preserve-3d;
-        transition:
-            box-shadow var(--ease-md),
-            opacity var(--ease-reveal),
-            transform var(--ease);
-        -webkit-backdrop-filter: blur(8px);
-    }
-
-    .details__item::before {
-        animation: gradient-rotate 4s linear infinite paused;
-        background: linear-gradient(
-            var(--gradient-angle),
-            var(--c-accent),
-            var(--c-highlight-indigo),
-            var(--c-highlight-cyan),
-            var(--c-accent)
-        );
-        border-radius: 16px;
-        content: "";
-        inset: 0;
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        opacity: 0;
-        padding: 1px;
-        position: absolute;
-        transition: opacity var(--ease-md);
-        z-index: 0;
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-    }
-
-    .details__item:hover::before {
-        animation-play-state: running;
-        opacity: 1;
-    }
-
-    .details__item::after {
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        border-radius: 16px;
-        content: "";
-        inset: 0;
-        opacity: 0.03;
-        pointer-events: none;
-        position: absolute;
-    }
-
-    .details__item:hover {
-        box-shadow: 0 16px 48px rgba(255, 77, 109, 0.25);
+    @media (min-width: 1280px) {
+        .details__grid {
+            flex-direction: row;
+        }
     }
 
     .details__icon {
-        height: 36px;
-        margin-bottom: var(--s-xs);
-        stroke: var(--c-accent);
-        width: 36px;
+        height: var(--fs-2);
+        margin-bottom: var(--s-4);
+        stroke: var(--c-brand);
+        width: var(--fs-2);
         z-index: 1;
     }
 
-    .details__label {
-        color: var(--c-text-muted);
-        font-family: var(--f-body);
-        font-size: var(--fs-6);
-        font-weight: 500;
-        letter-spacing: 0.1em;
-        margin-bottom: var(--s-xs);
-        z-index: 1;
-    }
 
-    .details__value {
-        color: var(--c-text);
-        font-family: var(--f-display);
-        font-size: var(--fs-4);
-        letter-spacing: 0.02em;
-        z-index: 1;
-    }
-
-    @media (max-width: 480px) {
-        .details__heading {
-            margin-bottom: var(--s-lg);
-        }
-
-        .details__item {
-            padding: var(--s-sm);
-        }
-    }
-
-    @media (min-width: 768px) {
-        .details__grid {
-            align-items: stretch;
-            flex-direction: row;
-            gap: var(--s-md);
-            justify-content: center;
-        }
-
-        .details__item {
-            flex: 1 1 0;
-            min-width: 0;
-            padding: var(--s-md);
-        }
-
-        .details__icon {
-            height: 44px;
-            width: 44px;
-        }
-
-        .details__value {
-            font-size: var(--fs-4);
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .details__icon {
-            height: 64px;
-            width: 64px;
-        }
-
-        .details__value {
-            font-size: var(--fs-4);
-        }
-    }
-
-    @media (min-width: 1536px) {
-        .details__icon {
-            height: 72px;
-            width: 72px;
+    @keyframes stroke-reveal {
+        to {
+            stroke-dashoffset: 0;
         }
     }
 </style>
 
-<script is:inline>
-    (() => {
-        const cards = document.querySelectorAll('.details__item');
-        cards.forEach((card) => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 15;
-                const rotateY = (centerX - x) / 15;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform =
-                    'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-            });
+<script>
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import gsap from 'gsap';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ICON_ANIMATION = 'stroke-reveal 2.5s ease-out forwards';
+    const PERSPECTIVE = 1000;
+    const TILT_DIVISOR = 15;
+    const TILT_SCALE = 1.02;
+
+    document.querySelectorAll('.details__icon').forEach((icon) => {
+        const paths = icon.querySelectorAll('path, circle, rect, line, polyline');
+
+        ScrollTrigger.create({
+            once: true,
+            onEnter: () => {
+                paths.forEach((path) => {
+                    (path as HTMLElement).style.animation = ICON_ANIMATION;
+                });
+            },
+            start: 'bottom bottom',
+            trigger: icon.closest('[data-scroll]') || icon,
         });
-    })();
+    });
+
+    document.querySelectorAll('.details__grid > *').forEach((card) => {
+        card.addEventListener('mousemove', (event) => {
+            const mouseEvent = event as MouseEvent;
+            const rect = card.getBoundingClientRect();
+            const offsetX = mouseEvent.clientX - rect.left;
+            const offsetY = mouseEvent.clientY - rect.top;
+            const rotateX = (rect.height / 2 - offsetY) / TILT_DIVISOR;
+            const rotateY = (offsetX - rect.width / 2) / TILT_DIVISOR;
+            (card as HTMLElement).style.transform = `perspective(${PERSPECTIVE}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${TILT_SCALE}, ${TILT_SCALE}, ${TILT_SCALE})`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            (card as HTMLElement).style.transform = `perspective(${PERSPECTIVE}px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+        });
+    });
 </script>

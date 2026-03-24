@@ -6,6 +6,6 @@ test.describe('index page', () => {
     });
 
     test('loads with correct title', async ({ page }) => {
-        await expect(page).toHaveTitle('ATX Music Video Film Festival | July 18, 2026');
+        await expect(page).toHaveTitle('ATX Music Video Film Festival');
     });
 });
