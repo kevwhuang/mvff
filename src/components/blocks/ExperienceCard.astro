@@ -1,0 +1,100 @@
+---
+interface Props {
+    delay: string;
+    label: string;
+    modal: string;
+}
+
+const { delay, label, modal } = Astro.props;
+---
+
+<li
+    class="experience-card relative flex flex-col items-center justify-center text-center"
+    data-modal={modal}
+    data-scroll
+    data-scroll-delay={delay}
+>
+    <slot />
+    <span class="relative">{label}</span>
+</li>
+
+<style>
+    .experience-card {
+        backdrop-filter: blur(8px);
+        background: color-mix(in srgb, var(--c-text) 5%, transparent);
+        border: 1px solid color-mix(in srgb, var(--c-text) 10%, transparent);
+        border-radius: var(--r-1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        color: var(--c-text);
+        contain: layout style paint;
+        font-family: var(--ff-heading);
+        font-size: var(--fs-5);
+        gap: var(--s-3);
+        letter-spacing: 0.02em;
+        height: 100%;
+        min-width: 0;
+        padding: var(--s-2) var(--s-2);
+        white-space: nowrap;
+        transform-style: preserve-3d;
+        transition:
+            box-shadow var(--xs-3),
+            opacity var(--xs-1),
+            transform var(--xs-4);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .experience-card:focus-visible,
+    .experience-card:hover {
+        box-shadow: 0 16px 48px color-mix(in srgb, var(--c-brand) 25%, transparent);
+    }
+
+    .experience-card:focus-visible {
+        outline: 2px solid var(--c-brand);
+        outline-offset: 4px;
+    }
+
+    .experience-card:hover::before {
+        animation-play-state: running;
+        opacity: 1;
+    }
+
+    .experience-card::before {
+        animation: border-glow 4s linear infinite paused;
+        background: linear-gradient(
+            var(--gradient-angle),
+            var(--c-brand),
+            var(--c-indigo),
+            var(--c-cyan),
+            var(--c-brand)
+        );
+        border-radius: var(--r-1);
+        content: "";
+        inset: 0;
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        opacity: 0;
+        padding: 1px;
+        position: absolute;
+        transition: opacity var(--xs-3);
+        z-index: 0;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+    }
+
+
+    @property --gradient-angle {
+        inherits: false;
+        initial-value: 0deg;
+        syntax: "<angle>";
+    }
+
+    @keyframes border-glow {
+        to {
+            --gradient-angle: 360deg;
+        }
+    }
+</style>

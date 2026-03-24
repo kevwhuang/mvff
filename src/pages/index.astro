@@ -1,169 +1,29 @@
 ---
-import Spacer from '@components/Spacer.astro';
 import Base from '@layouts/Base.astro';
 import Details from '@sections/Details.astro';
 import Experience from '@sections/Experience.astro';
+import Gap from '@components/ui/Gap.astro';
 import Hero from '@sections/Hero.astro';
+import Loader from '@sections/Loader.astro';
 import Partners from '@sections/Partners.astro';
+import Stars from '@components/ui/Stars.astro';
 import Tagline from '@sections/Tagline.astro';
-import logo from '@assets/images/logos/mvff.png';
 ---
 
 <Base
-    title="ATX Music Video Film Festival | July 18, 2026"
-    description="Screens to Stage — An immersive production blending music and film, celebrating artists. Music video screenings, live performances, Q&A panels, award ceremony, and pool party. July 18, 7PM–2AM at Cabana Club, Austin TX."
+    description="Austin's music video film festival — live performances, music video screenings, Q&A panels, awards, and a pool party. July 18, 2026, 7 PM–2 AM at Cabana Club, Austin TX."
+    title="ATX Music Video Film Festival"
 >
-    <Fragment slot="head">
-        <meta
-            name="keywords"
-            content="ATX Music Video Film Festival, Austin film festival, music video screening, live music Austin, film awards, Cabana Club, Texas film festival, music video awards, 2026 festival, summer festival Austin"
-        />
-        <link rel="canonical" href="https://atxmusicvideofilmfestival.com" />
-        <meta property="og:type" content="event" />
-        <meta property="og:url" content="https://atxmusicvideofilmfestival.com" />
-        <script
-            set:html={JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'Event',
-                'name': 'ATX Music Video Film Festival',
-                'description': 'Screens to Stage — An immersive production blending music and film, celebrating artists.',
-                'startDate': '2026-07-18T19:00:00-05:00',
-                'endDate': '2026-07-19T02:00:00-05:00',
-                'eventStatus': 'https://schema.org/EventScheduled',
-                'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-                'location': {
-                    '@type': 'Place',
-                    'name': 'Cabana Club',
-                    'address': {
-                        '@type': 'PostalAddress',
-                        'addressLocality': 'Austin',
-                        'addressRegion': 'TX',
-                        'addressCountry': 'US',
-                    },
-                },
-                'organizer': {
-                    '@type': 'Organization',
-                    'name': 'ATX Music Video Film Festival',
-                    'url': 'https://atxmusicvideofilmfestival.com',
-                },
-                'image': new URL(logo.src, 'https://atxmusicvideofilmfestival.com').href,
-            })}
-            type="application/ld+json"
-        />
-    </Fragment>
-    <div class="loader fixed flex items-center justify-center overflow-hidden" aria-hidden="true" slot="loader">
-        <div class="loader__content relative flex flex-col items-center justify-center">
-            <div class="loader__pulse absolute rounded-full"></div>
-            <div class="loader__pulse absolute rounded-full"></div>
-            <div class="loader__pulse absolute rounded-full"></div>
-            <img
-                class="loader__logo select-none"
-                alt=""
-                fetchpriority="high"
-                src={logo.src}
-            />
-            <div class="loader__bar"><div class="loader__progress"></div></div>
-            <div class="loader__percent">0%</div>
-        </div>
-    </div>
+    <Loader />
+    <Stars />
     <Hero />
-    <Spacer />
+    <Gap />
     <Tagline />
-    <Spacer />
+    <Gap />
     <Details />
-    <Spacer />
+    <Gap />
     <Experience />
-    <Spacer />
+    <Gap />
     <Partners />
-    <Spacer />
+    <Gap border />
 </Base>
-
-<script>
-    import gsap from 'gsap';
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-    import { initScrollAnimations } from '@lib/scroll';
-
-    gsap.registerPlugin(ScrollTrigger);
-    initScrollAnimations();
-
-    const loader = document.querySelector('.loader');
-
-    if (loader) {
-        const percent = document.querySelector('.loader__percent');
-        let p = 0;
-        const loadInterval = setInterval(() => {
-            p += Math.random() * 15 + 5;
-
-            if (p >= 100) {
-                p = 100;
-                clearInterval(loadInterval);
-                percent.textContent = '100%';
-                setTimeout(() => loader.classList.add('loader--hidden'), 200);
-            } else {
-                percent.textContent = Math.floor(p) + '%';
-            }
-        }, 100);
-
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            loader.classList.add('loader--hidden');
-        }
-    }
-
-    document.querySelectorAll('.details__icon, .categories__icon').forEach((icon) => {
-        const paths = icon.querySelectorAll('path, circle, rect, line, polyline');
-        ScrollTrigger.create({
-            once: true,
-            onEnter: () => {
-                paths.forEach((p) => {
-                    p.style.animation = 'icon-draw 2.5s ease-out forwards';
-                });
-            },
-            start: 'bottom bottom',
-            trigger: icon.closest('[data-scroll]') || icon,
-        });
-    });
-
-    ScrollTrigger.create({
-        once: true,
-        onEnter: () => {
-            document.querySelector('.partners__track')?.classList.add('partners__track--active');
-        },
-        start: 'bottom bottom',
-        trigger: '.partners',
-    });
-
-    const chars = 'iljtfr1|/';
-
-    function scrambleText(el: Element) {
-        const htmlEl = el as HTMLElement;
-        const original = htmlEl.dataset.original || htmlEl.textContent || '';
-        htmlEl.dataset.original = original;
-        let iteration = 0;
-        const interval = setInterval(() => {
-            htmlEl.textContent = original
-                .split('')
-                .map((char, i) => {
-                    if (i < iteration) return original[i];
-                    if (char === ' ') return ' ';
-                    return chars[Math.floor(Math.random() * chars.length)];
-                })
-                .join('');
-            iteration += 0.5;
-
-            if (iteration >= original.length) {
-                clearInterval(interval);
-                htmlEl.textContent = original;
-            }
-        }, 30);
-    }
-
-    document.querySelectorAll('[data-scramble]').forEach((el) => {
-        ScrollTrigger.create({
-            once: true,
-            onEnter: () => scrambleText(el),
-            start: 'bottom bottom',
-            trigger: el,
-        });
-    });
-</script>

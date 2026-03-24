@@ -3,16 +3,16 @@
 ---
 
 <section
-    class="not-found flex items-center justify-center min-h-screen px-[clamp(1rem,calc(0.5rem+2.5vw),2.5rem)] bg-zinc-950"
+    class="not-found flex items-center justify-center min-h-screen px-10 bg-zinc-950"
 >
     <div class="not-found__content text-center select-none">
         <h1
-            class="not-found__title mb-[clamp(1rem,calc(0.33rem+3.33vw),3rem)] font-bold text-[clamp(6rem,calc(3.0rem+15.0vw),15rem)] tracking-widest"
+            class="not-found__title mb-12 font-bold text-[15rem] tracking-widest"
         >
             404
         </h1>
         <a
-            class="not-found__link inline-block min-h-[clamp(2.75rem,calc(2.42rem+1.67vw),3.5rem)] px-[clamp(1.5rem,calc(1.17rem+1.67vw),2.5rem)] py-[clamp(0.875rem,calc(0.58rem+0.83vw),1.25rem)] border border-white/20 font-mono text-sm lowercase tracking-[0.2em] text-white/70 transition-all duration-300"
+            class="not-found__link inline-block min-h-14 px-10 py-5 border border-white/20 font-mono text-sm lowercase tracking-[0.2em] text-white/70"
             aria-label="Return to home"
             href="/"
         >
@@ -25,18 +25,22 @@
     .not-found__title {
         background: linear-gradient(
             180deg,
-            rgba(var(--rgb-white), 0.9) 0%,
-            rgba(var(--rgb-white), 0.4) 100%
+            color-mix(in srgb, var(--c-text) 90%, transparent) 0%,
+            color-mix(in srgb, var(--c-text) 40%, transparent) 100%
         );
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
+    .not-found__link {
+        transition: all var(--xs-3);
+    }
+
     .not-found__link:hover {
-        background-color: rgba(var(--rgb-white), 0.05);
-        border-color: rgba(var(--color-pink), 0.5);
-        color: rgba(var(--color-pink), 0.9);
-        text-shadow: 0 0 20px rgba(var(--color-pink), 0.3);
+        background-color: color-mix(in srgb, var(--c-text) 5%, transparent);
+        border-color: color-mix(in srgb, var(--c-brand) 50%, transparent);
+        color: color-mix(in srgb, var(--c-brand) 90%, transparent);
+        text-shadow: 0 0 20px color-mix(in srgb, var(--c-brand) 30%, transparent);
     }
 </style>

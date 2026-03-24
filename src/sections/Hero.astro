@@ -4,38 +4,36 @@ import heroVideo from '@assets/videos/hero.webm';
 import logo from '@assets/images/logos/mvff.png';
 ---
 
-<header class="header">
-    <div class="hero relative flex items-center justify-center overflow-hidden">
-        <video
-            class="hero__video absolute object-cover"
-            aria-hidden="true"
-            autoplay
-            loop
-            muted
-            playsinline
-            poster={heroPoster.src}
-        >
-            <source src={heroVideo} type="video/webm" />
-        </video>
-        <img
-            class="hero__img select-none"
-            alt="ATX Music Video Film Festival"
-            decoding="async"
-            height="700"
-            src={logo.src}
-            width="700"
-        />
-    </div>
+<header class="hero relative flex items-center justify-center overflow-hidden">
+    <video
+        class="hero__video absolute object-cover"
+        aria-hidden="true"
+        autoplay
+        loop
+        muted
+        playsinline
+        poster={heroPoster.src}
+    >
+        <source src={heroVideo} type="video/webm" />
+    </video>
+    <img
+        class="hero__img select-none"
+        alt="ATX Music Video Film Festival"
+        data-scroll
+        data-scroll-duration="10"
+        decoding="async"
+        height="700"
+        src={logo.src}
+        width="700"
+    />
 </header>
 
 <style>
-    .header {
-        padding-top: var(--nav-h);
-    }
-
     .hero {
-        background: var(--c-bg);
-        min-height: calc(100vh - var(--nav-h));
+        background: var(--c-base);
+        box-sizing: border-box;
+        min-height: 100vh;
+        padding-top: var(--l-nav);
         z-index: 1;
     }
 
@@ -50,6 +48,7 @@ import logo from '@assets/images/logos/mvff.png';
 
     .hero__img {
         height: auto;
-        width: clamp(250px, calc(250px + 750 * (100vw - 320px) / 1216), 1000px);
+        max-width: calc(var(--l-max) - var(--l-3) * 2);
+        width: 100%;
     }
 </style>

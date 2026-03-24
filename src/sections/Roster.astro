@@ -1,0 +1,55 @@
+---
+import TeamCard from '@components/blocks/TeamCard.astro';
+import amiiri from '@assets/images/team/amiiri.webp';
+import anna from '@assets/images/team/anna.webp';
+import ben from '@assets/images/team/ben.webp';
+import donovan from '@assets/images/team/donovan.webp';
+import jasmine from '@assets/images/team/jasmine.webp';
+import jymes from '@assets/images/team/jymes.webp';
+import killian from '@assets/images/team/killian.webp';
+import marissa from '@assets/images/team/marissa.webp';
+import phillip from '@assets/images/team/phillip.webp';
+import rocky from '@assets/images/team/rocky.webp';
+import sebastian from '@assets/images/team/sebastian.webp';
+---
+
+<section class="roster" aria-labelledby="roster-heading">
+    <h1 id="roster-heading" class="roster__heading text-center">2026 Team</h1>
+    <ul class="roster__grid grid list-none">
+        <TeamCard image={anna} name="Anna" title="Founder & Director" />
+        <TeamCard image={rocky} name="Rocky" title="Film Director" />
+        <TeamCard image={jasmine} name="Jasmine" title="Event Coordinator" />
+        <TeamCard image={jymes} name="Jymes" title="Talent Programmer" />
+        <TeamCard image={amiiri} name="Amiiri" title="Promotions Queen" />
+        <TeamCard image={donovan} name="Donovan" title="Social Media Manager" />
+        <TeamCard image={marissa} name="Marissa" title="Graphic Designer" />
+        <TeamCard image={sebastian} name="Sebastian" title="Community Outreach" />
+        <TeamCard image={phillip} name="Phillip" title="Volunteer Coordinator" />
+        <TeamCard image={killian} name="Killian" title="Visual Tech" />
+        <TeamCard image={ben} name="Ben" title="Audio Tech" />
+    </ul>
+</section>
+
+<style>
+    .roster {
+        margin: 0 auto;
+        max-width: var(--l-max);
+        padding: 0 var(--l-3);
+    }
+
+    .roster__heading {
+        color: var(--c-brand);
+        font-family: var(--ff-heading);
+        font-size: var(--fs-1);
+        letter-spacing: 0.02em;
+        margin-bottom: 0.3em;
+        text-shadow:
+            0 0 60px color-mix(in srgb, var(--c-brand) 60%, transparent),
+            0 0 120px color-mix(in srgb, var(--c-brand) 30%, transparent);
+    }
+
+    .roster__grid {
+        gap: var(--s-3);
+        grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    }
+</style>
