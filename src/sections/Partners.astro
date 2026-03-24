@@ -1,0 +1,61 @@
+---
+import logoCabana from '@assets/images/logos/cabana.png';
+import logoMadewell from '@assets/images/logos/madewell.png';
+---
+
+<section class="partners" data-scroll aria-label="Presented by">
+    <div class="partners__marquee overflow-hidden">
+        <div class="partners__track flex items-center">
+            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="Madewell Productions" src={logoMadewell.src} />
+            <img class="partners__logo shrink-0 object-contain select-none" alt="Cabana Club" src={logoCabana.src} />
+            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoMadewell.src} />
+            <img class="partners__logo shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoCabana.src} />
+            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoMadewell.src} />
+            <img class="partners__logo shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoCabana.src} />
+        </div>
+    </div>
+</section>
+
+<style>
+    .partners {
+        contain: layout style;
+        margin: 0 auto;
+        max-width: var(--max-w);
+        padding: 0 var(--page-px);
+    }
+
+    .partners__marquee {
+        mask: linear-gradient(90deg, transparent, #fff 15%, #fff 85%, transparent);
+        width: 100%;
+        -webkit-mask: linear-gradient(90deg, transparent, #fff 15%, #fff 85%, transparent);
+    }
+
+    .partners__track {
+        animation: marquee 30s linear infinite;
+        animation-play-state: paused;
+        gap: clamp(100px, calc(100px + 100 * (100vw - 320px) / 1216), 200px);
+        width: max-content;
+    }
+
+    .partners__track--active {
+        animation-play-state: running;
+    }
+
+    .partners__logo {
+        height: 150px;
+        width: auto;
+    }
+
+    .partners__logo--madewell {
+        filter: invert(0.85);
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-33.333%);
+        }
+    }
+</style>

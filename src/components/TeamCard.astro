@@ -1,0 +1,65 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+    image: ImageMetadata;
+    name: string;
+    title: string;
+}
+
+const { image, name, title } = Astro.props;
+---
+
+<li class="team-card flex flex-col items-center overflow-hidden">
+    <img class="team-card__img rounded-full object-cover pointer-events-none select-none" alt={name} draggable="false" src={image.src} />
+    <span class="team-card__name">{name}</span>
+    <span class="team-card__role uppercase">{title}</span>
+</li>
+
+<style>
+    .team-card {
+        background: linear-gradient(
+            135deg,
+            rgba(var(--c-text-rgb), 0.04) 0%,
+            rgba(var(--c-text-rgb), 0.01) 100%
+        );
+        border: 1px solid var(--c-border);
+        border-radius: clamp(8px, 2vw, 16px);
+        gap: 0.25rem;
+        padding: clamp(1.25rem, 3vw, 2rem);
+        transition:
+            background var(--ease-md),
+            border-color var(--ease-md),
+            transform var(--ease-md);
+    }
+
+    .team-card__img {
+        aspect-ratio: 1;
+        height: auto;
+        margin-bottom: 0.75rem;
+        width: clamp(80px, 20vw, 120px);
+    }
+
+    .team-card__name {
+        font-family: var(--f-display);
+        font-size: var(--fs-3);
+        letter-spacing: 0.02em;
+    }
+
+    .team-card__role {
+        color: var(--c-accent);
+        font-size: var(--fs-5);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+
+    .team-card:hover {
+        background: linear-gradient(
+            135deg,
+            rgba(var(--c-text-rgb), 0.07) 0%,
+            rgba(var(--c-text-rgb), 0.02) 100%
+        );
+        border-color: var(--c-border-accent);
+        transform: translateY(-4px);
+    }
+</style>

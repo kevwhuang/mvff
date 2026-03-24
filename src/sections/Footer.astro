@@ -1,0 +1,75 @@
+---
+import EmailIcon from '@components/icons/Email.astro';
+import InstagramIcon from '@components/icons/Instagram.astro';
+---
+
+<footer class="footer">
+    <div class="footer__inner flex flex-col items-center">
+        <nav class="footer__links flex" aria-label="Social links">
+            <a
+                class="footer__link inline-flex items-center justify-center rounded-full"
+                aria-label="Follow us on Instagram (opens in new tab)"
+                href="https://instagram.com/atxmvff"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                <InstagramIcon class="footer__icon" />
+            </a>
+            <a
+                class="footer__link inline-flex items-center justify-center rounded-full"
+                aria-label="Send us an email"
+                href="mailto:contact@atxmusicvideofilmfestival.com"
+            >
+                <EmailIcon class="footer__icon" />
+            </a>
+        </nav>
+        <p class="footer__copy">&copy; 2026 ATX Music Video Film Festival. All rights reserved.</p>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        border-top: 1px solid var(--c-border);
+        padding: 100px var(--page-px);
+    }
+
+    .footer__inner {
+        gap: clamp(20px, calc(20px + 30 * (100vw - 320px) / 1216), 50px);
+        margin: 0 auto;
+        max-width: var(--max-w);
+    }
+
+    .footer__links {
+        gap: clamp(20px, calc(20px + 30 * (100vw - 320px) / 1216), 50px);
+    }
+
+    .footer__link {
+        background: var(--c-surface);
+        border: 1px solid var(--c-border);
+        color: var(--c-text);
+        height: clamp(50px, calc(50px + 50 * (100vw - 320px) / 1216), 100px);
+        transition:
+            background var(--ease),
+            border-color var(--ease),
+            color var(--ease);
+        width: clamp(50px, calc(50px + 50 * (100vw - 320px) / 1216), 100px);
+    }
+
+    .footer__link:hover {
+        background: rgba(255, 77, 109, 0.08);
+        border-color: var(--c-border-accent);
+        color: var(--c-accent);
+    }
+
+    .footer__icon {
+        height: clamp(24px, calc(24px + 26 * (100vw - 320px) / 1216), 50px);
+        width: clamp(24px, calc(24px + 26 * (100vw - 320px) / 1216), 50px);
+    }
+
+    .footer__copy {
+        color: var(--c-text-muted);
+        font-size: var(--fs-5);
+        letter-spacing: 0.05em;
+        text-align: center;
+    }
+</style>
