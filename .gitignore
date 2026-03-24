@@ -1,5 +1,9 @@
 *.ds_store
 .env
-audit.html
-dev.ts
+TODO.md
+
+.astro/
+.netlify/
+.playwright/
+dist/
 node_modules/
