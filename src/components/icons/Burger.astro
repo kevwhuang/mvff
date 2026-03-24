@@ -1,0 +1,53 @@
+---
+
+---
+
+<svg
+    class="burger-icon"
+    aria-hidden="true"
+    fill="none"
+    focusable="false"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+>
+    <line class="burger-icon__line burger-icon__line--1" x1="3" y1="4" x2="21" y2="4" />
+    <line class="burger-icon__line burger-icon__line--2" x1="3" y1="12" x2="21" y2="12" />
+    <line class="burger-icon__line burger-icon__line--3" x1="3" y1="20" x2="21" y2="20" />
+</svg>
+
+<style>
+    .burger-icon {
+        height: clamp(15px, calc(15px + 10 * (100vw - 320px) / 1216), 25px);
+        width: clamp(15px, calc(15px + 10 * (100vw - 320px) / 1216), 25px);
+    }
+
+    .burger-icon__line--1 {
+        transform-origin: 12px 4px;
+        transition: transform var(--ease-md), opacity var(--ease-md);
+    }
+
+    .burger-icon__line--2 {
+        transform-origin: 12px 12px;
+        transition: opacity var(--ease-md);
+    }
+
+    .burger-icon__line--3 {
+        transform-origin: 12px 20px;
+        transition: transform var(--ease-md), opacity var(--ease-md);
+    }
+
+    .burger-icon[data-open] .burger-icon__line--1 {
+        transform: translate(0, 8px) rotate(45deg);
+    }
+
+    .burger-icon[data-open] .burger-icon__line--2 {
+        opacity: 0;
+    }
+
+    .burger-icon[data-open] .burger-icon__line--3 {
+        transform: translate(0, -8px) rotate(-45deg);
+    }
+</style>

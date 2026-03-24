@@ -1,0 +1,329 @@
+---
+import AwardsIcon from '@components/icons/Awards.astro';
+import MusicIcon from '@components/icons/Music.astro';
+import PanelIcon from '@components/icons/Panel.astro';
+import PartyIcon from '@components/icons/Party.astro';
+import ScreeningsIcon from '@components/icons/Screenings.astro';
+---
+
+<section class="experience" aria-labelledby="highlights-heading">
+    <h2
+        id="highlights-heading"
+        class="experience__heading"
+        data-scroll
+        data-scramble
+    >
+        The Experience
+    </h2>
+    <ul class="categories__list grid list-none">
+        <li class="categories__item relative flex flex-col items-center justify-center text-center" data-scroll data-scroll-delay="0.1" data-modal="28 official selections across all genres. Four screening blocks featuring emerging and established artists.">
+            <ScreeningsIcon class="categories__icon relative" />
+            <span class="relative">Screenings</span>
+        </li>
+        <li class="categories__item relative flex flex-col items-center justify-center text-center" data-scroll data-scroll-delay="0.2" data-modal="Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.">
+            <AwardsIcon class="categories__icon relative" />
+            <span class="relative">Awards</span>
+        </li>
+        <li class="categories__item relative flex flex-col items-center justify-center text-center" data-scroll data-scroll-delay="0.3" data-modal="Conversations with directors, producers, and artists after each screening block. Community partner spotlights.">
+            <PanelIcon class="categories__icon relative" />
+            <span class="relative">Q&amp;A Panel</span>
+        </li>
+        <li class="categories__item relative flex flex-col items-center justify-center text-center" data-scroll data-scroll-delay="0.4" data-modal="Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin's music and film worlds collide.">
+            <MusicIcon class="categories__icon relative" />
+            <span class="relative">Live Music</span>
+        </li>
+        <li class="categories__item relative flex flex-col items-center justify-center text-center" data-scroll data-scroll-delay="0.5" data-modal="Cabana Club night swim atmosphere. Red carpet meets pool party.">
+            <PartyIcon class="categories__icon relative" />
+            <span class="relative">Pool Party</span>
+        </li>
+    </ul>
+</section>
+<div class="categories__modal fixed pointer-events-none" aria-hidden="true">
+    <p class="categories__modal-text text-center"></p>
+</div>
+
+<style is:global>
+    .experience {
+        contain: layout style;
+        margin: 0 auto;
+        max-width: var(--max-w);
+        padding: 0 var(--page-px);
+    }
+
+    .experience__heading {
+        color: var(--c-accent);
+        font-family: var(--f-display);
+        font-size: var(--fs-1);
+        letter-spacing: 0.02em;
+        margin-bottom: var(--s-2xl);
+        text-align: center;
+        text-shadow:
+            0 0 60px rgba(255, 77, 109, 0.6),
+            0 0 120px rgba(255, 77, 109, 0.3);
+    }
+
+    .categories__list {
+        gap: var(--s-md);
+        grid-template-columns: 1fr;
+    }
+
+    .categories__item {
+        backdrop-filter: blur(8px);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        color: var(--c-text);
+        contain: layout style paint;
+        font-family: var(--f-display);
+        font-size: var(--fs-4);
+        gap: var(--s-sm);
+        letter-spacing: 0.02em;
+        min-height: 120px;
+        padding: var(--s-lg) var(--s-md);
+        transform-style: preserve-3d;
+        transition:
+            box-shadow var(--ease-md),
+            opacity var(--ease-reveal),
+            transform var(--ease);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .categories__item::before {
+        animation: gradient-rotate 4s linear infinite paused;
+        background: linear-gradient(
+            var(--gradient-angle),
+            var(--c-accent),
+            var(--c-highlight-indigo),
+            var(--c-highlight-cyan),
+            var(--c-accent)
+        );
+        border-radius: 16px;
+        content: "";
+        inset: 0;
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        opacity: 0;
+        padding: 1px;
+        position: absolute;
+        transition: opacity var(--ease-md);
+        z-index: 0;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+    }
+
+    .categories__item:hover::before {
+        animation-play-state: running;
+        opacity: 1;
+    }
+
+    .categories__item::after {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        border-radius: 16px;
+        content: "";
+        inset: 0;
+        opacity: 0.03;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .categories__item:hover {
+        box-shadow: 0 16px 48px rgba(255, 77, 109, 0.25);
+    }
+
+    .categories__icon {
+        height: 40px;
+        stroke: var(--c-accent);
+        width: 40px;
+        z-index: 1;
+    }
+
+    .categories__modal {
+        backdrop-filter: blur(16px);
+        background: rgba(10, 15, 26, 0.95);
+        border: 1px solid var(--c-border-accent);
+        border-radius: 12px;
+        box-shadow:
+            0 12px 40px rgba(0, 0, 0, 0.5),
+            0 0 20px rgba(255, 77, 109, 0.15);
+        left: 0;
+        opacity: 0;
+        padding: var(--s-lg);
+        top: 0;
+        transform: translateY(-8px);
+        transition:
+            opacity var(--ease-md),
+            transform var(--ease-md);
+        width: 340px;
+        z-index: 200;
+        -webkit-backdrop-filter: blur(16px);
+    }
+
+    .categories__modal::after {
+        border-bottom: 14px solid rgba(255, 77, 109, 0.5);
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        content: "";
+        left: var(--arrow-left, 50%);
+        position: absolute;
+        top: -14px;
+        transform: translateX(-50%);
+    }
+
+    .categories__modal--visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .categories__modal-text {
+        color: var(--c-text);
+        font-family: var(--f-body);
+        font-size: var(--fs-5);
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 480px) {
+        .experience__heading {
+            margin-bottom: var(--s-lg);
+        }
+
+        .categories__item {
+            min-height: 100px;
+            padding: var(--s-md);
+        }
+    }
+
+    @media (min-width: 768px) {
+        .categories__list {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .categories__item {
+            font-size: var(--fs-4);
+            gap: var(--s-md);
+            min-height: 160px;
+            padding: var(--s-lg);
+        }
+
+        .categories__icon {
+            height: 52px;
+            width: 52px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .categories__list {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .categories__item {
+            font-size: var(--fs-4);
+            min-height: 220px;
+        }
+
+        .categories__icon {
+            height: 72px;
+            width: 72px;
+        }
+    }
+
+    @media (min-width: 1536px) {
+        .categories__list {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .categories__item {
+            min-height: 240px;
+        }
+
+        .categories__icon {
+            height: 80px;
+            width: 80px;
+        }
+    }
+</style>
+
+<script is:inline>
+    (() => {
+        const cards = document.querySelectorAll('.categories__item');
+        cards.forEach((card) => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform =
+                    'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+        const modal = document.querySelector('.categories__modal');
+        const modalText = modal.querySelector('.categories__modal-text');
+        const modalItems = document.querySelectorAll('.categories__item[data-modal]');
+        let activeItem = null;
+        const positionModal = (item) => {
+            const rect = item.getBoundingClientRect();
+            const mw = 340;
+            let left = rect.left + rect.width / 2 - mw / 2;
+            left = Math.max(12, Math.min(left, window.innerWidth - mw - 12));
+            modal.style.width = mw + 'px';
+            modal.style.left = left + 'px';
+            modal.style.top = rect.bottom + 36 + 'px';
+            const arrowLeft = rect.left + rect.width / 2 - left;
+            modal.style.setProperty('--arrow-left', arrowLeft + 'px');
+        };
+        let showTimeout = null;
+        const showModal = (item) => {
+            const text = item.dataset.modal;
+            if (!text) return;
+            if (showTimeout) clearTimeout(showTimeout);
+            modal.classList.remove('categories__modal--visible');
+            modal.style.transition = 'none';
+            void modal.offsetHeight;
+            modal.style.transition = '';
+            modalText.textContent = text;
+            positionModal(item);
+            showTimeout = setTimeout(() => {
+                modal.classList.add('categories__modal--visible');
+                modal.style.transform = 'translateY(0)';
+            }, 10);
+            activeItem = item;
+        };
+        const hideModal = () => {
+            modal.classList.remove('categories__modal--visible');
+            activeItem = null;
+        };
+        modalItems.forEach((item) => {
+            item.addEventListener('mouseenter', () => showModal(item));
+            item.addEventListener('mouseleave', hideModal);
+            item.addEventListener('click', (e) => {
+                if (!matchMedia('(hover: hover)').matches) {
+                    e.stopPropagation();
+                    if (activeItem === item) {
+                        hideModal();
+                    } else {
+                        showModal(item);
+                    }
+                }
+            });
+        });
+        document.addEventListener('click', (e) => {
+            if (activeItem && !e.target.closest('.categories__item')) hideModal();
+        });
+        window.addEventListener('scroll', () => {
+            if (activeItem) positionModal(activeItem);
+        }, { passive: true });
+    })();
+</script>

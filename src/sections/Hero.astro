@@ -1,0 +1,55 @@
+---
+import heroPoster from '@assets/images/hero/poster.webp';
+import heroVideo from '@assets/videos/hero.webm';
+import logo from '@assets/images/logos/mvff.png';
+---
+
+<header class="header">
+    <div class="hero relative flex items-center justify-center overflow-hidden">
+        <video
+            class="hero__video absolute object-cover"
+            aria-hidden="true"
+            autoplay
+            loop
+            muted
+            playsinline
+            poster={heroPoster.src}
+        >
+            <source src={heroVideo} type="video/webm" />
+        </video>
+        <img
+            class="hero__img select-none"
+            alt="ATX Music Video Film Festival"
+            decoding="async"
+            height="700"
+            src={logo.src}
+            width="700"
+        />
+    </div>
+</header>
+
+<style>
+    .header {
+        padding-top: var(--nav-h);
+    }
+
+    .hero {
+        background: var(--c-bg);
+        min-height: calc(100vh - var(--nav-h));
+        z-index: 1;
+    }
+
+    .hero__video {
+        filter: saturate(0.8);
+        height: 100%;
+        inset: 0;
+        opacity: 0.15;
+        width: 100%;
+        z-index: -1;
+    }
+
+    .hero__img {
+        height: auto;
+        width: clamp(250px, calc(250px + 750 * (100vw - 320px) / 1216), 1000px);
+    }
+</style>

@@ -1,6 +1,7 @@
 ---
-import '@fontsource/geist-sans';
-import { ClientRouter } from 'astro:transitions';
+import Footer from '@sections/Footer.astro';
+import Navbar from '@sections/Navbar.astro';
+import logo from '@assets/images/logos/mvff.png';
 
 interface Props {
     description: string;
@@ -8,75 +9,607 @@ interface Props {
 }
 
 const { description, title } = Astro.props;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html class="overflow-x-clip scroll-smooth" lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
-        <meta content="ATX Music Video Film Festival" name="author" />
-        <meta content={description} name="description" />
-        <meta content="#0a0f1a" name="theme-color" />
-        <link href={canonicalUrl} rel="canonical" />
-        <link href="/favicon.png" rel="icon" type="image/png" />
-        <meta content={title} property="og:title" />
-        <meta content={description} property="og:description" />
-        <meta content={canonicalUrl} property="og:url" />
-        <meta content="website" property="og:type" />
-        <meta content={`${Astro.site}og.png`} property="og:image" />
-        <meta content="ATX Music Video Film Festival" property="og:site_name" />
-        <meta content="summary_large_image" name="twitter:card" />
-        <meta content={title} name="twitter:title" />
-        <meta content={description} name="twitter:description" />
-        <meta content={`${Astro.site}og.png`} name="twitter:image" />
-        <script
-            set:html={JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'Event',
-                'name': 'ATX Music Video Film Festival',
-                'url': Astro.site,
-            })}
-            type="application/ld+json"
+        <meta name="description" content={description} />
+        <meta name="author" content="ATX Music Video Film Festival" />
+        <meta name="robots" content="index, follow" />
+        <link rel="icon" href="favicon.png" type="image/png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta
+            property="og:image"
+            content="https://atxmusicvideofilmfestival.com/og.png"
         />
-        <ClientRouter />
-    </head>
-    <body class="flex flex-col min-h-screen font-sans bg-zinc-950 text-white">
-        <main class="flex-1">
-            <slot />
-        </main>
-    </body>
-</html>
+        <meta property="og:site_name" content="ATX Music Video Film Festival" />
+        <meta property="og:locale" content="en_US" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta
+            name="twitter:image"
+            content="https://atxmusicvideofilmfestival.com/og.png"
+        />
+        <meta name="twitter:site" content="@atxmvff" />
+        <meta name="theme-color" content="#0a0f1a" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="preload"
+            href={logo.src}
+            as="image"
+            fetchpriority="high"
+        />
+        <slot name="head" />
+        <style is:global>
+      @import 'tailwindcss';
 
-<style is:global>
-    @import 'tailwindcss';
+      :root {
+        --c-accent: #ff4d6d;
+        --c-accent-dark: #e8445f;
+        --c-accent-rgb: 255, 77, 109;
+        --c-bg: #0a0f1a;
+        --c-bg-rgb: 10, 15, 26;
+        --c-bg-dark: #080c14;
+        --c-bg-light: #0c1322;
+        --c-bg-lighter: #0e1528;
+        --c-border: #ffffff26;
+        --c-border-accent: #ff4d6d80;
+        --c-highlight-cyan: #22d3ee;
+        --c-highlight-indigo: #6366f1;
+        --c-highlight-purple: #c084fc;
+        --c-overlay: #0a0f1ae6;
+        --c-surface: #ffffff0d;
+        --c-text: #fff;
+        --c-text-muted: #a8b2c1;
+        --c-text-rgb: 255, 255, 255;
+        --ease: 150ms ease;
+        --ease-md: 0.3s ease;
+        --ease-reveal: 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-slow: 0.6s ease;
+        --f-body: "Space Grotesk", system-ui, sans-serif;
+        --f-display: "Archivo Black", Impact, sans-serif;
+        --fs-1: 120px;
+        --fs-2: 60px;
+        --fs-3: 30px;
+        --fs-4: 25px;
+        --fs-5: 20px;
+        --fs-6: 15px;
+        --gradient-angle: 0deg;
+        --max-w: 1536px;
+        --nav-h: clamp(60px, calc(60px + 40 * (100vw - 320px) / 1216), 100px);
+        --page-px: clamp(15px, calc(15px + 35 * (100vw - 320px) / 1216), 50px);
+        --s-2xl: 5rem;
+        --s-lg: 2rem;
+        --s-md: 1.5rem;
+        --s-sm: 1rem;
+        --s-xs: 0.5rem;
+      }
 
-    :root {
-        --color-pink: 236, 72, 153;
-        --font-sans: 'Geist', system-ui, sans-serif;
-        --rgb-white: 255, 255, 255;
-    }
+      @property --gradient-angle {
+        inherits: false;
+        initial-value: 0deg;
+        syntax: "<angle>";
+      }
 
-    :focus {
-        outline: none;
-    }
+      body {
+        background: var(--c-bg);
+        color: var(--c-text);
+        cursor: none;
+        font-family: var(--f-body);
+        font-size: var(--fs-5);
+        font-weight: 600;
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
 
-    :focus-visible {
-        border-radius: 2px;
-        outline: 2px solid rgba(var(--color-pink), 0.8);
+      a,
+      button {
+        cursor: none;
+      }
+
+      .stars {
+        background: linear-gradient(
+          180deg,
+          var(--c-bg),
+          var(--c-bg-light) 25%,
+          var(--c-bg-lighter) 50%,
+          var(--c-bg-light) 75%,
+          var(--c-bg-dark)
+        );
+        inset: 0;
+        z-index: -1;
+      }
+
+      .stars__layer {
+        backface-visibility: hidden;
+        inset: 0;
+        will-change: transform;
+      }
+
+      .stars__layer--1 {
+        animation: twinkle 6s ease-in-out infinite alternate;
+        background-image:
+          radial-gradient(1px 1px at 8% 12%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(1px 1px at 22% 28%, rgba(255, 255, 255, 0.7), transparent),
+          radial-gradient(1px 1px at 38% 18%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1px 1px at 58% 8%, rgba(255, 255, 255, 0.6), transparent),
+          radial-gradient(1px 1px at 78% 22%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(1px 1px at 92% 35%, rgba(255, 255, 255, 0.7), transparent),
+          radial-gradient(1px 1px at 12% 48%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1px 1px at 45% 42%, rgba(255, 255, 255, 0.5), transparent),
+          radial-gradient(1px 1px at 68% 38%, rgba(255, 255, 255, 0.6), transparent),
+          radial-gradient(1px 1px at 85% 52%, rgba(255, 255, 255, 0.7), transparent),
+          radial-gradient(1px 1px at 5% 68%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1px 1px at 32% 62%, rgba(255, 255, 255, 0.5), transparent),
+          radial-gradient(1px 1px at 55% 72%, rgba(255, 255, 255, 0.6), transparent),
+          radial-gradient(1px 1px at 75% 65%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(1px 1px at 95% 78%, rgba(255, 255, 255, 0.7), transparent),
+          radial-gradient(1px 1px at 18% 85%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1px 1px at 42% 92%, rgba(255, 255, 255, 0.6), transparent),
+          radial-gradient(1px 1px at 65% 88%, rgba(255, 255, 255, 0.75), transparent),
+          radial-gradient(1px 1px at 88% 95%, rgba(255, 255, 255, 0.85), transparent);
+      }
+
+      .stars__layer--2 {
+        animation: twinkle 8s ease-in-out infinite alternate-reverse;
+        background-image:
+          radial-gradient(2px 2px at 15% 10%, #fff, transparent),
+          radial-gradient(2px 2px at 48% 22%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(2px 2px at 82% 15%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(2px 2px at 8% 42%, rgba(255, 255, 255, 0.7), transparent),
+          radial-gradient(2px 2px at 62% 48%, rgba(255, 255, 255, 0.5), transparent),
+          radial-gradient(2px 2px at 92% 55%, #fff, transparent),
+          radial-gradient(2px 2px at 25% 68%, rgba(255, 255, 255, 0.85), transparent),
+          radial-gradient(2px 2px at 72% 75%, rgba(255, 255, 255, 0.75), transparent),
+          radial-gradient(2px 2px at 5% 88%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(2px 2px at 55% 92%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(2px 2px at 88% 85%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(2px 2px at 38% 35%, rgba(255, 255, 255, 0.5), transparent);
+      }
+
+      .stars__layer--3 {
+        animation: twinkle 10s ease-in-out infinite alternate;
+        background-image:
+          radial-gradient(3px 3px at 10% 25%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(3px 3px at 52% 18%, rgba(255, 255, 255, 0.85), transparent),
+          radial-gradient(3px 3px at 85% 42%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(3px 3px at 22% 72%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(3px 3px at 68% 65%, rgba(255, 255, 255, 0.85), transparent),
+          radial-gradient(3px 3px at 92% 88%, rgba(255, 255, 255, 0.9), transparent);
+      }
+
+      .stars__layer--4 {
+        background-image:
+          radial-gradient(6px 6px at 12% 15%, #fff, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.08) 60%, transparent),
+          radial-gradient(5px 5px at 55% 25%, #fff, rgba(255, 255, 255, 0.15) 30%, transparent 60%),
+          radial-gradient(7px 7px at 88% 42%, #fff, rgba(255, 255, 255, 0.45) 30%, rgba(255, 255, 255, 0.07) 60%, transparent),
+          radial-gradient(10px 10px at 25% 62%, #fff, rgba(255, 255, 255, 0.4) 20%, var(--c-surface) 50%, transparent),
+          radial-gradient(8px 8px at 72% 78%, #fff, rgba(255, 255, 255, 0.5) 25%, rgba(255, 255, 255, 0.07) 55%, transparent),
+          radial-gradient(7px 7px at 8% 85%, #fff, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.06) 60%, transparent),
+          radial-gradient(9px 9px at 15% 48%, #fff, rgba(255, 255, 255, 0.3) 25%, var(--c-surface) 50%, transparent),
+          radial-gradient(8px 8px at 92% 68%, #fff, rgba(255, 255, 255, 0.45) 25%, rgba(255, 255, 255, 0.06) 55%, transparent);
+      }
+
+      @keyframes twinkle {
+        from {
+          opacity: 0.5;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .loader {
+        background: var(--c-bg);
+        inset: 0;
+        transition:
+          opacity var(--ease-slow),
+          visibility var(--ease-slow);
+        z-index: 9999;
+      }
+
+      .loader--hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader__logo {
+        animation: loader-pulse 1.5s ease-in-out infinite;
+        height: auto;
+        position: relative;
+        width: 200px;
+        z-index: 1;
+      }
+
+      .loader__bar {
+        background: var(--c-border);
+        border-radius: 3px;
+        height: 3px;
+        margin-top: 2rem;
+        overflow: hidden;
+        width: 200px;
+      }
+
+      .loader__progress {
+        animation: loader-fill 0.8s ease-out forwards;
+        background: var(--c-accent);
+        height: 100%;
+      }
+
+      .loader__percent {
+        color: var(--c-accent);
+        font-family: var(--f-display);
+        font-size: var(--fs-3);
+        letter-spacing: 0.1em;
+        margin-top: 1rem;
+      }
+
+      .loader__pulse {
+        animation: loader-ring 3s ease-out infinite;
+        border: 1px solid rgba(255, 77, 109, 0.25);
+        height: 350px;
+        left: 50%;
+        margin: -175px 0 0 -175px;
+        top: 50%;
+        width: 350px;
+        z-index: 0;
+      }
+
+      .loader__pulse:nth-child(2) {
+        animation-delay: 1s;
+      }
+
+      .loader__pulse:nth-child(3) {
+        animation-delay: 2s;
+      }
+
+      @keyframes loader-pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(0.98);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes loader-ring {
+        0% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(2.5);
+        }
+      }
+
+      @keyframes loader-fill {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      .grain {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        inset: 0;
+        opacity: 0.04;
+        z-index: 1000;
+      }
+
+      .shapes {
+        inset: 0;
+        z-index: -1;
+      }
+
+      .shapes__blob {
+        animation: float 30s ease-in-out infinite;
+        backface-visibility: hidden;
+        filter: blur(100px);
+        opacity: 0.08;
+        will-change: transform;
+      }
+
+      .shapes__blob--1 {
+        background: var(--c-accent);
+        height: 400px;
+        left: 5%;
+        top: 10%;
+        width: 400px;
+      }
+
+      .shapes__blob--2 {
+        animation-delay: -10s;
+        background: var(--c-highlight-indigo);
+        height: 300px;
+        right: 5%;
+        top: 60%;
+        width: 300px;
+      }
+
+      .shapes__blob--3 {
+        animation-delay: -20s;
+        background: var(--c-highlight-cyan);
+        bottom: 10%;
+        height: 250px;
+        left: 30%;
+        width: 250px;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(30px, 20px);
+        }
+      }
+
+      .cursor {
+        backface-visibility: hidden;
+        background: radial-gradient(
+          circle,
+          rgba(255, 77, 109, 0.4) 0%,
+          transparent 70%
+        );
+        height: 30px;
+        left: -15px;
+        top: -15px;
+        width: 30px;
+        will-change: transform;
+        z-index: 9998;
+      }
+
+      .cursor__dot {
+        backface-visibility: hidden;
+        background: var(--c-accent);
+        height: 6px;
+        left: -3px;
+        top: -3px;
+        width: 6px;
+        will-change: transform;
+        z-index: 9999;
+      }
+
+      .cursor--hover {
+        height: 50px;
+        left: -25px;
+        top: -25px;
+        width: 50px;
+      }
+
+      .skip-link {
+        background: var(--c-accent);
+        border-radius: 0 0 8px 8px;
+        color: var(--c-bg);
+        font-weight: 800;
+        left: 50%;
+        padding: var(--s-sm) var(--s-md);
+        text-decoration: none;
+        top: -100%;
+        transform: translateX(-50%);
+        transition: top var(--ease);
+        z-index: 1000;
+      }
+
+      .skip-link:focus {
+        outline: 3px solid var(--c-text);
         outline-offset: 2px;
-    }
+        top: 0;
+      }
 
-    @media (prefers-reduced-motion: reduce) {
+      :focus-visible {
+        outline: 3px solid var(--c-accent);
+        outline-offset: 3px;
+      }
+
+      .scroll-progress {
+        background: linear-gradient(90deg, var(--c-accent), var(--c-highlight-indigo), var(--c-highlight-cyan));
+        height: 3px;
+        left: 0;
+        top: 0;
+        transition: width 0.1s ease-out;
+        width: 0%;
+        z-index: 101;
+      }
+
+      @keyframes gradient-rotate {
+        to {
+          --gradient-angle: 360deg;
+        }
+      }
+
+      .details__icon path,
+      .details__icon circle,
+      .details__icon rect,
+      .details__icon line,
+      .details__icon polyline,
+      .categories__icon path,
+      .categories__icon circle,
+      .categories__icon rect,
+      .categories__icon line,
+      .categories__icon polyline {
+        stroke-dasharray: 200;
+        stroke-dashoffset: 200;
+      }
+
+      @keyframes icon-draw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
         *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            scroll-behavior: auto !important;
-            transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
         }
-    }
-</style>
+
+        html {
+          scroll-behavior: auto;
+        }
+
+        .grain,
+        .shapes,
+        .loader,
+        .cursor,
+        .cursor__dot {
+          display: none;
+        }
+
+        body,
+        a,
+        button {
+          cursor: auto;
+        }
+      }
+
+      @media (hover: none), (pointer: coarse) {
+        .cursor,
+        .cursor__dot {
+          display: none;
+        }
+
+        body,
+        a,
+        button {
+          cursor: auto;
+        }
+      }
+
+      @media (prefers-contrast: more) {
+        :root {
+          --c-border: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      @media (forced-colors: active) {
+        .categories__icon,
+        .footer__icon {
+          stroke: currentColor;
+        }
+      }
+        </style>
+    </head>
+    <body>
+        <slot name="loader" />
+        <div class="grain fixed pointer-events-none" aria-hidden="true"></div>
+        <div class="cursor fixed rounded-full pointer-events-none" aria-hidden="true"></div>
+        <div class="cursor__dot fixed rounded-full pointer-events-none" aria-hidden="true"></div>
+        <div class="shapes fixed overflow-hidden pointer-events-none" aria-hidden="true">
+            <div class="shapes__blob shapes__blob--1 absolute rounded-full"></div>
+            <div class="shapes__blob shapes__blob--2 absolute rounded-full"></div>
+            <div class="shapes__blob shapes__blob--3 absolute rounded-full"></div>
+        </div>
+        <div class="stars fixed overflow-hidden" aria-hidden="true">
+            <div class="stars__layer stars__layer--1 absolute" data-parallax="0.1"></div>
+            <div class="stars__layer stars__layer--2 absolute" data-parallax="0.2"></div>
+            <div class="stars__layer stars__layer--3 absolute" data-parallax="0.3"></div>
+            <div class="stars__layer stars__layer--4 absolute" data-parallax="0.15"></div>
+        </div>
+        <a class="skip-link absolute" href="#main">Skip to main content</a>
+        <div class="scroll-progress fixed" aria-hidden="true"></div>
+        <Navbar />
+        <main id="main">
+            <slot />
+        </main>
+        <Footer />
+        <script is:inline>
+    (() => {
+        const scrollProgress = document.querySelector('.scroll-progress');
+
+        const updateScrollProgress = () => {
+            const scrollTop = window.scrollY;
+            const docHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        };
+
+        const layers = document.querySelectorAll('[data-parallax]');
+        let ticking = false;
+
+        const updateParallax = () => {
+            const y = window.scrollY;
+            layers.forEach(
+                l =>
+                    (l.style.transform = `translateY(${y * +l.dataset.parallax}px)`),
+            );
+            updateScrollProgress();
+            ticking = false;
+        };
+
+        window.addEventListener(
+            'scroll',
+            () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            },
+            { passive: true },
+        );
+
+        const cursor = document.querySelector('.cursor');
+        const dot = document.querySelector('.cursor__dot');
+        let cursorX = 0,
+            cursorY = 0,
+            cursorRaf = false;
+
+        const updateCursor = () => {
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            dot.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            cursorRaf = false;
+        };
+
+        document.addEventListener(
+            'mousemove',
+            (e) => {
+                cursorX = e.clientX;
+                cursorY = e.clientY;
+
+                if (!cursorRaf) {
+                    cursorRaf = true;
+                    requestAnimationFrame(updateCursor);
+                }
+            },
+            { passive: true },
+        );
+
+        document.querySelectorAll('a, button').forEach((el) => {
+            el.addEventListener('mouseenter', () =>
+                cursor.classList.add('cursor--hover'),
+            );
+            el.addEventListener('mouseleave', () =>
+                cursor.classList.remove('cursor--hover'),
+            );
+        });
+    })();
+        </script>
+    </body>
+</html>
