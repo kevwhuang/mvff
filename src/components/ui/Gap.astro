@@ -6,11 +6,13 @@ interface Props {
 const { border } = Astro.props;
 ---
 
-{border ? (
-    <div class="gap gap--border" aria-hidden="true"></div>
-) : (
-    <div class="gap" aria-hidden="true"></div>
-)}
+{border
+    ? (
+            <div class="gap gap--border" aria-hidden="true"></div>
+        )
+    : (
+            <div class="gap" aria-hidden="true"></div>
+        )}
 
 <style>
     .gap {

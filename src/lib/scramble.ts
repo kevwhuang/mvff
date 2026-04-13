@@ -4,14 +4,13 @@ const CHARS = 'iljtfr1|/';
 const ITERATION_STEP = 0.5;
 const SCRAMBLE_INTERVAL = 30;
 
-function scrambleText(element: Element): void {
-    const htmlElement = element as HTMLElement;
-    const original = htmlElement.dataset.original || htmlElement.textContent || '';
-    htmlElement.dataset.original = original;
+function scrambleText(element: HTMLElement): void {
+    const original = element.dataset.original || element.textContent || '';
+    element.dataset.original = original;
     let iteration = 0;
 
     const interval = setInterval(() => {
-        htmlElement.textContent = original
+        element.textContent = original
             .split('')
             .map((char, index) => {
                 if (index < iteration) return original[index];
@@ -23,13 +22,13 @@ function scrambleText(element: Element): void {
 
         if (iteration >= original.length) {
             clearInterval(interval);
-            htmlElement.textContent = original;
+            element.textContent = original;
         }
     }, SCRAMBLE_INTERVAL);
 }
 
 export function initScrambleAnimations(): void {
-    document.querySelectorAll('[data-scramble]').forEach((element) => {
+    document.querySelectorAll<HTMLElement>('[data-scramble]').forEach((element) => {
         ScrollTrigger.create({
             once: true,
             onEnter: () => scrambleText(element),
