@@ -2,30 +2,22 @@
 import logo from '@assets/images/logos/mvff.png';
 ---
 
-<div class="loader fixed flex items-center justify-center overflow-hidden" aria-hidden="true">
-    <div class="loader__content relative flex flex-col items-center justify-center">
-        <div class="loader__pulse absolute rounded-full"></div>
-        <div class="loader__pulse absolute rounded-full"></div>
-        <div class="loader__pulse absolute rounded-full"></div>
-        <img
-            class="loader__logo select-none"
-            alt=""
-            fetchpriority="high"
-            src={logo.src}
-        />
+<div class="loader fixed flex items-center justify-center" aria-hidden="true">
+    <div class="loader__inner text-center">
+        <div class="loader__mark">
+            <img alt="" fetchpriority="high" src={logo.src} />
+        </div>
+        <div class="loader__text">Loading reel · 2026</div>
         <div class="loader__bar"><div class="loader__progress"></div></div>
-        <div class="loader__percent select-none">0%</div>
     </div>
 </div>
 
 <style>
     .loader {
-        background: var(--c-base);
+        background: var(--ink);
         inset: 0;
-        transition:
-            opacity var(--xs-2),
-            visibility var(--xs-2);
-        z-index: 9999;
+        transition: opacity 600ms ease, visibility 600ms;
+        z-index: 300;
     }
 
     .loader[data-hidden] {
@@ -33,85 +25,70 @@ import logo from '@assets/images/logos/mvff.png';
         visibility: hidden;
     }
 
-    .loader__logo {
-        animation: loader-pulse 1.5s ease-in-out infinite;
-        height: auto;
-        position: relative;
-        width: var(--l-2);
-        z-index: 1;
+    .loader__mark {
+        animation: spinpulse 2s ease-in-out infinite;
+        display: grid;
+        filter: invert(var(--brand-invert, 0));
+        height: 90px;
+        margin: 0 auto 24px;
+        place-items: center;
+        width: 90px;
+    }
+
+    [data-theme='light'] .loader__mark {
+        --brand-invert: 1;
+    }
+
+    .loader__mark img {
+        width: 100%;
+    }
+
+    .loader__text {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
     }
 
     .loader__bar {
-        background: color-mix(in srgb, var(--c-text) 15%, transparent);
-        border-radius: var(--r-3);
-        height: 3px;
-        margin-top: var(--s-3);
+        background: var(--line);
+        height: 1px;
+        margin: 24px auto 0;
+        max-width: 60vw;
         overflow: hidden;
-        width: var(--l-2);
+        position: relative;
+        width: 280px;
     }
 
     .loader__progress {
-        animation: loader-fill 0.8s ease-out forwards;
-        background: var(--c-brand);
-        height: 100%;
+        animation: loadbar 1.4s ease-in-out infinite;
+        background: var(--accent);
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 30%;
     }
 
-    .loader__percent {
-        color: var(--c-brand);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-3);
-        letter-spacing: 0.1em;
-        margin-top: var(--s-4);
-    }
-
-    .loader__pulse {
-        animation: loader-ring 3s ease-out infinite;
-        border: 1px solid color-mix(in srgb, var(--c-brand) 25%, transparent);
-        height: var(--l-1);
-        left: 50%;
-        margin: calc(var(--l-1) / -2) 0 0 calc(var(--l-1) / -2);
-        top: 50%;
-        width: var(--l-1);
-        z-index: 0;
-    }
-
-    .loader__pulse:nth-child(2) {
-        animation-delay: 1s;
-    }
-
-    .loader__pulse:nth-child(3) {
-        animation-delay: 2s;
-    }
-
-    @keyframes loader-fill {
-        from {
-            width: 0;
+    @keyframes loadbar {
+        0% {
+            left: -30%;
         }
-        to {
-            width: 100%;
+        100% {
+            left: 100%;
         }
     }
 
-    @keyframes loader-pulse {
+    @keyframes spinpulse {
         0%,
         100% {
-            opacity: 0.5;
-            transform: scale(0.98);
-        }
-        50% {
             opacity: 1;
             transform: scale(1);
         }
-    }
-
-    @keyframes loader-ring {
-        0% {
-            opacity: 0.5;
-            transform: scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: scale(2.5);
+        50% {
+            opacity: 0.6;
+            transform: scale(1.05);
         }
     }
 
@@ -122,38 +99,61 @@ import logo from '@assets/images/logos/mvff.png';
     }
 </style>
 
-<script>
-    const HIDE_DELAY = 200;
-    const MAX_PROGRESS = 100;
-    const PROGRESS_BASE = 5;
-    const PROGRESS_RANGE = 15;
-    const TICK_INTERVAL = 100;
+<script is:inline>
+    (function () {
+        const MIN_DISPLAY = 1100;
+        const MAX_DISPLAY = 6000;
+        const FLAG = 'mvff-loaded';
 
-    const loader = document.querySelector('.loader');
+        const loader = document.querySelector('.loader');
 
-    if (loader) {
-        const percent = document.querySelector('.loader__percent');
-        let progress = 0;
+        if (!loader) return;
 
-        const loadInterval = setInterval(() => {
-            progress += Math.random() * PROGRESS_RANGE + PROGRESS_BASE;
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            if (progress >= MAX_PROGRESS) {
-                progress = MAX_PROGRESS;
-                clearInterval(loadInterval);
-
-                if (percent) {
-                    percent.textContent = '100%';
-                }
-
-                setTimeout(() => loader.setAttribute('data-hidden', ''), HIDE_DELAY);
-            } else if (percent) {
-                percent.textContent = Math.floor(progress) + '%';
-            }
-        }, TICK_INTERVAL);
-
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (reducedMotion || sessionStorage.getItem(FLAG)) {
             loader.setAttribute('data-hidden', '');
+            return;
         }
-    }
+
+        const start = performance.now();
+        let hidden = false;
+
+        function hide() {
+            if (hidden) return;
+            hidden = true;
+
+            const elapsed = performance.now() - start;
+            const remaining = Math.max(0, MIN_DISPLAY - elapsed);
+
+            setTimeout(function () {
+                loader.setAttribute('data-hidden', '');
+                try {
+                    sessionStorage.setItem(FLAG, '1');
+                } catch { /* noop */ }
+            }, remaining);
+        }
+
+        if (document.readyState === 'complete') {
+            hide();
+        } else {
+            window.addEventListener('load', hide, { once: true });
+        }
+
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) hide();
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden && performance.now() - start > MIN_DISPLAY) hide();
+        });
+
+        setTimeout(hide, MAX_DISPLAY);
+    })();
+</script>
+
+<script>
+    document.addEventListener('astro:after-swap', () => {
+        document.querySelector('.loader')?.setAttribute('data-hidden', '');
+    });
 </script>

@@ -1,275 +1,102 @@
 ---
-import AwardsIcon from '@components/icons/Awards.astro';
-import ExperienceCard from '@components/blocks/ExperienceCard.astro';
-import MusicIcon from '@components/icons/Music.astro';
-import PanelIcon from '@components/icons/Panel.astro';
-import PartyIcon from '@components/icons/Party.astro';
-import ScreeningsIcon from '@components/icons/Screenings.astro';
+const highlights = [
+    { title: 'Screenings', tag: '28 selections', desc: '28 official selections across all genres. Four screening blocks featuring emerging and established artists.' },
+    { title: 'Awards', tag: '6+ categories', desc: 'Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.' },
+    { title: 'Q&A Panel', tag: 'Live discussion', desc: 'Conversations with directors, producers, and artists after each screening block. Community partner spotlights.' },
+    { title: 'Live Music', tag: 'Two sets', desc: 'Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin\'s music and film worlds collide.' },
+    { title: 'Pool Party', tag: 'Until 2 AM', desc: 'Cabana Club night swim atmosphere. Red carpet meets pool party.' },
+];
 ---
 
-<section class="experience" aria-labelledby="highlights-heading">
-    <h2
-        id="highlights-heading"
-        class="experience__heading"
-        data-scramble
-        data-scroll
-    >
-        The Experience
-    </h2>
-    <ul class="experience__list grid list-none">
-        <ExperienceCard delay="0.1" label="Screenings" modal="28 official selections across all genres. Four screening blocks featuring emerging and established artists.">
-            <ScreeningsIcon class="experience__icon relative" />
-        </ExperienceCard>
-        <ExperienceCard delay="0.2" label="Awards" modal="Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.">
-            <AwardsIcon class="experience__icon relative" />
-        </ExperienceCard>
-        <ExperienceCard delay="0.3" label="Q&amp;A Panel" modal="Conversations with directors, producers, and artists after each screening block. Community partner spotlights.">
-            <PanelIcon class="experience__icon relative" />
-        </ExperienceCard>
-        <ExperienceCard delay="0.4" label="Live Music" modal="Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin's music and film worlds collide.">
-            <MusicIcon class="experience__icon relative" />
-        </ExperienceCard>
-        <ExperienceCard delay="0.5" label="Pool Party" modal="Cabana Club night swim atmosphere. Red carpet meets pool party.">
-            <PartyIcon class="experience__icon relative" />
-        </ExperienceCard>
-    </ul>
+<section class="section" aria-labelledby="experience-heading">
+    <div class="shell">
+        <div class="section-head">
+            <span class="section-num">[ 02 ]</span>
+            <h2 id="experience-heading" class="section-title">The Experience</h2>
+            <span class="section-meta">FIVE ACTS / ONE NIGHT</span>
+        </div>
+        <div>
+            {highlights.map((h, i) => (
+                <div class="highlight">
+                    <span class="highlight__num">/ {String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="highlight__title">{h.title}</h3>
+                    <p class="highlight__desc">{h.desc}</p>
+                    <span class="highlight__tag">{h.tag}</span>
+                </div>
+            ))}
+        </div>
+    </div>
 </section>
-<div class="experience__modal fixed pointer-events-none" aria-hidden="true">
-    <p class="experience__modal-text text-center"></p>
-</div>
 
 <style>
-    .experience {
-        contain: layout style;
-        margin: 0 auto;
-        max-width: var(--l-max);
-        padding: 0 var(--l-3);
+    .highlight {
+        align-items: baseline;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+        display: grid;
+        gap: clamp(16px, 3vw, 40px);
+        grid-template-columns: 80px 1fr 1.2fr 80px;
+        padding: clamp(28px, 4vw, 44px) 0;
+        transition: padding 250ms ease;
     }
 
-    .experience__heading {
-        color: var(--c-brand);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-1);
-        letter-spacing: 0.02em;
-        margin-bottom: var(--s-1);
-        text-align: center;
-        text-shadow:
-            0 0 60px color-mix(in srgb, var(--c-brand) 60%, transparent),
-            0 0 120px color-mix(in srgb, var(--c-brand) 30%, transparent);
+    .highlight:first-child {
+        border-top: 1px solid var(--line);
     }
 
-    .experience__list {
-        gap: var(--s-2);
-        grid-template-columns: 1fr;
+    .highlight:hover {
+        background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--accent) 8%, transparent), transparent);
     }
 
-    @media (min-width: 1280px) {
-        .experience__list {
-            grid-template-columns: repeat(5, 1fr);
+    .highlight:hover .highlight__title {
+        color: var(--accent);
+        transform: translateX(8px);
+    }
+
+    .highlight__num {
+        color: var(--paper-mute);
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        letter-spacing: 0.18em;
+    }
+
+    .highlight__title {
+        font-size: clamp(34px, 5vw, 64px);
+        line-height: 0.95;
+        text-transform: uppercase;
+        transition: all 250ms ease;
+    }
+
+    .highlight__desc {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: clamp(15px, 1.3vw, 17px);
+        line-height: 1.45;
+    }
+
+    .highlight__tag {
+        color: var(--accent);
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-align: right;
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+        .highlight {
+            gap: 14px;
+            grid-template-columns: 40px 1fr;
         }
-    }
 
-    .experience__icon {
-        height: var(--fs-3);
-        stroke: var(--c-brand);
-        width: var(--fs-3);
-        z-index: 1;
-    }
+        .highlight__desc,
+        .highlight__tag {
+            grid-column: 2 / -1;
+        }
 
-    .experience__modal {
-        backdrop-filter: blur(16px);
-        background: color-mix(in srgb, var(--c-base) 95%, transparent);
-        border: 1px solid color-mix(in srgb, var(--c-brand) 50%, transparent);
-        border-radius: var(--r-1);
-        box-shadow:
-            0 12px 40px rgba(0, 0, 0, 0.5),
-            0 0 20px color-mix(in srgb, var(--c-brand) 15%, transparent);
-        left: 0;
-        opacity: 0;
-        padding: var(--s-2);
-        top: 0;
-        transform: translateY(-8px);
-        transition:
-            opacity var(--xs-3),
-            transform var(--xs-3);
-        width: 340px;
-        z-index: 200;
-        -webkit-backdrop-filter: blur(16px);
-    }
-
-    .experience__modal[data-visible] {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0);
-    }
-
-    .experience__modal::after {
-        border-bottom: 14px solid color-mix(in srgb, var(--c-brand) 50%, transparent);
-        border-left: 14px solid transparent;
-        border-right: 14px solid transparent;
-        content: "";
-        left: var(--arrow-left, 50%);
-        position: absolute;
-        top: -14px;
-        transform: translateX(-50%);
-    }
-
-    .experience__modal-text {
-        color: var(--c-text);
-        font-family: var(--ff-body);
-        font-size: var(--fs-5);
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        line-height: 1.6;
-    }
-
-    @keyframes stroke-reveal {
-        to {
-            stroke-dashoffset: 0;
+        .highlight__tag {
+            margin-top: 6px;
+            text-align: left;
         }
     }
 </style>
-
-<script>
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import gsap from 'gsap';
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ICON_ANIMATION = 'stroke-reveal 2.5s ease-out forwards';
-    const MODAL_EDGE_PADDING = 12;
-    const MODAL_OFFSET_TOP = 36;
-    const MODAL_SHOW_DELAY = 10;
-    const MODAL_WIDTH = 340;
-    const PERSPECTIVE = 1000;
-    const TILT_DIVISOR = 15;
-    const TILT_SCALE = 1.02;
-
-    const modal = document.querySelector('.experience__modal') as HTMLElement | null;
-    const modalText = modal?.querySelector('.experience__modal-text');
-    const modalItems = document.querySelectorAll('[data-modal]');
-    let activeItem: Element | null = null;
-    let showTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    function positionModal(item: Element): void {
-        if (!modal) return;
-        const rect = item.getBoundingClientRect();
-        let left = rect.left + rect.width / 2 - MODAL_WIDTH / 2;
-        left = Math.max(MODAL_EDGE_PADDING, Math.min(left, window.innerWidth - MODAL_WIDTH - MODAL_EDGE_PADDING));
-        modal.style.width = MODAL_WIDTH + 'px';
-        modal.style.left = left + 'px';
-        modal.style.top = rect.bottom + MODAL_OFFSET_TOP + 'px';
-        const arrowLeft = rect.left + rect.width / 2 - left;
-        modal.style.setProperty('--arrow-left', arrowLeft + 'px');
-    }
-
-    function showModal(item: Element): void {
-        if (!modal || !modalText) return;
-        const text = (item as HTMLElement).dataset.modal;
-        if (!text) return;
-
-        if (showTimeout) {
-            clearTimeout(showTimeout);
-        }
-
-        modal.removeAttribute('data-visible');
-        modal.style.transition = 'none';
-        void modal.offsetHeight;
-        modal.style.transition = '';
-        modalText.textContent = text;
-        positionModal(item);
-
-        showTimeout = setTimeout(() => {
-            modal.setAttribute('data-visible', '');
-            modal.style.transform = 'translateY(0)';
-        }, MODAL_SHOW_DELAY);
-
-        activeItem = item;
-    }
-
-    function hideModal(): void {
-        if (modal) {
-            modal.removeAttribute('data-visible');
-        }
-
-        activeItem = null;
-    }
-
-    document.querySelectorAll('.experience__icon').forEach((icon) => {
-        const paths = icon.querySelectorAll('path, circle, rect, line, polyline');
-
-        ScrollTrigger.create({
-            once: true,
-            onEnter: () => {
-                paths.forEach((path) => {
-                    (path as HTMLElement).style.animation = ICON_ANIMATION;
-                });
-            },
-            start: 'bottom bottom',
-            trigger: icon.closest('[data-scroll]') || icon,
-        });
-    });
-
-    document.querySelectorAll('.experience__list > *').forEach((card) => {
-        card.addEventListener('mousemove', (event) => {
-            const mouseEvent = event as MouseEvent;
-            const rect = card.getBoundingClientRect();
-            const offsetX = mouseEvent.clientX - rect.left;
-            const offsetY = mouseEvent.clientY - rect.top;
-            const rotateX = (rect.height / 2 - offsetY) / TILT_DIVISOR;
-            const rotateY = (offsetX - rect.width / 2) / TILT_DIVISOR;
-            (card as HTMLElement).style.transform = `perspective(${PERSPECTIVE}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${TILT_SCALE}, ${TILT_SCALE}, ${TILT_SCALE})`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            (card as HTMLElement).style.transform = `perspective(${PERSPECTIVE}px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-        });
-    });
-
-    modalItems.forEach((item) => {
-        item.addEventListener('mouseenter', () => showModal(item));
-        item.addEventListener('mouseleave', hideModal);
-
-        item.addEventListener('click', (event) => {
-            if (!matchMedia('(hover: hover)').matches) {
-                event.stopPropagation();
-
-                if (activeItem === item) {
-                    hideModal();
-                } else {
-                    showModal(item);
-                }
-            }
-        });
-
-        item.addEventListener('keydown', (event) => {
-            const key = (event as KeyboardEvent).key;
-
-            if (key === 'Enter' || key === ' ') {
-                event.preventDefault();
-                if (activeItem === item) {
-                    hideModal();
-                } else {
-                    showModal(item);
-                }
-            } else if (key === 'Escape' && activeItem === item) {
-                hideModal();
-            }
-        });
-
-        item.addEventListener('focus', () => showModal(item));
-        item.addEventListener('blur', hideModal);
-    });
-
-    document.addEventListener('click', (event) => {
-        if (activeItem && !(event.target as Element).closest('[data-modal]')) {
-            hideModal();
-        }
-    });
-
-    window.addEventListener('scroll', () => {
-        if (activeItem) {
-            positionModal(activeItem);
-        }
-    }, { passive: true });
-</script>

@@ -1,244 +1,315 @@
 ---
-import BurgerIcon from '@components/icons/Burger.astro';
 import logo from '@assets/images/logos/mvff.png';
 ---
 
-<nav class="navbar fixed flex items-center" aria-label="Main">
-    <div class="navbar__inner flex items-center justify-between">
-        <a class="navbar__logo flex items-center" aria-label="ATX MVFF Home" href="/">
-            <img class="navbar__logo-img select-none" alt="" src={logo.src} />
+<nav class="nav sticky" aria-label="Main">
+    <div class="nav__inner">
+        <a class="nav__brand flex items-center" aria-label="ATX MVFF Home" href="/">
+            <div class="nav__brand-mark">
+                <img alt="MVFF" src={logo.src} />
+            </div>
+            <div class="nav__brand-text flex flex-col">
+                <span class="nav__brand-t1">ATX MVFF</span>
+                <span class="nav__brand-t2">EST. 2026 · AUSTIN TX</span>
+            </div>
         </a>
-        <div class="navbar__countdown select-none" aria-label="Countdown to event" aria-live="polite" aria-atomic="true">
-            <div class="navbar__countdown-num flex flex-col items-center">
-                <span id="countdown-days" class="navbar__countdown-val">--</span>
-                <span class="navbar__countdown-label uppercase">Days</span>
-            </div>
-            <span class="navbar__countdown-sep">:</span>
-            <div class="navbar__countdown-num flex flex-col items-center">
-                <span id="countdown-hours" class="navbar__countdown-val">--</span>
-                <span class="navbar__countdown-label uppercase">Hrs</span>
-            </div>
-            <span class="navbar__countdown-sep">:</span>
-            <div class="navbar__countdown-num flex flex-col items-center">
-                <span id="countdown-mins" class="navbar__countdown-val">--</span>
-                <span class="navbar__countdown-label uppercase">Min</span>
-            </div>
-            <span class="navbar__countdown-sep">:</span>
-            <div class="navbar__countdown-num flex flex-col items-center">
-                <span id="countdown-secs" class="navbar__countdown-val">--</span>
-                <span class="navbar__countdown-label uppercase">Sec</span>
-            </div>
+        <div class="nav__links flex items-center justify-center">
+            <a class="nav__link" href="/">Home</a>
+            <a class="nav__link" href="/team">Team</a>
+            <a class="nav__link" href="/shop">Shop</a>
+            <a class="nav__link" href="/gallery">Gallery</a>
+            <a class="nav__link" href="/info">Info</a>
+            <a class="nav__link" href="/contact">Contact</a>
         </div>
-        <div class="navbar__links flex items-center justify-end">
+        <div class="nav__actions flex items-center">
+            <div class="nav__countdown" aria-label="Countdown to event">
+                <span class="nav__pulse"></span>
+                <span id="nav-countdown-text">T-00d 00:00:00</span>
+            </div>
+            <button class="nav__theme" aria-label="Toggle theme" type="button">☾</button>
             <a
-                class="navbar__cta inline-flex items-center justify-center text-center uppercase no-underline"
-                aria-label="Submit your music video"
+                class="nav__submit"
                 href="https://filmfreeway.com/atxmusicvideofilmfestival"
                 rel="noopener noreferrer"
                 target="_blank"
             >
-                Submit Video<span class="sr-only"> (opens in new tab)</span>
+                Submit
             </a>
-            <button class="navbar__burger inline-flex items-center justify-center" aria-expanded="false" aria-label="Open menu">
-                <BurgerIcon />
-            </button>
+            <button class="nav__burger" aria-expanded="false" aria-label="Open menu" type="button">≡</button>
         </div>
     </div>
 </nav>
-<div class="navbar__menu fixed flex flex-col items-center justify-center pointer-events-none" aria-hidden="true">
-    <a class="navbar__menu-link no-underline" href="/">Home</a>
-    <a class="navbar__menu-link no-underline" href="/team">Team</a>
-    <div class="navbar__menu-divider"></div>
-    <a class="navbar__menu-link no-underline" href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck</a>
-    <a class="navbar__menu-link no-underline" href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Schedule a Call</a>
+<div class="mobile-menu fixed" aria-hidden="true">
+    <button class="mobile-menu__close" aria-label="Close menu" type="button">×</button>
+    <a class="mobile-menu__link" href="/">Home</a>
+    <a class="mobile-menu__link" href="/team">Team</a>
+    <a class="mobile-menu__link" href="/shop">Shop</a>
+    <a class="mobile-menu__link" href="/gallery">Gallery</a>
+    <a class="mobile-menu__link" href="/info">Info</a>
+    <a class="mobile-menu__link" href="/contact">Contact</a>
+    <div class="mobile-menu__divider"></div>
+    <a class="mobile-menu__link" href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck →</a>
+    <a class="mobile-menu__link" href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Schedule a Call →</a>
 </div>
 
 <style>
-    .navbar {
-        backdrop-filter: blur(10px);
-        background: color-mix(in srgb, var(--c-base) 90%, transparent);
-        border-bottom: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
-        height: var(--l-nav);
-        inset: 0 0 auto;
-        z-index: 100;
+    .nav {
+        backdrop-filter: blur(14px) saturate(120%);
+        background: color-mix(in oklab, var(--ink) 72%, transparent);
+        border-bottom: 1px solid var(--line);
+        top: 0;
+        z-index: 50;
+        -webkit-backdrop-filter: blur(14px) saturate(120%);
     }
 
-    .navbar__inner {
-        display: grid;
-        gap: var(--s-3);
-        grid-template-columns: 1fr auto 1fr;
-        margin: 0 auto;
-        max-width: var(--l-max);
-        padding: 0 var(--l-3);
-        width: 100%;
-    }
-
-    .navbar__logo-img {
-        height: var(--s-2);
-        width: auto;
-    }
-
-    .navbar__countdown {
+    .nav__inner {
         align-items: center;
-        color: var(--c-muted);
+        display: grid;
+        gap: clamp(12px, 3vw, 28px);
+        grid-template-columns: auto 1fr auto;
+        margin: 0 auto;
+        max-width: var(--shell-max);
+        padding: 14px var(--shell-pad);
+    }
+
+    .nav__brand {
+        cursor: pointer;
+        gap: 14px;
+        text-decoration: none;
+        user-select: none;
+    }
+
+    .nav__brand-mark {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        display: grid;
+        filter: invert(var(--brand-invert, 0));
+        height: 38px;
+        place-items: center;
+        width: 38px;
+    }
+
+    [data-theme='light'] .nav__brand-mark {
+        --brand-invert: 1;
+    }
+
+    .nav__brand-mark img {
+        display: block;
+        height: auto;
+        width: 78%;
+    }
+
+    .nav__brand-text {
+        line-height: 1;
+    }
+
+    .nav__brand-t1 {
+        color: var(--paper);
+        font-family: var(--ff-display);
+        font-size: 18px;
+        letter-spacing: 0.03em;
+    }
+
+    .nav__brand-t2 {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 9.5px;
+        letter-spacing: 0.22em;
+        margin-top: 3px;
+        text-transform: uppercase;
+    }
+
+    .nav__links {
+        gap: 4px;
+    }
+
+    .nav__link {
+        color: var(--paper-dim);
+        cursor: pointer;
+        font-family: var(--ff-mono);
+        font-size: 11.5px;
+        letter-spacing: 0.16em;
+        padding: 10px 14px;
+        position: relative;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color 180ms ease;
+    }
+
+    .nav__link:hover {
+        color: var(--paper);
+    }
+
+    .nav__link[aria-current='page'] {
+        color: var(--paper);
+    }
+
+    .nav__link[aria-current='page']::before {
+        background: var(--accent);
+        bottom: 4px;
+        content: '';
+        height: 2px;
+        left: 14px;
+        position: absolute;
+        right: 14px;
+    }
+
+    .nav__actions {
+        gap: 10px;
+        margin-left: auto;
+    }
+
+    .nav__countdown {
+        align-items: baseline;
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        color: var(--paper);
         display: flex;
-        font-family: var(--ff-body);
-        font-size: var(--fs-6);
-        font-weight: 600;
-        gap: var(--s-4);
-        height: var(--s-2);
-        letter-spacing: 0.05em;
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        gap: 6px;
+        letter-spacing: 0.1em;
+        padding: 6px 10px;
     }
 
-    .navbar__countdown-num {
-        min-width: var(--s-3);
+    .nav__pulse {
+        animation: pulse 1.6s ease-in-out infinite;
+        background: var(--accent);
+        border-radius: 50%;
+        display: inline-block;
+        height: 6px;
+        margin-right: 6px;
+        width: 6px;
     }
 
-    .navbar__countdown-val {
-        color: var(--c-brand);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-4);
-        line-height: 1;
-    }
-
-    .navbar__countdown-label {
-        font-size: var(--fs-6);
-        opacity: 0.7;
-    }
-
-    .navbar__countdown-sep {
-        color: var(--c-brand);
-        font-size: var(--fs-5);
-        opacity: 0.5;
-    }
-
-    .navbar__links {
-        gap: var(--s-4);
-        justify-self: end;
-    }
-
-    .navbar__cta {
-        animation: cta-pulse 2s ease-in-out infinite;
-        background: var(--c-brand);
-        border-radius: var(--r-2);
-        box-shadow: 0 3px 15px color-mix(in srgb, var(--c-brand) 40%, transparent);
-        color: var(--c-text);
-        font-size: var(--fs-6);
-        font-weight: 800;
-        height: var(--s-2);
-        letter-spacing: 0.05em;
-        line-height: 1;
-        padding: 0 var(--s-4);
-        transition:
-            background var(--xs-4),
-            box-shadow var(--xs-4),
-            transform var(--xs-4);
-    }
-
-    .navbar__cta:hover {
-        animation: none;
-        background: color-mix(in srgb, var(--c-brand), black 10%);
-        box-shadow: 0 5px 25px color-mix(in srgb, var(--c-brand) 70%, transparent);
-        transform: scale(1.05);
-    }
-
-    .navbar__burger {
-        background: color-mix(in srgb, var(--c-text) 5%, transparent);
-        border: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
-        border-radius: var(--r-2);
-        color: var(--c-text);
-        height: var(--s-2);
-        transition:
-            background var(--xs-4),
-            border-color var(--xs-4);
-        width: var(--s-2);
-    }
-
-    .navbar__burger:hover {
-        background: color-mix(in srgb, var(--c-text) 5%, transparent);
-        border-color: color-mix(in srgb, var(--c-text) 50%, transparent);
-    }
-
-    .navbar__menu {
-        backdrop-filter: blur(16px);
-        background: color-mix(in srgb, var(--c-base) 95%, transparent);
-        bottom: 0;
-        gap: var(--s-2);
-        left: 0;
-        opacity: 0;
-        right: 0;
-        top: var(--l-nav);
-        transition: opacity var(--xs-3);
-        z-index: 99;
-        -webkit-backdrop-filter: blur(16px);
-    }
-
-    .navbar__menu[data-open] {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .navbar__menu-link:focus-visible {
-        color: var(--c-brand);
-        outline: 2px solid var(--c-brand);
-        outline-offset: 4px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .navbar__menu {
-            transition: none;
-        }
-
-        .navbar__cta {
-            animation: none;
-        }
-
-        .navbar__cta:hover {
-            transform: none;
-        }
-
-        .navbar__burger {
-            transition: none;
-        }
-    }
-
-    .navbar__menu-link {
-        color: var(--c-text);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-2);
-        letter-spacing: 0.05em;
-        transition: color var(--xs-4);
-    }
-
-    .navbar__menu-link:hover {
-        color: var(--c-brand);
-    }
-
-    .navbar__menu-divider {
-        border-top: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent);
-        margin: var(--s-4) 0;
-        width: var(--l-1);
-    }
-
-    @media (prefers-contrast: more) {
-        .navbar__cta {
-            outline: 2px solid var(--c-text);
-        }
-    }
-
-    @media (forced-colors: active) {
-        .navbar__cta {
-            border: 2px solid currentColor;
-        }
-    }
-
-    @keyframes cta-pulse {
+    @keyframes pulse {
         0%,
         100% {
-            box-shadow: 0 3px 15px color-mix(in srgb, var(--c-brand) 40%, transparent);
+            opacity: 0.4;
+            transform: scale(0.9);
         }
         50% {
-            box-shadow: 0 3px 20px color-mix(in srgb, var(--c-brand) 70%, transparent);
+            box-shadow: 0 0 12px var(--accent);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    .nav__theme {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        color: var(--paper);
+        cursor: pointer;
+        display: grid;
+        height: 36px;
+        place-items: center;
+        transition: all 200ms ease;
+        width: 36px;
+    }
+
+    .nav__theme:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .nav__submit {
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        color: var(--ink);
+        cursor: pointer;
+        display: inline-block;
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        padding: 10px 16px;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 200ms ease;
+    }
+
+    .nav__submit:hover {
+        background: var(--paper);
+        border-color: var(--paper);
+        color: var(--ink);
+    }
+
+    .nav__burger {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        color: var(--paper);
+        cursor: pointer;
+        display: none;
+        height: 36px;
+        place-items: center;
+        width: 36px;
+    }
+
+    .mobile-menu {
+        background: var(--ink);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        inset: 0;
+        padding: 80px 32px 32px;
+        transform: translateX(100%);
+        transition: transform 300ms ease;
+        z-index: 60;
+    }
+
+    .mobile-menu[data-open] {
+        transform: translateX(0);
+    }
+
+    .mobile-menu__close {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        color: var(--paper);
+        cursor: pointer;
+        height: 36px;
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        width: 36px;
+    }
+
+    .mobile-menu__link {
+        border-bottom: 1px solid var(--line);
+        color: var(--paper);
+        font-family: var(--ff-display);
+        font-size: 28px;
+        letter-spacing: 0.04em;
+        padding: 14px 0;
+        text-decoration: none;
+        transition: color 180ms ease;
+    }
+
+    .mobile-menu__link:hover {
+        color: var(--accent);
+    }
+
+    .mobile-menu__divider {
+        border-top: 1px solid var(--line);
+        margin: 8px 0;
+    }
+
+    @media (max-width: 1024px) {
+        .nav__links {
+            display: none;
+        }
+
+        .nav__countdown {
+            display: none;
+        }
+
+        .nav__burger {
+            display: grid;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .nav__brand-text {
+            display: none;
         }
     }
 </style>
@@ -251,103 +322,130 @@ import logo from '@assets/images/logos/mvff.png';
     const PAD_LENGTH = 2;
     const EVENT_DATE = new Date('2026-07-18T19:00:00-05:00').getTime();
 
-    const countdownContainer = document.querySelector('.navbar__countdown') as HTMLElement | null;
-    const countdownElements = {
-        days: document.getElementById('countdown-days'),
-        hours: document.getElementById('countdown-hours'),
-        mins: document.getElementById('countdown-mins'),
-        secs: document.getElementById('countdown-secs'),
-    };
+    let navInterval: ReturnType<typeof setInterval> | undefined;
+    let themeHandler: (() => void) | undefined;
+    let burgerHandler: (() => void) | undefined;
+    let closeHandler: (() => void) | undefined;
+    let escapeHandler: ((e: KeyboardEvent) => void) | undefined;
 
-    function updateCountdown(): void {
+    function updateNavCountdown(): void {
+        const el = document.getElementById('nav-countdown-text');
+
+        if (!el) return;
+
         const remaining = EVENT_DATE - Date.now();
 
         if (remaining <= 0) {
-            if (countdownContainer) {
-                countdownContainer.innerHTML = '<span class="navbar__countdown-val" style="font-size:var(--fs-3);letter-spacing:0.1em">HAPPENING NOW</span>';
-            }
-            clearInterval(countdownInterval);
+            el.textContent = 'HAPPENING NOW';
             return;
         }
 
-        const days = Math.floor(remaining / MS_PER_DAY);
-        const hours = Math.floor((remaining % MS_PER_DAY) / MS_PER_HOUR);
-        const minutes = Math.floor((remaining % MS_PER_HOUR) / MS_PER_MINUTE);
-        const seconds = Math.floor((remaining % MS_PER_MINUTE) / MS_PER_SECOND);
+        const d = Math.floor(remaining / MS_PER_DAY);
+        const h = Math.floor((remaining % MS_PER_DAY) / MS_PER_HOUR);
+        const m = Math.floor((remaining % MS_PER_HOUR) / MS_PER_MINUTE);
+        const s = Math.floor((remaining % MS_PER_MINUTE) / MS_PER_SECOND);
 
-        if (countdownElements.days) {
-            countdownElements.days.textContent = String(days).padStart(PAD_LENGTH, '0');
-        }
+        el.textContent = 'T-'
+            + String(d).padStart(PAD_LENGTH, '0') + 'd '
+            + String(h).padStart(PAD_LENGTH, '0') + ':'
+            + String(m).padStart(PAD_LENGTH, '0') + ':'
+            + String(s).padStart(PAD_LENGTH, '0');
+    }
 
-        if (countdownElements.hours) {
-            countdownElements.hours.textContent = String(hours).padStart(PAD_LENGTH, '0');
-        }
-
-        if (countdownElements.mins) {
-            countdownElements.mins.textContent = String(minutes).padStart(PAD_LENGTH, '0');
-        }
-
-        if (countdownElements.secs) {
-            countdownElements.secs.textContent = String(seconds).padStart(PAD_LENGTH, '0');
+    function getStoredTheme(): string {
+        try {
+            return localStorage.getItem('mvff-theme') || 'dark';
+        } catch {
+            return 'dark';
         }
     }
 
-    updateCountdown();
-    const countdownInterval = setInterval(updateCountdown, MS_PER_SECOND);
+    function applyTheme(theme: string): void {
+        document.documentElement.setAttribute('data-theme', theme);
 
-    const burger = document.querySelector('.navbar__burger') as HTMLButtonElement | null;
-    const burgerIcon = burger?.querySelector('.burger-icon') as SVGElement | null;
-    const menu = document.querySelector('.navbar__menu') as HTMLElement | null;
-    const menuLinks = menu?.querySelectorAll('.navbar__menu-link') as NodeListOf<HTMLAnchorElement>;
+        const btn = document.querySelector('.nav__theme');
 
-    function openMenu(): void {
-        burgerIcon?.setAttribute('data-open', '');
-        menu?.setAttribute('data-open', '');
-        burger?.setAttribute('aria-expanded', 'true');
-        menu?.setAttribute('aria-hidden', 'false');
-        if (menuLinks?.length) menuLinks[0].focus();
-    }
+        if (btn) btn.textContent = theme === 'dark' ? '☾' : '☀';
 
-    function closeMenu(): void {
-        burgerIcon?.removeAttribute('data-open');
-        menu?.removeAttribute('data-open');
-        burger?.setAttribute('aria-expanded', 'false');
-        menu?.setAttribute('aria-hidden', 'true');
-        burger?.focus();
-    }
-
-    function isMenuOpen(): boolean {
-        return menu?.hasAttribute('data-open') ?? false;
-    }
-
-    burger?.addEventListener('click', () => {
-        if (isMenuOpen()) {
-            closeMenu();
-        } else {
-            openMenu();
+        try {
+            localStorage.setItem('mvff-theme', theme);
+        } catch {
+            /* noop */
         }
-    });
+    }
 
-    document.addEventListener('keydown', (e) => {
-        if (!isMenuOpen() || !menuLinks) return;
+    function initNavbar(): void {
+        if (navInterval) clearInterval(navInterval);
+        updateNavCountdown();
+        navInterval = setInterval(updateNavCountdown, MS_PER_SECOND);
 
-        if (e.key === 'Escape') {
-            closeMenu();
-            return;
+        const theme = getStoredTheme();
+        const themeBtn = document.querySelector('.nav__theme');
+
+        if (themeBtn) themeBtn.textContent = theme === 'dark' ? '☾' : '☀';
+        const burger = document.querySelector('.nav__burger');
+        const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
+        const mobileClose = document.querySelector('.mobile-menu__close');
+
+        if (themeBtn) {
+            if (themeHandler) themeBtn.removeEventListener('click', themeHandler);
+            themeHandler = () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'dark';
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            };
+            themeBtn.addEventListener('click', themeHandler);
         }
 
-        if (e.key === 'Tab') {
-            const focusable = Array.from(menuLinks);
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
+        if (burger && mobileMenu) {
+            function openMenu(): void {
+                mobileMenu!.setAttribute('data-open', '');
+                mobileMenu!.setAttribute('aria-hidden', 'false');
+                burger!.setAttribute('aria-expanded', 'true');
             }
+
+            function closeMenu(): void {
+                mobileMenu!.removeAttribute('data-open');
+                mobileMenu!.setAttribute('aria-hidden', 'true');
+                burger!.setAttribute('aria-expanded', 'false');
+            }
+
+            if (burgerHandler) burger.removeEventListener('click', burgerHandler);
+            burgerHandler = () => {
+                if (mobileMenu.hasAttribute('data-open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            };
+            burger.addEventListener('click', burgerHandler);
+
+            if (mobileClose) {
+                if (closeHandler) mobileClose.removeEventListener('click', closeHandler);
+                closeHandler = closeMenu;
+                mobileClose.addEventListener('click', closeHandler);
+            }
+
+            if (escapeHandler) document.removeEventListener('keydown', escapeHandler);
+            escapeHandler = (e: KeyboardEvent) => {
+                if (e.key === 'Escape' && mobileMenu.hasAttribute('data-open')) {
+                    closeMenu();
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
         }
-    });
+
+        const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+
+        document.querySelectorAll('.nav__link').forEach((link) => {
+            const href = link.getAttribute('href')?.replace(/\/$/, '') || '/';
+
+            if (href === currentPath) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+
+    document.addEventListener('astro:page-load', initNavbar);
 </script>

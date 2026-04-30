@@ -1,5 +1,4 @@
 ---
-import TeamCard from '@components/blocks/TeamCard.astro';
 import amiiri from '@assets/images/team/amiiri.webp';
 import anna from '@assets/images/team/anna.webp';
 import ben from '@assets/images/team/ben.webp';
@@ -11,45 +10,121 @@ import marissa from '@assets/images/team/marissa.webp';
 import phillip from '@assets/images/team/phillip.webp';
 import rocky from '@assets/images/team/rocky.webp';
 import sebastian from '@assets/images/team/sebastian.webp';
+
+const team = [
+    { name: 'Anna', role: 'Founder & Director', img: anna },
+    { name: 'Rocky', role: 'Film Director', img: rocky },
+    { name: 'Jasmine', role: 'Event Coordinator', img: jasmine },
+    { name: 'Jymes', role: 'Talent Programmer', img: jymes },
+    { name: 'Amiiri', role: 'Promotions Queen', img: amiiri },
+    { name: 'Donovan', role: 'Social Media Manager', img: donovan },
+    { name: 'Marissa', role: 'Graphic Designer', img: marissa },
+    { name: 'Sebastian', role: 'Community Outreach', img: sebastian },
+    { name: 'Phillip', role: 'Volunteer Coordinator', img: phillip },
+    { name: 'Killian', role: 'Visual Tech', img: killian },
+    { name: 'Ben', role: 'Audio Tech', img: ben },
+];
 ---
 
-<section class="roster" aria-labelledby="roster-heading">
-    <h1 id="roster-heading" class="roster__heading text-center">2026 Team</h1>
-    <ul class="roster__grid grid list-none">
-        <TeamCard image={anna} name="Anna" title="Founder & Director" />
-        <TeamCard image={rocky} name="Rocky" title="Film Director" />
-        <TeamCard image={jasmine} name="Jasmine" title="Event Coordinator" />
-        <TeamCard image={jymes} name="Jymes" title="Talent Programmer" />
-        <TeamCard image={amiiri} name="Amiiri" title="Promotions Queen" />
-        <TeamCard image={donovan} name="Donovan" title="Social Media Manager" />
-        <TeamCard image={marissa} name="Marissa" title="Graphic Designer" />
-        <TeamCard image={sebastian} name="Sebastian" title="Community Outreach" />
-        <TeamCard image={phillip} name="Phillip" title="Volunteer Coordinator" />
-        <TeamCard image={killian} name="Killian" title="Visual Tech" />
-        <TeamCard image={ben} name="Ben" title="Audio Tech" />
-    </ul>
+<section class="section" aria-labelledby="roster-heading">
+    <div class="shell">
+        <div class="section-head">
+            <span class="section-num">[ T ]</span>
+            <h1 id="roster-heading" class="section-title">2026 Team</h1>
+            <span class="section-meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</span>
+        </div>
+        <div class="roster__grid">
+            {team.map((m, i) => (
+                <div class="roster__card">
+                    <span class="roster__num">{String(i + 1).padStart(2, '0')}</span>
+                    <div class="roster__photo">
+                        <img alt={m.name} loading="lazy" src={m.img.src} />
+                    </div>
+                    <div class="roster__info">
+                        <span class="roster__name">{m.name}</span>
+                        <span class="roster__role">{m.role}</span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
 </section>
 
 <style>
-    .roster {
-        margin: 0 auto;
-        max-width: var(--l-max);
-        padding: 0 var(--l-3);
-    }
-
-    .roster__heading {
-        color: var(--c-brand);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-1);
-        letter-spacing: 0.02em;
-        margin-bottom: 0.3em;
-        text-shadow:
-            0 0 60px color-mix(in srgb, var(--c-brand) 60%, transparent),
-            0 0 120px color-mix(in srgb, var(--c-brand) 30%, transparent);
-    }
-
     .roster__grid {
-        gap: var(--s-3);
-        grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+        background: var(--line);
+        border: 1px solid var(--line);
+        display: grid;
+        gap: 1px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    .roster__card {
+        background: var(--ink-2);
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .roster__num {
+        color: var(--paper);
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        left: 12px;
+        letter-spacing: 0.16em;
+        mix-blend-mode: difference;
+        position: absolute;
+        top: 10px;
+        z-index: 2;
+    }
+
+    .roster__photo {
+        aspect-ratio: 4 / 5;
+        background: var(--ink-3);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .roster__photo img {
+        filter: grayscale(0.85) contrast(1.1) brightness(0.95);
+        height: 100%;
+        object-fit: cover;
+        transition: filter 400ms ease, transform 600ms ease;
+        width: 100%;
+    }
+
+    .roster__card:hover .roster__photo img {
+        filter: grayscale(0) contrast(1.05) brightness(1);
+        transform: scale(1.05);
+    }
+
+    .roster__photo::after {
+        background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+        content: '';
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .roster__info {
+        border-top: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 16px 18px 20px;
+    }
+
+    .roster__name {
+        font-family: var(--ff-display);
+        font-size: 26px;
+        line-height: 1;
+    }
+
+    .roster__role {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
     }
 </style>

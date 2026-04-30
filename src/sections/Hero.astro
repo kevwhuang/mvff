@@ -1,54 +1,285 @@
 ---
 import heroPoster from '@assets/images/hero/poster.webp';
 import heroVideo from '@assets/videos/hero.webm';
-import logo from '@assets/images/logos/mvff.png';
 ---
 
-<header class="hero relative flex items-center justify-center overflow-hidden">
-    <video
-        class="hero__video absolute object-cover"
-        aria-hidden="true"
-        autoplay
-        loop
-        muted
-        playsinline
-        poster={heroPoster.src}
-    >
-        <source src={heroVideo} type="video/webm" />
-    </video>
-    <img
-        class="hero__img select-none"
-        alt="ATX Music Video Film Festival"
-        data-scroll
-        data-scroll-duration="10"
-        decoding="async"
-        height="700"
-        src={logo.src}
-        width="700"
-    />
-</header>
+<section class="hero relative overflow-hidden" aria-label="Hero">
+    <div class="hero__bg absolute">
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            poster={heroPoster.src}
+        >
+            <source src={heroVideo} type="video/webm" />
+        </video>
+    </div>
+
+    <div class="hero__frame-tl absolute" aria-hidden="true"></div>
+    <div class="hero__frame-tr absolute" aria-hidden="true"></div>
+    <div class="hero__frame-bl absolute" aria-hidden="true"></div>
+    <div class="hero__frame-br absolute" aria-hidden="true"></div>
+
+    <div class="hero__countdown" aria-label="Event countdown">
+        <div>
+            <div class="hero__countdown-num" id="hero-days">00</div>
+            <div class="hero__countdown-lbl">Days</div>
+        </div>
+        <div>
+            <div class="hero__countdown-num" id="hero-hrs">00</div>
+            <div class="hero__countdown-lbl">Hrs</div>
+        </div>
+        <div>
+            <div class="hero__countdown-num" id="hero-min">00</div>
+            <div class="hero__countdown-lbl">Min</div>
+        </div>
+        <div>
+            <div class="hero__countdown-num" id="hero-sec">00</div>
+            <div class="hero__countdown-lbl">Sec</div>
+        </div>
+    </div>
+
+    <div class="hero__content relative">
+        <div class="hero__meta flex items-center flex-wrap" data-scroll>
+            <span class="hero__meta-item">VOL. 01 / EST. 2026</span>
+            <span class="hero__meta-item">Cabana Club · Austin TX</span>
+            <span class="hero__meta-item">07 · 18 · 2026 — 19:00 CDT</span>
+        </div>
+        <h1 class="hero__title" data-scroll data-scroll-delay="0.1">
+            Music<br />Video<br />Film <span class="hero__title-accent">Fest</span>
+        </h1>
+        <p class="hero__sub" data-scroll data-scroll-delay="0.2">One night where Austin's music and film worlds collide. Twelve programmed acts, four screening blocks, one pool party.</p>
+        <div class="hero__actions flex items-center flex-wrap" data-scroll data-scroll-delay="0.3">
+            <a
+                class="btn btn-primary"
+                href="https://filmfreeway.com/atxmusicvideofilmfestival"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                Submit a Video →
+            </a>
+            <a class="btn" href="/info">See the Lineup</a>
+        </div>
+    </div>
+</section>
 
 <style>
     .hero {
-        background: var(--c-base);
-        box-sizing: border-box;
-        min-height: 100vh;
-        padding-top: var(--l-nav);
-        z-index: 1;
+        align-items: end;
+        display: grid;
+        isolation: isolate;
+        min-height: calc(100vh - 70px);
     }
 
-    .hero__video {
-        filter: saturate(0.8);
-        height: 100%;
+    .hero__bg {
         inset: 0;
-        opacity: 0.15;
-        width: 100%;
         z-index: -1;
     }
 
-    .hero__img {
-        height: auto;
-        max-width: calc(var(--l-max) - var(--l-3) * 2);
+    .hero__bg video {
+        filter: brightness(0.55) contrast(1.1) saturate(1.15);
+        height: 100%;
+        object-fit: cover;
         width: 100%;
     }
+
+    .hero__bg::after {
+        background:
+            linear-gradient(180deg, rgba(10, 10, 15, 0.4) 0%, transparent 30%, transparent 60%, var(--ink) 100%),
+            radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(10, 10, 15, 0.7) 100%);
+        content: '';
+        inset: 0;
+        position: absolute;
+    }
+
+    [data-theme='light'] .hero__bg video {
+        filter: sepia(0.4) brightness(0.85) contrast(1.05) saturate(0.7);
+    }
+
+    [data-theme='light'] .hero__bg::after {
+        background: linear-gradient(180deg, rgba(241, 234, 216, 0.2) 0%, transparent 25%, transparent 55%, var(--ink) 100%);
+    }
+
+    .hero__frame-tl,
+    .hero__frame-tr,
+    .hero__frame-bl,
+    .hero__frame-br {
+        border: 1px solid var(--paper);
+        height: 28px;
+        width: 28px;
+    }
+
+    .hero__frame-tl {
+        border-bottom: none;
+        border-right: none;
+        left: 24px;
+        top: 24px;
+    }
+
+    .hero__frame-tr {
+        border-bottom: none;
+        border-left: none;
+        right: 24px;
+        top: 24px;
+    }
+
+    .hero__frame-bl {
+        border-right: none;
+        border-top: none;
+        bottom: 24px;
+        left: 24px;
+    }
+
+    .hero__frame-br {
+        border-left: none;
+        border-top: none;
+        bottom: 24px;
+        right: 24px;
+    }
+
+    .hero__countdown {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(4, 1fr);
+        position: absolute;
+        right: var(--shell-pad);
+        text-align: right;
+        top: 60px;
+    }
+
+    .hero__countdown-num {
+        color: var(--paper);
+        font-family: var(--ff-display);
+        font-size: clamp(28px, 4vw, 56px);
+        line-height: 0.9;
+    }
+
+    .hero__countdown-lbl {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        margin-top: 4px;
+        text-transform: uppercase;
+    }
+
+    .hero__content {
+        margin: 0 auto;
+        max-width: var(--shell-max);
+        padding: 0 var(--shell-pad) clamp(40px, 8vh, 90px);
+        width: 100%;
+    }
+
+    .hero__meta {
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .hero__meta-item {
+        align-items: center;
+        color: var(--paper-dim);
+        display: flex;
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        gap: 8px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+
+    .hero__meta-item::before {
+        background: var(--paper-dim);
+        content: '';
+        display: inline-block;
+        height: 1px;
+        width: 18px;
+    }
+
+    .hero__title {
+        font-size: clamp(64px, 13vw, 200px);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 0.86;
+        margin: 0 0 18px;
+        text-transform: uppercase;
+    }
+
+    .hero__title-accent {
+        color: var(--accent);
+        font-family: var(--ff-serif);
+        font-size: 0.85em;
+        font-style: italic;
+        padding: 0 0.05em;
+        vertical-align: 0.05em;
+    }
+
+    .hero__sub {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: clamp(20px, 2.4vw, 30px);
+        font-style: italic;
+        line-height: 1.3;
+        margin-top: 18px;
+        max-width: 540px;
+    }
+
+    .hero__actions {
+        gap: 14px;
+        margin-top: 32px;
+    }
+
+    @media (max-width: 1024px) {
+        .hero__countdown {
+            display: none;
+        }
+    }
 </style>
+
+<script>
+    const MS_PER_DAY = 86400000;
+    const MS_PER_HOUR = 3600000;
+    const MS_PER_MINUTE = 60000;
+    const MS_PER_SECOND = 1000;
+    const PAD_LENGTH = 2;
+    const EVENT_DATE = new Date('2026-07-18T19:00:00-05:00').getTime();
+
+    let heroInterval: ReturnType<typeof setInterval> | undefined;
+
+    function updateHeroCountdown(): void {
+        const days = document.getElementById('hero-days');
+        const hrs = document.getElementById('hero-hrs');
+        const min = document.getElementById('hero-min');
+        const sec = document.getElementById('hero-sec');
+
+        if (!days) {
+            if (heroInterval) {
+                clearInterval(heroInterval);
+                heroInterval = undefined;
+            }
+
+            return;
+        }
+
+        const remaining = EVENT_DATE - Date.now();
+
+        if (remaining <= 0) return;
+
+        const d = Math.floor(remaining / MS_PER_DAY);
+        const h = Math.floor((remaining % MS_PER_DAY) / MS_PER_HOUR);
+        const m = Math.floor((remaining % MS_PER_HOUR) / MS_PER_MINUTE);
+        const s = Math.floor((remaining % MS_PER_MINUTE) / MS_PER_SECOND);
+
+        days.textContent = String(d).padStart(PAD_LENGTH, '0');
+        if (hrs) hrs.textContent = String(h).padStart(PAD_LENGTH, '0');
+        if (min) min.textContent = String(m).padStart(PAD_LENGTH, '0');
+        if (sec) sec.textContent = String(s).padStart(PAD_LENGTH, '0');
+    }
+
+    function initHeroCountdown(): void {
+        if (heroInterval) clearInterval(heroInterval);
+        updateHeroCountdown();
+        heroInterval = setInterval(updateHeroCountdown, MS_PER_SECOND);
+    }
+
+    document.addEventListener('astro:page-load', initHeroCountdown);
+</script>

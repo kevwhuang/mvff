@@ -1,0 +1,320 @@
+---
+import Base from '@layouts/Base.astro';
+import Stars from '@components/Stars.astro';
+
+const schedule = [
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+];
+
+const faq = [
+    { q: 'What exactly is the ATX MVFF?', a: 'A one-night festival in Austin where music videos take the spotlight — paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.' },
+    { q: 'When and where is it happening?', a: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.' },
+    { q: 'How do I submit a music video?', a: 'Submissions are open through FilmFreeway. Head to filmfreeway.com/atxmusicvideofilmfestival to enter — early-bird, regular, and final deadlines apply.' },
+    { q: 'Is there an age requirement?', a: 'Yes — 21+ with valid ID. The bar is full-service and the pool party runs late.' },
+    { q: 'What\'s the dress code?', a: 'Red carpet meets pool party. Dress to be photographed — and bring a swimsuit if you plan to take a dip after midnight.' },
+    { q: 'Can I bring a camera?', a: 'Phones and small personal cameras are welcome. Professional press / accredited media — please reach out in advance via the contact form.' },
+    { q: 'Where do I park?', a: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.' },
+    { q: 'Will there be food and drinks?', a: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.' },
+];
+
+const practical = [
+    '21+ with valid government-issued ID — no exceptions',
+    'Doors open at 7:00 PM, last entry at 11:30 PM',
+    'No outside food or drink — full-service bar on site',
+    'Pool access included with all ticket tiers — bring a suit',
+    'Wristband re-entry permitted up until midnight',
+    'Wheelchair-accessible venue — email us for any further accommodations',
+];
+---
+
+<Base
+    description="Schedule, venue details, FAQ, and practical info for the ATX Music Video Film Festival — July 18, 2026."
+    title="Info | ATX Music Video Film Festival"
+>
+    <Stars />
+    <section class="section">
+        <div class="shell">
+            <div class="section-head">
+                <span class="section-num">[ I ]</span>
+                <h1 class="section-title">Info</h1>
+                <span class="section-meta">SCHEDULE · VENUE<br />FAQ · PRACTICAL</span>
+            </div>
+
+            <div class="info__grid">
+                <div>
+                    <h2 class="subhead">Run of Show <span class="badge">7PM → 2AM</span></h2>
+                    <div class="schedule flex flex-col">
+                        {schedule.map(([time, event, tag]) => (
+                            <div class="sched__row">
+                                <span class="sched__time">{time}</span>
+                                <span class="sched__event">{event}</span>
+                                <span class="sched__tag">{tag}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="subhead">Venue <span class="badge">CAP 300</span></h2>
+                    <div class="venue">
+                        <div class="venue__name">Cabana Club</div>
+                        <div class="venue__addr">AUSTIN · TEXAS</div>
+                        <p class="venue__desc">Intimate venue, limited to 300 guests. Indoor screening room, outdoor pool area, full-service bar, and a dedicated VIP lounge. Street parking is available, but rideshare is strongly recommended given how late the night runs.</p>
+                        <ul class="venue__features grid list-none">
+                            <li>Indoor screen</li>
+                            <li>Outdoor pool</li>
+                            <li>Full bar</li>
+                            <li>VIP lounge</li>
+                            <li>Red carpet</li>
+                            <li>ADA access</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="subhead" style="margin-top:48px">Practical <span class="badge">READ FIRST</span></h2>
+                    <ul class="practical flex flex-col list-none">
+                        {practical.map(p => (
+                            <li>{p}</li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info__faq">
+                <h2 class="subhead">Frequently Asked <span class="badge">{faq.length} ENTRIES</span></h2>
+                <div class="faq flex flex-col">
+                    {faq.map((f, i) => (
+                        <div class={`faq__item ${i === 0 ? 'faq__item--open' : ''}`}>
+                            <button class="faq__q" type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
+                                <span>{f.q}</span>
+                                <span class="faq__icon">+</span>
+                            </button>
+                            <div class="faq__a">{f.a}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </section>
+</Base>
+
+<style>
+    .info__grid {
+        display: grid;
+        gap: clamp(40px, 6vw, 80px);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sched__row {
+        align-items: baseline;
+        border-bottom: 1px solid var(--line-2);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 100px 1fr auto;
+        padding: 14px 0;
+        position: relative;
+        transition: padding 180ms ease;
+    }
+
+    .sched__row:hover {
+        padding-left: 8px;
+    }
+
+    .sched__row:hover .sched__time {
+        color: var(--accent);
+    }
+
+    .sched__time {
+        color: var(--paper);
+        font-family: var(--ff-mono);
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        transition: color 180ms ease;
+    }
+
+    .sched__event {
+        font-family: var(--ff-display);
+        font-size: 18px;
+        letter-spacing: 0.02em;
+    }
+
+    .sched__tag {
+        color: var(--paper-mute);
+        font-family: var(--ff-mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    .venue {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        margin-top: 16px;
+        padding: 28px;
+    }
+
+    .venue__name {
+        font-family: var(--ff-display);
+        font-size: 36px;
+        line-height: 1;
+    }
+
+    .venue__addr {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        margin-top: 6px;
+    }
+
+    .venue__desc {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: 15px;
+        line-height: 1.5;
+        margin-top: 14px;
+    }
+
+    .venue__features {
+        gap: 8px;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 18px;
+    }
+
+    .venue__features li {
+        align-items: center;
+        color: var(--paper);
+        display: flex;
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        gap: 8px;
+        letter-spacing: 0.08em;
+    }
+
+    .venue__features li::before {
+        color: var(--accent);
+        content: '+';
+        font-weight: 600;
+    }
+
+    .practical {
+        gap: 10px;
+    }
+
+    .practical li {
+        align-items: baseline;
+        color: var(--paper);
+        display: grid;
+        font-family: var(--ff-body);
+        font-size: 14px;
+        gap: 12px;
+        grid-template-columns: 24px 1fr;
+    }
+
+    .practical li::before {
+        color: var(--accent);
+        content: '►';
+        font-size: 10px;
+    }
+
+    .info__faq {
+        margin-top: clamp(60px, 8vw, 100px);
+    }
+
+    .faq__item {
+        border-bottom: 1px solid var(--line);
+    }
+
+    .faq__q {
+        align-items: center;
+        background: none;
+        border: none;
+        color: var(--paper);
+        cursor: pointer;
+        display: flex;
+        font-family: var(--ff-display);
+        font-size: 20px;
+        gap: 16px;
+        justify-content: space-between;
+        letter-spacing: 0.02em;
+        padding: 18px 0;
+        text-align: left;
+        transition: color 180ms ease;
+        width: 100%;
+    }
+
+    .faq__q:hover {
+        color: var(--accent);
+    }
+
+    .faq__icon {
+        color: var(--accent);
+        font-family: var(--ff-mono);
+        font-size: 20px;
+        transition: transform 250ms ease;
+    }
+
+    .faq__item--open .faq__icon {
+        transform: rotate(45deg);
+    }
+
+    .faq__a {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: 15px;
+        line-height: 1.55;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 350ms ease, padding 350ms ease;
+    }
+
+    .faq__item--open .faq__a {
+        max-height: 240px;
+        padding: 0 0 20px;
+    }
+
+    @media (max-width: 1024px) {
+        .info__grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    let faqAc: AbortController | undefined;
+
+    function initFaq(): void {
+        faqAc?.abort();
+        faqAc = new AbortController();
+        const { signal } = faqAc;
+
+        document.querySelectorAll('.faq__q').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.faq__item')!;
+                const isOpen = item.classList.contains('faq__item--open');
+
+                document.querySelectorAll('.faq__item--open').forEach((open) => {
+                    open.classList.remove('faq__item--open');
+                    open.querySelector('.faq__q')?.setAttribute('aria-expanded', 'false');
+                });
+
+                if (!isOpen) {
+                    item.classList.add('faq__item--open');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            }, { signal });
+        });
+    }
+
+    document.addEventListener('astro:page-load', initFaq);
+</script>

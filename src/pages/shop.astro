@@ -1,0 +1,413 @@
+---
+import Base from '@layouts/Base.astro';
+import Stars from '@components/Stars.astro';
+
+const products = [
+    { id: 'item-1', name: 'Item 01', price: 0, icon: '01', desc: 'Details coming soon.' },
+    { id: 'item-2', name: 'Item 02', price: 0, icon: '02', desc: 'Details coming soon.' },
+    { id: 'item-3', name: 'Item 03', price: 0, icon: '03', desc: 'Details coming soon.' },
+    { id: 'item-4', name: 'Item 04', price: 0, icon: '04', desc: 'Details coming soon.' },
+    { id: 'item-5', name: 'Item 05', price: 0, icon: '05', desc: 'Details coming soon.' },
+];
+---
+
+<Base
+    description="Tickets and merch for the ATX Music Video Film Festival — July 18, 2026."
+    title="Shop | ATX Music Video Film Festival"
+>
+    <Stars />
+    <section class="section">
+        <div class="shell">
+            <div class="section-head">
+                <span class="section-num">[ S ]</span>
+                <h1 class="section-title">Shop</h1>
+                <span class="section-meta">TICKETS / MERCH<br />SHIPS FROM AUSTIN</span>
+            </div>
+            <div class="shop">
+                <div class="shop__grid">
+                    {products.map(p => (
+                        <div class="product" data-product-id={p.id} data-product-name={p.name} data-product-price={p.price}>
+                            <div class="product__img">
+                                <span class="product__img-icon">{p.icon}</span>
+                                <span class="product__img-label">[ photo · {p.id}.jpg ]</span>
+                            </div>
+                            <div class="product__name">{p.name}</div>
+                            <div class="product__desc">{p.desc}</div>
+                            <div class="product__foot flex items-center justify-between">
+                                <span class="product__price">${p.price}</span>
+                                <button class="product__add" type="button">Add to Cart</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <aside class="cart sticky">
+                    <div class="cart__head flex justify-between items-baseline">
+                        <h3>Cart</h3>
+                        <span class="cart__count">[0 ITEMS]</span>
+                    </div>
+                    <div class="cart__list">
+                        <div class="cart__empty">Your cart is empty. Pick a ticket — or grab the bundle.</div>
+                    </div>
+                    <div class="cart__total flex justify-between items-baseline">
+                        <span class="cart__total-lbl">SUBTOTAL</span>
+                        <span class="cart__total-amt">$0</span>
+                    </div>
+                    <form class="cart__checkout flex flex-col" onsubmit="event.preventDefault()">
+                        <label class="field">
+                            <span class="label">Email</span>
+                            <input class="input" placeholder="you@domain.com" type="email" />
+                        </label>
+                        <label class="field">
+                            <span class="label">Card Number</span>
+                            <input class="input" placeholder="•••• •••• •••• ••••" />
+                        </label>
+                        <div class="cart__checkout-row grid">
+                            <label class="field">
+                                <span class="label">Exp</span>
+                                <input class="input" placeholder="MM / YY" />
+                            </label>
+                            <label class="field">
+                                <span class="label">CVC</span>
+                                <input class="input" placeholder="•••" />
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" id="checkout-btn" disabled style="justify-content:center" type="submit">Coming Soon</button>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </section>
+</Base>
+
+<style>
+    .shop {
+        align-items: start;
+        display: grid;
+        gap: clamp(24px, 4vw, 48px);
+        grid-template-columns: 1fr 360px;
+    }
+
+    .shop__grid {
+        background: var(--line);
+        border: 1px solid var(--line);
+        display: grid;
+        gap: 1px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .product {
+        background: var(--ink-2);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px;
+        position: relative;
+        transition: background 200ms ease;
+    }
+
+    .product:hover {
+        background: var(--ink-3);
+    }
+
+    .product__img {
+        aspect-ratio: 1;
+        background: repeating-linear-gradient(45deg, var(--ink-3) 0 8px, var(--ink-2) 8px 16px);
+        border: 1px solid var(--line);
+        display: grid;
+        overflow: hidden;
+        place-items: center;
+        position: relative;
+    }
+
+    .product__img-icon {
+        color: var(--paper-mute);
+        font-family: var(--ff-display);
+        font-size: 48px;
+    }
+
+    .product__img-label {
+        bottom: 8px;
+        color: var(--paper-mute);
+        font-family: var(--ff-mono);
+        font-size: 9px;
+        left: 8px;
+        letter-spacing: 0.18em;
+        position: absolute;
+    }
+
+    .product__name {
+        font-family: var(--ff-display);
+        font-size: 24px;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .product__desc {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .product__foot {
+        border-top: 1px solid var(--line);
+        margin-top: auto;
+        padding-top: 12px;
+    }
+
+    .product__price {
+        color: var(--accent);
+        font-family: var(--ff-display);
+        font-size: 28px;
+    }
+
+    .product__add {
+        background: transparent;
+        border: 1px solid var(--paper);
+        color: var(--paper);
+        cursor: pointer;
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        padding: 8px 12px;
+        text-transform: uppercase;
+        transition: all 200ms ease;
+    }
+
+    .product__add:hover {
+        background: var(--paper);
+        color: var(--ink);
+    }
+
+    .product__add[data-in-cart] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--ink);
+    }
+
+    .cart {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px;
+        top: 90px;
+    }
+
+    .cart__head {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 14px;
+    }
+
+    .cart__head h3 {
+        font-family: var(--ff-display);
+        font-size: 24px;
+    }
+
+    .cart__count {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+    }
+
+    .cart__list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 240px;
+        overflow-y: auto;
+    }
+
+    .cart__empty {
+        color: var(--paper-mute);
+        font-family: var(--ff-serif);
+        font-size: 14px;
+        font-style: italic;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    :global(.cart-item) {
+        align-items: center;
+        border-bottom: 1px dashed var(--line);
+        display: grid;
+        font-size: 13px;
+        gap: 10px;
+        grid-template-columns: 1fr auto auto;
+        padding: 8px 0;
+    }
+
+    :global(.cart-item__name) {
+        font-family: var(--ff-display);
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    :global(.cart-item__qty) {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 11px;
+    }
+
+    :global(.cart-item__price) {
+        font-family: var(--ff-mono);
+        font-size: 12px;
+    }
+
+    :global(.cart-item__remove) {
+        background: none;
+        border: none;
+        color: var(--paper-mute);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    :global(.cart-item__remove:hover) {
+        color: var(--accent);
+    }
+
+    .cart__total {
+        border-top: 1px solid var(--line);
+        font-family: var(--ff-display);
+        padding-top: 14px;
+    }
+
+    .cart__total-lbl {
+        color: var(--paper-dim);
+        font-size: 14px;
+        letter-spacing: 0.12em;
+    }
+
+    .cart__total-amt {
+        color: var(--accent);
+        font-size: 32px;
+    }
+
+    .cart__checkout {
+        border-top: 1px solid var(--line);
+        gap: 12px;
+        margin-top: 8px;
+        padding-top: 16px;
+    }
+
+    .cart__checkout-row {
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 1024px) {
+        .shop {
+            grid-template-columns: 1fr;
+        }
+
+        .cart {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
+
+<script>
+    interface CartItem {
+        id: string;
+        name: string;
+        price: number;
+        qty: number;
+    }
+
+    let cart: CartItem[] = [];
+    let shopAc: AbortController | undefined;
+
+    function renderCart(): void {
+        const cartList = document.querySelector('.cart__list') as HTMLElement | null;
+        const cartCount = document.querySelector('.cart__count') as HTMLElement | null;
+        const cartTotalAmt = document.querySelector('.cart__total-amt') as HTMLElement | null;
+        const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement | null;
+
+        if (!cartList || !cartCount || !cartTotalAmt || !checkoutBtn) return;
+
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const count = cart.reduce((s, i) => s + i.qty, 0);
+
+        cartCount.textContent = `[${count} ITEMS]`;
+        cartTotalAmt.textContent = `$${total}`;
+        checkoutBtn.textContent = 'Coming Soon';
+        checkoutBtn.disabled = true;
+
+        if (cart.length === 0) {
+            cartList.innerHTML = '<div class="cart__empty">Your cart is empty. Pick a ticket — or grab the bundle.</div>';
+        } else {
+            cartList.innerHTML = cart.map(item =>
+                `<div class="cart-item">
+                    <div>
+                        <div class="cart-item__name">${item.name}</div>
+                        <div class="cart-item__qty">× ${item.qty}</div>
+                    </div>
+                    <div class="cart-item__price">$${item.price * item.qty}</div>
+                    <button class="cart-item__remove" data-remove-id="${item.id}" type="button" aria-label="Remove ${item.name}">×</button>
+                </div>`,
+            ).join('');
+
+            cartList.querySelectorAll('[data-remove-id]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = (btn as HTMLElement).dataset.removeId!;
+                    const idx = cart.findIndex(i => i.id === id);
+                    if (idx !== -1) cart.splice(idx, 1);
+                    updateButtons();
+                    renderCart();
+                });
+            });
+        }
+    }
+
+    function updateButtons(): void {
+        document.querySelectorAll('.product__add').forEach((btn) => {
+            const product = btn.closest('[data-product-id]') as HTMLElement;
+            const id = product.dataset.productId!;
+            const item = cart.find(i => i.id === id);
+
+            if (item) {
+                btn.setAttribute('data-in-cart', '');
+                btn.textContent = `In Cart (${item.qty})`;
+            } else {
+                btn.removeAttribute('data-in-cart');
+                btn.textContent = 'Add to Cart';
+            }
+        });
+    }
+
+    function initShop(): void {
+        shopAc?.abort();
+        shopAc = new AbortController();
+        const { signal } = shopAc;
+
+        cart = [];
+
+        document.querySelectorAll('.product__add').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const product = btn.closest('[data-product-id]') as HTMLElement;
+                const id = product.dataset.productId!;
+                const name = product.dataset.productName!;
+                const price = Number(product.dataset.productPrice);
+
+                const existing = cart.find(i => i.id === id);
+
+                if (existing) {
+                    existing.qty++;
+                } else {
+                    cart.push({ id, name, price, qty: 1 });
+                }
+
+                updateButtons();
+                renderCart();
+            }, { signal });
+        });
+
+        renderCart();
+    }
+
+    document.addEventListener('astro:page-load', initShop);
+</script>

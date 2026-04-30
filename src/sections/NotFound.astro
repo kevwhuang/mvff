@@ -2,45 +2,87 @@
 
 ---
 
-<section
-    class="not-found flex items-center justify-center min-h-screen px-10 bg-zinc-950"
->
-    <div class="not-found__content text-center select-none">
-        <h1
-            class="not-found__title mb-12 font-bold text-[15rem] tracking-widest"
-        >
-            404
-        </h1>
-        <a
-            class="not-found__link inline-block min-h-14 px-10 py-5 border border-white/20 font-mono text-sm lowercase tracking-[0.2em] text-white/70"
-            aria-label="Return to home"
-            href="/"
-        >
-            return
-        </a>
+<section class="error flex items-center justify-center text-center">
+    <div>
+        <h1 class="error__glitch" data-text="404">404</h1>
+        <p class="error__sub">This reel jumped the projector. The frame you're looking for isn't on the program.</p>
+        <div class="error__actions flex justify-center flex-wrap">
+            <a class="btn btn-primary" aria-label="Return to home" href="/">← Back to Home</a>
+            <a class="btn" href="/info">See the Schedule</a>
+        </div>
     </div>
 </section>
 
 <style>
-    .not-found__title {
-        background: linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--c-text) 90%, transparent) 0%,
-            color-mix(in srgb, var(--c-text) 40%, transparent) 100%
-        );
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .error {
+        min-height: calc(100vh - 80px);
+        padding: 60px 20px;
+        position: relative;
     }
 
-    .not-found__link {
-        transition: all var(--xs-3);
+    .error__glitch {
+        display: inline-block;
+        font-family: var(--ff-display);
+        font-size: clamp(120px, 28vw, 380px);
+        letter-spacing: -0.02em;
+        line-height: 0.85;
+        position: relative;
     }
 
-    .not-found__link:hover {
-        background-color: color-mix(in srgb, var(--c-text) 5%, transparent);
-        border-color: color-mix(in srgb, var(--c-brand) 50%, transparent);
-        color: color-mix(in srgb, var(--c-brand) 90%, transparent);
-        text-shadow: 0 0 20px color-mix(in srgb, var(--c-brand) 30%, transparent);
+    .error__glitch::before,
+    .error__glitch::after {
+        content: attr(data-text);
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .error__glitch::before {
+        animation: glitch 3s infinite;
+        clip-path: polygon(0 5%, 100% 5%, 100% 25%, 0 25%);
+        color: var(--accent);
+        mix-blend-mode: screen;
+        transform: translate(-4px, 0);
+    }
+
+    .error__glitch::after {
+        animation: glitch 2.4s infinite reverse;
+        clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+        color: var(--accent-2);
+        mix-blend-mode: screen;
+        transform: translate(4px, 0);
+    }
+
+    @keyframes glitch {
+        0%,
+        100% {
+            transform: translate(-4px, 0);
+        }
+        20% {
+            transform: translate(4px, -2px);
+        }
+        40% {
+            transform: translate(-2px, 2px);
+        }
+        60% {
+            transform: translate(3px, -1px);
+        }
+        80% {
+            transform: translate(-3px, 1px);
+        }
+    }
+
+    .error__sub {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: clamp(20px, 2.6vw, 32px);
+        font-style: italic;
+        margin-top: 20px;
+        max-width: 540px;
+    }
+
+    .error__actions {
+        gap: 14px;
+        margin-top: 32px;
     }
 </style>

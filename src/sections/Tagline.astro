@@ -3,144 +3,55 @@
 ---
 
 <section class="tagline text-center" data-scroll>
-    <h1 class="sr-only">ATX Music Video Film Festival</h1>
-    <p class="tagline__text">
-        <span class="tagline__highlight block"><span class="tagline__word">Screens</span>
-            <span class="tagline__arrow">&#8594;</span>
-            <span class="tagline__word tagline__word--accent">Stage</span>
-        </span
-        >
-        <span
-            class="tagline__typed block"
-            aria-label="An immersive production blending music and film, celebrating artists."
-            data-text="An immersive production blending music and film, celebrating artists."
-        >
-        </span>
-    </p>
+    <h2 class="tagline__main">
+        <span class="tagline__a">Screens</span><span class="tagline__arrow"> → </span><span class="tagline__b">Stage</span>
+    </h2>
+    <p class="tagline__sub">An immersive production blending music and film, celebrating artists.</p>
 </section>
 
 <style>
     .tagline {
-        contain: layout style;
-        margin: 0 auto;
-        max-width: var(--l-max);
-        padding: 0 var(--l-3);
+        padding: clamp(80px, 14vh, 160px) var(--shell-pad);
+        position: relative;
     }
 
-    .tagline__text {
-        color: var(--c-muted);
-        font-family: var(--ff-heading);
-        font-size: var(--fs-2);
-        letter-spacing: 0.08em;
-        line-height: 1.2;
-        margin: 0 auto;
+    .tagline__main {
+        font-size: clamp(56px, 12vw, 180px);
+        letter-spacing: -0.01em;
+        line-height: 0.9;
+        position: relative;
+        text-transform: uppercase;
+        z-index: 1;
     }
 
-    .tagline__highlight {
-        font-size: var(--fs-1);
-        letter-spacing: 0.01em;
-        line-height: 1.1;
-        margin-bottom: 0.3em;
-    }
-
-    .tagline__word {
-        animation: text-shimmer 3s ease-in-out infinite;
-        background: linear-gradient(90deg, var(--c-text), var(--c-muted), var(--c-text));
-        background-clip: text;
-        background-size: 200% 100%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .tagline__word--accent {
-        background: linear-gradient(135deg, var(--c-brand), var(--c-indigo), var(--c-cyan));
-        background-clip: text;
-        filter: drop-shadow(0 0 30px color-mix(in srgb, var(--c-brand) 50%, transparent))
-            drop-shadow(0 0 60px color-mix(in srgb, var(--c-indigo) 25%, transparent));
-        text-shadow: none;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .tagline__a {
+        color: var(--paper);
     }
 
     .tagline__arrow {
-        color: var(--c-muted);
-        font-size: var(--fs-1);
-        margin: 0 0.1em;
-        opacity: 0.6;
-        vertical-align: middle;
+        color: var(--accent);
+        font-family: var(--ff-serif);
+        font-size: 0.7em;
+        font-style: italic;
+        padding: 0 0.15em;
     }
 
-    .tagline__typed {
-        min-height: 1.6em;
-        text-align: center;
+    .tagline__b {
+        color: var(--accent);
+        font-family: var(--ff-serif);
+        font-size: 0.92em;
+        font-style: italic;
     }
 
-    .tagline__typed :global(.tagline__typed-text)::after {
-        animation: blink 0.8s infinite;
-        color: var(--c-brand);
-        content: "|";
-        font-weight: 300;
-        margin-left: 2px;
-    }
-
-    .tagline__typed[data-done] :global(.tagline__typed-text)::after {
-        display: none;
-    }
-
-    @keyframes blink {
-        0%,
-        50% {
-            opacity: 1;
-        }
-        51%,
-        100% {
-            opacity: 0;
-        }
-    }
-
-    @keyframes text-shimmer {
-        0%,
-        100% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
+    .tagline__sub {
+        color: var(--paper-dim);
+        font-family: var(--ff-serif);
+        font-size: clamp(18px, 2.2vw, 26px);
+        font-style: italic;
+        line-height: 1.4;
+        margin: 32px auto 0;
+        max-width: 640px;
+        position: relative;
+        z-index: 2;
     }
 </style>
-
-<script>
-    const CHAR_DELAY = 50;
-    const START_DELAY = 500;
-    const VISIBILITY_THRESHOLD = 0.5;
-
-    const typed = document.querySelector('.tagline__typed') as HTMLElement | null;
-
-    if (typed) {
-        const text = typed.dataset.text || '';
-        const textSpan = document.createElement('span');
-        textSpan.className = 'tagline__typed-text';
-        typed.appendChild(textSpan);
-        let charIndex = 0;
-
-        function typeNextChar(): void {
-            if (charIndex < text.length) {
-                textSpan.textContent += text.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeNextChar, CHAR_DELAY);
-            }
-        }
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting) {
-                    setTimeout(typeNextChar, START_DELAY);
-                    observer.disconnect();
-                }
-            },
-            { threshold: VISIBILITY_THRESHOLD },
-        );
-
-        observer.observe(typed.closest('.tagline')!);
-    }
-</script>

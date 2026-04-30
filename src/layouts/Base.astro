@@ -1,12 +1,20 @@
 ---
-import '@fontsource/archivo-black/index.css';
-import '@fontsource/space-grotesk/index.css';
+import '@fontsource/bebas-neue/latin-400.css';
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource/jetbrains-mono/300.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/600.css';
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
 import { ClientRouter } from 'astro:transitions';
 
-import Cursor from '@components/ui/Cursor.astro';
 import Footer from '@sections/Footer.astro';
 import Navbar from '@sections/Navbar.astro';
-import ScrollProgress from '@components/ui/ScrollProgress.astro';
 
 interface Props {
     description: string;
@@ -18,14 +26,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
     <head>
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <title>{title}</title>
         <meta content="Kevin Huang" name="author" />
         <meta content={description} name="description" />
-        <meta content="#0c0e18" name="theme-color" />
+        <meta content="#0a0a0f" name="theme-color" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/favicon.png" rel="icon" type="image/png" />
         <meta content={title} property="og:title" />
@@ -52,70 +60,103 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
             type="application/ld+json"
         />
         <ClientRouter />
+        <script is:inline>
+            function __applyStoredTheme() {
+                try {
+                    const t = localStorage.getItem('mvff-theme');
+                    if (t) document.documentElement.setAttribute('data-theme', t);
+                } catch { /* noop */ }
+            }
+            __applyStoredTheme();
+            document.addEventListener('astro:after-swap', __applyStoredTheme);
+        </script>
     </head>
     <body>
-        <Cursor />
-        <ScrollProgress />
-        <Navbar />
-        <main>
-            <slot />
-        </main>
-        <Footer />
+        <div class="app">
+            <div class="grain" aria-hidden="true"></div>
+            <div class="vignette" aria-hidden="true"></div>
+            <Navbar />
+            <main>
+                <slot />
+            </main>
+            <Footer />
+        </div>
     </body>
 </html>
 
 <style is:global>
     @import 'tailwindcss';
 
-    :root {
-        --c-base: rgb(12, 14, 24);
-        --c-brand: rgb(240, 80, 105);
-        --c-cyan: rgb(45, 200, 225);
-        --c-indigo: rgb(110, 100, 220);
-        --c-muted: rgb(175, 175, 185);
-        --c-text: rgb(245, 245, 250);
-        --ff-body: 'Space Grotesk', system-ui, sans-serif;
-        --ff-heading: 'Archivo Black', Impact, sans-serif;
-        --fs-1: 120px;
-        --fs-2: 80px;
-        --fs-3: 54px;
-        --fs-4: 36px;
-        --fs-5: 24px;
-        --fs-6: 16px;
-        --l-1: 400px;
-        --l-2: 200px;
-        --l-3: 100px;
-        --l-max: 1640px;
-        --l-min: 320px;
-        --l-nav: 100px;
-        --r-1: 16px;
-        --r-2: 8px;
-        --r-3: 4px;
-        --s-1: 80px;
-        --s-2: 40px;
-        --s-3: 20px;
-        --s-4: 10px;
-        --xs-1: 1200ms ease-out;
-        --xs-2: 600ms ease;
-        --xs-3: 300ms ease;
-        --xs-4: 150ms ease;
+    :root,
+    [data-theme='dark'] {
+        --ink: #0a0a0f;
+        --ink-2: #11111a;
+        --ink-3: #1a1a25;
+        --paper: #f4f1ea;
+        --paper-dim: rgba(244, 241, 234, 0.62);
+        --paper-mute: rgba(244, 241, 234, 0.38);
+        --line: rgba(244, 241, 234, 0.14);
+        --line-2: rgba(244, 241, 234, 0.08);
+        --accent: oklch(0.74 0.19 30);
+        --accent-2: oklch(0.78 0.16 210);
+        --accent-3: oklch(0.85 0.18 95);
+        --grain-opacity: 0.18;
+        --vignette: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.55) 100%);
+        --ff-display: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+        --ff-serif: 'Instrument Serif', Georgia, serif;
+        --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
+        --ff-body: 'Inter', system-ui, sans-serif;
+        --shell-max: 1280px;
+        --shell-pad: clamp(20px, 4vw, 56px);
+        color-scheme: dark;
     }
 
-    a,
-    button {
-        cursor: none;
+    [data-theme='light'] {
+        --ink: #f1ead8;
+        --ink-2: #ebe2cb;
+        --ink-3: #e0d5b8;
+        --paper: #1a1612;
+        --paper-dim: rgba(26, 22, 18, 0.66);
+        --paper-mute: rgba(26, 22, 18, 0.42);
+        --line: rgba(26, 22, 18, 0.18);
+        --line-2: rgba(26, 22, 18, 0.09);
+        --accent: oklch(0.50 0.16 28);
+        --accent-2: oklch(0.55 0.10 200);
+        --accent-3: oklch(0.58 0.13 75);
+        --grain-opacity: 0.30;
+        --vignette: radial-gradient(ellipse at center, transparent 50%, rgba(120, 90, 40, 0.18) 100%);
+        color-scheme: light;
     }
 
-    body {
-        background: var(--c-base);
-        color: var(--c-text);
-        cursor: none;
-        font-family: var(--ff-body);
-        font-size: var(--fs-5);
-        font-weight: 600;
-        line-height: 1.6;
-        min-height: 100vh;
-        overflow-x: hidden;
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    ::selection {
+        background: var(--accent);
+        color: var(--ink);
+    }
+
+    ::-webkit-scrollbar {
+        height: 10px;
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--ink);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border: 2px solid var(--ink);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
     }
 
     html {
@@ -123,13 +164,240 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
         scroll-behavior: smooth;
     }
 
+    body {
+        background: var(--ink);
+        color: var(--paper);
+        font-family: var(--ff-body);
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.5;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background 600ms ease, color 600ms ease;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--ff-display);
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        line-height: 0.94;
+    }
+
     :focus {
         outline: none;
     }
 
     :focus-visible {
-        outline: 2px solid var(--c-brand);
-        outline-offset: 2px;
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+    }
+
+    .app {
+        isolation: isolate;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    .grain {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
+        inset: 0;
+        mix-blend-mode: overlay;
+        opacity: var(--grain-opacity);
+        pointer-events: none;
+        position: fixed;
+        z-index: 100;
+    }
+
+    .vignette {
+        background: var(--vignette);
+        inset: 0;
+        pointer-events: none;
+        position: fixed;
+        z-index: 99;
+    }
+
+    .shell {
+        margin: 0 auto;
+        max-width: var(--shell-max);
+        padding: 0 var(--shell-pad);
+        width: 100%;
+    }
+
+    .display {
+        font-family: var(--ff-display);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        line-height: 0.92;
+    }
+
+    .serif {
+        font-family: var(--ff-serif);
+        font-weight: 400;
+    }
+
+    .mono {
+        font-family: var(--ff-mono);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+    }
+
+    .eyebrow {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+
+    .btn {
+        align-items: center;
+        background: transparent;
+        border: 1px solid var(--paper);
+        color: var(--paper);
+        cursor: pointer;
+        display: inline-flex;
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        gap: 10px;
+        letter-spacing: 0.16em;
+        padding: 14px 22px;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 200ms ease;
+    }
+
+    .btn:hover {
+        background: var(--paper);
+        color: var(--ink);
+    }
+
+    .btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+    }
+
+    .btn-primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--ink);
+        font-weight: 600;
+    }
+
+    .btn-primary:hover {
+        background: var(--paper);
+        border-color: var(--paper);
+    }
+
+    .section {
+        padding: clamp(60px, 10vh, 130px) 0;
+        position: relative;
+    }
+
+    .section-head {
+        align-items: end;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 12px 24px;
+        grid-template-columns: auto 1fr auto;
+        margin-bottom: clamp(40px, 6vw, 72px);
+        padding-bottom: 18px;
+    }
+
+    @media (max-width: 720px) {
+        .section-head {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .section-num {
+        color: var(--accent);
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+    }
+
+    .section-title {
+        font-size: clamp(40px, 7vw, 88px);
+        line-height: 0.9;
+        text-transform: uppercase;
+    }
+
+    .section-meta {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+
+    .subhead {
+        align-items: baseline;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        font-family: var(--ff-display);
+        font-size: clamp(28px, 3.6vw, 44px);
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .subhead .badge {
+        color: var(--accent);
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+    }
+
+    .input,
+    .textarea,
+    .select {
+        background: var(--ink);
+        border: 1px solid var(--line);
+        color: var(--paper);
+        font-family: var(--ff-mono);
+        font-size: 13px;
+        outline: none;
+        padding: 12px 14px;
+        transition: all 180ms ease;
+        width: 100%;
+    }
+
+    .input:hover,
+    .textarea:hover,
+    .select:hover {
+        border-color: var(--paper-mute);
+    }
+
+    .input:focus,
+    .textarea:focus,
+    .select:focus {
+        background: var(--ink-2);
+        border-color: var(--accent);
+    }
+
+    .textarea {
+        font-family: var(--ff-body);
+        line-height: 1.5;
+        min-height: 140px;
+        resize: vertical;
+    }
+
+    .label {
+        color: var(--paper-dim);
+        display: block;
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
     }
 
     [data-scroll] {
@@ -152,33 +420,22 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import gsap from 'gsap';
 
-    import { initScrambleAnimations } from '@lib/scramble';
     import { initScrollAnimations } from '@lib/scroll';
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const PERCENT_SCALE = 100;
-    let cursorRafPending = false;
-    let cursorX = 0;
-    let cursorY = 0;
     let scrollRafPending = false;
+    let baseAc: AbortController | undefined;
 
     function init(): void {
-        initScrambleAnimations();
+        baseAc?.abort();
+        baseAc = new AbortController();
+        const { signal } = baseAc;
+
+        ScrollTrigger.getAll().forEach(t => t.kill());
         initScrollAnimations();
 
-        const cursor = document.querySelector('.cursor') as HTMLElement | null;
-        const dot = document.querySelector('.cursor__dot') as HTMLElement | null;
         const layers = document.querySelectorAll<HTMLElement>('[data-parallax]');
-        const scrollProgressBar = document.querySelector('.scroll-progress') as HTMLElement | null;
-
-        function updateScrollProgress(): void {
-            if (!scrollProgressBar) return;
-            const scrollTop = window.scrollY;
-            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (scrollTop / documentHeight) * PERCENT_SCALE;
-            scrollProgressBar.style.width = progress + '%';
-        }
 
         function updateParallax(): void {
             const scrollY = window.scrollY;
@@ -187,52 +444,16 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
                 layer.style.transform = 'translateY(' + (scrollY * +(layer.dataset.parallax || 0)) + 'px)';
             });
 
-            updateScrollProgress();
             scrollRafPending = false;
         }
 
-        function updateCursor(): void {
-            if (cursor) cursor.style.transform = 'translate(' + cursorX + 'px, ' + cursorY + 'px)';
-            if (dot) dot.style.transform = 'translate(' + cursorX + 'px, ' + cursorY + 'px)';
-            cursorRafPending = false;
-        }
-
-        window.addEventListener(
-            'scroll',
-            () => {
-                if (!scrollRafPending) {
-                    requestAnimationFrame(updateParallax);
-                    scrollRafPending = true;
-                }
-            },
-            { passive: true },
-        );
-
-        document.addEventListener(
-            'mousemove',
-            (event) => {
-                cursorX = event.clientX;
-                cursorY = event.clientY;
-
-                if (!cursorRafPending) {
-                    cursorRafPending = true;
-                    requestAnimationFrame(updateCursor);
-                }
-            },
-            { passive: true },
-        );
-
-        document.querySelectorAll('a, button').forEach((element) => {
-            element.addEventListener('mouseenter', () => {
-                cursor?.setAttribute('data-hover', '');
-            });
-
-            element.addEventListener('mouseleave', () => {
-                cursor?.removeAttribute('data-hover');
-            });
-        });
+        window.addEventListener('scroll', () => {
+            if (!scrollRafPending) {
+                requestAnimationFrame(updateParallax);
+                scrollRafPending = true;
+            }
+        }, { passive: true, signal });
     }
 
-    init();
     document.addEventListener('astro:page-load', init);
 </script>

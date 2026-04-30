@@ -1,0 +1,213 @@
+---
+import Base from '@layouts/Base.astro';
+import Stars from '@components/Stars.astro';
+---
+
+<Base
+    description="Get in touch with the ATX Music Video Film Festival team — general inquiries, press, sponsorship, and submissions."
+    title="Contact | ATX Music Video Film Festival"
+>
+    <Stars />
+    <section class="section">
+        <div class="shell">
+            <div class="section-head">
+                <span class="section-num">[ C ]</span>
+                <h1 class="section-title">Contact</h1>
+                <span class="section-meta">RESPONSE WITHIN 48H<br />AUSTIN · TX</span>
+            </div>
+            <div class="contact">
+                <form class="contact__form flex flex-col" id="contact-form">
+                    <div class="contact__banner" id="success-banner" aria-live="polite"></div>
+                    <label class="field">
+                        <span class="label">Name</span>
+                        <input class="input" name="name" placeholder="Your name" required type="text" />
+                    </label>
+                    <label class="field">
+                        <span class="label">Email</span>
+                        <input class="input" name="email" placeholder="you@domain.com" required type="email" />
+                    </label>
+                    <label class="field">
+                        <span class="label">Subject</span>
+                        <select class="select" name="subject">
+                            <option>General Inquiry</option>
+                            <option>Press &amp; Media</option>
+                            <option>Sponsorship</option>
+                            <option>Submissions</option>
+                            <option>Volunteering</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span class="label">Message</span>
+                        <textarea class="textarea" name="message" placeholder="Tell us what brought you here." required></textarea>
+                    </label>
+                    <button class="btn btn-primary" disabled style="justify-content:center" type="submit">Coming Soon</button>
+                </form>
+                <aside class="contact__side flex flex-col">
+                    <div>
+                        <h2 class="subhead">Direct Channels</h2>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Email</span>
+                            <span class="contact__line-val"><a href="mailto:contact@atxmusicvideofilmfestival.com">contact@atxmusicvideofilmfestival.com</a></span>
+                        </div>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Instagram</span>
+                            <span class="contact__line-val"><a href="https://instagram.com/atxmvff" rel="noopener noreferrer" target="_blank">@atxmvff</a></span>
+                        </div>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Submit</span>
+                            <span class="contact__line-val"><a href="https://filmfreeway.com/atxmusicvideofilmfestival" rel="noopener noreferrer" target="_blank">FilmFreeway →</a></span>
+                        </div>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Pitch</span>
+                            <span class="contact__line-val"><a href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck (PDF)</a></span>
+                        </div>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Call</span>
+                            <span class="contact__line-val"><a href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Calendly →</a></span>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="subhead">Founder</h2>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Director</span>
+                            <span class="contact__line-val">Anna Madewell</span>
+                        </div>
+                        <div class="contact__line">
+                            <span class="contact__line-lbl">Studio</span>
+                            <span class="contact__line-val">Madewell Productions</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+</Base>
+
+<style>
+    .contact {
+        align-items: start;
+        display: grid;
+        gap: clamp(40px, 6vw, 80px);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .contact__form {
+        gap: 18px;
+    }
+
+    .contact__banner {
+        display: none;
+    }
+
+    .contact__banner[data-visible] {
+        align-items: center;
+        animation: slidein 350ms ease;
+        background: var(--accent);
+        color: var(--ink);
+        display: flex;
+        font-family: var(--ff-mono);
+        font-size: 12px;
+        gap: 12px;
+        letter-spacing: 0.14em;
+        margin-bottom: 8px;
+        padding: 14px 18px;
+        text-transform: uppercase;
+    }
+
+    @keyframes slidein {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .contact__side {
+        gap: 32px;
+    }
+
+    .contact__line {
+        align-items: baseline;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 100px 1fr;
+        padding: 14px 0;
+        transition: padding 180ms ease;
+    }
+
+    .contact__line:hover {
+        padding-left: 8px;
+    }
+
+    .contact__line-lbl {
+        color: var(--paper-dim);
+        font-family: var(--ff-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    .contact__line-val {
+        font-family: var(--ff-display);
+        font-size: 22px;
+        overflow-wrap: break-word;
+        min-width: 0;
+    }
+
+    .contact__line a {
+        color: var(--paper);
+        text-decoration: none;
+        transition: color 180ms;
+    }
+
+    .contact__line a:hover {
+        color: var(--accent);
+    }
+
+    @media (max-width: 1024px) {
+        .contact {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .contact__line {
+            grid-template-columns: 1fr;
+            gap: 4px;
+        }
+    }
+</style>
+
+<script>
+    const BANNER_DURATION = 4000;
+
+    let contactAc: AbortController | undefined;
+
+    function initContact(): void {
+        contactAc?.abort();
+        contactAc = new AbortController();
+        const { signal } = contactAc;
+
+        const form = document.getElementById('contact-form') as HTMLFormElement | null;
+        const banner = document.getElementById('success-banner') as HTMLElement | null;
+
+        if (!form || !banner) return;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            banner.textContent = '✓ MESSAGE SENT — WE\'LL BE IN TOUCH SHORTLY';
+            banner.setAttribute('data-visible', '');
+            form.reset();
+
+            setTimeout(() => {
+                banner.removeAttribute('data-visible');
+            }, BANNER_DURATION);
+        }, { signal });
+    }
+
+    document.addEventListener('astro:page-load', initContact);
+</script>

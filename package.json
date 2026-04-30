@@ -1,6 +1,6 @@
 {
     "name": "mvff",
-    "version": "26.4.28",
+    "version": "26.4.30",
     "type": "module",
     "author": "Kevin Huang",
     "scripts": {
@@ -14,8 +14,10 @@
         "@astrojs/netlify": "^7.0.8",
         "@astrojs/react": "^5.0.4",
         "@astrojs/sitemap": "^3.7.2",
-        "@fontsource/archivo-black": "^5.2.8",
-        "@fontsource/space-grotesk": "^5.2.10",
+        "@fontsource/bebas-neue": "^5.2.7",
+        "@fontsource/instrument-serif": "^5.2.8",
+        "@fontsource/inter": "^5.2.8",
+        "@fontsource/jetbrains-mono": "^5.2.8",
         "@supabase/supabase-js": "^2.105.1",
         "@tailwindcss/vite": "^4.2.4",
         "astro": "^6.1.10",

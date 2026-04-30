@@ -3,75 +3,78 @@ import logoCabana from '@assets/images/logos/cabana.png';
 import logoMadewell from '@assets/images/logos/madewell.png';
 ---
 
-<section class="partners" aria-label="Presented by" data-scroll>
-    <div class="partners__marquee overflow-hidden">
-        <div class="partners__track flex items-center">
-            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="Madewell Productions" src={logoMadewell.src} />
-            <img class="partners__logo shrink-0 object-contain select-none" alt="Cabana Club" src={logoCabana.src} />
-            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoMadewell.src} />
-            <img class="partners__logo shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoCabana.src} />
-            <img class="partners__logo partners__logo--madewell shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoMadewell.src} />
-            <img class="partners__logo shrink-0 object-contain select-none" alt="" aria-hidden="true" src={logoCabana.src} />
-        </div>
+<section class="marquee" aria-label="Partners">
+    <div class="marquee__track flex items-center">
+        {Array.from({ length: 2 }).flatMap((_, k) => [
+            <div class="marquee__item flex items-center" key={`a-${k}`}>
+                <img class="marquee__logo marquee__logo--madewell" alt={k === 0 ? 'Madewell Productions' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoMadewell.src} />
+                <span>Madewell Productions</span>
+            </div>,
+            <div class="marquee__item" key={`s1-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item flex items-center" key={`b-${k}`}>
+                <img class="marquee__logo" alt={k === 0 ? 'Cabana Club' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoCabana.src} />
+                <span>Cabana Club</span>
+            </div>,
+            <div class="marquee__item" key={`s2-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item" key={`c-${k}`} aria-hidden="true"><span>EST · 2026</span></div>,
+            <div class="marquee__item" key={`s3-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item" key={`d-${k}`} aria-hidden="true"><span>AUSTIN TEXAS</span></div>,
+            <div class="marquee__item" key={`s4-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
+        ])}
     </div>
 </section>
 
 <style>
-    .partners {
-        contain: layout style;
-        margin: 0 auto;
-        max-width: var(--l-max);
-        padding: 0 var(--l-3);
+    .marquee {
+        background: var(--ink-2);
+        border-bottom: 1px solid var(--line);
+        border-top: 1px solid var(--line);
+        overflow: hidden;
+        padding: clamp(40px, 6vh, 64px) 0;
+        position: relative;
     }
 
-    .partners__marquee {
-        mask: linear-gradient(90deg, transparent, #fff 15%, #fff 85%, transparent);
-        width: 100%;
-        -webkit-mask: linear-gradient(90deg, transparent, #fff 15%, #fff 85%, transparent);
-    }
-
-    .partners__track {
-        animation: marquee 30s linear infinite;
-        animation-play-state: paused;
-        gap: var(--l-2);
+    .marquee__track {
+        animation: marquee 28s linear infinite;
+        gap: clamp(40px, 6vw, 80px);
         width: max-content;
     }
 
-    .partners__track[data-active] {
-        animation-play-state: running;
+    .marquee__item {
+        color: var(--paper-dim);
+        font-family: var(--ff-display);
+        font-size: clamp(40px, 6vw, 80px);
+        gap: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
     }
 
-    .partners__logo {
-        height: var(--fs-1);
+    .marquee__logo {
+        height: clamp(40px, 6vw, 70px);
+        opacity: 0.85;
         width: auto;
     }
 
-    .partners__logo--madewell {
+    .marquee__logo--madewell {
         filter: invert(0.85);
     }
 
+    [data-theme='light'] .marquee__logo--madewell {
+        filter: invert(0);
+    }
+
+    .marquee__diamond {
+        background: var(--accent);
+        display: inline-block;
+        height: 14px;
+        transform: rotate(45deg);
+        width: 14px;
+    }
+
     @keyframes marquee {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-33.333%);
+        to {
+            transform: translateX(calc(-50% - 40px));
         }
     }
 </style>
-
-<script>
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import gsap from 'gsap';
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    ScrollTrigger.create({
-        once: true,
-        onEnter: () => {
-            document.querySelector('.partners__track')?.setAttribute('data-active', '');
-        },
-        start: 'bottom bottom',
-        trigger: '.partners',
-    });
-</script>
