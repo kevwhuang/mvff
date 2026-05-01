@@ -1,5 +1,5 @@
 ---
-import Base from '@layouts/Base.astro';
+import Layout from '@/Layout.astro';
 import Stars from '@components/Stars.astro';
 
 const schedule = [
@@ -38,7 +38,7 @@ const practical = [
 ];
 ---
 
-<Base
+<Layout
     description="Schedule, venue details, FAQ, and practical info for the ATX Music Video Film Festival — July 18, 2026."
     title="Info | ATX Music Video Film Festival"
 >
@@ -106,7 +106,7 @@ const practical = [
             </div>
         </div>
     </section>
-</Base>
+</Layout>
 
 <style>
     .info__grid {

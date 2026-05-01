@@ -1,6 +1,5 @@
 ---
-import heroPoster from '@assets/images/hero/poster.webp';
-import heroVideo from '@assets/videos/hero.webm';
+import poster from '@images/poster.webp';
 ---
 
 <section class="hero relative overflow-hidden" aria-label="Hero">
@@ -10,9 +9,9 @@ import heroVideo from '@assets/videos/hero.webm';
             loop
             muted
             playsinline
-            poster={heroPoster.src}
+            poster={poster.src}
         >
-            <source src={heroVideo} type="video/webm" />
+            <source src="/videos/hero.webm" type="video/webm" />
         </video>
     </div>
 

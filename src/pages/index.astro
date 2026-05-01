@@ -1,15 +1,15 @@
 ---
-import Base from '@layouts/Base.astro';
 import Details from '@sections/Details.astro';
 import Experience from '@sections/Experience.astro';
 import Hero from '@sections/Hero.astro';
+import Layout from '@/Layout.astro';
 import Loader from '@sections/Loader.astro';
 import Partners from '@sections/Partners.astro';
 import Stars from '@components/Stars.astro';
 import Tagline from '@sections/Tagline.astro';
 ---
 
-<Base
+<Layout
     description="Austin's music video film festival — live performances, music video screenings, Q&A panels, awards, and a pool party. July 18, 2026, 7 PM–2 AM at Cabana Club, Austin TX."
     title="ATX Music Video Film Festival"
 >
@@ -20,4 +20,4 @@ import Tagline from '@sections/Tagline.astro';
     <Details />
     <Experience />
     <Partners />
-</Base>
+</Layout>
