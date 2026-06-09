@@ -1,12 +1,15 @@
 ---
-import logo from '@images/logos/mvff.png';
+import logo from '@images/logos/mvff.webp';
 ---
 
-<footer class="footer">
+<footer
+    class="footer"
+    aria-label="Site footer"
+>
     <div class="footer__inner">
         <div class="footer__brand flex flex-col">
             <div class="footer__mark">
-                <img alt="" src={logo.src} />
+                <img alt="MVFF" src={logo.src} />
             </div>
             <p class="footer__tag">An immersive production blending music and film, celebrating artists. One night, one venue, every screen and stage active.</p>
         </div>
@@ -40,8 +43,8 @@ import logo from '@images/logos/mvff.png';
 
 <style>
     .footer {
-        background: var(--ink-2);
-        border-top: 1px solid var(--line);
+        background: var(--color-navy);
+        border-top: 1px solid var(--color-cream-15);
         margin-top: clamp(60px, 10vh, 120px);
         padding: clamp(40px, 6vw, 60px) 0 clamp(20px, 3vw, 32px);
     }
@@ -57,8 +60,8 @@ import logo from '@images/logos/mvff.png';
     }
 
     .footer__mark {
-        background: var(--ink);
-        border: 1px solid var(--line);
+        background: var(--color-night);
+        border: 1px solid var(--color-cream-15);
         display: grid;
         height: 80px;
         place-items: center;
@@ -70,17 +73,13 @@ import logo from '@images/logos/mvff.png';
         width: 78%;
     }
 
-    [data-theme='light'] .footer__mark img {
-        --brand-invert: 1;
-    }
-
     .footer__brand {
         gap: 16px;
     }
 
     .footer__tag {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 16px;
         font-style: italic;
         line-height: 1.4;
@@ -88,8 +87,8 @@ import logo from '@images/logos/mvff.png';
     }
 
     .footer__col h4 {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 10px;
         font-weight: 400;
         letter-spacing: 0.22em;
@@ -98,26 +97,26 @@ import logo from '@images/logos/mvff.png';
     }
 
     .footer__col a {
-        color: var(--paper);
+        color: var(--color-cream);
         display: block;
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 18px;
         padding: 5px 0;
         text-decoration: none;
-        transition: all 180ms ease;
+        transition: color 0.18s ease, transform 0.18s ease;
     }
 
     .footer__col a:hover {
-        color: var(--accent);
+        color: var(--color-accent);
         transform: translateX(4px);
     }
 
     .footer__bottom {
-        border-top: 1px solid var(--line);
-        color: var(--paper-mute);
+        border-top: 1px solid var(--color-cream-15);
+        color: var(--color-cream-40);
         display: flex;
         flex-wrap: wrap;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 10.5px;
         gap: 12px;
         justify-content: space-between;

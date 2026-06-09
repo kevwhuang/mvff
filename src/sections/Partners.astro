@@ -1,34 +1,37 @@
 ---
-import logoCabana from '@images/logos/cabana.png';
-import logoMadewell from '@images/logos/madewell.png';
+import logoCabana from '@images/logos/cabana.webp';
+import logoMadewell from '@images/logos/madewell.webp';
 ---
 
-<section class="marquee" aria-label="Partners">
+<section
+    class="marquee"
+    aria-label="Partners"
+>
     <div class="marquee__track flex items-center">
         {Array.from({ length: 2 }).flatMap((_, k) => [
-            <div class="marquee__item flex items-center" key={`a-${k}`}>
+            <div class="marquee__item flex items-center">
                 <img class="marquee__logo marquee__logo--madewell" alt={k === 0 ? 'Madewell Productions' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoMadewell.src} />
                 <span>Madewell Productions</span>
             </div>,
-            <div class="marquee__item" key={`s1-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item flex items-center" key={`b-${k}`}>
+            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item flex items-center">
                 <img class="marquee__logo" alt={k === 0 ? 'Cabana Club' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoCabana.src} />
                 <span>Cabana Club</span>
             </div>,
-            <div class="marquee__item" key={`s2-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item" key={`c-${k}`} aria-hidden="true"><span>EST · 2026</span></div>,
-            <div class="marquee__item" key={`s3-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item" key={`d-${k}`} aria-hidden="true"><span>AUSTIN TEXAS</span></div>,
-            <div class="marquee__item" key={`s4-${k}`} aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item" aria-hidden="true"><span>EST · 2026</span></div>,
+            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div class="marquee__item" aria-hidden="true"><span>AUSTIN TEXAS</span></div>,
+            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
         ])}
     </div>
 </section>
 
 <style>
     .marquee {
-        background: var(--ink-2);
-        border-bottom: 1px solid var(--line);
-        border-top: 1px solid var(--line);
+        background: var(--color-navy);
+        border-bottom: 1px solid var(--color-cream-15);
+        border-top: 1px solid var(--color-cream-15);
         overflow: hidden;
         padding: clamp(40px, 6vh, 64px) 0;
         position: relative;
@@ -41,8 +44,8 @@ import logoMadewell from '@images/logos/madewell.png';
     }
 
     .marquee__item {
-        color: var(--paper-dim);
-        font-family: var(--ff-display);
+        color: var(--color-cream-60);
+        font-family: var(--font-display);
         font-size: clamp(40px, 6vw, 80px);
         gap: 24px;
         letter-spacing: 0.04em;
@@ -60,12 +63,8 @@ import logoMadewell from '@images/logos/madewell.png';
         filter: invert(0.85);
     }
 
-    [data-theme='light'] .marquee__logo--madewell {
-        filter: invert(0);
-    }
-
     .marquee__diamond {
-        background: var(--accent);
+        background: var(--color-accent);
         display: inline-block;
         height: 14px;
         transform: rotate(45deg);

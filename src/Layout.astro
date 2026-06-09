@@ -1,18 +1,11 @@
 ---
-import '@fontsource/bebas-neue/latin-400.css';
-import '@fontsource/instrument-serif/latin-400.css';
-import '@fontsource/instrument-serif/latin-400-italic.css';
-import '@fontsource/jetbrains-mono/300.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
-import '@fontsource/jetbrains-mono/600.css';
-import '@fontsource/inter/300.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
+import '@fontsource/bebas-neue/index.css';
+import '@fontsource/instrument-serif/index.css';
+import '@fontsource/inter/index.css';
+import '@fontsource/jetbrains-mono/index.css';
 import { ClientRouter } from 'astro:transitions';
 
+import '@/global.css';
 import '@/styles.css';
 import Footer from '@sections/Footer.astro';
 import Navbar from '@sections/Navbar.astro';
@@ -22,27 +15,28 @@ interface Props {
     title: string;
 }
 
-const { description, title } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const { description, title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <title>{title}</title>
-        <meta content="Kevin Huang" name="author" />
         <meta content={description} name="description" />
+        <meta content="Kevin Huang" name="author" />
         <meta content="#0a0a0f" name="theme-color" />
         <link href={canonicalUrl} rel="canonical" />
+        <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link href="/favicon.png" rel="icon" type="image/png" />
         <meta content={title} property="og:title" />
         <meta content={description} property="og:description" />
-        <meta content={canonicalUrl} property="og:url" />
-        <meta content="website" property="og:type" />
         <meta content={`${Astro.site}og.png`} property="og:image" />
+        <meta content={canonicalUrl} property="og:url" />
         <meta content="ATX Music Video Film Festival" property="og:site_name" />
+        <meta content="website" property="og:type" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta content={title} name="twitter:title" />
         <meta content={description} name="twitter:description" />
@@ -52,7 +46,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
             set:html={JSON.stringify({
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
-                'founder': {
+                'author': {
                     '@type': 'Person',
                     'name': 'Anna Madewell',
                 },
@@ -62,400 +56,20 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
             type="application/ld+json"
         />
         <ClientRouter />
-        <script is:inline>
-            function __applyStoredTheme() {
-                try {
-                    const t = localStorage.getItem('mvff-theme');
-                    if (t) document.documentElement.setAttribute('data-theme', t);
-                } catch { /* noop */ }
-            }
-            __applyStoredTheme();
-            document.addEventListener('astro:after-swap', __applyStoredTheme);
-        </script>
     </head>
-    <body>
-        <div class="app">
-            <div class="grain" aria-hidden="true"></div>
-            <div class="vignette" aria-hidden="true"></div>
-            <Navbar />
-            <main>
-                <slot />
-            </main>
-            <Footer />
-        </div>
+    <body class="flex flex-col relative isolate min-h-screen overflow-x-clip font-sans antialiased bg-night text-cream">
+        <div class="grain" aria-hidden="true" />
+        <div class="vignette" aria-hidden="true" />
+        <Navbar />
+        <main class="flex flex-1 flex-col">
+            <slot />
+        </main>
+        <Footer />
     </body>
 </html>
 
-<style is:global>
-    @import 'tailwindcss';
-
-    :root,
-    [data-theme='dark'] {
-        --ink: #0a0a0f;
-        --ink-2: #11111a;
-        --ink-3: #1a1a25;
-        --paper: #f4f1ea;
-        --paper-dim: rgba(244, 241, 234, 0.62);
-        --paper-mute: rgba(244, 241, 234, 0.38);
-        --line: rgba(244, 241, 234, 0.14);
-        --line-2: rgba(244, 241, 234, 0.08);
-        --accent: oklch(0.74 0.19 30);
-        --accent-2: oklch(0.78 0.16 210);
-        --accent-3: oklch(0.85 0.18 95);
-        --grain-opacity: 0.18;
-        --vignette: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.55) 100%);
-        --ff-display: 'Bebas Neue', 'Helvetica Neue', sans-serif;
-        --ff-serif: 'Instrument Serif', Georgia, serif;
-        --ff-mono: 'JetBrains Mono', ui-monospace, monospace;
-        --ff-body: 'Inter', system-ui, sans-serif;
-        --shell-max: 1280px;
-        --shell-pad: clamp(20px, 4vw, 56px);
-        color-scheme: dark;
-    }
-
-    [data-theme='light'] {
-        --ink: #f1ead8;
-        --ink-2: #ebe2cb;
-        --ink-3: #e0d5b8;
-        --paper: #1a1612;
-        --paper-dim: rgba(26, 22, 18, 0.66);
-        --paper-mute: rgba(26, 22, 18, 0.42);
-        --line: rgba(26, 22, 18, 0.18);
-        --line-2: rgba(26, 22, 18, 0.09);
-        --accent: oklch(0.50 0.16 28);
-        --accent-2: oklch(0.55 0.10 200);
-        --accent-3: oklch(0.58 0.13 75);
-        --grain-opacity: 0.30;
-        --vignette: radial-gradient(ellipse at center, transparent 50%, rgba(120, 90, 40, 0.18) 100%);
-        color-scheme: light;
-    }
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    ::selection {
-        background: var(--accent);
-        color: var(--ink);
-    }
-
-    ::-webkit-scrollbar {
-        height: 10px;
-        width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--ink);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--line);
-        border: 2px solid var(--ink);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-    }
-
-    html {
-        overflow-x: clip;
-        scroll-behavior: smooth;
-    }
-
-    body {
-        background: var(--ink);
-        color: var(--paper);
-        font-family: var(--ff-body);
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 1.5;
-        min-height: 100vh;
-        overflow-x: hidden;
-        transition: background 600ms ease, color 600ms ease;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
-    }
-
-    h1, h2, h3, h4 {
-        font-family: var(--ff-display);
-        font-weight: 400;
-        letter-spacing: 0.01em;
-        line-height: 0.94;
-    }
-
-    :focus {
-        outline: none;
-    }
-
-    :focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 3px;
-    }
-
-    .app {
-        isolation: isolate;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    .grain {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
-        inset: 0;
-        mix-blend-mode: overlay;
-        opacity: var(--grain-opacity);
-        pointer-events: none;
-        position: fixed;
-        z-index: 100;
-    }
-
-    .vignette {
-        background: var(--vignette);
-        inset: 0;
-        pointer-events: none;
-        position: fixed;
-        z-index: 99;
-    }
-
-    .shell {
-        margin: 0 auto;
-        max-width: var(--shell-max);
-        padding: 0 var(--shell-pad);
-        width: 100%;
-    }
-
-    .display {
-        font-family: var(--ff-display);
-        font-weight: 400;
-        letter-spacing: 0.02em;
-        line-height: 0.92;
-    }
-
-    .serif {
-        font-family: var(--ff-serif);
-        font-weight: 400;
-    }
-
-    .mono {
-        font-family: var(--ff-mono);
-        font-weight: 400;
-        letter-spacing: 0.02em;
-    }
-
-    .eyebrow {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
-        font-size: 11px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-    }
-
-    .btn {
-        align-items: center;
-        background: transparent;
-        border: 1px solid var(--paper);
-        color: var(--paper);
-        cursor: pointer;
-        display: inline-flex;
-        font-family: var(--ff-mono);
-        font-size: 12px;
-        gap: 10px;
-        letter-spacing: 0.16em;
-        padding: 14px 22px;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: all 200ms ease;
-    }
-
-    .btn:hover {
-        background: var(--paper);
-        color: var(--ink);
-    }
-
-    .btn:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 3px;
-    }
-
-    .btn-primary {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: var(--ink);
-        font-weight: 600;
-    }
-
-    .btn-primary:hover {
-        background: var(--paper);
-        border-color: var(--paper);
-    }
-
-    .section {
-        padding: clamp(60px, 10vh, 130px) 0;
-        position: relative;
-    }
-
-    .section-head {
-        align-items: end;
-        border-bottom: 1px solid var(--line);
-        display: grid;
-        gap: 12px 24px;
-        grid-template-columns: auto 1fr auto;
-        margin-bottom: clamp(40px, 6vw, 72px);
-        padding-bottom: 18px;
-    }
-
-    @media (max-width: 720px) {
-        .section-head {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .section-num {
-        color: var(--accent);
-        font-family: var(--ff-mono);
-        font-size: 12px;
-        letter-spacing: 0.2em;
-    }
-
-    .section-title {
-        font-size: clamp(40px, 7vw, 88px);
-        line-height: 0.9;
-        text-transform: uppercase;
-    }
-
-    .section-meta {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
-        font-size: 10.5px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-    }
-
-    .subhead {
-        align-items: baseline;
-        border-bottom: 1px solid var(--line);
-        display: flex;
-        font-family: var(--ff-display);
-        font-size: clamp(28px, 3.6vw, 44px);
-        justify-content: space-between;
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .subhead .badge {
-        color: var(--accent);
-        font-family: var(--ff-mono);
-        font-size: 10px;
-        letter-spacing: 0.2em;
-    }
-
-    .input,
-    .textarea,
-    .select {
-        background: var(--ink);
-        border: 1px solid var(--line);
-        color: var(--paper);
-        font-family: var(--ff-mono);
-        font-size: 13px;
-        outline: none;
-        padding: 12px 14px;
-        transition: all 180ms ease;
-        width: 100%;
-    }
-
-    .input:hover,
-    .textarea:hover,
-    .select:hover {
-        border-color: var(--paper-mute);
-    }
-
-    .input:focus,
-    .textarea:focus,
-    .select:focus {
-        background: var(--ink-2);
-        border-color: var(--accent);
-    }
-
-    .textarea {
-        font-family: var(--ff-body);
-        line-height: 1.5;
-        min-height: 140px;
-        resize: vertical;
-    }
-
-    .label {
-        color: var(--paper-dim);
-        display: block;
-        font-family: var(--ff-mono);
-        font-size: 10px;
-        letter-spacing: 0.2em;
-        margin-bottom: 6px;
-        text-transform: uppercase;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-    }
-
-    [data-scroll] {
-        opacity: 0;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            scroll-behavior: auto !important;
-            transition-duration: 0.01ms !important;
-        }
-    }
-</style>
-
 <script>
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import gsap from 'gsap';
+    import { initMotion } from '@lib/motion';
 
-    import { initScrollAnimations } from '@lib/scroll';
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    let scrollRafPending = false;
-    let baseAc: AbortController | undefined;
-
-    function init(): void {
-        baseAc?.abort();
-        baseAc = new AbortController();
-        const { signal } = baseAc;
-
-        ScrollTrigger.getAll().forEach(t => t.kill());
-        initScrollAnimations();
-
-        const layers = document.querySelectorAll<HTMLElement>('[data-parallax]');
-
-        function updateParallax(): void {
-            const scrollY = window.scrollY;
-
-            layers.forEach((layer) => {
-                layer.style.transform = 'translateY(' + (scrollY * +(layer.dataset.parallax || 0)) + 'px)';
-            });
-
-            scrollRafPending = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!scrollRafPending) {
-                requestAnimationFrame(updateParallax);
-                scrollRafPending = true;
-            }
-        }, { passive: true, signal });
-    }
-
-    document.addEventListener('astro:page-load', init);
+    document.addEventListener('astro:page-load', initMotion);
 </script>

@@ -1,6 +1,6 @@
 ---
-import Layout from '@/Layout.astro';
 import Stars from '@components/Stars.astro';
+import Layout from '@/Layout.astro';
 ---
 
 <Layout
@@ -10,25 +10,48 @@ import Stars from '@components/Stars.astro';
     <Stars />
     <section class="section">
         <div class="shell">
-            <div class="section-head">
-                <span class="section-num">[ C ]</span>
-                <h1 class="section-title">Contact</h1>
-                <span class="section-meta">RESPONSE WITHIN 48H<br />AUSTIN · TX</span>
+            <div class="section__head">
+                <span class="section__num">[ C ]</span>
+                <h1 class="section__title">Contact</h1>
+                <span class="section__meta">RESPONSE WITHIN 48H<br />AUSTIN · TX</span>
             </div>
             <div class="contact">
-                <form class="contact__form flex flex-col" id="contact-form">
-                    <div class="contact__banner" id="success-banner" aria-live="polite"></div>
+                <form
+                    id="contact-form"
+                    class="contact__form flex flex-col"
+                >
+                    <div
+                        id="success-banner"
+                        aria-live="polite"
+                        class="contact__banner"
+                    >
+                    </div>
                     <label class="field">
                         <span class="label">Name</span>
-                        <input class="input" name="name" placeholder="Your name" required type="text" />
+                        <input
+                            class="input"
+                            name="name"
+                            placeholder="Your name"
+                            required
+                            type="text"
+                        />
                     </label>
                     <label class="field">
                         <span class="label">Email</span>
-                        <input class="input" name="email" placeholder="you@domain.com" required type="email" />
+                        <input
+                            class="input"
+                            name="email"
+                            placeholder="you@domain.com"
+                            required
+                            type="email"
+                        />
                     </label>
                     <label class="field">
                         <span class="label">Subject</span>
-                        <select class="select" name="subject">
+                        <select
+                            class="select"
+                            name="subject"
+                        >
                             <option>General Inquiry</option>
                             <option>Press &amp; Media</option>
                             <option>Sponsorship</option>
@@ -40,7 +63,13 @@ import Stars from '@components/Stars.astro';
                         <span class="label">Message</span>
                         <textarea class="textarea" name="message" placeholder="Tell us what brought you here." required></textarea>
                     </label>
-                    <button class="btn btn-primary" disabled style="justify-content:center" type="submit">Coming Soon</button>
+                    <button
+                        class="btn btn--primary"
+                        disabled
+                        style="justify-content:center"
+                        type="submit"
+                    >Coming Soon
+                    </button>
                 </form>
                 <aside class="contact__side flex flex-col">
                     <div>
@@ -51,19 +80,51 @@ import Stars from '@components/Stars.astro';
                         </div>
                         <div class="contact__line">
                             <span class="contact__line-lbl">Instagram</span>
-                            <span class="contact__line-val"><a href="https://instagram.com/atxmvff" rel="noopener noreferrer" target="_blank">@atxmvff</a></span>
+                            <span class="contact__line-val">
+                                <a
+                                    href="https://instagram.com/atxmvff"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    @atxmvff
+                                </a>
+                            </span>
                         </div>
                         <div class="contact__line">
                             <span class="contact__line-lbl">Submit</span>
-                            <span class="contact__line-val"><a href="https://filmfreeway.com/atxmusicvideofilmfestival" rel="noopener noreferrer" target="_blank">FilmFreeway →</a></span>
+                            <span class="contact__line-val">
+                                <a
+                                    href="https://filmfreeway.com/atxmusicvideofilmfestival"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    FilmFreeway &rarr;
+                                </a>
+                            </span>
                         </div>
                         <div class="contact__line">
                             <span class="contact__line-lbl">Pitch</span>
-                            <span class="contact__line-val"><a href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck (PDF)</a></span>
+                            <span class="contact__line-val">
+                                <a
+                                    href="pitch-deck.pdf"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    Pitch Deck (PDF)
+                                </a>
+                            </span>
                         </div>
                         <div class="contact__line">
                             <span class="contact__line-lbl">Call</span>
-                            <span class="contact__line-val"><a href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Calendly →</a></span>
+                            <span class="contact__line-val">
+                                <a
+                                    href="https://calendly.com/madewellanna99/30min"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    Calendly &rarr;
+                                </a>
+                            </span>
                         </div>
                     </div>
                     <div>
@@ -101,11 +162,11 @@ import Stars from '@components/Stars.astro';
 
     .contact__banner[data-visible] {
         align-items: center;
-        animation: slidein 350ms ease;
-        background: var(--accent);
-        color: var(--ink);
+        animation: slidein 0.35s ease;
+        background: var(--color-accent);
+        color: var(--color-night);
         display: flex;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 12px;
         gap: 12px;
         letter-spacing: 0.14em;
@@ -131,12 +192,12 @@ import Stars from '@components/Stars.astro';
 
     .contact__line {
         align-items: baseline;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid var(--color-cream-15);
         display: grid;
         gap: 16px;
         grid-template-columns: 100px 1fr;
         padding: 14px 0;
-        transition: padding 180ms ease;
+        transition: padding 0.18s ease;
     }
 
     .contact__line:hover {
@@ -144,28 +205,28 @@ import Stars from '@components/Stars.astro';
     }
 
     .contact__line-lbl {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.2em;
         text-transform: uppercase;
     }
 
     .contact__line-val {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 22px;
-        overflow-wrap: break-word;
         min-width: 0;
+        overflow-wrap: break-word;
     }
 
     .contact__line a {
-        color: var(--paper);
+        color: var(--color-cream);
         text-decoration: none;
-        transition: color 180ms;
+        transition: color 0.18s ease;
     }
 
     .contact__line a:hover {
-        color: var(--accent);
+        color: var(--color-accent);
     }
 
     @media (max-width: 1024px) {
@@ -176,21 +237,21 @@ import Stars from '@components/Stars.astro';
 
     @media (max-width: 720px) {
         .contact__line {
-            grid-template-columns: 1fr;
             gap: 4px;
+            grid-template-columns: 1fr;
         }
     }
 </style>
 
 <script>
-    const BANNER_DURATION = 4000;
+    const BANNER_DURATION = 4_000;
 
-    let contactAc: AbortController | undefined;
+    let contactController: AbortController | undefined;
 
     function initContact(): void {
-        contactAc?.abort();
-        contactAc = new AbortController();
-        const { signal } = contactAc;
+        contactController?.abort();
+        contactController = new AbortController();
+        const { signal } = contactController;
 
         const form = document.getElementById('contact-form') as HTMLFormElement | null;
         const banner = document.getElementById('success-banner') as HTMLElement | null;
@@ -199,7 +260,7 @@ import Stars from '@components/Stars.astro';
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            banner.textContent = '✓ MESSAGE SENT — WE\'LL BE IN TOUCH SHORTLY';
+            banner.textContent = '\u2713 MESSAGE SENT — WE\'LL BE IN TOUCH SHORTLY';
             banner.setAttribute('data-visible', '');
             form.reset();
 

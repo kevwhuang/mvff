@@ -1,13 +1,13 @@
 ---
-import Layout from '@/Layout.astro';
 import Stars from '@components/Stars.astro';
+import Layout from '@/Layout.astro';
 
 const products = [
-    { id: 'item-1', name: 'Item 01', price: 0, icon: '01', desc: 'Details coming soon.' },
-    { id: 'item-2', name: 'Item 02', price: 0, icon: '02', desc: 'Details coming soon.' },
-    { id: 'item-3', name: 'Item 03', price: 0, icon: '03', desc: 'Details coming soon.' },
-    { id: 'item-4', name: 'Item 04', price: 0, icon: '04', desc: 'Details coming soon.' },
-    { id: 'item-5', name: 'Item 05', price: 0, icon: '05', desc: 'Details coming soon.' },
+    { desc: 'Details coming soon.', icon: '01', id: 'item-1', name: 'Item 01', price: 0 },
+    { desc: 'Details coming soon.', icon: '02', id: 'item-2', name: 'Item 02', price: 0 },
+    { desc: 'Details coming soon.', icon: '03', id: 'item-3', name: 'Item 03', price: 0 },
+    { desc: 'Details coming soon.', icon: '04', id: 'item-4', name: 'Item 04', price: 0 },
+    { desc: 'Details coming soon.', icon: '05', id: 'item-5', name: 'Item 05', price: 0 },
 ];
 ---
 
@@ -18,15 +18,20 @@ const products = [
     <Stars />
     <section class="section">
         <div class="shell">
-            <div class="section-head">
-                <span class="section-num">[ S ]</span>
-                <h1 class="section-title">Shop</h1>
-                <span class="section-meta">TICKETS / MERCH<br />SHIPS FROM AUSTIN</span>
+            <div class="section__head">
+                <span class="section__num">[ S ]</span>
+                <h1 class="section__title">Shop</h1>
+                <span class="section__meta">TICKETS / MERCH<br />SHIPS FROM AUSTIN</span>
             </div>
             <div class="shop">
                 <div class="shop__grid">
                     {products.map(p => (
-                        <div class="product" data-product-id={p.id} data-product-name={p.name} data-product-price={p.price}>
+                        <div
+                            class="product"
+                            data-product-id={p.id}
+                            data-product-name={p.name}
+                            data-product-price={p.price}
+                        >
                             <div class="product__img">
                                 <span class="product__img-icon">{p.icon}</span>
                                 <span class="product__img-label">[ photo · {p.id}.jpg ]</span>
@@ -35,43 +40,73 @@ const products = [
                             <div class="product__desc">{p.desc}</div>
                             <div class="product__foot flex items-center justify-between">
                                 <span class="product__price">${p.price}</span>
-                                <button class="product__add" type="button">Add to Cart</button>
+                                <button
+                                    class="product__add"
+                                    type="button"
+                                >Add to Cart
+                                </button>
                             </div>
                         </div>
                     ))}
                 </div>
                 <aside class="cart sticky">
-                    <div class="cart__head flex justify-between items-baseline">
-                        <h3>Cart</h3>
+                    <div class="cart__head flex items-baseline justify-between">
+                        <h2>Cart</h2>
                         <span class="cart__count">[0 ITEMS]</span>
                     </div>
                     <div class="cart__list">
                         <div class="cart__empty">Your cart is empty. Pick a ticket — or grab the bundle.</div>
                     </div>
-                    <div class="cart__total flex justify-between items-baseline">
+                    <div class="cart__total flex items-baseline justify-between">
                         <span class="cart__total-lbl">SUBTOTAL</span>
                         <span class="cart__total-amt">$0</span>
                     </div>
-                    <form class="cart__checkout flex flex-col" onsubmit="event.preventDefault()">
+                    <form class="cart__checkout flex flex-col">
                         <label class="field">
                             <span class="label">Email</span>
-                            <input class="input" placeholder="you@domain.com" type="email" />
+                            <input
+                                class="input"
+                                name="email"
+                                placeholder="you@domain.com"
+                                type="email"
+                            />
                         </label>
                         <label class="field">
                             <span class="label">Card Number</span>
-                            <input class="input" placeholder="•••• •••• •••• ••••" />
+                            <input
+                                class="input"
+                                name="card-number"
+                                placeholder="•••• •••• •••• ••••"
+                                type="text"
+                            />
                         </label>
                         <div class="cart__checkout-row grid">
                             <label class="field">
                                 <span class="label">Exp</span>
-                                <input class="input" placeholder="MM / YY" />
+                                <input
+                                    class="input"
+                                    name="expiration"
+                                    placeholder="MM / YY"
+                                    type="text"
+                                />
                             </label>
                             <label class="field">
                                 <span class="label">CVC</span>
-                                <input class="input" placeholder="•••" />
+                                <input
+                                    class="input"
+                                    name="cvc"
+                                    placeholder="•••"
+                                    type="text"
+                                />
                             </label>
                         </div>
-                        <button class="btn btn-primary" id="checkout-btn" disabled style="justify-content:center" type="submit">Coming Soon</button>
+                        <button
+                            id="checkout-btn"
+                            class="btn btn--primary justify-center"
+                            disabled
+                            type="submit"
+                        >Coming Soon
+                        </button>
                     </form>
                 </aside>
             </div>
@@ -88,31 +123,31 @@ const products = [
     }
 
     .shop__grid {
-        background: var(--line);
-        border: 1px solid var(--line);
+        background: var(--color-cream-15);
+        border: 1px solid var(--color-cream-15);
         display: grid;
         gap: 1px;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     }
 
     .product {
-        background: var(--ink-2);
+        background: var(--color-navy);
         display: flex;
         flex-direction: column;
         gap: 16px;
         padding: 24px;
         position: relative;
-        transition: background 200ms ease;
+        transition: background 0.2s ease;
     }
 
     .product:hover {
-        background: var(--ink-3);
+        background: var(--color-slate);
     }
 
     .product__img {
         aspect-ratio: 1;
-        background: repeating-linear-gradient(45deg, var(--ink-3) 0 8px, var(--ink-2) 8px 16px);
-        border: 1px solid var(--line);
+        background: repeating-linear-gradient(45deg, var(--color-slate) 0 8px, var(--color-navy) 8px 16px);
+        border: 1px solid var(--color-cream-15);
         display: grid;
         overflow: hidden;
         place-items: center;
@@ -120,15 +155,15 @@ const products = [
     }
 
     .product__img-icon {
-        color: var(--paper-mute);
-        font-family: var(--ff-display);
+        color: var(--color-cream-40);
+        font-family: var(--font-display);
         font-size: 48px;
     }
 
     .product__img-label {
         bottom: 8px;
-        color: var(--paper-mute);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-40);
+        font-family: var(--font-mono);
         font-size: 9px;
         left: 8px;
         letter-spacing: 0.18em;
@@ -136,58 +171,58 @@ const products = [
     }
 
     .product__name {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 24px;
         line-height: 1;
         text-transform: uppercase;
     }
 
     .product__desc {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 14px;
         line-height: 1.4;
     }
 
     .product__foot {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid var(--color-cream-15);
         margin-top: auto;
         padding-top: 12px;
     }
 
     .product__price {
-        color: var(--accent);
-        font-family: var(--ff-display);
+        color: var(--color-accent);
+        font-family: var(--font-display);
         font-size: 28px;
     }
 
     .product__add {
         background: transparent;
-        border: 1px solid var(--paper);
-        color: var(--paper);
+        border: 1px solid var(--color-cream);
+        color: var(--color-cream);
         cursor: pointer;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.18em;
         padding: 8px 12px;
         text-transform: uppercase;
-        transition: all 200ms ease;
+        transition: background 0.2s ease, color 0.2s ease;
     }
 
     .product__add:hover {
-        background: var(--paper);
-        color: var(--ink);
+        background: var(--color-cream);
+        color: var(--color-night);
     }
 
     .product__add[data-in-cart] {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: var(--ink);
+        background: var(--color-accent);
+        border-color: var(--color-accent);
+        color: var(--color-night);
     }
 
     .cart {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -196,18 +231,18 @@ const products = [
     }
 
     .cart__head {
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid var(--color-cream-15);
         padding-bottom: 14px;
     }
 
-    .cart__head h3 {
-        font-family: var(--ff-display);
+    .cart__head h2 {
+        font-family: var(--font-display);
         font-size: 24px;
     }
 
     .cart__count {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 11px;
         letter-spacing: 0.16em;
     }
@@ -221,8 +256,8 @@ const products = [
     }
 
     .cart__empty {
-        color: var(--paper-mute);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-40);
+        font-family: var(--font-serif);
         font-size: 14px;
         font-style: italic;
         padding: 20px 0;
@@ -231,7 +266,7 @@ const products = [
 
     :global(.cart-item) {
         align-items: center;
-        border-bottom: 1px dashed var(--line);
+        border-bottom: 1px dashed var(--color-cream-15);
         display: grid;
         font-size: 13px;
         gap: 10px;
@@ -240,54 +275,54 @@ const products = [
     }
 
     :global(.cart-item__name) {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 16px;
         line-height: 1;
     }
 
     :global(.cart-item__qty) {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 11px;
     }
 
     :global(.cart-item__price) {
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 12px;
     }
 
     :global(.cart-item__remove) {
         background: none;
         border: none;
-        color: var(--paper-mute);
+        color: var(--color-cream-40);
         cursor: pointer;
         font-size: 14px;
         padding: 4px;
     }
 
     :global(.cart-item__remove:hover) {
-        color: var(--accent);
+        color: var(--color-accent);
     }
 
     .cart__total {
-        border-top: 1px solid var(--line);
-        font-family: var(--ff-display);
+        border-top: 1px solid var(--color-cream-15);
+        font-family: var(--font-display);
         padding-top: 14px;
     }
 
     .cart__total-lbl {
-        color: var(--paper-dim);
+        color: var(--color-cream-60);
         font-size: 14px;
         letter-spacing: 0.12em;
     }
 
     .cart__total-amt {
-        color: var(--accent);
+        color: var(--color-accent);
         font-size: 32px;
     }
 
     .cart__checkout {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid var(--color-cream-15);
         gap: 12px;
         margin-top: 8px;
         padding-top: 16px;
@@ -311,87 +346,33 @@ const products = [
 </style>
 
 <script>
-    interface CartItem {
-        id: string;
-        name: string;
-        price: number;
-        qty: number;
-    }
-
     let cart: CartItem[] = [];
-    let shopAc: AbortController | undefined;
-
-    function renderCart(): void {
-        const cartList = document.querySelector('.cart__list') as HTMLElement | null;
-        const cartCount = document.querySelector('.cart__count') as HTMLElement | null;
-        const cartTotalAmt = document.querySelector('.cart__total-amt') as HTMLElement | null;
-        const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement | null;
-
-        if (!cartList || !cartCount || !cartTotalAmt || !checkoutBtn) return;
-
-        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-        const count = cart.reduce((s, i) => s + i.qty, 0);
-
-        cartCount.textContent = `[${count} ITEMS]`;
-        cartTotalAmt.textContent = `$${total}`;
-        checkoutBtn.textContent = 'Coming Soon';
-        checkoutBtn.disabled = true;
-
-        if (cart.length === 0) {
-            cartList.innerHTML = '<div class="cart__empty">Your cart is empty. Pick a ticket — or grab the bundle.</div>';
-        } else {
-            cartList.innerHTML = cart.map(item =>
-                `<div class="cart-item">
-                    <div>
-                        <div class="cart-item__name">${item.name}</div>
-                        <div class="cart-item__qty">× ${item.qty}</div>
-                    </div>
-                    <div class="cart-item__price">$${item.price * item.qty}</div>
-                    <button class="cart-item__remove" data-remove-id="${item.id}" type="button" aria-label="Remove ${item.name}">×</button>
-                </div>`,
-            ).join('');
-
-            cartList.querySelectorAll('[data-remove-id]').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const id = (btn as HTMLElement).dataset.removeId!;
-                    const idx = cart.findIndex(i => i.id === id);
-                    if (idx !== -1) cart.splice(idx, 1);
-                    updateButtons();
-                    renderCart();
-                });
-            });
-        }
-    }
-
-    function updateButtons(): void {
-        document.querySelectorAll('.product__add').forEach((btn) => {
-            const product = btn.closest('[data-product-id]') as HTMLElement;
-            const id = product.dataset.productId!;
-            const item = cart.find(i => i.id === id);
-
-            if (item) {
-                btn.setAttribute('data-in-cart', '');
-                btn.textContent = `In Cart (${item.qty})`;
-            } else {
-                btn.removeAttribute('data-in-cart');
-                btn.textContent = 'Add to Cart';
-            }
-        });
-    }
+    let shopController: AbortController | undefined;
 
     function initShop(): void {
-        shopAc?.abort();
-        shopAc = new AbortController();
-        const { signal } = shopAc;
+        shopController?.abort();
+        shopController = new AbortController();
+        const { signal } = shopController;
 
         cart = [];
 
+        const checkoutForm = document.querySelector('.cart__checkout');
+
+        checkoutForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+        }, { signal });
+
         document.querySelectorAll('.product__add').forEach((btn) => {
             btn.addEventListener('click', () => {
-                const product = btn.closest('[data-product-id]') as HTMLElement;
-                const id = product.dataset.productId!;
-                const name = product.dataset.productName!;
+                const product = btn.closest('[data-product-id]') as HTMLElement | null;
+
+                if (!product) return;
+
+                const id = product.dataset.productId;
+                const name = product.dataset.productName;
                 const price = Number(product.dataset.productPrice);
+
+                if (!id || !name) return;
 
                 const existing = cart.find(i => i.id === id);
 
@@ -407,6 +388,73 @@ const products = [
         });
 
         renderCart();
+    }
+
+    function renderCart(): void {
+        const cartList = document.querySelector('.cart__list') as HTMLElement | null;
+        const cartCount = document.querySelector('.cart__count') as HTMLElement | null;
+        const cartTotalAmt = document.querySelector('.cart__total-amt') as HTMLElement | null;
+        const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement | null;
+
+        if (!cartList || !cartCount || !cartTotalAmt || !checkoutBtn) return;
+
+        const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
+        cartCount.textContent = `[${count} ITEMS]`;
+        cartTotalAmt.textContent = `$${total}`;
+        checkoutBtn.textContent = 'Coming Soon';
+        checkoutBtn.disabled = true;
+
+        if (cart.length === 0) {
+            cartList.innerHTML = '<div class="cart__empty">Your cart is empty. Pick a ticket — or grab the bundle.</div>';
+        } else {
+            cartList.innerHTML = cart.map(item =>
+                `<div class="cart-item">
+                    <div>
+                        <div class="cart-item__name">${item.name}</div>
+                        <div class="cart-item__qty">\u00d7 ${item.qty}</div>
+                    </div>
+                    <div class="cart-item__price">$${item.price * item.qty}</div>
+                    <button class="cart-item__remove" data-remove-id="${item.id}" type="button" aria-label="Remove ${item.name}">&times;</button>
+                </div>`,
+            ).join('');
+
+            cartList.querySelectorAll('[data-remove-id]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = (btn as HTMLElement).dataset.removeId;
+
+                    if (!id) return;
+
+                    const idx = cart.findIndex(i => i.id === id);
+                    if (idx !== -1) cart.splice(idx, 1);
+                    updateButtons();
+                    renderCart();
+                });
+            });
+        }
+    }
+
+    function updateButtons(): void {
+        document.querySelectorAll('.product__add').forEach((btn) => {
+            const product = btn.closest('[data-product-id]') as HTMLElement | null;
+
+            if (!product) return;
+
+            const id = product.dataset.productId;
+
+            if (!id) return;
+
+            const item = cart.find(i => i.id === id);
+
+            if (item) {
+                btn.setAttribute('data-in-cart', '');
+                btn.textContent = `In Cart (${item.qty})`;
+            } else {
+                btn.removeAttribute('data-in-cart');
+                btn.textContent = 'Add to Cart';
+            }
+        });
     }
 
     document.addEventListener('astro:page-load', initShop);

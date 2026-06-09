@@ -12,37 +12,40 @@ import rocky from '@images/team/rocky.webp';
 import sebastian from '@images/team/sebastian.webp';
 
 const team = [
-    { name: 'Anna', role: 'Founder & Director', img: anna },
-    { name: 'Rocky', role: 'Film Director', img: rocky },
-    { name: 'Jasmine', role: 'Event Coordinator', img: jasmine },
-    { name: 'Jymes', role: 'Talent Programmer', img: jymes },
-    { name: 'Amiiri', role: 'Promotions Queen', img: amiiri },
-    { name: 'Donovan', role: 'Social Media Manager', img: donovan },
-    { name: 'Marissa', role: 'Graphic Designer', img: marissa },
-    { name: 'Sebastian', role: 'Community Outreach', img: sebastian },
-    { name: 'Phillip', role: 'Volunteer Coordinator', img: phillip },
-    { name: 'Killian', role: 'Visual Tech', img: killian },
-    { name: 'Ben', role: 'Audio Tech', img: ben },
+    { img: anna, name: 'Anna', role: 'Founder & Director' },
+    { img: rocky, name: 'Rocky', role: 'Film Director' },
+    { img: jasmine, name: 'Jasmine', role: 'Event Coordinator' },
+    { img: jymes, name: 'Jymes', role: 'Talent Programmer' },
+    { img: amiiri, name: 'Amiiri', role: 'Promotions Queen' },
+    { img: donovan, name: 'Donovan', role: 'Social Media Manager' },
+    { img: marissa, name: 'Marissa', role: 'Graphic Designer' },
+    { img: sebastian, name: 'Sebastian', role: 'Community Outreach' },
+    { img: phillip, name: 'Phillip', role: 'Volunteer Coordinator' },
+    { img: killian, name: 'Killian', role: 'Visual Tech' },
+    { img: ben, name: 'Ben', role: 'Audio Tech' },
 ];
 ---
 
-<section class="section" aria-labelledby="roster-heading">
+<section
+    class="section"
+    aria-labelledby="roster-heading"
+>
     <div class="shell">
-        <div class="section-head">
-            <span class="section-num">[ T ]</span>
-            <h1 id="roster-heading" class="section-title">2026 Team</h1>
-            <span class="section-meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</span>
+        <div class="section__head">
+            <span class="section__num">[ T ]</span>
+            <h1 id="roster-heading" class="section__title">2026 Team</h1>
+            <span class="section__meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</span>
         </div>
         <div class="roster__grid">
-            {team.map((m, i) => (
+            {team.map((member, i) => (
                 <div class="roster__card">
                     <span class="roster__num">{String(i + 1).padStart(2, '0')}</span>
                     <div class="roster__photo">
-                        <img alt={m.name} loading="lazy" src={m.img.src} />
+                        <img alt={member.name} loading="lazy" src={member.img.src} />
                     </div>
                     <div class="roster__info">
-                        <span class="roster__name">{m.name}</span>
-                        <span class="roster__role">{m.role}</span>
+                        <span class="roster__name">{member.name}</span>
+                        <span class="roster__role">{member.role}</span>
                     </div>
                 </div>
             ))}
@@ -52,23 +55,22 @@ const team = [
 
 <style>
     .roster__grid {
-        background: var(--line);
-        border: 1px solid var(--line);
+        background: var(--color-cream-15);
+        border: 1px solid var(--color-cream-15);
         display: grid;
         gap: 1px;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 
     .roster__card {
-        background: var(--ink-2);
-        cursor: pointer;
+        background: var(--color-navy);
         overflow: hidden;
         position: relative;
     }
 
     .roster__num {
-        color: var(--paper);
-        font-family: var(--ff-mono);
+        color: var(--color-cream);
+        font-family: var(--font-mono);
         font-size: 10px;
         left: 12px;
         letter-spacing: 0.16em;
@@ -80,7 +82,7 @@ const team = [
 
     .roster__photo {
         aspect-ratio: 4 / 5;
-        background: var(--ink-3);
+        background: var(--color-slate);
         overflow: hidden;
         position: relative;
     }
@@ -89,7 +91,7 @@ const team = [
         filter: grayscale(0.85) contrast(1.1) brightness(0.95);
         height: 100%;
         object-fit: cover;
-        transition: filter 400ms ease, transform 600ms ease;
+        transition: filter 0.4s ease, transform 0.6s ease;
         width: 100%;
     }
 
@@ -99,7 +101,7 @@ const team = [
     }
 
     .roster__photo::after {
-        background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+        background: linear-gradient(180deg, transparent 50%, var(--color-black-70) 100%);
         content: '';
         inset: 0;
         pointer-events: none;
@@ -107,7 +109,7 @@ const team = [
     }
 
     .roster__info {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid var(--color-cream-15);
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -115,14 +117,14 @@ const team = [
     }
 
     .roster__name {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 26px;
         line-height: 1;
     }
 
     .roster__role {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.18em;
         text-transform: uppercase;

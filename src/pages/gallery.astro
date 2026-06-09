@@ -1,6 +1,6 @@
 ---
-import Layout from '@/Layout.astro';
 import Stars from '@components/Stars.astro';
+import Layout from '@/Layout.astro';
 
 const palette = [
     ['#1f1424', '#5b2a4c'], ['#0e1d2c', '#2a4a6b'], ['#2a1a0e', '#7a3f1c'],
@@ -12,13 +12,13 @@ const palette = [
 
 const titles = Array.from({ length: 15 }, (_, i) => `Frame ${String(i + 1).padStart(2, '0')}`);
 
-const items = palette.map((g, i) => ({
-    id: i,
-    title: titles[i],
+const items = palette.map((gradient, i) => ({
     block: `BLK_${String(i + 1).padStart(3, '0')}`,
-    year: '2025',
-    grad: `linear-gradient(135deg, ${g[0]} 0%, ${g[1]} 100%)`,
+    grad: `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
+    id: i,
     span: i % 7 === 0 ? 'wide' : i % 5 === 0 ? 'tall' : i % 11 === 0 ? 'big' : 'norm',
+    title: titles[i],
+    year: '2025',
 }));
 
 function spanClass(s: string): string {
@@ -38,42 +38,70 @@ function spanClass(s: string): string {
     <Stars />
     <section class="section">
         <div class="shell">
-            <div class="section-head">
-                <span class="section-num">[ G ]</span>
-                <h1 class="section-title">Gallery</h1>
-                <span class="section-meta">FROM THE 2025 CUT<br />15 STILLS</span>
+            <div class="section__head">
+                <span class="section__num">[ G ]</span>
+                <h1 class="section__title">Gallery</h1>
+                <span class="section__meta">FROM THE 2025 CUT<br />15 STILLS</span>
             </div>
             <div class="gallery__grid">
                 {items.map(g => (
-                    <div
-                        class={`gallery__tile ${spanClass(g.span)}`}
-                        data-gallery-title={g.title}
-                        data-gallery-block={g.block}
-                        data-gallery-year={g.year}
-                        data-gallery-grad={g.grad}
-                        role="button"
-                        tabindex="0"
+                    <button
                         aria-label={`View ${g.title}`}
+                        class={`gallery__tile ${spanClass(g.span)}`}
+                        data-gallery-block={g.block}
+                        data-gallery-grad={g.grad}
+                        data-gallery-title={g.title}
+                        data-gallery-year={g.year}
+                        type="button"
                     >
-                        <div class="gallery__tile-img" style={`background:${g.grad}`}></div>
-                        <div class="gallery__tile-meta">
+                        <span
+                            class="gallery__tile-img"
+                            style={`background:${g.grad}`}
+                        >
+                        </span>
+                        <span class="gallery__tile-meta">
                             <span>{g.title}</span>
                             <span>{g.block}</span>
-                        </div>
-                    </div>
+                        </span>
+                    </button>
                 ))}
             </div>
         </div>
     </section>
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-        <div class="lightbox__inner" id="lightbox-inner">
-            <button class="lightbox__close" id="lightbox-close" type="button" aria-label="Close lightbox">×</button>
-            <div class="lightbox__img" id="lightbox-img"></div>
+    <div
+        id="lightbox"
+        aria-hidden="true"
+        class="lightbox"
+    >
+        <div
+            id="lightbox-inner"
+            class="lightbox__inner"
+        >
+            <button
+                id="lightbox-close"
+                aria-label="Close lightbox"
+                class="lightbox__close"
+                type="button"
+            >&times;
+            </button>
+            <div
+                id="lightbox-img"
+                class="lightbox__img"
+            >
+            </div>
             <div class="lightbox__info flex flex-col">
-                <div class="lightbox__meta" id="lightbox-meta"></div>
-                <h3 id="lightbox-title" aria-label="Gallery item title">&nbsp;</h3>
+                <div
+                    id="lightbox-meta"
+                    class="lightbox__meta"
+                >
+                </div>
+                <h2
+                    id="lightbox-title"
+                    aria-label="Gallery item title"
+                >&nbsp;
+                </h2>
                 <p>Gallery content coming soon.</p>
-                <div class="lightbox__meta" style="margin-top:auto">SHOT BY MVFF MEDIA TEAM</div>
+                <div class="lightbox__meta mt-auto">SHOT BY MVFF MEDIA TEAM</div>
             </div>
         </div>
     </div>
@@ -88,12 +116,16 @@ function spanClass(s: string): string {
     }
 
     .gallery__tile {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: inherit;
         cursor: pointer;
+        font: inherit;
         overflow: hidden;
+        padding: 0;
         position: relative;
-        transition: transform 300ms ease;
+        text-align: left;
+        transition: transform 0.3s ease;
     }
 
     .gallery__tile:hover {
@@ -127,7 +159,7 @@ function spanClass(s: string): string {
         filter: grayscale(0.5) contrast(1.05);
         inset: 0;
         position: absolute;
-        transition: filter 400ms ease;
+        transition: filter 0.4s ease;
     }
 
     .gallery__tile:hover .gallery__tile-img {
@@ -135,11 +167,11 @@ function spanClass(s: string): string {
     }
 
     .gallery__tile-meta {
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+        background: linear-gradient(transparent, var(--color-black-85));
         bottom: 0;
-        color: var(--paper);
+        color: var(--color-cream);
         display: flex;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 10px;
         justify-content: space-between;
         left: 0;
@@ -148,7 +180,7 @@ function spanClass(s: string): string {
         padding: 12px 14px;
         position: absolute;
         right: 0;
-        transition: opacity 250ms ease;
+        transition: opacity 0.25s ease;
     }
 
     .gallery__tile:hover .gallery__tile-meta {
@@ -156,10 +188,9 @@ function spanClass(s: string): string {
     }
 
     .lightbox {
-        animation: fadein 250ms ease;
+        animation: fadein 0.25s ease;
         backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        background: rgba(0, 0, 0, 0.93);
+        background: var(--color-black-95);
         cursor: zoom-out;
         display: none;
         inset: 0;
@@ -167,6 +198,7 @@ function spanClass(s: string): string {
         place-items: center;
         position: fixed;
         z-index: 200;
+        -webkit-backdrop-filter: blur(8px);
     }
 
     .lightbox[data-active] {
@@ -196,29 +228,29 @@ function spanClass(s: string): string {
         aspect-ratio: 3 / 2;
         background-position: center;
         background-size: cover;
-        border: 1px solid var(--line);
+        border: 1px solid var(--color-cream-15);
     }
 
     .lightbox__info {
-        color: var(--paper);
+        color: var(--color-cream);
         gap: 12px;
     }
 
-    .lightbox__info h3 {
-        font-family: var(--ff-display);
+    .lightbox__info h2 {
+        font-family: var(--font-display);
         font-size: 36px;
     }
 
     .lightbox__info p {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 16px;
         line-height: 1.5;
     }
 
     .lightbox__meta {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 11px;
         letter-spacing: 0.16em;
         text-transform: uppercase;
@@ -226,10 +258,10 @@ function spanClass(s: string): string {
 
     .lightbox__close {
         background: none;
-        border: 1px solid var(--paper);
-        color: var(--paper);
+        border: 1px solid var(--color-cream);
+        color: var(--color-cream);
         cursor: pointer;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         height: 32px;
         position: absolute;
         right: 0;
@@ -249,7 +281,7 @@ function spanClass(s: string): string {
 </style>
 
 <script>
-    let galleryAc: AbortController | undefined;
+    let galleryController: AbortController | undefined;
 
     function closeLightbox(): void {
         const lightbox = document.getElementById('lightbox');
@@ -261,9 +293,9 @@ function spanClass(s: string): string {
     }
 
     function initGallery(): void {
-        galleryAc?.abort();
-        galleryAc = new AbortController();
-        const { signal } = galleryAc;
+        galleryController?.abort();
+        galleryController = new AbortController();
+        const { signal } = galleryController;
 
         document.querySelectorAll('.gallery__tile').forEach((tile) => {
             tile.addEventListener('click', () => {
@@ -280,13 +312,6 @@ function spanClass(s: string): string {
                 meta.textContent = `${el.dataset.galleryBlock} · ${el.dataset.galleryYear}`;
                 lightbox.setAttribute('data-active', '');
                 lightbox.setAttribute('aria-hidden', 'false');
-            }, { signal });
-
-            tile.addEventListener('keydown', (e) => {
-                if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-                    e.preventDefault();
-                    (tile as HTMLElement).click();
-                }
             }, { signal });
         });
 

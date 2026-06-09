@@ -1,6 +1,26 @@
 ---
-import Layout from '@/Layout.astro';
 import Stars from '@components/Stars.astro';
+import Layout from '@/Layout.astro';
+
+const faq = [
+    { a: 'A one-night festival in Austin where music videos take the spotlight — paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.', q: 'What exactly is the ATX MVFF?' },
+    { a: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.', q: 'When and where is it happening?' },
+    { a: 'Submissions are open through FilmFreeway. Head to filmfreeway.com/atxmusicvideofilmfestival to enter — early-bird, regular, and final deadlines apply.', q: 'How do I submit a music video?' },
+    { a: 'Yes — 21+ with valid ID. The bar is full-service and the pool party runs late.', q: 'Is there an age requirement?' },
+    { a: 'Red carpet meets pool party. Dress to be photographed — and bring a swimsuit if you plan to take a dip after midnight.', q: 'What\'s the dress code?' },
+    { a: 'Phones and small personal cameras are welcome. Professional press / accredited media — please reach out in advance via the contact form.', q: 'Can I bring a camera?' },
+    { a: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.', q: 'Where do I park?' },
+    { a: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.', q: 'Will there be food and drinks?' },
+];
+
+const practical = [
+    '21+ with valid government-issued ID — no exceptions',
+    'Doors open at 7:00 PM, last entry at 11:30 PM',
+    'No outside food or drink — full-service bar on site',
+    'Pool access included with all ticket tiers — bring a suit',
+    'Wristband re-entry permitted up until midnight',
+    'Wheelchair-accessible venue — email us for any further accommodations',
+];
 
 const schedule = [
     ['TBD', 'Event TBD', 'TBD'],
@@ -16,26 +36,6 @@ const schedule = [
     ['TBD', 'Event TBD', 'TBD'],
     ['TBD', 'Event TBD', 'TBD'],
 ];
-
-const faq = [
-    { q: 'What exactly is the ATX MVFF?', a: 'A one-night festival in Austin where music videos take the spotlight — paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.' },
-    { q: 'When and where is it happening?', a: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.' },
-    { q: 'How do I submit a music video?', a: 'Submissions are open through FilmFreeway. Head to filmfreeway.com/atxmusicvideofilmfestival to enter — early-bird, regular, and final deadlines apply.' },
-    { q: 'Is there an age requirement?', a: 'Yes — 21+ with valid ID. The bar is full-service and the pool party runs late.' },
-    { q: 'What\'s the dress code?', a: 'Red carpet meets pool party. Dress to be photographed — and bring a swimsuit if you plan to take a dip after midnight.' },
-    { q: 'Can I bring a camera?', a: 'Phones and small personal cameras are welcome. Professional press / accredited media — please reach out in advance via the contact form.' },
-    { q: 'Where do I park?', a: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.' },
-    { q: 'Will there be food and drinks?', a: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.' },
-];
-
-const practical = [
-    '21+ with valid government-issued ID — no exceptions',
-    'Doors open at 7:00 PM, last entry at 11:30 PM',
-    'No outside food or drink — full-service bar on site',
-    'Pool access included with all ticket tiers — bring a suit',
-    'Wristband re-entry permitted up until midnight',
-    'Wheelchair-accessible venue — email us for any further accommodations',
-];
 ---
 
 <Layout
@@ -45,10 +45,10 @@ const practical = [
     <Stars />
     <section class="section">
         <div class="shell">
-            <div class="section-head">
-                <span class="section-num">[ I ]</span>
-                <h1 class="section-title">Info</h1>
-                <span class="section-meta">SCHEDULE · VENUE<br />FAQ · PRACTICAL</span>
+            <div class="section__head">
+                <span class="section__num">[ I ]</span>
+                <h1 class="section__title">Info</h1>
+                <span class="section__meta">SCHEDULE · VENUE<br />FAQ · PRACTICAL</span>
             </div>
 
             <div class="info__grid">
@@ -56,10 +56,10 @@ const practical = [
                     <h2 class="subhead">Run of Show <span class="badge">7PM → 2AM</span></h2>
                     <div class="schedule flex flex-col">
                         {schedule.map(([time, event, tag]) => (
-                            <div class="sched__row">
-                                <span class="sched__time">{time}</span>
-                                <span class="sched__event">{event}</span>
-                                <span class="sched__tag">{tag}</span>
+                            <div class="schedule__row">
+                                <span class="schedule__time">{time}</span>
+                                <span class="schedule__event">{event}</span>
+                                <span class="schedule__tag">{tag}</span>
                             </div>
                         ))}
                     </div>
@@ -81,7 +81,7 @@ const practical = [
                         </ul>
                     </div>
 
-                    <h2 class="subhead" style="margin-top:48px">Practical <span class="badge">READ FIRST</span></h2>
+                    <h2 class="subhead mt-12">Practical <span class="badge">READ FIRST</span></h2>
                     <ul class="practical flex flex-col list-none">
                         {practical.map(p => (
                             <li>{p}</li>
@@ -93,13 +93,17 @@ const practical = [
             <div class="info__faq">
                 <h2 class="subhead">Frequently Asked <span class="badge">{faq.length} ENTRIES</span></h2>
                 <div class="faq flex flex-col">
-                    {faq.map((f, i) => (
+                    {faq.map((entry, i) => (
                         <div class={`faq__item ${i === 0 ? 'faq__item--open' : ''}`}>
-                            <button class="faq__q" type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
-                                <span>{f.q}</span>
+                            <button
+                                class="faq__q"
+                                aria-expanded={i === 0 ? 'true' : 'false'}
+                                type="button"
+                            >
+                                <span>{entry.q}</span>
                                 <span class="faq__icon">+</span>
                             </button>
-                            <div class="faq__a">{f.a}</div>
+                            <div class="faq__a">{entry.a}</div>
                         </div>
                     ))}
                 </div>
@@ -115,71 +119,71 @@ const practical = [
         grid-template-columns: 1fr 1fr;
     }
 
-    .sched__row {
+    .schedule__row {
         align-items: baseline;
-        border-bottom: 1px solid var(--line-2);
+        border-bottom: 1px solid var(--color-cream-10);
         display: grid;
         gap: 18px;
         grid-template-columns: 100px 1fr auto;
         padding: 14px 0;
         position: relative;
-        transition: padding 180ms ease;
+        transition: padding 0.18s ease;
     }
 
-    .sched__row:hover {
+    .schedule__row:hover {
         padding-left: 8px;
     }
 
-    .sched__row:hover .sched__time {
-        color: var(--accent);
+    .schedule__row:hover .schedule__time {
+        color: var(--color-accent);
     }
 
-    .sched__time {
-        color: var(--paper);
-        font-family: var(--ff-mono);
+    .schedule__time {
+        color: var(--color-cream);
+        font-family: var(--font-mono);
         font-size: 13px;
         letter-spacing: 0.06em;
-        transition: color 180ms ease;
+        transition: color 0.18s ease;
     }
 
-    .sched__event {
-        font-family: var(--ff-display);
+    .schedule__event {
+        font-family: var(--font-display);
         font-size: 18px;
         letter-spacing: 0.02em;
     }
 
-    .sched__tag {
-        color: var(--paper-mute);
-        font-family: var(--ff-mono);
+    .schedule__tag {
+        color: var(--color-cream-40);
+        font-family: var(--font-mono);
         font-size: 9px;
         letter-spacing: 0.2em;
         text-transform: uppercase;
     }
 
     .venue {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
         margin-top: 16px;
         padding: 28px;
     }
 
     .venue__name {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 36px;
         line-height: 1;
     }
 
     .venue__addr {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 12px;
         letter-spacing: 0.1em;
         margin-top: 6px;
     }
 
     .venue__desc {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 15px;
         line-height: 1.5;
         margin-top: 14px;
@@ -193,16 +197,16 @@ const practical = [
 
     .venue__features li {
         align-items: center;
-        color: var(--paper);
+        color: var(--color-cream);
         display: flex;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 11px;
         gap: 8px;
         letter-spacing: 0.08em;
     }
 
     .venue__features li::before {
-        color: var(--accent);
+        color: var(--color-accent);
         content: '+';
         font-weight: 600;
     }
@@ -213,16 +217,16 @@ const practical = [
 
     .practical li {
         align-items: baseline;
-        color: var(--paper);
+        color: var(--color-cream);
         display: grid;
-        font-family: var(--ff-body);
+        font-family: var(--font-sans);
         font-size: 14px;
         gap: 12px;
         grid-template-columns: 24px 1fr;
     }
 
     .practical li::before {
-        color: var(--accent);
+        color: var(--color-accent);
         content: '►';
         font-size: 10px;
     }
@@ -232,36 +236,36 @@ const practical = [
     }
 
     .faq__item {
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid var(--color-cream-15);
     }
 
     .faq__q {
         align-items: center;
         background: none;
         border: none;
-        color: var(--paper);
+        color: var(--color-cream);
         cursor: pointer;
         display: flex;
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: 20px;
         gap: 16px;
         justify-content: space-between;
         letter-spacing: 0.02em;
         padding: 18px 0;
         text-align: left;
-        transition: color 180ms ease;
+        transition: color 0.18s ease;
         width: 100%;
     }
 
     .faq__q:hover {
-        color: var(--accent);
+        color: var(--color-accent);
     }
 
     .faq__icon {
-        color: var(--accent);
-        font-family: var(--ff-mono);
+        color: var(--color-accent);
+        font-family: var(--font-mono);
         font-size: 20px;
-        transition: transform 250ms ease;
+        transition: transform 0.25s ease;
     }
 
     .faq__item--open .faq__icon {
@@ -269,13 +273,13 @@ const practical = [
     }
 
     .faq__a {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 15px;
         line-height: 1.55;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 350ms ease, padding 350ms ease;
+        transition: max-height 0.35s ease, padding 0.35s ease;
     }
 
     .faq__item--open .faq__a {
@@ -291,16 +295,19 @@ const practical = [
 </style>
 
 <script>
-    let faqAc: AbortController | undefined;
+    let faqController: AbortController | undefined;
 
     function initFaq(): void {
-        faqAc?.abort();
-        faqAc = new AbortController();
-        const { signal } = faqAc;
+        faqController?.abort();
+        faqController = new AbortController();
+        const { signal } = faqController;
 
         document.querySelectorAll('.faq__q').forEach((btn) => {
             btn.addEventListener('click', () => {
-                const item = btn.closest('.faq__item')!;
+                const item = btn.closest('.faq__item') as HTMLElement | null;
+
+                if (!item) return;
+
                 const isOpen = item.classList.contains('faq__item--open');
 
                 document.querySelectorAll('.faq__item--open').forEach((open) => {

@@ -2,12 +2,15 @@
 
 ---
 
-<section class="section" aria-labelledby="details-heading">
+<section
+    class="section"
+    aria-labelledby="details-heading"
+>
     <div class="shell">
-        <div class="section-head">
-            <span class="section-num">[ 01 ]</span>
-            <h2 id="details-heading" class="section-title">The Coordinates</h2>
-            <span class="section-meta">CABANA CLUB / ATX<br />SAT · JUL 18 · 2026</span>
+        <div class="section__head">
+            <span class="section__num">[ 01 ]</span>
+            <h2 id="details-heading" class="section__title">The Coordinates</h2>
+            <span class="section__meta">CABANA CLUB / ATX<br />SAT · JUL 18 · 2026</span>
         </div>
         <div class="details__grid">
             <div class="details__cell">
@@ -31,22 +34,21 @@
 
 <style>
     .details__grid {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
         display: grid;
-        gap: 0;
         grid-template-columns: repeat(3, 1fr);
     }
 
     .details__cell {
-        border-right: 1px solid var(--line);
+        border-right: 1px solid var(--color-cream-15);
         cursor: default;
         display: flex;
         flex-direction: column;
         gap: 12px;
         padding: clamp(28px, 4vw, 48px);
         position: relative;
-        transition: background 200ms ease;
+        transition: background 0.2s ease;
     }
 
     .details__cell:last-child {
@@ -54,27 +56,27 @@
     }
 
     .details__cell:hover {
-        background: var(--ink-3);
+        background: var(--color-slate);
     }
 
     .details__lbl {
-        color: var(--accent);
-        font-family: var(--ff-mono);
+        color: var(--color-accent);
+        font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.22em;
         text-transform: uppercase;
     }
 
     .details__val {
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: clamp(30px, 3.6vw, 48px);
         line-height: 1;
         white-space: nowrap;
     }
 
     .details__ext {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: 16px;
         font-style: italic;
         margin-top: 4px;
@@ -86,7 +88,7 @@
         }
 
         .details__cell {
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid var(--color-cream-15);
             border-right: none;
         }
 

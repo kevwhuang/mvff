@@ -2,12 +2,15 @@
 
 ---
 
-<section class="error flex items-center justify-center text-center">
+<section
+    class="error flex items-center justify-center text-center"
+    aria-label="Page not found"
+>
     <div>
         <h1 class="error__glitch" data-text="404">404</h1>
         <p class="error__sub">This reel jumped the projector. The frame you're looking for isn't on the program.</p>
-        <div class="error__actions flex justify-center flex-wrap">
-            <a class="btn btn-primary" aria-label="Return to home" href="/">← Back to Home</a>
+        <div class="error__actions flex flex-wrap justify-center">
+            <a class="btn btn--primary" aria-label="Return to home" href="/">← Back to Home</a>
             <a class="btn" href="/info">See the Schedule</a>
         </div>
     </div>
@@ -22,7 +25,7 @@
 
     .error__glitch {
         display: inline-block;
-        font-family: var(--ff-display);
+        font-family: var(--font-display);
         font-size: clamp(120px, 28vw, 380px);
         letter-spacing: -0.02em;
         line-height: 0.85;
@@ -40,7 +43,7 @@
     .error__glitch::before {
         animation: glitch 3s infinite;
         clip-path: polygon(0 5%, 100% 5%, 100% 25%, 0 25%);
-        color: var(--accent);
+        color: var(--color-accent);
         mix-blend-mode: screen;
         transform: translate(-4px, 0);
     }
@@ -48,7 +51,7 @@
     .error__glitch::after {
         animation: glitch 2.4s infinite reverse;
         clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
-        color: var(--accent-2);
+        color: var(--color-teal);
         mix-blend-mode: screen;
         transform: translate(4px, 0);
     }
@@ -73,8 +76,8 @@
     }
 
     .error__sub {
-        color: var(--paper-dim);
-        font-family: var(--ff-serif);
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
         font-size: clamp(20px, 2.6vw, 32px);
         font-style: italic;
         margin-top: 20px;

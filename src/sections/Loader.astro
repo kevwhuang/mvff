@@ -1,11 +1,11 @@
 ---
-import logo from '@images/logos/mvff.png';
+import logo from '@images/logos/mvff.webp';
 ---
 
 <div class="loader fixed flex items-center justify-center" aria-hidden="true">
     <div class="loader__inner text-center">
         <div class="loader__mark">
-            <img alt="" fetchpriority="high" src={logo.src} />
+            <img alt="MVFF" fetchpriority="high" src={logo.src} />
         </div>
         <div class="loader__text">Loading reel · 2026</div>
         <div class="loader__bar"><div class="loader__progress"></div></div>
@@ -14,9 +14,9 @@ import logo from '@images/logos/mvff.png';
 
 <style>
     .loader {
-        background: var(--ink);
+        background: var(--color-night);
         inset: 0;
-        transition: opacity 600ms ease, visibility 600ms;
+        transition: opacity 0.6s ease, visibility 0.6s ease;
         z-index: 300;
     }
 
@@ -35,24 +35,20 @@ import logo from '@images/logos/mvff.png';
         width: 90px;
     }
 
-    [data-theme='light'] .loader__mark {
-        --brand-invert: 1;
-    }
-
     .loader__mark img {
         width: 100%;
     }
 
     .loader__text {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 11px;
         letter-spacing: 0.3em;
         text-transform: uppercase;
     }
 
     .loader__bar {
-        background: var(--line);
+        background: var(--color-cream-15);
         height: 1px;
         margin: 24px auto 0;
         max-width: 60vw;
@@ -63,7 +59,7 @@ import logo from '@images/logos/mvff.png';
 
     .loader__progress {
         animation: loadbar 1.4s ease-in-out infinite;
-        background: var(--accent);
+        background: var(--color-accent);
         bottom: 0;
         left: 0;
         position: absolute;
@@ -100,10 +96,15 @@ import logo from '@images/logos/mvff.png';
 </style>
 
 <script is:inline>
+    document.addEventListener('astro:after-swap', function () {
+        const el = document.querySelector('.loader');
+        if (el) el.setAttribute('data-hidden', '');
+    });
+
     (function () {
-        const MIN_DISPLAY = 1100;
-        const MAX_DISPLAY = 6000;
         const FLAG = 'mvff-loaded';
+        const MAX_DISPLAY = 6_000;
+        const MIN_DISPLAY = 1_100;
 
         const loader = document.querySelector('.loader');
 
@@ -130,7 +131,9 @@ import logo from '@images/logos/mvff.png';
                 loader.setAttribute('data-hidden', '');
                 try {
                     sessionStorage.setItem(FLAG, '1');
-                } catch { /* noop */ }
+                } catch {
+                    return;
+                }
             }, remaining);
         }
 
@@ -150,10 +153,4 @@ import logo from '@images/logos/mvff.png';
 
         setTimeout(hide, MAX_DISPLAY);
     })();
-</script>
-
-<script>
-    document.addEventListener('astro:after-swap', () => {
-        document.querySelector('.loader')?.setAttribute('data-hidden', '');
-    });
 </script>

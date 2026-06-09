@@ -1,8 +1,11 @@
 ---
-import logo from '@images/logos/mvff.png';
+import logo from '@images/logos/mvff.webp';
 ---
 
-<nav class="nav sticky" aria-label="Main">
+<nav
+    class="nav sticky"
+    aria-label="Main"
+>
     <div class="nav__inner">
         <a class="nav__brand flex items-center" aria-label="ATX MVFF Home" href="/">
             <div class="nav__brand-mark">
@@ -26,7 +29,6 @@ import logo from '@images/logos/mvff.png';
                 <span class="nav__pulse"></span>
                 <span id="nav-countdown-text">T-00d 00:00:00</span>
             </div>
-            <button class="nav__theme" aria-label="Toggle theme" type="button">☾</button>
             <a
                 class="nav__submit"
                 href="https://filmfreeway.com/atxmusicvideofilmfestival"
@@ -35,12 +37,23 @@ import logo from '@images/logos/mvff.png';
             >
                 Submit
             </a>
-            <button class="nav__burger" aria-expanded="false" aria-label="Open menu" type="button">≡</button>
+            <button
+                class="nav__burger"
+                aria-expanded="false"
+                aria-label="Open menu"
+                type="button"
+            >&equiv;
+            </button>
         </div>
     </div>
 </nav>
 <div class="mobile-menu fixed" aria-hidden="true">
-    <button class="mobile-menu__close" aria-label="Close menu" type="button">×</button>
+    <button
+        class="mobile-menu__close"
+        aria-label="Close menu"
+        type="button"
+    >&times;
+    </button>
     <a class="mobile-menu__link" href="/">Home</a>
     <a class="mobile-menu__link" href="/team">Team</a>
     <a class="mobile-menu__link" href="/shop">Shop</a>
@@ -55,8 +68,8 @@ import logo from '@images/logos/mvff.png';
 <style>
     .nav {
         backdrop-filter: blur(14px) saturate(120%);
-        background: color-mix(in oklab, var(--ink) 72%, transparent);
-        border-bottom: 1px solid var(--line);
+        background: color-mix(in oklab, var(--color-night) 72%, transparent);
+        border-bottom: 1px solid var(--color-cream-15);
         top: 0;
         z-index: 50;
         -webkit-backdrop-filter: blur(14px) saturate(120%);
@@ -80,17 +93,13 @@ import logo from '@images/logos/mvff.png';
     }
 
     .nav__brand-mark {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
         display: grid;
         filter: invert(var(--brand-invert, 0));
         height: 38px;
         place-items: center;
         width: 38px;
-    }
-
-    [data-theme='light'] .nav__brand-mark {
-        --brand-invert: 1;
     }
 
     .nav__brand-mark img {
@@ -104,15 +113,15 @@ import logo from '@images/logos/mvff.png';
     }
 
     .nav__brand-t1 {
-        color: var(--paper);
-        font-family: var(--ff-display);
+        color: var(--color-cream);
+        font-family: var(--font-display);
         font-size: 18px;
         letter-spacing: 0.03em;
     }
 
     .nav__brand-t2 {
-        color: var(--paper-dim);
-        font-family: var(--ff-mono);
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
         font-size: 9.5px;
         letter-spacing: 0.22em;
         margin-top: 3px;
@@ -124,28 +133,28 @@ import logo from '@images/logos/mvff.png';
     }
 
     .nav__link {
-        color: var(--paper-dim);
+        color: var(--color-cream-60);
         cursor: pointer;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 11.5px;
         letter-spacing: 0.16em;
         padding: 10px 14px;
         position: relative;
         text-decoration: none;
         text-transform: uppercase;
-        transition: color 180ms ease;
+        transition: color 0.18s ease;
     }
 
     .nav__link:hover {
-        color: var(--paper);
+        color: var(--color-cream);
     }
 
     .nav__link[aria-current='page'] {
-        color: var(--paper);
+        color: var(--color-cream);
     }
 
     .nav__link[aria-current='page']::before {
-        background: var(--accent);
+        background: var(--color-accent);
         bottom: 4px;
         content: '';
         height: 2px;
@@ -161,11 +170,11 @@ import logo from '@images/logos/mvff.png';
 
     .nav__countdown {
         align-items: baseline;
-        background: var(--ink-2);
-        border: 1px solid var(--line);
-        color: var(--paper);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
         display: flex;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 11px;
         gap: 6px;
         letter-spacing: 0.1em;
@@ -174,7 +183,7 @@ import logo from '@images/logos/mvff.png';
 
     .nav__pulse {
         animation: pulse 1.6s ease-in-out infinite;
-        background: var(--accent);
+        background: var(--color-accent);
         border-radius: 50%;
         display: inline-block;
         height: 6px;
@@ -189,55 +198,38 @@ import logo from '@images/logos/mvff.png';
             transform: scale(0.9);
         }
         50% {
-            box-shadow: 0 0 12px var(--accent);
+            box-shadow: 0 0 12px var(--color-accent);
             opacity: 1;
             transform: scale(1.2);
         }
     }
 
-    .nav__theme {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
-        color: var(--paper);
-        cursor: pointer;
-        display: grid;
-        height: 36px;
-        place-items: center;
-        transition: all 200ms ease;
-        width: 36px;
-    }
-
-    .nav__theme:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-    }
-
     .nav__submit {
-        background: var(--accent);
-        border: 1px solid var(--accent);
-        color: var(--ink);
+        background: var(--color-accent);
+        border: 1px solid var(--color-accent);
+        color: var(--color-night);
         cursor: pointer;
         display: inline-block;
-        font-family: var(--ff-mono);
+        font-family: var(--font-mono);
         font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.16em;
         padding: 10px 16px;
         text-decoration: none;
         text-transform: uppercase;
-        transition: all 200ms ease;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
 
     .nav__submit:hover {
-        background: var(--paper);
-        border-color: var(--paper);
-        color: var(--ink);
+        background: var(--color-cream);
+        border-color: var(--color-cream);
+        color: var(--color-night);
     }
 
     .nav__burger {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
-        color: var(--paper);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
         cursor: pointer;
         display: none;
         height: 36px;
@@ -246,14 +238,14 @@ import logo from '@images/logos/mvff.png';
     }
 
     .mobile-menu {
-        background: var(--ink);
+        background: var(--color-night);
         display: flex;
         flex-direction: column;
         gap: 8px;
         inset: 0;
         padding: 80px 32px 32px;
         transform: translateX(100%);
-        transition: transform 300ms ease;
+        transition: transform 0.3s ease;
         z-index: 60;
     }
 
@@ -262,9 +254,9 @@ import logo from '@images/logos/mvff.png';
     }
 
     .mobile-menu__close {
-        background: var(--ink-2);
-        border: 1px solid var(--line);
-        color: var(--paper);
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
         cursor: pointer;
         height: 36px;
         position: absolute;
@@ -274,22 +266,22 @@ import logo from '@images/logos/mvff.png';
     }
 
     .mobile-menu__link {
-        border-bottom: 1px solid var(--line);
-        color: var(--paper);
-        font-family: var(--ff-display);
+        border-bottom: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
+        font-family: var(--font-display);
         font-size: 28px;
         letter-spacing: 0.04em;
         padding: 14px 0;
         text-decoration: none;
-        transition: color 180ms ease;
+        transition: color 0.18s ease;
     }
 
     .mobile-menu__link:hover {
-        color: var(--accent);
+        color: var(--color-accent);
     }
 
     .mobile-menu__divider {
-        border-top: 1px solid var(--line);
+        border-top: 1px solid var(--color-cream-15);
         margin: 8px 0;
     }
 
@@ -315,123 +307,56 @@ import logo from '@images/logos/mvff.png';
 </style>
 
 <script>
-    const MS_PER_DAY = 86400000;
-    const MS_PER_HOUR = 3600000;
-    const MS_PER_MINUTE = 60000;
-    const MS_PER_SECOND = 1000;
-    const PAD_LENGTH = 2;
-    const EVENT_DATE = new Date('2026-07-18T19:00:00-05:00').getTime();
+    import { getCountdownParts, pad } from '@lib/utils';
 
+    const MS_PER_SECOND = 1_000;
+
+    let navController: AbortController | undefined;
     let navInterval: ReturnType<typeof setInterval> | undefined;
-    let themeHandler: (() => void) | undefined;
-    let burgerHandler: (() => void) | undefined;
-    let closeHandler: (() => void) | undefined;
-    let escapeHandler: ((e: KeyboardEvent) => void) | undefined;
-
-    function updateNavCountdown(): void {
-        const el = document.getElementById('nav-countdown-text');
-
-        if (!el) return;
-
-        const remaining = EVENT_DATE - Date.now();
-
-        if (remaining <= 0) {
-            el.textContent = 'HAPPENING NOW';
-            return;
-        }
-
-        const d = Math.floor(remaining / MS_PER_DAY);
-        const h = Math.floor((remaining % MS_PER_DAY) / MS_PER_HOUR);
-        const m = Math.floor((remaining % MS_PER_HOUR) / MS_PER_MINUTE);
-        const s = Math.floor((remaining % MS_PER_MINUTE) / MS_PER_SECOND);
-
-        el.textContent = 'T-'
-            + String(d).padStart(PAD_LENGTH, '0') + 'd '
-            + String(h).padStart(PAD_LENGTH, '0') + ':'
-            + String(m).padStart(PAD_LENGTH, '0') + ':'
-            + String(s).padStart(PAD_LENGTH, '0');
-    }
-
-    function getStoredTheme(): string {
-        try {
-            return localStorage.getItem('mvff-theme') || 'dark';
-        } catch {
-            return 'dark';
-        }
-    }
-
-    function applyTheme(theme: string): void {
-        document.documentElement.setAttribute('data-theme', theme);
-
-        const btn = document.querySelector('.nav__theme');
-
-        if (btn) btn.textContent = theme === 'dark' ? '☾' : '☀';
-
-        try {
-            localStorage.setItem('mvff-theme', theme);
-        } catch {
-            /* noop */
-        }
-    }
 
     function initNavbar(): void {
         if (navInterval) clearInterval(navInterval);
+        navController?.abort();
+        navController = new AbortController();
+        const { signal } = navController;
+
         updateNavCountdown();
         navInterval = setInterval(updateNavCountdown, MS_PER_SECOND);
 
-        const theme = getStoredTheme();
-        const themeBtn = document.querySelector('.nav__theme');
-
-        if (themeBtn) themeBtn.textContent = theme === 'dark' ? '☾' : '☀';
         const burger = document.querySelector('.nav__burger');
         const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
         const mobileClose = document.querySelector('.mobile-menu__close');
 
-        if (themeBtn) {
-            if (themeHandler) themeBtn.removeEventListener('click', themeHandler);
-            themeHandler = () => {
-                const current = document.documentElement.getAttribute('data-theme') || 'dark';
-                applyTheme(current === 'dark' ? 'light' : 'dark');
-            };
-            themeBtn.addEventListener('click', themeHandler);
-        }
-
         if (burger && mobileMenu) {
-            function openMenu(): void {
-                mobileMenu!.setAttribute('data-open', '');
-                mobileMenu!.setAttribute('aria-hidden', 'false');
-                burger!.setAttribute('aria-expanded', 'true');
-            }
-
             function closeMenu(): void {
                 mobileMenu!.removeAttribute('data-open');
                 mobileMenu!.setAttribute('aria-hidden', 'true');
                 burger!.setAttribute('aria-expanded', 'false');
             }
 
-            if (burgerHandler) burger.removeEventListener('click', burgerHandler);
-            burgerHandler = () => {
+            function openMenu(): void {
+                mobileMenu!.setAttribute('data-open', '');
+                mobileMenu!.setAttribute('aria-hidden', 'false');
+                burger!.setAttribute('aria-expanded', 'true');
+            }
+
+            burger.addEventListener('click', () => {
                 if (mobileMenu.hasAttribute('data-open')) {
                     closeMenu();
                 } else {
                     openMenu();
                 }
-            };
-            burger.addEventListener('click', burgerHandler);
+            }, { signal });
 
             if (mobileClose) {
-                if (closeHandler) mobileClose.removeEventListener('click', closeHandler);
-                closeHandler = closeMenu;
-                mobileClose.addEventListener('click', closeHandler);
+                mobileClose.addEventListener('click', closeMenu, { signal });
             }
 
-            if (escapeHandler) document.removeEventListener('keydown', escapeHandler);
-            escapeHandler = (e: KeyboardEvent) => {
+            document.addEventListener('keydown', (e: KeyboardEvent) => {
                 if (e.key === 'Escape' && mobileMenu.hasAttribute('data-open')) {
                     closeMenu();
                 }
-            };
-            document.addEventListener('keydown', escapeHandler);
+            }, { signal });
         }
 
         const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
@@ -445,6 +370,25 @@ import logo from '@images/logos/mvff.png';
                 link.removeAttribute('aria-current');
             }
         });
+    }
+
+    function updateNavCountdown(): void {
+        const el = document.getElementById('nav-countdown-text');
+
+        if (!el) return;
+
+        const { remaining, d, h, m, s } = getCountdownParts();
+
+        if (remaining <= 0) {
+            el.textContent = 'HAPPENING NOW';
+            return;
+        }
+
+        el.textContent = 'T-'
+            + pad(d) + 'd '
+            + pad(h) + ':'
+            + pad(m) + ':'
+            + pad(s);
     }
 
     document.addEventListener('astro:page-load', initNavbar);
