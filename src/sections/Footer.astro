@@ -1,92 +1,137 @@
 ---
-import logo from '@images/logos/mvff.webp';
+import { Image } from 'astro:assets';
+
+import logo from '@images/logos/atx_music_video_film_festival.webp';
+import { LINKS, ROUTES } from '@lib/utils';
 ---
 
 <footer
-    class="footer"
+    class="site-footer"
     aria-label="Site footer"
 >
-    <div class="footer__inner">
-        <div class="footer__brand flex flex-col">
-            <div class="footer__mark">
-                <img alt="MVFF" src={logo.src} />
+    <div class="shell site-footer__inner">
+        <div class="flex flex-col gap-4">
+            <div class="site-footer__mark">
+                <Image
+                    alt="ATX Music Video Film Festival"
+                    densities={[1, 2]}
+                    src={logo}
+                    width={62}
+                />
             </div>
-            <p class="footer__tag">An immersive production blending music and film, celebrating artists. One night, one venue, every screen and stage active.</p>
+            <p class="site-footer__tag">An immersive production blending music and film, celebrating artists. One night, one venue, every screen and stage active.</p>
         </div>
-        <div class="footer__col">
-            <h4>Site</h4>
-            <a href="/">Home</a>
-            <a href="/team">Team</a>
-            <a href="/shop">Shop</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/info">Info</a>
-            <a href="/contact">Contact</a>
+        <div class="site-footer__col">
+            <h2>Site</h2>
+            <ul class="list-none">
+                {ROUTES.map(route => (
+                    <li>
+                        <a href={route.href}>{route.label}</a>
+                    </li>
+                ))}
+            </ul>
         </div>
-        <div class="footer__col">
-            <h4>Connect</h4>
-            <a href="https://instagram.com/atxmvff" rel="noopener noreferrer" target="_blank">Instagram</a>
-            <a href="mailto:contact@atxmusicvideofilmfestival.com">Email</a>
-            <a href="https://filmfreeway.com/atxmusicvideofilmfestival" rel="noopener noreferrer" target="_blank">FilmFreeway</a>
+        <div class="site-footer__col">
+            <h2>Connect</h2>
+            <ul class="list-none">
+                <li>
+                    <a href={LINKS.email}>Email</a>
+                </li>
+                <li>
+                    <a
+                        href={LINKS.instagram}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Instagram
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={LINKS.filmfreeway}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        FilmFreeway
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="footer__col">
-            <h4>Inside</h4>
-            <a href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck</a>
-            <a href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Schedule a Call</a>
-            <a href="/contact">Press &amp; Media</a>
+        <div class="site-footer__col">
+            <h2>Inside</h2>
+            <ul class="list-none">
+                <li>
+                    <a
+                        href={LINKS.calendly}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Schedule a Call
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={LINKS.pitchDeck}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Pitch Deck
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="footer__bottom">
+    <div class="shell site-footer__bottom">
         <span>&copy; 2026 ATX Music Video Film Festival. All rights reserved.</span>
-        <span>JUL 18 2026 · 7PM → 2AM · CABANA CLUB · AUSTIN TX</span>
+        <nav
+            class="flex gap-3"
+            aria-label="Legal"
+        >
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+        </nav>
+        <span><time datetime="2026-07-18T19:00-05:00">JUL 18 2026</time> &middot; 7PM &rarr; 2AM &middot; CABANA CLUB &middot; AUSTIN TX</span>
     </div>
 </footer>
 
 <style>
-    .footer {
+    .site-footer {
         background: var(--color-navy);
         border-top: 1px solid var(--color-cream-15);
-        margin-top: clamp(60px, 10vh, 120px);
         padding: clamp(40px, 6vw, 60px) 0 clamp(20px, 3vw, 32px);
     }
 
-    .footer__inner {
-        align-items: start;
-        display: grid;
-        gap: clamp(24px, 4vw, 48px);
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        margin: 0 auto;
-        max-width: var(--shell-max);
-        padding: 0 var(--shell-pad);
-    }
-
-    .footer__mark {
-        background: var(--color-night);
-        border: 1px solid var(--color-cream-15);
-        display: grid;
-        height: 80px;
-        place-items: center;
-        width: 80px;
-    }
-
-    .footer__mark img {
-        filter: invert(var(--brand-invert, 0));
-        width: 78%;
-    }
-
-    .footer__brand {
-        gap: 16px;
-    }
-
-    .footer__tag {
+    .site-footer__bottom {
+        border-top: 1px solid var(--color-cream-15);
         color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: 16px;
-        font-style: italic;
-        line-height: 1.4;
-        max-width: 360px;
+        display: flex;
+        flex-wrap: wrap;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        gap: 12px;
+        justify-content: space-between;
+        letter-spacing: 0.16em;
+        padding-block: 18px 0;
+        text-transform: uppercase;
     }
 
-    .footer__col h4 {
+    .site-footer__col a {
+        color: var(--color-cream);
+        display: block;
+        font-family: var(--font-display);
+        font-size: 18px;
+        padding: 8px 0;
+        text-decoration: none;
+        transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+    }
+
+    .site-footer__col a:active,
+    .site-footer__col a:hover {
+        color: var(--color-coral);
+        transform: translateX(4px);
+    }
+
+    .site-footer__col h2 {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
         font-size: 10px;
@@ -96,45 +141,41 @@ import logo from '@images/logos/mvff.webp';
         text-transform: uppercase;
     }
 
-    .footer__col a {
-        color: var(--color-cream);
-        display: block;
-        font-family: var(--font-display);
-        font-size: 18px;
-        padding: 5px 0;
-        text-decoration: none;
-        transition: color 0.18s ease, transform 0.18s ease;
+    .site-footer__inner {
+        align-items: start;
+        display: grid;
+        gap: clamp(24px, 4vw, 48px);
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        margin-bottom: clamp(40px, 5vw, 60px);
     }
 
-    .footer__col a:hover {
-        color: var(--color-accent);
-        transform: translateX(4px);
+    .site-footer__mark {
+        background: var(--color-night);
+        border: 1px solid var(--color-cream-15);
+        display: grid;
+        height: 80px;
+        place-items: center;
+        user-select: none;
+        width: 80px;
     }
 
-    .footer__bottom {
-        border-top: 1px solid var(--color-cream-15);
-        color: var(--color-cream-40);
-        display: flex;
-        flex-wrap: wrap;
-        font-family: var(--font-mono);
-        font-size: 10.5px;
-        gap: 12px;
-        justify-content: space-between;
-        letter-spacing: 0.16em;
-        margin: clamp(40px, 5vw, 60px) auto 0;
-        max-width: var(--shell-max);
-        padding: 18px var(--shell-pad) 0;
-        text-transform: uppercase;
+    .site-footer__tag {
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
+        font-size: 16px;
+        font-style: italic;
+        line-height: 1.4;
+        max-width: 360px;
     }
 
     @media (max-width: 1024px) {
-        .footer__inner {
+        .site-footer__inner {
             grid-template-columns: 1fr 1fr;
         }
     }
 
-    @media (max-width: 720px) {
-        .footer__inner {
+    @media (max-width: 768px) {
+        .site-footer__inner {
             grid-template-columns: 1fr;
         }
     }

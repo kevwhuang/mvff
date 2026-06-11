@@ -1,0 +1,44 @@
+---
+import SectionHead from '@components/SectionHead.astro';
+import { LINKS } from '@lib/utils';
+---
+
+<section
+    class="section"
+    aria-labelledby="privacy-title"
+>
+    <div class="shell">
+        <SectionHead
+            headingId="privacy-title"
+            number="[ &sect; ]"
+        >
+            Privacy Policy
+            <Fragment slot="meta">LAST UPDATED<br /><time datetime="2026-06-10">JUN 10 &middot; 2026</time></Fragment>
+        </SectionHead>
+        <div class="prose">
+            <h2>1. What we collect</h2>
+            <ul>
+                <li><strong>You provide it:</strong> information you choose to send us by email, Instagram, or Calendly &mdash; such as your name, contact details, and the contents of your message.</li>
+                <li><strong>The Site collects nothing itself:</strong> the contact form is not yet active, and the Site does not collect or store form submissions.</li>
+            </ul>
+            <h2>2. Hosting logs</h2>
+            <p>Our hosting provider, Netlify, keeps standard server access logs (such as IP address, request time, and pages requested) as part of operating its service. The Site runs no analytics or tracking scripts of its own.</p>
+            <h2>3. Browser storage</h2>
+            <p>The Site sets no cookies. It stores a single flag in your browser&rsquo;s session storage so the intro loader doesn&rsquo;t replay as you browse; it contains no personal data and is cleared when you close the tab.</p>
+            <h2>4. Third parties</h2>
+            <p>All fonts, images, and video on the Site are self-hosted &mdash; pages load no third-party scripts. Links to FilmFreeway, Calendly, and Instagram lead to external services that operate under their own policies. If tickets or merchandise go on sale, third-party ticketing and payment providers will handle your purchase information under their own terms, presented at the point of sale.</p>
+            <h2>5. How we use it</h2>
+            <p>We use the information you send us to respond to your inquiries, to run the festival, and to promote it &mdash; including through event photos and recordings.</p>
+            <h2>6. Sharing</h2>
+            <p>We share information only with service providers that operate our infrastructure (such as Netlify, which processes server logs as described above) and where required by law. We never sell your personal information.</p>
+            <h2>7. Retention</h2>
+            <p>We keep what you send us only as long as needed to handle your inquiry and run the festival.</p>
+            <h2>8. Your choices</h2>
+            <p>To ask what we hold about you, or to have it corrected or deleted, contact us through the channels below.</p>
+            <h2>9. Changes</h2>
+            <p>We may update this policy from time to time; the date above reflects the current version. Material changes will be announced on the Site.</p>
+            <h2>10. Contact</h2>
+            <p>Privacy questions: <a href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a> or <a href={LINKS.instagram} rel="noopener noreferrer" target="_blank">@atxmvff</a> on Instagram. See also our <a href="/terms">Terms of Service</a>.</p>
+        </div>
+    </div>
+</section>

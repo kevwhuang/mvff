@@ -1,45 +1,45 @@
 ---
-
+import SectionHead from '@components/SectionHead.astro';
 ---
 
 <section
-    class="section"
-    aria-labelledby="details-heading"
+    class="details section"
+    aria-labelledby="details-title"
 >
     <div class="shell">
-        <div class="section__head">
-            <span class="section__num">[ 01 ]</span>
-            <h2 id="details-heading" class="section__title">The Coordinates</h2>
-            <span class="section__meta">CABANA CLUB / ATX<br />SAT · JUL 18 · 2026</span>
-        </div>
-        <div class="details__grid">
+        <SectionHead
+            headingId="details-title"
+            level="h2"
+            number="[ 01 ]"
+        >
+            The Coordinates
+            <Fragment slot="meta">CABANA CLUB / AUSTIN TX<br />SAT &middot; JUL 18 &middot; 2026</Fragment>
+        </SectionHead>
+        <dl
+            class="details__grid"
+            data-scroll
+            data-scroll-stagger="0.12"
+        >
             <div class="details__cell">
-                <span class="details__lbl">Venue</span>
-                <span class="details__val">Cabana Club</span>
-                <span class="details__ext">Indoor screening room, outdoor pool, full bar.</span>
+                <dt class="details__label">Venue</dt>
+                <dd class="details__value">Cabana Club</dd>
+                <dd class="details__note">Indoor screening room, outdoor pool, full bar.</dd>
             </div>
             <div class="details__cell">
-                <span class="details__lbl">Date</span>
-                <span class="details__val">July 18</span>
-                <span class="details__ext">Saturday night, 2026.</span>
+                <dt class="details__label">Date</dt>
+                <dd class="details__value"><time datetime="2026-07-18">July 18</time></dd>
+                <dd class="details__note">Saturday night, 2026.</dd>
             </div>
             <div class="details__cell">
-                <span class="details__lbl">Time</span>
-                <span class="details__val">7 PM → 2 AM</span>
-                <span class="details__ext">Seven hours, twelve acts.</span>
+                <dt class="details__label">Time</dt>
+                <dd class="details__value">7 PM &rarr; 2 AM</dd>
+                <dd class="details__note">Seven hours, twelve acts.</dd>
             </div>
-        </div>
+        </dl>
     </div>
 </section>
 
 <style>
-    .details__grid {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
     .details__cell {
         border-right: 1px solid var(--color-cream-15);
         cursor: default;
@@ -48,45 +48,48 @@
         gap: 12px;
         padding: clamp(28px, 4vw, 48px);
         position: relative;
-        transition: background 0.2s ease;
-    }
-
-    .details__cell:last-child {
-        border-right: none;
+        transition: background var(--duration-fast) ease;
     }
 
     .details__cell:hover {
         background: var(--color-slate);
     }
 
-    .details__lbl {
-        color: var(--color-accent);
+    .details__cell:last-child {
+        border-right: none;
+    }
+
+    .details__grid {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .details__label {
+        color: var(--color-coral);
         font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.22em;
         text-transform: uppercase;
     }
 
-    .details__val {
-        font-family: var(--font-display);
-        font-size: clamp(30px, 3.6vw, 48px);
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    .details__ext {
+    .details__note {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
         font-size: 16px;
         font-style: italic;
-        margin-top: 4px;
     }
 
-    @media (max-width: 720px) {
-        .details__grid {
-            grid-template-columns: 1fr;
-        }
+    .details__value {
+        font-family: var(--font-display);
+        font-size: clamp(30px, 3.75vw, 48px);
+        line-height: 1;
+        margin-bottom: 4px;
+        white-space: nowrap;
+    }
 
+    @media (max-width: 768px) {
         .details__cell {
             border-bottom: 1px solid var(--color-cream-15);
             border-right: none;
@@ -94,6 +97,10 @@
 
         .details__cell:last-child {
             border-bottom: none;
+        }
+
+        .details__grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>

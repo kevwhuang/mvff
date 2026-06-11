@@ -4,13 +4,18 @@
 
 <section
     class="tagline text-center"
-    aria-label="Tagline"
+    aria-labelledby="tagline-title"
     data-scroll
 >
-    <h2 class="tagline__main">
-        <span class="tagline__a">Screens</span><span class="tagline__arrow"> → </span><span class="tagline__b">Stage</span>
+    <h2
+        id="tagline-title"
+        class="tagline__main"
+    >
+        <span class="tagline__screens">Screens</span>
+        <span class="tagline__arrow">&rarr;</span>
+        <span class="tagline__stage">Stage</span>
     </h2>
-    <p class="tagline__sub">An immersive production blending music and film, celebrating artists.</p>
+    <p class="tagline__subtitle">An immersive production blending music and film, celebrating artists.</p>
 </section>
 
 <style>
@@ -19,41 +24,42 @@
         position: relative;
     }
 
-    .tagline__main {
-        font-size: clamp(56px, 12vw, 180px);
-        letter-spacing: -0.01em;
-        line-height: 0.9;
-        position: relative;
-        text-transform: uppercase;
-        z-index: 1;
-    }
-
-    .tagline__a {
-        color: var(--color-cream);
-    }
-
     .tagline__arrow {
-        color: var(--color-accent);
+        color: var(--color-coral);
         font-family: var(--font-serif);
         font-size: 0.7em;
         font-style: italic;
         padding: 0 0.15em;
     }
 
-    .tagline__b {
-        color: var(--color-accent);
+    .tagline__main {
+        font-size: clamp(56px, 14.1vw, 180px);
+        letter-spacing: -0.01em;
+        line-height: 0.9;
+        margin-bottom: 32px;
+        position: relative;
+        text-transform: uppercase;
+        z-index: 1;
+    }
+
+    .tagline__screens {
+        color: var(--color-cream);
+    }
+
+    .tagline__stage {
+        color: var(--color-coral);
         font-family: var(--font-serif);
         font-size: 0.92em;
         font-style: italic;
     }
 
-    .tagline__sub {
+    .tagline__subtitle {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
         font-size: clamp(18px, 2.2vw, 26px);
         font-style: italic;
         line-height: 1.4;
-        margin: 32px auto 0;
+        margin: 0 auto;
         max-width: 640px;
         position: relative;
         z-index: 2;

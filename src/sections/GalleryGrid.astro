@@ -1,0 +1,344 @@
+---
+import SectionHead from '@components/SectionHead.astro';
+import { pad } from '@lib/utils';
+
+const PALETTE = [
+    ['#1f1424', '#5b2a4c'], ['#0e1d2c', '#2a4a6b'], ['#2a1a0e', '#7a3f1c'],
+    ['#1a2614', '#3f6b2a'], ['#241a2a', '#5c3a8a'], ['#0e0e1a', '#3a3a6e'],
+    ['#2c1414', '#7a2a2a'], ['#1c2424', '#4a6e6e'], ['#241c0e', '#8a6a2a'],
+    ['#14242c', '#2a6a8a'], ['#2a2414', '#8a7a3a'], ['#1c1424', '#5a3a7a'],
+    ['#0e1c14', '#2a8a4a'], ['#241414', '#8a4a4a'], ['#14241c', '#2a8a6a'],
+];
+
+const WIDES = [0, 7, 11, 13, 14];
+
+const titles = Array.from({ length: PALETTE.length }, (_, index) => `Frame ${pad(index + 1)}`);
+
+const items = PALETTE.map((gradient, index) => ({
+    block: `BLK_${pad(index + 1, 3)}`,
+    gradient: `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
+    id: index,
+    span: WIDES.includes(index) ? 'wide' : 'normal',
+    title: titles[index],
+    year: '2025',
+}));
+---
+
+<section
+    class="gallery section"
+    aria-labelledby="gallery-title"
+>
+    <div class="shell">
+        <SectionHead
+            headingId="gallery-title"
+            number="[ G ]"
+        >
+            Gallery
+            <Fragment slot="meta">15 STILLS</Fragment>
+        </SectionHead>
+        <ul
+            class="gallery__grid list-none"
+            data-scroll
+            data-scroll-stagger="0.04"
+        >
+            {items.map(item => (
+                <li class:list={['gallery__cell', `gallery__cell--${item.span}`]}>
+                    <button
+                        class="gallery__tile"
+                        aria-label={`View ${item.title}`}
+                        data-gallery-block={item.block}
+                        data-gallery-gradient={item.gradient}
+                        data-gallery-title={item.title}
+                        data-gallery-year={item.year}
+                        type="button"
+                    >
+                        <span
+                            class="gallery__tile-image"
+                            style={`background: ${item.gradient};`}
+                        />
+                        <span class="gallery__tile-meta">
+                            <span>{item.title}</span>
+                            <span>{item.block}</span>
+                        </span>
+                    </button>
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>
+<div
+    class="lightbox"
+    aria-hidden="true"
+    aria-labelledby="lightbox-title"
+    aria-modal="true"
+    role="dialog"
+>
+    <div class="lightbox__inner">
+        <button
+            class="lightbox__close"
+            aria-label="Close lightbox"
+            type="button"
+        >
+            &times;
+        </button>
+        <div class="lightbox__image" />
+        <div class="lightbox__info flex flex-col">
+            <div class="lightbox__meta" />
+            <h2 id="lightbox-title">&nbsp;</h2>
+            <p>Gallery content coming soon.</p>
+            <div class="lightbox__meta">SHOT BY ATX MVFF MEDIA TEAM</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .gallery__cell {
+        display: grid;
+    }
+
+    .gallery__cell--normal {
+        grid-column: span 3;
+        grid-row: span 3;
+    }
+
+    .gallery__cell--wide {
+        grid-column: span 6;
+        grid-row: span 3;
+    }
+
+    .gallery__grid {
+        display: grid;
+        gap: 12px;
+        grid-auto-flow: dense;
+        grid-auto-rows: 80px;
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .gallery__tile {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+        overflow: hidden;
+        padding: 0;
+        position: relative;
+        text-align: left;
+        transition: transform var(--duration-base) ease;
+    }
+
+    .gallery__tile:active {
+        transform: scale(1);
+    }
+
+    .gallery__tile:hover {
+        transform: scale(1.02);
+        z-index: 2;
+    }
+
+    .gallery__tile:hover .gallery__tile-image {
+        filter: grayscale(0) contrast(1.1);
+    }
+
+    .gallery__tile:hover .gallery__tile-meta {
+        opacity: 1;
+    }
+
+    .gallery__tile-image {
+        background-position: center;
+        background-size: cover;
+        filter: grayscale(0.5) contrast(1.05);
+        inset: 0;
+        position: absolute;
+        transition: filter var(--duration-slow) ease;
+    }
+
+    .gallery__tile-meta {
+        background: linear-gradient(transparent, var(--color-black-85));
+        bottom: 0;
+        color: var(--color-cream);
+        display: flex;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        justify-content: space-between;
+        left: 0;
+        letter-spacing: 0.14em;
+        opacity: 0;
+        padding: 12px 14px;
+        position: absolute;
+        right: 0;
+        transition: opacity var(--duration-fast) ease;
+    }
+
+    .lightbox {
+        animation: lightbox__fade-in var(--duration-fast) ease;
+        backdrop-filter: blur(8px);
+        background: var(--color-black-95);
+        cursor: zoom-out;
+        display: none;
+        inset: 0;
+        padding: clamp(20px, 5vw, 60px);
+        place-items: center;
+        position: fixed;
+        z-index: 200;
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .lightbox[data-active] {
+        display: grid;
+    }
+
+    .lightbox__close {
+        background: none;
+        border: 1px solid var(--color-cream);
+        color: var(--color-cream);
+        cursor: pointer;
+        font-family: var(--font-mono);
+        height: 32px;
+        position: absolute;
+        right: 0;
+        top: -40px;
+        transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+        width: 32px;
+    }
+
+    .lightbox__close:active,
+    .lightbox__close:hover {
+        border-color: var(--color-coral);
+        color: var(--color-coral);
+    }
+
+    .lightbox__close::after {
+        content: '';
+        inset: -8px;
+        position: absolute;
+    }
+
+    .lightbox__image {
+        aspect-ratio: 3 / 2;
+        background-position: center;
+        background-size: cover;
+        border: 1px solid var(--color-cream-15);
+    }
+
+    .lightbox__info {
+        color: var(--color-cream);
+        gap: 12px;
+    }
+
+    .lightbox__info h2 {
+        font-family: var(--font-display);
+        font-size: 36px;
+    }
+
+    .lightbox__info p {
+        color: var(--color-cream-60);
+        flex: 1;
+        font-family: var(--font-serif);
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .lightbox__inner {
+        cursor: default;
+        display: grid;
+        gap: 32px;
+        grid-template-columns: 1fr 280px;
+        max-width: 1100px;
+        position: relative;
+        width: 100%;
+    }
+
+    .lightbox__meta {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+        .gallery__grid {
+            grid-auto-rows: 44px;
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .lightbox__inner {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @keyframes lightbox__fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+<script>
+    let galleryController: AbortController | undefined;
+    let lastTile: HTMLElement | undefined;
+
+    function closeLightbox() {
+        const lightbox = document.querySelector('.lightbox');
+
+        if (!lightbox?.hasAttribute('data-active')) return;
+
+        lightbox.removeAttribute('data-active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        lastTile?.focus();
+        lastTile = undefined;
+    }
+
+    function handleLightboxKeydown(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            closeLightbox();
+        } else if (event.key === 'Tab' && document.querySelector('.lightbox')?.hasAttribute('data-active')) {
+            event.preventDefault();
+            document.querySelector<HTMLElement>('.lightbox__close')?.focus();
+        }
+    }
+
+    function initGallery() {
+        galleryController?.abort();
+        galleryController = new AbortController();
+
+        const { signal } = galleryController;
+
+        document.querySelectorAll<HTMLElement>('.gallery__tile').forEach((tile) => {
+            tile.addEventListener('click', () => openLightbox(tile), { signal });
+        });
+
+        const close = document.querySelector('.lightbox__close');
+        const inner = document.querySelector('.lightbox__inner');
+        const lightbox = document.querySelector('.lightbox');
+
+        close?.addEventListener('click', closeLightbox, { signal });
+        inner?.addEventListener('click', event => event.stopPropagation(), { signal });
+        lightbox?.addEventListener('click', closeLightbox, { signal });
+        document.addEventListener('keydown', handleLightboxKeydown, { signal });
+    }
+
+    function openLightbox(tile: HTMLElement) {
+        const image = document.querySelector<HTMLElement>('.lightbox__image');
+        const lightbox = document.querySelector('.lightbox');
+        const meta = document.querySelector('.lightbox__meta');
+        const title = document.getElementById('lightbox-title');
+
+        if (!image || !lightbox || !meta || !title) return;
+
+        image.style.background = tile.dataset.galleryGradient || '';
+        title.textContent = tile.dataset.galleryTitle || '';
+        meta.textContent = `${tile.dataset.galleryBlock} \u00b7 ${tile.dataset.galleryYear}`;
+        lastTile = tile;
+        lightbox.setAttribute('data-active', '');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.querySelector<HTMLElement>('.lightbox__close')?.focus();
+    }
+
+    document.addEventListener('astro:page-load', initGallery);
+</script>

@@ -1,33 +1,43 @@
 ---
-const highlights = [
-    { desc: '28 official selections across all genres. Four screening blocks featuring emerging and established artists.', tag: '28 selections', title: 'Screenings' },
-    { desc: 'Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.', tag: '6+ categories', title: 'Awards' },
-    { desc: 'Conversations with directors, producers, and artists after each screening block. Community partner spotlights.', tag: 'Live discussion', title: 'Q&A Panel' },
-    { desc: 'Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin\'s music and film worlds collide.', tag: 'Two sets', title: 'Live Music' },
-    { desc: 'Cabana Club night swim atmosphere. Red carpet meets pool party.', tag: 'Until 2 AM', title: 'Pool Party' },
+import SectionHead from '@components/SectionHead.astro';
+import { pad } from '@lib/utils';
+
+const HIGHLIGHTS = [
+    { description: '28 official selections across all genres. Four screening blocks featuring emerging and established artists.', tag: '28 selections', title: 'Screenings' },
+    { description: 'Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.', tag: '6+ categories', title: 'Awards' },
+    { description: 'Conversations with directors, producers, and artists after each screening block. Community partner spotlights.', tag: 'Live discussion', title: 'Q&A Panel' },
+    { description: 'Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin\'s music and film worlds collide.', tag: 'Two sets', title: 'Live Music' },
+    { description: 'Cabana Club night swim atmosphere. Red carpet meets pool party.', tag: 'Until 2 AM', title: 'Pool Party' },
 ];
 ---
 
 <section
     class="section"
-    aria-labelledby="experience-heading"
+    aria-labelledby="experience-title"
 >
     <div class="shell">
-        <div class="section__head">
-            <span class="section__num">[ 02 ]</span>
-            <h2 id="experience-heading" class="section__title">The Experience</h2>
-            <span class="section__meta">FIVE ACTS / ONE NIGHT</span>
-        </div>
-        <div>
-            {highlights.map((highlight, i) => (
-                <div class="highlight">
-                    <span class="highlight__num">/ {String(i + 1).padStart(2, '0')}</span>
+        <SectionHead
+            headingId="experience-title"
+            level="h2"
+            number="[ 02 ]"
+        >
+            The Experience
+            <Fragment slot="meta">FIVE ACTS / ONE NIGHT</Fragment>
+        </SectionHead>
+        <ol
+            class="list-none"
+            data-scroll
+            data-scroll-stagger="0.08"
+        >
+            {HIGHLIGHTS.map((highlight, index) => (
+                <li class="highlight">
+                    <span class="highlight__number">/ {pad(index + 1)}</span>
                     <h3 class="highlight__title">{highlight.title}</h3>
-                    <p class="highlight__desc">{highlight.desc}</p>
+                    <p class="highlight__description">{highlight.description}</p>
                     <span class="highlight__tag">{highlight.tag}</span>
-                </div>
+                </li>
             ))}
-        </div>
+        </ol>
     </div>
 </section>
 
@@ -36,48 +46,53 @@ const highlights = [
         align-items: baseline;
         border-bottom: 1px solid var(--color-cream-15);
         display: grid;
-        gap: clamp(16px, 3vw, 40px);
+        gap: clamp(16px, 3.13vw, 40px);
         grid-template-columns: 80px 1fr 1.2fr 80px;
+        isolation: isolate;
         padding: clamp(28px, 4vw, 44px) 0;
-        transition: padding 0.25s ease;
+        position: relative;
     }
 
     .highlight:first-child {
         border-top: 1px solid var(--color-cream-15);
     }
 
-    .highlight:hover {
-        background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-accent) 8%, transparent), transparent);
+    .highlight:hover::after {
+        opacity: 1;
     }
 
     .highlight:hover .highlight__title {
-        color: var(--color-accent);
+        color: var(--color-coral);
         transform: translateX(8px);
     }
 
-    .highlight__num {
-        color: var(--color-cream-40);
+    .highlight::after {
+        background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-coral) 8%, transparent), transparent);
+        content: '';
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        transition: opacity var(--duration-fast) ease;
+        z-index: -1;
+    }
+
+    .highlight__description {
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
+        font-size: clamp(15px, 1.33vw, 17px);
+        line-height: 1.45;
+    }
+
+    .highlight__number {
+        color: var(--color-cream-60);
         font-family: var(--font-mono);
         font-size: 12px;
         letter-spacing: 0.18em;
     }
 
-    .highlight__title {
-        font-size: clamp(34px, 5vw, 64px);
-        line-height: 0.95;
-        text-transform: uppercase;
-        transition: color 0.25s ease, transform 0.25s ease;
-    }
-
-    .highlight__desc {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: clamp(15px, 1.3vw, 17px);
-        line-height: 1.45;
-    }
-
     .highlight__tag {
-        color: var(--color-accent);
+        color: var(--color-coral);
         font-family: var(--font-mono);
         font-size: 10px;
         letter-spacing: 0.18em;
@@ -85,19 +100,29 @@ const highlights = [
         text-transform: uppercase;
     }
 
-    @media (max-width: 720px) {
+    .highlight__title {
+        font-size: clamp(34px, 5vw, 64px);
+        line-height: 0.95;
+        text-transform: uppercase;
+        transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+    }
+
+    @media (max-width: 768px) {
         .highlight {
             gap: 14px;
             grid-template-columns: 40px 1fr;
         }
 
-        .highlight__desc,
+        .highlight__description {
+            margin-bottom: 6px;
+        }
+
+        .highlight__description,
         .highlight__tag {
             grid-column: 2 / -1;
         }
 
         .highlight__tag {
-            margin-top: 6px;
             text-align: left;
         }
     }

@@ -1,0 +1,274 @@
+---
+import SectionHead from '@components/SectionHead.astro';
+import { LINKS } from '@lib/utils';
+---
+
+<section
+    class="section"
+    aria-labelledby="contact-title"
+>
+    <div class="shell">
+        <SectionHead
+            headingId="contact-title"
+            number="[ C ]"
+        >
+            Contact
+            <Fragment slot="meta">AUSTIN &middot; TX</Fragment>
+        </SectionHead>
+        <div
+            class="contact"
+            data-scroll
+            data-scroll-stagger="0.1"
+        >
+            <form class="contact__form flex flex-col gap-4.5">
+                <div class="contact__banner" aria-live="polite" />
+                <label class="flex flex-col">
+                    <span class="label">Name</span>
+                    <input
+                        class="input"
+                        name="name"
+                        placeholder="Your name"
+                        required
+                        type="text"
+                    />
+                </label>
+                <label class="flex flex-col">
+                    <span class="label">Email</span>
+                    <input
+                        class="input"
+                        name="email"
+                        placeholder="you@domain.com"
+                        required
+                        type="email"
+                    />
+                </label>
+                <label class="flex flex-col">
+                    <span class="label">Subject</span>
+                    <select
+                        class="select"
+                        name="subject"
+                    >
+                        <option>General Inquiry</option>
+                        <option>Press &amp; Media</option>
+                        <option>Sponsorship</option>
+                        <option>Submissions</option>
+                        <option>Volunteering</option>
+                    </select>
+                </label>
+                <label class="flex flex-col">
+                    <span class="label">Message</span>
+                    <textarea class="textarea" name="message" placeholder="Tell us what brought you here." required />
+                </label>
+                <button
+                    class="btn btn--primary justify-center"
+                    disabled
+                    type="submit"
+                >
+                    Coming Soon
+                </button>
+            </form>
+            <aside class="flex flex-col gap-8">
+                <div>
+                    <h2 class="subhead">Direct Channels</h2>
+                    <dl>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Email</dt>
+                            <dd class="contact__line-value"><a href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a></dd>
+                        </div>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Instagram</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    href={LINKS.instagram}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    @atxmvff
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Submit</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    href={LINKS.filmfreeway}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    FilmFreeway &rarr;
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Pitch</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    href={LINKS.pitchDeck}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    Pitch Deck
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Call</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    href={LINKS.calendly}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    Calendly &rarr;
+                                </a>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+                <div>
+                    <h2 class="subhead">Founder</h2>
+                    <dl>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Director</dt>
+                            <dd class="contact__line-value">Anna Madewell</dd>
+                        </div>
+                        <div class="contact__line">
+                            <dt class="contact__line-label">Studio</dt>
+                            <dd class="contact__line-value">Madewell Productions</dd>
+                        </div>
+                    </dl>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact {
+        align-items: start;
+        display: grid;
+        gap: clamp(40px, 6.25vw, 80px);
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .contact__banner {
+        align-items: center;
+        color: var(--color-night);
+        display: flex;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        gap: 12px;
+        letter-spacing: 0.14em;
+        position: absolute;
+        text-transform: uppercase;
+    }
+
+    .contact__banner[data-visible] {
+        animation: contact__slide-in var(--duration-base) ease;
+        background: var(--color-coral);
+        margin-bottom: 8px;
+        padding: 14px 18px;
+        position: static;
+    }
+
+    .contact__line {
+        align-items: baseline;
+        border-bottom: 1px solid var(--color-cream-15);
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 100px 1fr;
+        padding: 14px 0;
+        transition: padding var(--duration-fast) ease;
+    }
+
+    .contact__line:hover {
+        padding-left: 8px;
+    }
+
+    .contact__line a {
+        color: var(--color-cream);
+        text-decoration: none;
+        transition: color var(--duration-fast) ease;
+    }
+
+    .contact__line a:active,
+    .contact__line a:hover {
+        color: var(--color-coral);
+    }
+
+    .contact__line-label {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    .contact__line-value {
+        font-family: var(--font-display);
+        font-size: clamp(16px, calc(10px + 1.875vw), 22px);
+        min-width: 0;
+        overflow-wrap: break-word;
+    }
+
+    @media (max-width: 1024px) {
+        .contact {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact__line {
+            gap: 4px;
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @keyframes contact__slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    const BANNER_DURATION = 4_000;
+
+    let bannerTimeout: Timer | undefined;
+    let contactController: AbortController | undefined;
+
+    function handleSubmit(event: SubmitEvent, banner: Element, form: HTMLFormElement) {
+        event.preventDefault();
+        banner.textContent = '\u2713 MESSAGE SENT \u2014 WE\'LL BE IN TOUCH SHORTLY';
+        banner.setAttribute('data-visible', '');
+        form.reset();
+        clearTimeout(bannerTimeout);
+
+        bannerTimeout = setTimeout(() => {
+            banner.removeAttribute('data-visible');
+            banner.textContent = '';
+        }, BANNER_DURATION);
+    }
+
+    function initContact() {
+        contactController?.abort();
+        contactController = new AbortController();
+
+        const { signal } = contactController;
+
+        const banner = document.querySelector('.contact__banner');
+        const form = document.querySelector<HTMLFormElement>('.contact__form');
+
+        if (!banner || !form) return;
+
+        form.addEventListener('submit', event => handleSubmit(event, banner, form), { signal });
+    }
+
+    document.addEventListener('astro:page-load', initContact);
+</script>

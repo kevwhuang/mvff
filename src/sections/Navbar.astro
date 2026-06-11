@@ -1,174 +1,172 @@
 ---
-import logo from '@images/logos/mvff.webp';
+import { Image } from 'astro:assets';
+
+import logo from '@images/logos/atx_music_video_film_festival.webp';
+import { LINKS, ROUTES } from '@lib/utils';
 ---
 
-<nav
-    class="nav sticky"
-    aria-label="Main"
->
-    <div class="nav__inner">
-        <a class="nav__brand flex items-center" aria-label="ATX MVFF Home" href="/">
-            <div class="nav__brand-mark">
-                <img alt="MVFF" src={logo.src} />
+<header class="site-header sticky">
+    <div class="shell site-header__inner">
+        <a
+            class="flex items-center gap-3.5 no-underline cursor-pointer select-none"
+            aria-label="ATX MVFF Home"
+            href="/"
+        >
+            <div class="site-header__brand-mark">
+                <Image
+                    class="block h-auto"
+                    alt=""
+                    densities={[1, 2]}
+                    src={logo}
+                    width={30}
+                />
             </div>
-            <div class="nav__brand-text flex flex-col">
-                <span class="nav__brand-t1">ATX MVFF</span>
-                <span class="nav__brand-t2">EST. 2026 · AUSTIN TX</span>
+            <div class="site-header__brand-text flex flex-col">
+                <span class="site-header__brand-name">ATX MVFF</span>
+                <span class="site-header__brand-tagline">EST. 2026 &middot; AUSTIN TX</span>
             </div>
         </a>
-        <div class="nav__links flex items-center justify-center">
-            <a class="nav__link" href="/">Home</a>
-            <a class="nav__link" href="/team">Team</a>
-            <a class="nav__link" href="/shop">Shop</a>
-            <a class="nav__link" href="/gallery">Gallery</a>
-            <a class="nav__link" href="/info">Info</a>
-            <a class="nav__link" href="/contact">Contact</a>
-        </div>
-        <div class="nav__actions flex items-center">
-            <div class="nav__countdown" aria-label="Countdown to event">
-                <span class="nav__pulse"></span>
-                <span id="nav-countdown-text">T-00d 00:00:00</span>
+        <nav
+            class="site-nav"
+            aria-label="Primary"
+        >
+            <button
+                class="site-nav__close"
+                aria-label="Close menu"
+                type="button"
+            >
+                &times;
+            </button>
+            <ul class="site-nav__list flex items-center justify-center list-none">
+                {ROUTES.map(route => (
+                    <li>
+                        <a class="site-nav__link" href={route.href}>{route.label}</a>
+                    </li>
+                ))}
+                <li class="site-nav__divider" aria-hidden="true" />
+                <li class="site-nav__extra">
+                    <a
+                        class="site-nav__link"
+                        href={LINKS.pitchDeck}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Pitch Deck &rarr;
+                    </a>
+                </li>
+                <li class="site-nav__extra">
+                    <a
+                        class="site-nav__link"
+                        href={LINKS.calendly}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Schedule a Call &rarr;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="flex items-center justify-self-end gap-2.5">
+            <div
+                class="site-header__countdown"
+                aria-label="Event countdown"
+                role="timer"
+            >
+                <span class="site-header__pulse" aria-hidden="true" />
+                <span class="site-header__countdown-text">T-00d 00:00:00</span>
             </div>
             <a
-                class="nav__submit"
-                href="https://filmfreeway.com/atxmusicvideofilmfestival"
+                class="site-header__submit"
+                href={LINKS.filmfreeway}
                 rel="noopener noreferrer"
                 target="_blank"
             >
                 Submit
             </a>
             <button
-                class="nav__burger"
+                class="nav-toggle"
                 aria-expanded="false"
-                aria-label="Open menu"
+                aria-label="Toggle menu"
                 type="button"
-            >&equiv;
+            >
+                &equiv;
             </button>
         </div>
     </div>
-</nav>
-<div class="mobile-menu fixed" aria-hidden="true">
-    <button
-        class="mobile-menu__close"
-        aria-label="Close menu"
-        type="button"
-    >&times;
-    </button>
-    <a class="mobile-menu__link" href="/">Home</a>
-    <a class="mobile-menu__link" href="/team">Team</a>
-    <a class="mobile-menu__link" href="/shop">Shop</a>
-    <a class="mobile-menu__link" href="/gallery">Gallery</a>
-    <a class="mobile-menu__link" href="/info">Info</a>
-    <a class="mobile-menu__link" href="/contact">Contact</a>
-    <div class="mobile-menu__divider"></div>
-    <a class="mobile-menu__link" href="pitch-deck.pdf" rel="noopener noreferrer" target="_blank">Pitch Deck →</a>
-    <a class="mobile-menu__link" href="https://calendly.com/madewellanna99/30min" rel="noopener noreferrer" target="_blank">Schedule a Call →</a>
-</div>
+</header>
 
 <style>
-    .nav {
-        backdrop-filter: blur(14px) saturate(120%);
-        background: color-mix(in oklab, var(--color-night) 72%, transparent);
+    .nav-toggle {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
+        cursor: pointer;
+        display: none;
+        height: 36px;
+        place-items: center;
+        position: relative;
+        transition: border-color var(--duration-fast) ease;
+        width: 36px;
+    }
+
+    .nav-toggle:active,
+    .nav-toggle:hover {
+        border-color: var(--color-cream-40);
+    }
+
+    .nav-toggle::after {
+        content: '';
+        inset: -6px;
+        position: absolute;
+    }
+
+    .site-header {
         border-bottom: 1px solid var(--color-cream-15);
         top: 0;
         z-index: 50;
+    }
+
+    .site-header::before {
+        backdrop-filter: blur(14px) saturate(120%);
+        background: color-mix(in oklab, var(--color-night) 72%, transparent);
+        content: '';
+        inset: 0;
+        position: absolute;
+        z-index: -1;
         -webkit-backdrop-filter: blur(14px) saturate(120%);
     }
 
-    .nav__inner {
-        align-items: center;
-        display: grid;
-        gap: clamp(12px, 3vw, 28px);
-        grid-template-columns: auto 1fr auto;
-        margin: 0 auto;
-        max-width: var(--shell-max);
-        padding: 14px var(--shell-pad);
-    }
-
-    .nav__brand {
-        cursor: pointer;
-        gap: 14px;
-        text-decoration: none;
-        user-select: none;
-    }
-
-    .nav__brand-mark {
+    .site-header__brand-mark {
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
         display: grid;
-        filter: invert(var(--brand-invert, 0));
         height: 38px;
         place-items: center;
         width: 38px;
     }
 
-    .nav__brand-mark img {
-        display: block;
-        height: auto;
-        width: 78%;
-    }
-
-    .nav__brand-text {
-        line-height: 1;
-    }
-
-    .nav__brand-t1 {
+    .site-header__brand-name {
         color: var(--color-cream);
         font-family: var(--font-display);
         font-size: 18px;
         letter-spacing: 0.03em;
     }
 
-    .nav__brand-t2 {
+    .site-header__brand-tagline {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
         font-size: 9.5px;
         letter-spacing: 0.22em;
-        margin-top: 3px;
         text-transform: uppercase;
+        white-space: nowrap;
     }
 
-    .nav__links {
-        gap: 4px;
+    .site-header__brand-text {
+        gap: 3px;
+        line-height: 1;
     }
 
-    .nav__link {
-        color: var(--color-cream-60);
-        cursor: pointer;
-        font-family: var(--font-mono);
-        font-size: 11.5px;
-        letter-spacing: 0.16em;
-        padding: 10px 14px;
-        position: relative;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: color 0.18s ease;
-    }
-
-    .nav__link:hover {
-        color: var(--color-cream);
-    }
-
-    .nav__link[aria-current='page'] {
-        color: var(--color-cream);
-    }
-
-    .nav__link[aria-current='page']::before {
-        background: var(--color-accent);
-        bottom: 4px;
-        content: '';
-        height: 2px;
-        left: 14px;
-        position: absolute;
-        right: 14px;
-    }
-
-    .nav__actions {
-        gap: 10px;
-        margin-left: auto;
-    }
-
-    .nav__countdown {
+    .site-header__countdown {
         align-items: baseline;
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
@@ -179,34 +177,29 @@ import logo from '@images/logos/mvff.webp';
         gap: 6px;
         letter-spacing: 0.1em;
         padding: 6px 10px;
+        user-select: none;
     }
 
-    .nav__pulse {
-        animation: pulse 1.6s ease-in-out infinite;
-        background: var(--color-accent);
+    .site-header__inner {
+        align-items: center;
+        display: grid;
+        gap: clamp(12px, 3vw, 28px);
+        grid-template-columns: auto 1fr auto;
+        padding-block: 14px;
+    }
+
+    .site-header__pulse {
+        animation: site-header__pulse 1.6s ease-in-out infinite;
+        background: var(--color-coral);
         border-radius: 50%;
         display: inline-block;
         height: 6px;
-        margin-right: 6px;
         width: 6px;
     }
 
-    @keyframes pulse {
-        0%,
-        100% {
-            opacity: 0.4;
-            transform: scale(0.9);
-        }
-        50% {
-            box-shadow: 0 0 12px var(--color-accent);
-            opacity: 1;
-            transform: scale(1.2);
-        }
-    }
-
-    .nav__submit {
-        background: var(--color-accent);
-        border: 1px solid var(--color-accent);
+    .site-header__submit {
+        background: var(--color-coral);
+        border: 1px solid var(--color-coral);
         color: var(--color-night);
         cursor: pointer;
         display: inline-block;
@@ -217,91 +210,171 @@ import logo from '@images/logos/mvff.webp';
         padding: 10px 16px;
         text-decoration: none;
         text-transform: uppercase;
-        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease;
     }
 
-    .nav__submit:hover {
+    .site-header__submit:active {
+        transform: translateY(1px);
+    }
+
+    .site-header__submit:hover {
         background: var(--color-cream);
         border-color: var(--color-cream);
         color: var(--color-night);
     }
 
-    .nav__burger {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        color: var(--color-cream);
-        cursor: pointer;
+    .site-nav__close {
         display: none;
-        height: 36px;
-        place-items: center;
-        width: 36px;
     }
 
-    .mobile-menu {
-        background: var(--color-night);
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        inset: 0;
-        padding: 80px 32px 32px;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        z-index: 60;
+    .site-nav__divider,
+    .site-nav__extra {
+        display: none;
     }
 
-    .mobile-menu[data-open] {
-        transform: translateX(0);
-    }
-
-    .mobile-menu__close {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        color: var(--color-cream);
+    .site-nav__link {
+        color: var(--color-cream-60);
         cursor: pointer;
-        height: 36px;
-        position: absolute;
-        right: 18px;
-        top: 18px;
-        width: 36px;
-    }
-
-    .mobile-menu__link {
-        border-bottom: 1px solid var(--color-cream-15);
-        color: var(--color-cream);
-        font-family: var(--font-display);
-        font-size: 28px;
-        letter-spacing: 0.04em;
-        padding: 14px 0;
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        letter-spacing: 0.16em;
+        padding: 10px 9px;
+        position: relative;
         text-decoration: none;
-        transition: color 0.18s ease;
+        text-transform: uppercase;
+        transition: color var(--duration-fast) ease;
     }
 
-    .mobile-menu__link:hover {
-        color: var(--color-accent);
+    .site-nav__link:active,
+    .site-nav__link:hover {
+        color: var(--color-cream);
     }
 
-    .mobile-menu__divider {
-        border-top: 1px solid var(--color-cream-15);
-        margin: 8px 0;
+    .site-nav__link[aria-current='page'] {
+        color: var(--color-cream);
+    }
+
+    .site-nav__link[aria-current='page']::before {
+        background: var(--color-coral);
+        bottom: 4px;
+        content: '';
+        height: 2px;
+        left: 9px;
+        position: absolute;
+        right: 9px;
+    }
+
+    .site-nav__list {
+        gap: 4px;
     }
 
     @media (max-width: 1024px) {
-        .nav__links {
-            display: none;
-        }
-
-        .nav__countdown {
-            display: none;
-        }
-
-        .nav__burger {
+        .nav-toggle {
             display: grid;
+        }
+
+        .site-header__countdown {
+            display: none;
+        }
+
+        .site-nav {
+            background: var(--color-night);
+            inset: 0;
+            overflow-y: auto;
+            padding: 80px 32px 32px;
+            position: fixed;
+            transform: translateX(100%);
+            transition: transform var(--duration-base) ease, visibility 0s var(--duration-base);
+            visibility: hidden;
+            z-index: 60;
+        }
+
+        .site-nav[data-open] {
+            transform: translateX(0);
+            transition: transform var(--duration-base) ease, visibility 0s;
+            visibility: visible;
+        }
+
+        .site-nav__close {
+            background: var(--color-navy);
+            border: 1px solid var(--color-cream-15);
+            color: var(--color-cream);
+            cursor: pointer;
+            display: block;
+            height: 36px;
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            transition: border-color var(--duration-fast) ease;
+            width: 36px;
+        }
+
+        .site-nav__close:active,
+        .site-nav__close:hover {
+            border-color: var(--color-cream-40);
+        }
+
+        .site-nav__close::after {
+            content: '';
+            inset: -6px;
+            position: absolute;
+        }
+
+        .site-nav__divider {
+            border-top: 1px solid var(--color-cream-15);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .site-nav__extra {
+            display: block;
+        }
+
+        .site-nav__link {
+            border-bottom: 1px solid var(--color-cream-15);
+            color: var(--color-cream);
+            display: block;
+            font-family: var(--font-display);
+            font-size: 28px;
+            letter-spacing: 0.04em;
+            padding: 14px 0;
+            text-transform: none;
+        }
+
+        .site-nav__link:active,
+        .site-nav__link:hover {
+            color: var(--color-coral);
+        }
+
+        .site-nav__link[aria-current='page']::before {
+            content: none;
+        }
+
+        .site-nav__list {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 8px;
+            justify-content: flex-start;
         }
     }
 
-    @media (max-width: 720px) {
-        .nav__brand-text {
+    @media (max-width: 768px) {
+        .site-header__brand-text {
             display: none;
+        }
+    }
+
+    @keyframes site-header__pulse {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(0.9);
+        }
+
+        50% {
+            box-shadow: 0 0 12px var(--color-coral);
+            opacity: 1;
+            transform: scale(1.2);
         }
     }
 </style>
@@ -309,59 +382,56 @@ import logo from '@images/logos/mvff.webp';
 <script>
     import { getCountdownParts, pad } from '@lib/utils';
 
-    const MS_PER_SECOND = 1_000;
-
     let navController: AbortController | undefined;
-    let navInterval: ReturnType<typeof setInterval> | undefined;
+    let navInterval: Timer | undefined;
 
-    function initNavbar(): void {
+    function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
+        menu.removeAttribute('data-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus();
+    }
+
+    function handleMenuKeydown(event: KeyboardEvent, menu: HTMLElement, toggle: HTMLElement) {
+        if (!menu.hasAttribute('data-open')) return;
+
+        if (event.key === 'Escape') {
+            closeMenu(menu, toggle);
+        } else if (event.key === 'Tab') {
+            trapFocus(event, menu);
+        }
+    }
+
+    function handleToggleClick(menu: HTMLElement, toggle: HTMLElement) {
+        if (menu.hasAttribute('data-open')) {
+            closeMenu(menu, toggle);
+        } else {
+            openMenu(menu, toggle);
+        }
+    }
+
+    function initNavbar() {
         if (navInterval) clearInterval(navInterval);
         navController?.abort();
         navController = new AbortController();
+
         const { signal } = navController;
 
         updateNavCountdown();
-        navInterval = setInterval(updateNavCountdown, MS_PER_SECOND);
+        navInterval = setInterval(updateNavCountdown, 1_000);
 
-        const burger = document.querySelector('.nav__burger');
-        const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
-        const mobileClose = document.querySelector('.mobile-menu__close');
+        const close = document.querySelector<HTMLElement>('.site-nav__close');
+        const menu = document.querySelector<HTMLElement>('.site-nav');
+        const toggle = document.querySelector<HTMLElement>('.nav-toggle');
 
-        if (burger && mobileMenu) {
-            function closeMenu(): void {
-                mobileMenu!.removeAttribute('data-open');
-                mobileMenu!.setAttribute('aria-hidden', 'true');
-                burger!.setAttribute('aria-expanded', 'false');
-            }
-
-            function openMenu(): void {
-                mobileMenu!.setAttribute('data-open', '');
-                mobileMenu!.setAttribute('aria-hidden', 'false');
-                burger!.setAttribute('aria-expanded', 'true');
-            }
-
-            burger.addEventListener('click', () => {
-                if (mobileMenu.hasAttribute('data-open')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }, { signal });
-
-            if (mobileClose) {
-                mobileClose.addEventListener('click', closeMenu, { signal });
-            }
-
-            document.addEventListener('keydown', (e: KeyboardEvent) => {
-                if (e.key === 'Escape' && mobileMenu.hasAttribute('data-open')) {
-                    closeMenu();
-                }
-            }, { signal });
+        if (menu && toggle) {
+            close?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+            document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
+            toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
         }
 
         const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
 
-        document.querySelectorAll('.nav__link').forEach((link) => {
+        document.querySelectorAll('.site-nav__link').forEach((link) => {
             const href = link.getAttribute('href')?.replace(/\/$/, '') || '/';
 
             if (href === currentPath) {
@@ -372,23 +442,46 @@ import logo from '@images/logos/mvff.webp';
         });
     }
 
-    function updateNavCountdown(): void {
-        const el = document.getElementById('nav-countdown-text');
+    function openMenu(menu: HTMLElement, toggle: HTMLElement) {
+        menu.setAttribute('data-open', '');
+        toggle.setAttribute('aria-expanded', 'true');
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => menu.querySelector<HTMLElement>('.site-nav__close')?.focus());
+        });
+    }
 
-        if (!el) return;
+    function trapFocus(event: KeyboardEvent, menu: HTMLElement) {
+        const focusables = menu.querySelectorAll<HTMLElement>('a, button');
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
 
-        const { remaining, d, h, m, s } = getCountdownParts();
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    }
 
-        if (remaining <= 0) {
-            el.textContent = 'HAPPENING NOW';
+    function updateNavCountdown() {
+        const countdown = document.querySelector('.site-header__countdown-text');
+
+        if (!countdown) return;
+
+        const parts = getCountdownParts();
+
+        if (parts.remaining <= 0) {
+            countdown.textContent = 'HAPPENING NOW';
+
             return;
         }
 
-        el.textContent = 'T-'
-            + pad(d) + 'd '
-            + pad(h) + ':'
-            + pad(m) + ':'
-            + pad(s);
+        countdown.textContent = 'T-'
+            + pad(parts.days) + 'd '
+            + pad(parts.hours) + ':'
+            + pad(parts.minutes) + ':'
+            + pad(parts.seconds);
     }
 
     document.addEventListener('astro:page-load', initNavbar);

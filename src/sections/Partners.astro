@@ -1,6 +1,8 @@
 ---
-import logoCabana from '@images/logos/cabana.webp';
-import logoMadewell from '@images/logos/madewell.webp';
+import { Image } from 'astro:assets';
+
+import logoCabanaClub from '@images/logos/cabana_club.webp';
+import logoMadewellProductions from '@images/logos/madewell_productions.webp';
 ---
 
 <section
@@ -8,21 +10,71 @@ import logoMadewell from '@images/logos/madewell.webp';
     aria-label="Partners"
 >
     <div class="marquee__track flex items-center">
-        {Array.from({ length: 2 }).flatMap((_, k) => [
-            <div class="marquee__item flex items-center">
-                <img class="marquee__logo marquee__logo--madewell" alt={k === 0 ? 'Madewell Productions' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoMadewell.src} />
+        {Array.from({ length: 2 }).flatMap((_, copy) => [
+            <div
+                class="marquee__item flex items-center"
+                aria-hidden={copy > 0 ? 'true' : undefined}
+            >
+                <Image
+                    class="marquee__logo marquee__logo--madewell"
+                    alt=""
+                    aria-hidden="true"
+                    densities={[1, 2]}
+                    src={logoMadewellProductions}
+                    width={99}
+                />
                 <span>Madewell Productions</span>
             </div>,
-            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item flex items-center">
-                <img class="marquee__logo" alt={k === 0 ? 'Cabana Club' : ''} aria-hidden={k > 0 ? 'true' : undefined} src={logoCabana.src} />
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span class="marquee__diamond" />
+            </div>,
+            <div
+                class="marquee__item flex items-center"
+                aria-hidden={copy > 0 ? 'true' : undefined}
+            >
+                <Image
+                    class="marquee__logo"
+                    alt=""
+                    aria-hidden="true"
+                    densities={[1, 2]}
+                    src={logoCabanaClub}
+                    width={375}
+                />
                 <span>Cabana Club</span>
             </div>,
-            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item" aria-hidden="true"><span>EST · 2026</span></div>,
-            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
-            <div class="marquee__item" aria-hidden="true"><span>AUSTIN TEXAS</span></div>,
-            <div class="marquee__item" aria-hidden="true"><span class="marquee__diamond"></span></div>,
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span class="marquee__diamond" />
+            </div>,
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span>EST &middot; 2026</span>
+            </div>,
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span class="marquee__diamond" />
+            </div>,
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span>AUSTIN TEXAS</span>
+            </div>,
+            <div
+                class="marquee__item"
+                aria-hidden="true"
+            >
+                <span class="marquee__diamond" />
+            </div>,
         ])}
     </div>
 </section>
@@ -35,18 +87,21 @@ import logoMadewell from '@images/logos/madewell.webp';
         overflow: hidden;
         padding: clamp(40px, 6vh, 64px) 0;
         position: relative;
+        user-select: none;
     }
 
-    .marquee__track {
-        animation: marquee 28s linear infinite;
-        gap: clamp(40px, 6vw, 80px);
-        width: max-content;
+    .marquee__diamond {
+        background: var(--color-coral);
+        display: inline-block;
+        height: 14px;
+        transform: rotate(45deg);
+        width: 14px;
     }
 
     .marquee__item {
         color: var(--color-cream-60);
         font-family: var(--font-display);
-        font-size: clamp(40px, 6vw, 80px);
+        font-size: clamp(40px, 6.25vw, 80px);
         gap: 24px;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -63,17 +118,16 @@ import logoMadewell from '@images/logos/madewell.webp';
         filter: invert(0.85);
     }
 
-    .marquee__diamond {
-        background: var(--color-accent);
-        display: inline-block;
-        height: 14px;
-        transform: rotate(45deg);
-        width: 14px;
+    .marquee__track {
+        --marquee-gap: clamp(40px, 6.25vw, 80px);
+        animation: marquee__scroll 28s linear infinite;
+        gap: var(--marquee-gap);
+        width: max-content;
     }
 
-    @keyframes marquee {
+    @keyframes marquee__scroll {
         to {
-            transform: translateX(calc(-50% - 40px));
+            transform: translateX(calc(-50% - var(--marquee-gap) / 2));
         }
     }
 </style>

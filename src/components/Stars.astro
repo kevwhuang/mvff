@@ -2,19 +2,16 @@
 
 ---
 
-<div class="starfield fixed overflow-hidden" aria-hidden="true">
-    <div class="starfield__layer absolute" data-parallax="-0.15"></div>
-    <div class="starfield__layer absolute" data-parallax="-0.35"></div>
-    <div class="starfield__layer absolute" data-parallax="-0.65"></div>
+<div
+    class="fixed inset-0 z-0 overflow-hidden pointer-events-none"
+    aria-hidden="true"
+>
+    <div class="starfield__layer absolute" data-parallax="-0.15" />
+    <div class="starfield__layer absolute" data-parallax="-0.35" />
+    <div class="starfield__layer absolute" data-parallax="-0.65" />
 </div>
 
 <style>
-    .starfield {
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-    }
-
     .starfield__layer {
         backface-visibility: hidden;
         inset: -10%;
@@ -22,64 +19,65 @@
     }
 
     .starfield__layer:nth-child(1) {
-        animation: twinkle 6s ease-in-out infinite alternate;
+        animation: starfield__twinkle 6s ease-in-out infinite alternate;
         background-image:
-            radial-gradient(1.2px 1.2px at 58% 8%, #f4f1ea80, transparent),
-            radial-gradient(1px 1px at 8% 12%, #f4f1eab3, transparent),
-            radial-gradient(1.3px 1.3px at 38% 18%, #f4f1ea99, transparent),
-            radial-gradient(1px 1px at 78% 22%, #f4f1eab3, transparent),
-            radial-gradient(1.1px 1.1px at 22% 28%, #f4f1ea80, transparent),
-            radial-gradient(1px 1px at 92% 35%, #f4f1ea80, transparent),
-            radial-gradient(1.2px 1.2px at 68% 38%, #f4f1ea66, transparent),
-            radial-gradient(1px 1px at 45% 42%, #f4f1ea59, transparent),
-            radial-gradient(1.1px 1.1px at 12% 48%, #f4f1ea99, transparent),
-            radial-gradient(1px 1px at 85% 52%, #f4f1ea80, transparent),
-            radial-gradient(1.3px 1.3px at 32% 62%, #f4f1ea59, transparent),
-            radial-gradient(1px 1px at 75% 65%, #f4f1eab3, transparent),
-            radial-gradient(1.2px 1.2px at 5% 68%, #f4f1ea99, transparent),
-            radial-gradient(1px 1px at 55% 72%, #f4f1ea66, transparent),
-            radial-gradient(1.1px 1.1px at 95% 78%, #f4f1ea80, transparent),
-            radial-gradient(1px 1px at 18% 85%, #f4f1ea99, transparent),
-            radial-gradient(1.3px 1.3px at 65% 88%, #f4f1ea8c, transparent),
-            radial-gradient(1px 1px at 42% 92%, #f4f1ea66, transparent),
-            radial-gradient(1.2px 1.2px at 88% 95%, #f4f1ea99, transparent);
+            radial-gradient(1.2px 1.2px at 58% 8%, var(--color-cream-50), transparent),
+            radial-gradient(1px 1px at 8% 12%, var(--color-cream-70), transparent),
+            radial-gradient(1.3px 1.3px at 38% 18%, var(--color-cream-60), transparent),
+            radial-gradient(1px 1px at 78% 22%, var(--color-cream-70), transparent),
+            radial-gradient(1.1px 1.1px at 22% 28%, var(--color-cream-50), transparent),
+            radial-gradient(1px 1px at 92% 35%, var(--color-cream-50), transparent),
+            radial-gradient(1.2px 1.2px at 68% 38%, var(--color-cream-40), transparent),
+            radial-gradient(1px 1px at 45% 42%, var(--color-cream-35), transparent),
+            radial-gradient(1.1px 1.1px at 12% 48%, var(--color-cream-60), transparent),
+            radial-gradient(1px 1px at 85% 52%, var(--color-cream-50), transparent),
+            radial-gradient(1.3px 1.3px at 32% 62%, var(--color-cream-35), transparent),
+            radial-gradient(1px 1px at 75% 65%, var(--color-cream-70), transparent),
+            radial-gradient(1.2px 1.2px at 5% 68%, var(--color-cream-60), transparent),
+            radial-gradient(1px 1px at 55% 72%, var(--color-cream-40), transparent),
+            radial-gradient(1.1px 1.1px at 95% 78%, var(--color-cream-50), transparent),
+            radial-gradient(1px 1px at 18% 85%, var(--color-cream-60), transparent),
+            radial-gradient(1.3px 1.3px at 65% 88%, var(--color-cream-55), transparent),
+            radial-gradient(1px 1px at 42% 92%, var(--color-cream-40), transparent),
+            radial-gradient(1.2px 1.2px at 88% 95%, var(--color-cream-60), transparent);
         opacity: 0.35;
     }
 
     .starfield__layer:nth-child(2) {
-        animation: twinkle 8s ease-in-out infinite alternate-reverse;
+        animation: starfield__twinkle 8s ease-in-out infinite alternate-reverse;
         background-image:
-            radial-gradient(2px 2px at 15% 10%, #f4f1eacc, transparent),
-            radial-gradient(1.8px 1.8px at 82% 15%, #f4f1eab3, transparent),
-            radial-gradient(2.2px 2.2px at 48% 22%, #f4f1ea99, transparent),
-            radial-gradient(1.8px 1.8px at 38% 35%, #f4f1ea66, transparent),
-            radial-gradient(2px 2px at 8% 42%, #f4f1ea8c, transparent),
-            radial-gradient(2.3px 2.3px at 62% 48%, #f4f1ea66, transparent),
-            radial-gradient(2px 2px at 92% 55%, #f4f1ead9, transparent),
-            radial-gradient(1.8px 1.8px at 25% 68%, #f4f1eaa6, transparent),
-            radial-gradient(2.2px 2.2px at 72% 75%, #f4f1ea8c, transparent),
-            radial-gradient(2px 2px at 88% 85%, #f4f1ea99, transparent),
-            radial-gradient(1.8px 1.8px at 5% 88%, #f4f1ea99, transparent),
-            radial-gradient(2px 2px at 55% 92%, #f4f1eab3, transparent);
+            radial-gradient(2px 2px at 15% 10%, var(--color-cream-80), transparent),
+            radial-gradient(1.8px 1.8px at 82% 15%, var(--color-cream-70), transparent),
+            radial-gradient(2.2px 2.2px at 48% 22%, var(--color-cream-60), transparent),
+            radial-gradient(1.8px 1.8px at 38% 35%, var(--color-cream-40), transparent),
+            radial-gradient(2px 2px at 8% 42%, var(--color-cream-55), transparent),
+            radial-gradient(2.3px 2.3px at 62% 48%, var(--color-cream-40), transparent),
+            radial-gradient(2px 2px at 92% 55%, var(--color-cream-85), transparent),
+            radial-gradient(1.8px 1.8px at 25% 68%, var(--color-cream-65), transparent),
+            radial-gradient(2.2px 2.2px at 72% 75%, var(--color-cream-55), transparent),
+            radial-gradient(2px 2px at 88% 85%, var(--color-cream-60), transparent),
+            radial-gradient(1.8px 1.8px at 5% 88%, var(--color-cream-60), transparent),
+            radial-gradient(2px 2px at 55% 92%, var(--color-cream-70), transparent);
         opacity: 0.55;
     }
 
     .starfield__layer:nth-child(3) {
-        animation: twinkle 10s ease-in-out infinite alternate;
+        animation: starfield__twinkle 10s ease-in-out infinite alternate;
         background-image:
-            radial-gradient(3px 3px at 52% 18%, #f4f1eab3, transparent),
-            radial-gradient(2.8px 2.8px at 10% 25%, #f4f1eabf, transparent),
-            radial-gradient(3.2px 3.2px at 85% 42%, #f4f1eaa6, transparent),
-            radial-gradient(3px 3px at 68% 65%, #f4f1eab3, transparent),
-            radial-gradient(2.8px 2.8px at 22% 72%, #f4f1eabf, transparent),
-            radial-gradient(3px 3px at 92% 88%, #f4f1eabf, transparent);
+            radial-gradient(3px 3px at 52% 18%, var(--color-cream-70), transparent),
+            radial-gradient(2.8px 2.8px at 10% 25%, var(--color-cream-75), transparent),
+            radial-gradient(3.2px 3.2px at 85% 42%, var(--color-cream-65), transparent),
+            radial-gradient(3px 3px at 68% 65%, var(--color-cream-70), transparent),
+            radial-gradient(2.8px 2.8px at 22% 72%, var(--color-cream-75), transparent),
+            radial-gradient(3px 3px at 92% 88%, var(--color-cream-75), transparent);
         opacity: 0.85;
     }
 
-    @keyframes twinkle {
+    @keyframes starfield__twinkle {
         from {
             opacity: 0.3;
         }
+
         to {
             opacity: 1;
         }

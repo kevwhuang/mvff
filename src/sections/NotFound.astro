@@ -7,18 +7,33 @@
     aria-label="Page not found"
 >
     <div>
-        <h1 class="error__glitch" data-text="404">404</h1>
-        <p class="error__sub">This reel jumped the projector. The frame you're looking for isn't on the program.</p>
-        <div class="error__actions flex flex-wrap justify-center">
-            <a class="btn btn--primary" aria-label="Return to home" href="/">← Back to Home</a>
-            <a class="btn" href="/info">See the Schedule</a>
+        <h1
+            class="error__glitch"
+            data-text="404"
+        >
+            404
+        </h1>
+        <p class="error__subtitle">This reel jumped the projector. The frame you're looking for isn't on the program.</p>
+        <div class="flex flex-wrap justify-center gap-3.5">
+            <a
+                class="btn btn--primary"
+                href="/"
+            >
+                &larr; Back to Home
+            </a>
+            <a
+                class="btn"
+                href="/info"
+            >
+                See the Schedule
+            </a>
         </div>
     </div>
 </section>
 
 <style>
     .error {
-        min-height: calc(100vh - 80px);
+        min-height: calc(100vh - 70px);
         padding: 60px 20px;
         position: relative;
     }
@@ -26,66 +41,66 @@
     .error__glitch {
         display: inline-block;
         font-family: var(--font-display);
-        font-size: clamp(120px, 28vw, 380px);
+        font-size: clamp(120px, 29.7vw, 380px);
         letter-spacing: -0.02em;
         line-height: 0.85;
+        margin-bottom: 20px;
         position: relative;
     }
 
-    .error__glitch::before,
-    .error__glitch::after {
+    .error__glitch::after,
+    .error__glitch::before {
         content: attr(data-text);
         inset: 0;
         pointer-events: none;
         position: absolute;
     }
 
-    .error__glitch::before {
-        animation: glitch 3s infinite;
-        clip-path: polygon(0 5%, 100% 5%, 100% 25%, 0 25%);
-        color: var(--color-accent);
-        mix-blend-mode: screen;
-        transform: translate(-4px, 0);
-    }
-
     .error__glitch::after {
-        animation: glitch 2.4s infinite reverse;
+        animation: error__glitch 2.4s ease infinite reverse;
         clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
         color: var(--color-teal);
         mix-blend-mode: screen;
         transform: translate(4px, 0);
     }
 
-    @keyframes glitch {
-        0%,
-        100% {
-            transform: translate(-4px, 0);
-        }
-        20% {
-            transform: translate(4px, -2px);
-        }
-        40% {
-            transform: translate(-2px, 2px);
-        }
-        60% {
-            transform: translate(3px, -1px);
-        }
-        80% {
-            transform: translate(-3px, 1px);
-        }
+    .error__glitch::before {
+        animation: error__glitch 3s ease infinite;
+        clip-path: polygon(0 5%, 100% 5%, 100% 25%, 0 25%);
+        color: var(--color-coral);
+        mix-blend-mode: screen;
+        transform: translate(-4px, 0);
     }
 
-    .error__sub {
+    .error__subtitle {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
         font-size: clamp(20px, 2.6vw, 32px);
         font-style: italic;
-        margin-top: 20px;
+        margin-bottom: 32px;
         max-width: 540px;
     }
 
-    .error__actions {
-        gap: 14px;
-        margin-top: 32px;
+    @keyframes error__glitch {
+        0%,
+        100% {
+            transform: translate(-4px, 0);
+        }
+
+        20% {
+            transform: translate(4px, -2px);
+        }
+
+        40% {
+            transform: translate(-2px, 2px);
+        }
+
+        60% {
+            transform: translate(3px, -1px);
+        }
+
+        80% {
+            transform: translate(-3px, 1px);
+        }
     }
 </style>

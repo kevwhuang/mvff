@@ -1,0 +1,61 @@
+---
+interface Props {
+    headingId: string;
+    level?: 'h1' | 'h2';
+    number: string;
+}
+
+const { headingId, level: Heading = 'h1', number } = Astro.props;
+---
+
+<div class="section__head" data-scroll>
+    <span class="section__number">{number}</span>
+    <Heading
+        id={headingId}
+        class="section__title"
+    >
+        <slot />
+    </Heading>
+    <span class="section__meta">
+        <slot name="meta" />
+    </span>
+</div>
+
+<style>
+    .section__head {
+        align-items: end;
+        border-bottom: 1px solid var(--color-cream-15);
+        display: grid;
+        gap: 12px 24px;
+        grid-template-columns: auto 1fr auto;
+        margin-bottom: clamp(40px, 6vw, 72px);
+        padding-bottom: 18px;
+    }
+
+    .section__meta {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+
+    .section__number {
+        color: var(--color-coral);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+    }
+
+    .section__title {
+        font-size: clamp(40px, 7vw, 88px);
+        line-height: 0.9;
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+        .section__head {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

@@ -1,0 +1,48 @@
+---
+import SectionHead from '@components/SectionHead.astro';
+import { LINKS } from '@lib/utils';
+---
+
+<section
+    class="section"
+    aria-labelledby="terms-title"
+>
+    <div class="shell">
+        <SectionHead
+            headingId="terms-title"
+            number="[ &sect; ]"
+        >
+            Terms of Service
+            <Fragment slot="meta">LAST UPDATED<br /><time datetime="2026-06-10">JUN 10 &middot; 2026</time></Fragment>
+        </SectionHead>
+        <div class="prose">
+            <h2>1. Acceptance</h2>
+            <p>By using atxmusicvideofilmfestival.com (the &ldquo;Site&rdquo;) or attending the ATX Music Video Film Festival (the &ldquo;Event&rdquo;), you agree to these terms. Your use of the Site is also covered by our <a href="/privacy">Privacy Policy</a>. If you do not agree, please do not use the Site or attend the Event.</p>
+            <h2>2. The event</h2>
+            <p>The Event is produced by Madewell Productions (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our&rdquo;) and is scheduled for <time datetime="2026-07-18T19:00-05:00">July 18, 2026, from 7 PM to 2 AM</time> at Cabana Club in Austin, Texas. Event details &mdash; including dates, times, programming, and venue &mdash; are subject to change; material changes will be announced on the Site and our social channels.</p>
+            <h2>3. Entry &amp; conduct</h2>
+            <ul>
+                <li>The Event is 21+ with valid government-issued ID &mdash; no exceptions.</li>
+                <li>Doors open at 7:00 PM; last entry is 11:30 PM; wristband re-entry is permitted until midnight.</li>
+                <li>No outside food or drink &mdash; a full-service bar operates on site.</li>
+                <li>We reserve the right to refuse entry to, or remove, anyone whose behavior endangers others or violates venue rules, without refund.</li>
+            </ul>
+            <h2>4. Tickets &amp; merchandise</h2>
+            <p>Tickets and merchandise are not yet on sale. When they become available, sales will be handled by third-party ticketing and payment providers, and refund, exchange, and transfer terms will be set at the point of sale.</p>
+            <h2>5. Submissions</h2>
+            <p>Music video submissions are handled through FilmFreeway, a third-party platform, under its own terms and the submission guidelines posted there.</p>
+            <h2>6. Photography &amp; recording</h2>
+            <p>The Event is photographed and filmed. By attending, you consent to appearing in photos and recordings that may be used for promotional purposes. Phones and small personal cameras are welcome; professional press and accredited media should reach out in advance through our contact channels.</p>
+            <h2>7. Intellectual property</h2>
+            <p>All Site content &mdash; including the ATX Music Video Film Festival name, logo, and artwork &mdash; is owned by Madewell Productions or its licensors and may not be reproduced without prior written permission.</p>
+            <h2>8. Disclaimer &amp; limitation of liability</h2>
+            <p>The Site and the Event are provided &ldquo;as is&rdquo; and &ldquo;as available.&rdquo; To the fullest extent permitted by law, we disclaim all warranties, express or implied, and are not liable for indirect, incidental, or consequential damages arising from use of the Site or attendance at the Event.</p>
+            <h2>9. Governing law</h2>
+            <p>These terms are governed by the laws of the State of Texas, without regard to its conflict-of-law rules. Disputes will be resolved in the courts of Travis County, Texas.</p>
+            <h2>10. Changes</h2>
+            <p>We may update these terms from time to time; the date above reflects the current version. Material changes will be announced on the Site.</p>
+            <h2>11. Contact</h2>
+            <p>Questions about these terms: <a href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a> or <a href={LINKS.instagram} rel="noopener noreferrer" target="_blank">@atxmvff</a> on Instagram.</p>
+        </div>
+    </div>
+</section>

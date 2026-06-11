@@ -1,14 +1,27 @@
 ---
-import logo from '@images/logos/mvff.webp';
+import { Image } from 'astro:assets';
+
+import logo from '@images/logos/atx_music_video_film_festival.webp';
 ---
 
-<div class="loader fixed flex items-center justify-center" aria-hidden="true">
+<div
+    class="loader fixed flex items-center justify-center"
+    aria-hidden="true"
+>
     <div class="loader__inner text-center">
         <div class="loader__mark">
-            <img alt="MVFF" fetchpriority="high" src={logo.src} />
+            <Image
+                class="h-auto w-full"
+                alt=""
+                densities={[1, 2]}
+                fetchpriority="high"
+                loading="eager"
+                src={logo}
+                width={90}
+            />
         </div>
-        <div class="loader__text">Loading reel · 2026</div>
-        <div class="loader__bar"><div class="loader__progress"></div></div>
+        <div class="loader__text">Loading reel &middot; 2026</div>
+        <div class="loader__bar"><div class="loader__progress" /></div>
     </div>
 </div>
 
@@ -16,7 +29,7 @@ import logo from '@images/logos/mvff.webp';
     .loader {
         background: var(--color-night);
         inset: 0;
-        transition: opacity 0.6s ease, visibility 0.6s ease;
+        transition: opacity var(--duration-slower) ease, visibility var(--duration-slower) ease;
         z-index: 300;
     }
 
@@ -25,41 +38,28 @@ import logo from '@images/logos/mvff.webp';
         visibility: hidden;
     }
 
-    .loader__mark {
-        animation: spinpulse 2s ease-in-out infinite;
-        display: grid;
-        filter: invert(var(--brand-invert, 0));
-        height: 90px;
-        margin: 0 auto 24px;
-        place-items: center;
-        width: 90px;
-    }
-
-    .loader__mark img {
-        width: 100%;
-    }
-
-    .loader__text {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
-        font-size: 11px;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-    }
-
     .loader__bar {
         background: var(--color-cream-15);
         height: 1px;
-        margin: 24px auto 0;
+        margin: 0 auto;
         max-width: 60vw;
         overflow: hidden;
         position: relative;
         width: 280px;
     }
 
+    .loader__mark {
+        animation: loader__pulse 2s ease-in-out infinite;
+        display: grid;
+        height: 90px;
+        margin: 0 auto 24px;
+        place-items: center;
+        width: 90px;
+    }
+
     .loader__progress {
-        animation: loadbar 1.4s ease-in-out infinite;
-        background: var(--color-accent);
+        animation: loader__sweep 1.4s ease-in-out infinite;
+        background: var(--color-coral);
         bottom: 0;
         left: 0;
         position: absolute;
@@ -67,41 +67,47 @@ import logo from '@images/logos/mvff.webp';
         width: 30%;
     }
 
-    @keyframes loadbar {
-        0% {
-            left: -30%;
-        }
-        100% {
-            left: 100%;
+    .loader__text {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.3em;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .loader {
+            display: none;
         }
     }
 
-    @keyframes spinpulse {
+    @keyframes loader__pulse {
         0%,
         100% {
             opacity: 1;
             transform: scale(1);
         }
+
         50% {
             opacity: 0.6;
             transform: scale(1.05);
         }
     }
 
-    @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
-        .loader {
-            display: none;
+    @keyframes loader__sweep {
+        0% {
+            left: -30%;
+        }
+
+        100% {
+            left: 100%;
         }
     }
 </style>
 
 <script is:inline>
-    document.addEventListener('astro:after-swap', function () {
-        const el = document.querySelector('.loader');
-        if (el) el.setAttribute('data-hidden', '');
-    });
-
-    (function () {
+    function initLoader() {
         const FLAG = 'mvff-loaded';
         const MAX_DISPLAY = 6_000;
         const MIN_DISPLAY = 1_100;
@@ -110,14 +116,15 @@ import logo from '@images/logos/mvff.webp';
 
         if (!loader) return;
 
-        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        if (reducedMotion || sessionStorage.getItem(FLAG)) {
+        if (prefersReducedMotion || sessionStorage.getItem(FLAG)) {
             loader.setAttribute('data-hidden', '');
             return;
         }
 
         const start = performance.now();
+
         let hidden = false;
 
         function hide() {
@@ -127,7 +134,7 @@ import logo from '@images/logos/mvff.webp';
             const elapsed = performance.now() - start;
             const remaining = Math.max(0, MIN_DISPLAY - elapsed);
 
-            setTimeout(function () {
+            setTimeout(() => {
                 loader.setAttribute('data-hidden', '');
                 try {
                     sessionStorage.setItem(FLAG, '1');
@@ -143,14 +150,20 @@ import logo from '@images/logos/mvff.webp';
             window.addEventListener('load', hide, { once: true });
         }
 
-        window.addEventListener('pageshow', function (e) {
-            if (e.persisted) hide();
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) hide();
         });
 
-        document.addEventListener('visibilitychange', function () {
+        document.addEventListener('visibilitychange', () => {
             if (!document.hidden && performance.now() - start > MIN_DISPLAY) hide();
         });
 
         setTimeout(hide, MAX_DISPLAY);
-    })();
+    }
+
+    document.addEventListener('astro:after-swap', () => {
+        document.querySelector('.loader')?.setAttribute('data-hidden', '');
+    });
+
+    initLoader();
 </script>

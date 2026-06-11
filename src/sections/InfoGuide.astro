@@ -1,0 +1,313 @@
+---
+import SectionHead from '@components/SectionHead.astro';
+
+const FAQ = [
+    { answer: 'A one-night festival in Austin where music videos take the spotlight \u2014 paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.', question: 'What exactly is the ATX MVFF?' },
+    { answer: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.', question: 'When and where is it happening?' },
+    { answer: 'Submissions are open through FilmFreeway. Head to filmfreeway.com/atxmusicvideofilmfestival to enter \u2014 early-bird, regular, and final deadlines apply.', question: 'How do I submit a music video?' },
+    { answer: 'Yes \u2014 21+ with valid ID. The bar is full-service and the pool party runs late.', question: 'Is there an age requirement?' },
+    { answer: 'Red carpet meets pool party. Dress to be photographed \u2014 and bring a swimsuit if you plan to take a dip after midnight.', question: 'What\'s the dress code?' },
+    { answer: 'Phones and small personal cameras are welcome. Professional press / accredited media \u2014 please reach out in advance via the contact form.', question: 'Can I bring a camera?' },
+    { answer: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.', question: 'Where do I park?' },
+    { answer: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.', question: 'Will there be food and drinks?' },
+];
+
+const PRACTICAL = [
+    '21+ with valid government-issued ID \u2014 no exceptions',
+    'Doors open at 7:00 PM, last entry at 11:30 PM',
+    'No outside food or drink \u2014 full-service bar on site',
+    'Pool access included with all ticket tiers \u2014 bring a suit',
+    'Wristband re-entry permitted up until midnight',
+    'Wheelchair-accessible venue \u2014 email us for any further accommodations',
+];
+
+const SCHEDULE = [
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+    ['TBD', 'Event TBD', 'TBD'],
+];
+---
+
+<section
+    class="info section"
+    aria-labelledby="info-title"
+>
+    <div class="shell">
+        <SectionHead
+            headingId="info-title"
+            number="[ I ]"
+        >
+            Info
+            <Fragment slot="meta">SCHEDULE &middot; VENUE<br />FAQ &middot; PRACTICAL</Fragment>
+        </SectionHead>
+        <div
+            class="info__grid"
+            data-scroll
+            data-scroll-stagger="0.1"
+        >
+            <div>
+                <h2 class="subhead">Run of Show <span class="subhead__badge">7PM &rarr; 2AM</span></h2>
+                <ol class="schedule flex flex-col list-none">
+                    {SCHEDULE.map(([time, event, tag]) => (
+                        <li class="schedule__row">
+                            <span class="schedule__time">{time}</span>
+                            <span class="schedule__event">{event}</span>
+                            <span class="schedule__tag">{tag}</span>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+            <div>
+                <h2 class="subhead">Venue <span class="subhead__badge">CAP 300</span></h2>
+                <div class="venue">
+                    <h3 class="venue__name">Cabana Club</h3>
+                    <address class="venue__address">AUSTIN &middot; TEXAS</address>
+                    <p class="venue__description">Intimate venue, limited to 300 guests. Indoor screening room, outdoor pool area, full-service bar, and a dedicated VIP lounge. Street parking is available, but rideshare is strongly recommended given how late the night runs.</p>
+                    <ul class="venue__features grid list-none">
+                        <li>Indoor screen</li>
+                        <li>Outdoor pool</li>
+                        <li>Full bar</li>
+                        <li>VIP lounge</li>
+                        <li>Red carpet</li>
+                        <li>ADA access</li>
+                    </ul>
+                </div>
+                <h2 class="subhead">Practical <span class="subhead__badge">READ FIRST</span></h2>
+                <ul class="practical flex flex-col list-none">
+                    {PRACTICAL.map(item => (
+                        <li>{item}</li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+        <div class="relative" data-scroll>
+            <h2 class="subhead">Frequently Asked <span class="subhead__badge">{FAQ.length} ENTRIES</span></h2>
+            <div class="faq flex flex-col">
+                {FAQ.map((entry, index) => (
+                    <details
+                        class="faq__item"
+                        name="faq"
+                        open={index === 0}
+                    >
+                        <summary class="faq__question">
+                            <span>{entry.question}</span>
+                            <span
+                                class="faq__icon"
+                                aria-hidden="true"
+                            >
+                                +
+                            </span>
+                        </summary>
+                        <p class="faq__answer">
+                            {entry.answer}
+                        </p>
+                    </details>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .faq__answer {
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
+        font-size: 15px;
+        line-height: 1.55;
+        padding: 0 0 20px;
+    }
+
+    .faq__icon {
+        color: var(--color-coral);
+        font-family: var(--font-mono);
+        font-size: 20px;
+        transition: transform var(--duration-fast) ease;
+    }
+
+    .faq__item {
+        border-bottom: 1px solid var(--color-cream-15);
+    }
+
+    .faq__item[open] .faq__icon {
+        transform: rotate(45deg);
+    }
+
+    .faq__question {
+        align-items: center;
+        color: var(--color-cream);
+        cursor: pointer;
+        display: flex;
+        font-family: var(--font-display);
+        font-size: 20px;
+        gap: 16px;
+        justify-content: space-between;
+        letter-spacing: 0.02em;
+        list-style: none;
+        padding: 18px 0;
+        transition: color var(--duration-fast) ease;
+        user-select: none;
+    }
+
+    .faq__question:active,
+    .faq__question:hover {
+        color: var(--color-coral);
+    }
+
+    .faq__question::-webkit-details-marker {
+        display: none;
+    }
+
+    .info__grid {
+        display: grid;
+        gap: clamp(40px, 6.25vw, 80px);
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: clamp(60px, 8vw, 100px);
+    }
+
+    .practical {
+        gap: 10px;
+    }
+
+    .practical li {
+        align-items: baseline;
+        color: var(--color-cream);
+        display: grid;
+        font-family: var(--font-sans);
+        font-size: 14px;
+        gap: 12px;
+        grid-template-columns: 24px 1fr;
+    }
+
+    .practical li::before {
+        color: var(--color-coral);
+        content: '\25BA';
+        font-size: 10px;
+    }
+
+    .schedule__event {
+        font-family: var(--font-display);
+        font-size: 18px;
+        letter-spacing: 0.02em;
+    }
+
+    .schedule__row {
+        align-items: baseline;
+        border-bottom: 1px solid var(--color-cream-10);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 100px 1fr auto;
+        padding: 14px 0;
+        position: relative;
+        transition: padding var(--duration-fast) ease;
+    }
+
+    .schedule__row:hover {
+        padding-left: 8px;
+    }
+
+    .schedule__row:hover .schedule__time {
+        color: var(--color-coral);
+    }
+
+    .schedule__tag {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    .schedule__time {
+        color: var(--color-cream);
+        font-family: var(--font-mono);
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        transition: color var(--duration-fast) ease;
+    }
+
+    .subhead {
+        align-items: baseline;
+        border-bottom: 1px solid var(--color-cream-15);
+        display: flex;
+        font-family: var(--font-display);
+        font-size: clamp(28px, 3.6vw, 44px);
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .subhead__badge {
+        color: var(--color-coral);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+    }
+
+    .venue {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        margin-bottom: 48px;
+        padding: 28px;
+    }
+
+    .venue__address {
+        color: var(--color-cream-60);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-style: normal;
+        letter-spacing: 0.1em;
+        margin-bottom: 14px;
+    }
+
+    .venue__description {
+        color: var(--color-cream-60);
+        font-family: var(--font-serif);
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 18px;
+    }
+
+    .venue__features {
+        gap: 8px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .venue__features li {
+        align-items: center;
+        color: var(--color-cream);
+        display: flex;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        gap: 8px;
+        letter-spacing: 0.08em;
+    }
+
+    .venue__features li::before {
+        color: var(--color-coral);
+        content: '+';
+        font-weight: 600;
+    }
+
+    .venue__name {
+        font-family: var(--font-display);
+        font-size: 36px;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    @media (max-width: 1024px) {
+        .info__grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

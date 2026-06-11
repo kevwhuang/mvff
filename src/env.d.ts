@@ -2,17 +2,21 @@
 
 declare module 'eslint-plugin-jsx-a11y';
 
+type Direction = 'down' | 'left' | 'right' | 'up';
+
+type Timer = ReturnType<typeof setInterval>;
+
 interface CartItem {
     id: string;
     name: string;
     price: number;
-    qty: number;
+    quantity: number;
 }
 
 interface CountdownParts {
-    d: number;
-    h: number;
-    m: number;
+    days: number;
+    hours: number;
+    minutes: number;
     remaining: number;
-    s: number;
+    seconds: number;
 }

@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+
+import SectionHead from '@components/SectionHead.astro';
 import amiiri from '@images/team/amiiri.webp';
 import anna from '@images/team/anna.webp';
 import ben from '@images/team/ben.webp';
@@ -10,50 +13,75 @@ import marissa from '@images/team/marissa.webp';
 import phillip from '@images/team/phillip.webp';
 import rocky from '@images/team/rocky.webp';
 import sebastian from '@images/team/sebastian.webp';
+import { pad } from '@lib/utils';
 
-const team = [
-    { img: anna, name: 'Anna', role: 'Founder & Director' },
-    { img: rocky, name: 'Rocky', role: 'Film Director' },
-    { img: jasmine, name: 'Jasmine', role: 'Event Coordinator' },
-    { img: jymes, name: 'Jymes', role: 'Talent Programmer' },
-    { img: amiiri, name: 'Amiiri', role: 'Promotions Queen' },
-    { img: donovan, name: 'Donovan', role: 'Social Media Manager' },
-    { img: marissa, name: 'Marissa', role: 'Graphic Designer' },
-    { img: sebastian, name: 'Sebastian', role: 'Community Outreach' },
-    { img: phillip, name: 'Phillip', role: 'Volunteer Coordinator' },
-    { img: killian, name: 'Killian', role: 'Visual Tech' },
-    { img: ben, name: 'Ben', role: 'Audio Tech' },
+const TEAM = [
+    { image: anna, name: 'Anna', role: 'Founder & Director' },
+    { image: rocky, name: 'Rocky', role: 'Film Director' },
+    { image: jasmine, name: 'Jasmine', role: 'Event Coordinator' },
+    { image: jymes, name: 'Jymes', role: 'Talent Programmer' },
+    { image: amiiri, name: 'Amiiri', role: 'Promotions Queen' },
+    { image: donovan, name: 'Donovan', role: 'Social Media Manager' },
+    { image: marissa, name: 'Marissa', role: 'Graphic Designer' },
+    { image: sebastian, name: 'Sebastian', role: 'Community Outreach' },
+    { image: phillip, name: 'Phillip', role: 'Volunteer Coordinator' },
+    { image: killian, name: 'Killian', role: 'Visual Tech' },
+    { image: ben, name: 'Ben', role: 'Audio Tech' },
 ];
 ---
 
 <section
-    class="section"
-    aria-labelledby="roster-heading"
+    class="roster section"
+    aria-labelledby="roster-title"
 >
     <div class="shell">
-        <div class="section__head">
-            <span class="section__num">[ T ]</span>
-            <h1 id="roster-heading" class="section__title">2026 Team</h1>
-            <span class="section__meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</span>
-        </div>
-        <div class="roster__grid">
-            {team.map((member, i) => (
-                <div class="roster__card">
-                    <span class="roster__num">{String(i + 1).padStart(2, '0')}</span>
+        <SectionHead
+            headingId="roster-title"
+            number="[ T ]"
+        >
+            2026 Team
+            <Fragment slot="meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</Fragment>
+        </SectionHead>
+        <ul
+            class="roster__grid list-none"
+            data-scroll
+            data-scroll-stagger="0.05"
+        >
+            {TEAM.map((member, index) => (
+                <li class="roster__card">
+                    <span class="roster__number">{pad(index + 1)}</span>
                     <div class="roster__photo">
-                        <img alt={member.name} loading="lazy" src={member.img.src} />
+                        <Image
+                            class="roster__image"
+                            alt={member.name}
+                            height={250}
+                            loading="lazy"
+                            src={member.image}
+                            width={250}
+                        />
                     </div>
-                    <div class="roster__info">
-                        <span class="roster__name">{member.name}</span>
+                    <div class="flex flex-col gap-1 pb-5 pt-4 px-4.5 border-t border-cream-15">
+                        <h2 class="roster__name">{member.name}</h2>
                         <span class="roster__role">{member.role}</span>
                     </div>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     </div>
 </section>
 
 <style>
+    .roster__card {
+        background: var(--color-navy);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .roster__card:hover .roster__image {
+        filter: grayscale(0) contrast(1.05) brightness(1);
+        transform: scale(1.05);
+    }
+
     .roster__grid {
         background: var(--color-cream-15);
         border: 1px solid var(--color-cream-15);
@@ -62,13 +90,23 @@ const team = [
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 
-    .roster__card {
-        background: var(--color-navy);
-        overflow: hidden;
-        position: relative;
+    .roster__image {
+        filter: grayscale(0.85) contrast(1.1) brightness(0.95);
+        height: 100%;
+        object-fit: cover;
+        transition: filter var(--duration-slow) ease, transform var(--duration-slower) ease;
+        width: 100%;
     }
 
-    .roster__num {
+    .roster__name {
+        font-family: var(--font-display);
+        font-size: 26px;
+        letter-spacing: normal;
+        line-height: 1;
+        margin-bottom: 0;
+    }
+
+    .roster__number {
         color: var(--color-cream);
         font-family: var(--font-mono);
         font-size: 10px;
@@ -87,39 +125,12 @@ const team = [
         position: relative;
     }
 
-    .roster__photo img {
-        filter: grayscale(0.85) contrast(1.1) brightness(0.95);
-        height: 100%;
-        object-fit: cover;
-        transition: filter 0.4s ease, transform 0.6s ease;
-        width: 100%;
-    }
-
-    .roster__card:hover .roster__photo img {
-        filter: grayscale(0) contrast(1.05) brightness(1);
-        transform: scale(1.05);
-    }
-
     .roster__photo::after {
         background: linear-gradient(180deg, transparent 50%, var(--color-black-70) 100%);
         content: '';
         inset: 0;
         pointer-events: none;
         position: absolute;
-    }
-
-    .roster__info {
-        border-top: 1px solid var(--color-cream-15);
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        padding: 16px 18px 20px;
-    }
-
-    .roster__name {
-        font-family: var(--font-display);
-        font-size: 26px;
-        line-height: 1;
     }
 
     .roster__role {
