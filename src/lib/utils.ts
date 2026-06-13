@@ -10,13 +10,17 @@ export const LINKS = {
     email: 'mailto:contact@atxmusicvideofilmfestival.com',
     filmfreeway: 'https://filmfreeway.com/atxmusicvideofilmfestival',
     instagram: 'https://instagram.com/atxmvff',
+    partner: 'https://form.jotform.com/261292517666060',
     pitchDeck: '/atx_music_video_film_festival_pitch_deck.pdf',
+    sponsor: 'https://form.jotform.com/261316235757055',
 } as const;
+
+const STORE_HREF = 'https://shop.atxmusicvideofilmfestival.com';
 
 export const ROUTES = [
     { href: '/', label: 'Home' },
     { href: '/info', label: 'Info' },
-    { href: '/store', label: 'Store' },
+    { href: STORE_HREF, label: 'Store' },
     { href: '/team', label: 'Team' },
     { href: '/gallery', label: 'Gallery' },
     { href: '/contact', label: 'Contact' },

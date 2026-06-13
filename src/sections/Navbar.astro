@@ -40,7 +40,13 @@ import { LINKS, ROUTES } from '@lib/utils';
             <ul class="site-nav__list flex items-center justify-center list-none">
                 {ROUTES.map(route => (
                     <li>
-                        <a class="site-nav__link" href={route.href}>{route.label}</a>
+                        <a
+                            class="site-nav__link"
+                            href={route.href}
+                            target={route.href.startsWith('http') ? '_blank' : undefined}
+                        >
+                            {route.label}
+                        </a>
                     </li>
                 ))}
                 <li class="site-nav__divider" aria-hidden="true" />
@@ -48,7 +54,6 @@ import { LINKS, ROUTES } from '@lib/utils';
                     <a
                         class="site-nav__link"
                         href={LINKS.pitchDeck}
-                        rel="noopener noreferrer"
                         target="_blank"
                     >
                         Pitch Deck &rarr;
@@ -58,7 +63,6 @@ import { LINKS, ROUTES } from '@lib/utils';
                     <a
                         class="site-nav__link"
                         href={LINKS.calendly}
-                        rel="noopener noreferrer"
                         target="_blank"
                     >
                         Schedule a Call &rarr;
@@ -78,10 +82,9 @@ import { LINKS, ROUTES } from '@lib/utils';
             <a
                 class="site-header__submit"
                 href={LINKS.filmfreeway}
-                rel="noopener noreferrer"
                 target="_blank"
             >
-                Submit
+                Submit Video
             </a>
             <button
                 class="nav-toggle"
