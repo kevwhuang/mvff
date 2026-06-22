@@ -11,6 +11,7 @@ export const LINKS = {
     filmfreeway: 'https://filmfreeway.com/atxmusicvideofilmfestival',
     instagram: 'https://instagram.com/atxmvff',
     partner: 'https://form.jotform.com/261292517666060',
+    posh: 'https://posh.vip/e/austin-texas-music-video-film-festival',
     pitchDeck: '/atx_music_video_film_festival_pitch_deck.pdf',
     sponsor: 'https://form.jotform.com/261316235757055',
 } as const;

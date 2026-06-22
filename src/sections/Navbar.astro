@@ -8,23 +8,17 @@ import { LINKS, ROUTES } from '@lib/utils';
 <header class="site-header sticky">
     <div class="shell site-header__inner">
         <a
-            class="flex items-center gap-3.5 no-underline cursor-pointer select-none"
+            class="no-underline cursor-pointer select-none"
             aria-label="ATX MVFF Home"
             href="/"
         >
-            <div class="site-header__brand-mark">
-                <Image
-                    class="block h-auto"
-                    alt=""
-                    densities={[1, 2]}
-                    src={logo}
-                    width={30}
-                />
-            </div>
-            <div class="site-header__brand-text flex flex-col">
-                <span class="site-header__brand-name">ATX MVFF</span>
-                <span class="site-header__brand-tagline">EST. 2026 &middot; AUSTIN TX</span>
-            </div>
+            <Image
+                class="site-header__logo block h-auto"
+                alt=""
+                densities={[1, 2]}
+                src={logo}
+                width={80}
+            />
         </a>
         <nav
             class="site-nav"
@@ -80,11 +74,11 @@ import { LINKS, ROUTES } from '@lib/utils';
                 <span class="site-header__countdown-text">T-00d 00:00:00</span>
             </div>
             <a
-                class="site-header__submit"
-                href={LINKS.filmfreeway}
+                class="site-header__tickets"
+                href={LINKS.posh}
                 target="_blank"
             >
-                Submit Video
+                Buy Tickets
             </a>
             <button
                 class="nav-toggle"
@@ -131,7 +125,7 @@ import { LINKS, ROUTES } from '@lib/utils';
 
     .site-header::before {
         backdrop-filter: blur(14px) saturate(120%);
-        background: color-mix(in oklab, var(--color-night) 72%, transparent);
+        background: color-mix(in oklab, var(--color-night) 88%, transparent);
         content: '';
         inset: 0;
         position: absolute;
@@ -139,34 +133,8 @@ import { LINKS, ROUTES } from '@lib/utils';
         -webkit-backdrop-filter: blur(14px) saturate(120%);
     }
 
-    .site-header__brand-mark {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        display: grid;
-        height: 38px;
-        place-items: center;
-        width: 38px;
-    }
-
-    .site-header__brand-name {
-        color: var(--color-cream);
-        font-family: var(--font-display);
-        font-size: 18px;
-        letter-spacing: 0.03em;
-    }
-
-    .site-header__brand-tagline {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
-        font-size: 9.5px;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        white-space: nowrap;
-    }
-
-    .site-header__brand-text {
-        gap: 3px;
-        line-height: 1;
+    .site-header__logo {
+        margin: -14px 0;
     }
 
     .site-header__countdown {
@@ -176,10 +144,10 @@ import { LINKS, ROUTES } from '@lib/utils';
         color: var(--color-cream);
         display: flex;
         font-family: var(--font-mono);
-        font-size: 11px;
-        gap: 6px;
+        font-size: 13px;
+        gap: 8px;
         letter-spacing: 0.1em;
-        padding: 6px 10px;
+        padding: 10px 14px;
         user-select: none;
     }
 
@@ -188,7 +156,7 @@ import { LINKS, ROUTES } from '@lib/utils';
         display: grid;
         gap: clamp(12px, 3vw, 28px);
         grid-template-columns: auto 1fr auto;
-        padding-block: 14px;
+        padding-block: 18px;
     }
 
     .site-header__pulse {
@@ -200,7 +168,7 @@ import { LINKS, ROUTES } from '@lib/utils';
         width: 6px;
     }
 
-    .site-header__submit {
+    .site-header__tickets {
         background: var(--color-coral);
         border: 1px solid var(--color-coral);
         color: var(--color-night);
@@ -216,11 +184,11 @@ import { LINKS, ROUTES } from '@lib/utils';
         transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease;
     }
 
-    .site-header__submit:active {
+    .site-header__tickets:active {
         transform: translateY(1px);
     }
 
-    .site-header__submit:hover {
+    .site-header__tickets:hover {
         background: var(--color-cream);
         border-color: var(--color-cream);
         color: var(--color-night);
@@ -284,7 +252,7 @@ import { LINKS, ROUTES } from '@lib/utils';
             background: var(--color-night);
             inset: 0;
             overflow-y: auto;
-            padding: 80px 32px 32px;
+            padding: 88px 32px 32px;
             position: fixed;
             transform: translateX(100%);
             transition: transform var(--duration-base) ease, visibility 0s var(--duration-base);
@@ -358,12 +326,6 @@ import { LINKS, ROUTES } from '@lib/utils';
             flex-direction: column;
             gap: 8px;
             justify-content: flex-start;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .site-header__brand-text {
-            display: none;
         }
     }
 

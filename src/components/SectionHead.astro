@@ -8,7 +8,7 @@ interface Props {
 const { headingId, level: Heading = 'h1', number } = Astro.props;
 ---
 
-<div class="section__head" data-scroll>
+<div class="section__head select-none" data-scroll>
     <span class="section__number">{number}</span>
     <Heading
         id={headingId}

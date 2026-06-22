@@ -1,7 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-
-import logo from '@images/logos/atx_music_video_film_festival.webp';
 import { LINKS, ROUTES } from '@lib/utils';
 ---
 
@@ -11,14 +8,7 @@ import { LINKS, ROUTES } from '@lib/utils';
 >
     <div class="shell site-footer__inner">
         <div class="flex flex-col gap-4">
-            <div class="site-footer__mark">
-                <Image
-                    alt="ATX Music Video Film Festival"
-                    densities={[1, 2]}
-                    src={logo}
-                    width={62}
-                />
-            </div>
+            <span class="site-footer__title select-none">ATX MVFF</span>
             <p class="site-footer__tag">An immersive production blending music and film, celebrating artists. One night, one venue, every screen and stage active.</p>
         </div>
         <div class="site-footer__col">
@@ -40,6 +30,14 @@ import { LINKS, ROUTES } from '@lib/utils';
             <h2>Connect</h2>
             <ul class="list-none">
                 <li>
+                    <a
+                        href={LINKS.calendly}
+                        target="_blank"
+                    >
+                        Schedule a Call
+                    </a>
+                </li>
+                <li>
                     <a href={LINKS.email}>Email</a>
                 </li>
                 <li>
@@ -48,6 +46,19 @@ import { LINKS, ROUTES } from '@lib/utils';
                         target="_blank"
                     >
                         Instagram
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="site-footer__col">
+            <h2>Inside</h2>
+            <ul class="list-none">
+                <li>
+                    <a
+                        href={LINKS.pitchDeck}
+                        target="_blank"
+                    >
+                        Pitch Deck
                     </a>
                 </li>
                 <li>
@@ -60,27 +71,6 @@ import { LINKS, ROUTES } from '@lib/utils';
                 </li>
             </ul>
         </div>
-        <div class="site-footer__col">
-            <h2>Inside</h2>
-            <ul class="list-none">
-                <li>
-                    <a
-                        href={LINKS.calendly}
-                        target="_blank"
-                    >
-                        Schedule a Call
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href={LINKS.pitchDeck}
-                        target="_blank"
-                    >
-                        Pitch Deck
-                    </a>
-                </li>
-            </ul>
-        </div>
     </div>
     <div class="shell site-footer__bottom">
         <span>&copy; 2026 ATX Music Video Film Festival. All rights reserved.</span>
@@ -89,9 +79,10 @@ import { LINKS, ROUTES } from '@lib/utils';
             aria-label="Legal"
         >
             <a href="/privacy">Privacy</a>
+            <span aria-hidden="true">&middot;</span>
             <a href="/terms">Terms</a>
         </nav>
-        <span><time datetime="2026-07-18T19:00-05:00">JUL 18 2026</time> &middot; 7PM &rarr; 2AM &middot; CABANA CLUB &middot; AUSTIN TX</span>
+        <span><time datetime="2026-07-18T19:00-05:00">JUL 18 2026</time> &middot; 7PM &rarr; 2AM &middot; CABANA CLUB &middot; AUSTIN, TX</span>
     </div>
 </footer>
 
@@ -150,16 +141,6 @@ import { LINKS, ROUTES } from '@lib/utils';
         margin-bottom: clamp(40px, 5vw, 60px);
     }
 
-    .site-footer__mark {
-        background: var(--color-night);
-        border: 1px solid var(--color-cream-15);
-        display: grid;
-        height: 80px;
-        place-items: center;
-        user-select: none;
-        width: 80px;
-    }
-
     .site-footer__tag {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
@@ -167,6 +148,14 @@ import { LINKS, ROUTES } from '@lib/utils';
         font-style: italic;
         line-height: 1.4;
         max-width: 360px;
+    }
+
+    .site-footer__title {
+        color: var(--color-cream);
+        font-family: var(--font-display);
+        font-size: clamp(36px, 5vw, 52px);
+        letter-spacing: 0.04em;
+        line-height: 1;
     }
 
     @media (max-width: 1024px) {

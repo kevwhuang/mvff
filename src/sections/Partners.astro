@@ -41,33 +41,9 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
                     aria-hidden="true"
                     densities={[1, 2]}
                     src={logoCabanaClub}
-                    width={375}
+                    width={180}
                 />
                 <span>Cabana Club</span>
-            </div>,
-            <div
-                class="marquee__item"
-                aria-hidden="true"
-            >
-                <span class="marquee__diamond" />
-            </div>,
-            <div
-                class="marquee__item"
-                aria-hidden="true"
-            >
-                <span>EST &middot; 2026</span>
-            </div>,
-            <div
-                class="marquee__item"
-                aria-hidden="true"
-            >
-                <span class="marquee__diamond" />
-            </div>,
-            <div
-                class="marquee__item"
-                aria-hidden="true"
-            >
-                <span>AUSTIN TEXAS</span>
             </div>,
             <div
                 class="marquee__item"
@@ -84,7 +60,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
         background: var(--color-navy);
         border-bottom: 1px solid var(--color-cream-15);
         border-top: 1px solid var(--color-cream-15);
-        overflow: hidden;
+        overflow-x: clip;
         padding: clamp(40px, 6vh, 64px) 0;
         position: relative;
         user-select: none;
@@ -99,18 +75,27 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
     }
 
     .marquee__item {
+        align-items: center;
         color: var(--color-cream-60);
+        display: flex;
         font-family: var(--font-display);
         font-size: clamp(40px, 6.25vw, 80px);
         gap: 24px;
         letter-spacing: 0.04em;
+        line-height: 1;
         text-transform: uppercase;
         white-space: nowrap;
     }
 
+    .marquee__item span {
+        transform: translateY(0.08em);
+    }
+
     .marquee__logo {
         height: clamp(40px, 6vw, 70px);
+        object-fit: contain;
         opacity: 0.85;
+        vertical-align: middle;
         width: auto;
     }
 
@@ -120,6 +105,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
 
     .marquee__track {
         --marquee-gap: clamp(40px, 6.25vw, 80px);
+        align-items: center;
         animation: marquee__scroll 28s linear infinite;
         gap: var(--marquee-gap);
         width: max-content;
