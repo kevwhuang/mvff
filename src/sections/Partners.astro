@@ -6,13 +6,14 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
 ---
 
 <section
-    class="marquee"
+    class="marquee relative select-none"
     aria-label="Partners"
+    data-scroll
 >
     <div class="marquee__track flex items-center">
         {Array.from({ length: 2 }).flatMap((_, copy) => [
             <div
-                class="marquee__item flex items-center"
+                class="marquee__item flex items-center whitespace-nowrap"
                 aria-hidden={copy > 0 ? 'true' : undefined}
             >
                 <Image
@@ -26,13 +27,13 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
                 <span>Madewell Productions</span>
             </div>,
             <div
-                class="marquee__item"
+                class="marquee__item flex items-center"
                 aria-hidden="true"
             >
-                <span class="marquee__diamond" />
+                <span class="marquee__diamond inline-block" />
             </div>,
             <div
-                class="marquee__item flex items-center"
+                class="marquee__item flex items-center whitespace-nowrap"
                 aria-hidden={copy > 0 ? 'true' : undefined}
             >
                 <Image
@@ -46,10 +47,10 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
                 <span>Cabana Club</span>
             </div>,
             <div
-                class="marquee__item"
+                class="marquee__item flex items-center"
                 aria-hidden="true"
             >
-                <span class="marquee__diamond" />
+                <span class="marquee__diamond inline-block" />
             </div>,
         ])}
     </div>
@@ -61,30 +62,25 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
         border-bottom: 1px solid var(--color-cream-15);
         border-top: 1px solid var(--color-cream-15);
         overflow-x: clip;
-        padding: clamp(40px, 6vh, 64px) 0;
-        position: relative;
-        user-select: none;
+        padding: clamp(48px, 6vw, 80px) 0;
     }
 
     .marquee__diamond {
+        aspect-ratio: 1;
         background: var(--color-coral);
-        display: inline-block;
-        height: 14px;
-        transform: rotate(45deg);
+        flex-shrink: 0;
+        rotate: 45deg;
         width: 14px;
     }
 
     .marquee__item {
-        align-items: center;
         color: var(--color-cream-60);
-        display: flex;
         font-family: var(--font-display);
         font-size: clamp(40px, 6.25vw, 80px);
-        gap: 24px;
+        gap: 32px;
         letter-spacing: 0.04em;
         line-height: 1;
         text-transform: uppercase;
-        white-space: nowrap;
     }
 
     .marquee__item span {
@@ -105,10 +101,15 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
 
     .marquee__track {
         --marquee-gap: clamp(40px, 6.25vw, 80px);
-        align-items: center;
         animation: marquee__scroll 28s linear infinite;
         gap: var(--marquee-gap);
         width: max-content;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .marquee__track {
+            animation: none;
+        }
     }
 
     @keyframes marquee__scroll {

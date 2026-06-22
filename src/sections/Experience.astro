@@ -22,7 +22,6 @@ const HIGHLIGHTS = [
             number="[ 02 ]"
         >
             The Experience
-            <Fragment slot="meta">FIVE ACTS / ONE NIGHT</Fragment>
         </SectionHead>
         <ol
             class="list-none"
@@ -30,7 +29,7 @@ const HIGHLIGHTS = [
             data-scroll-stagger="0.08"
         >
             {HIGHLIGHTS.map((highlight, index) => (
-                <li class="highlight">
+                <li class="highlight grid isolate relative items-baseline">
                     <span class="highlight__number select-none">/ {pad(index + 1)}</span>
                     <h3 class="highlight__title">{highlight.title}</h3>
                     <p class="highlight__description">{highlight.description}</p>
@@ -42,14 +41,10 @@ const HIGHLIGHTS = [
 
 <style>
     .highlight {
-        align-items: baseline;
         border-bottom: 1px solid var(--color-cream-15);
-        display: grid;
         gap: clamp(16px, 3.13vw, 40px);
         grid-template-columns: 80px 1fr 1.2fr;
-        isolation: isolate;
-        padding: clamp(28px, 4vw, 44px) 0;
-        position: relative;
+        padding: clamp(32px, 4vw, 48px) 0;
     }
 
     .highlight:first-child {
@@ -99,12 +94,16 @@ const HIGHLIGHTS = [
 
     @media (max-width: 768px) {
         .highlight {
-            gap: 14px;
-            grid-template-columns: 40px 1fr;
+            gap: 16px;
+            grid-template-columns: 1fr;
         }
 
         .highlight__description {
-            grid-column: 2 / -1;
+            grid-column: 1 / -1;
+        }
+
+        .highlight__number {
+            display: none;
         }
     }
 </style>

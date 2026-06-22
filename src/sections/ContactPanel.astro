@@ -13,19 +13,19 @@ import { LINKS } from '@lib/utils';
             number="[ C ]"
         >
             Contact
-            <Fragment slot="meta">AUSTIN &middot; TX</Fragment>
         </SectionHead>
         <div
-            class="contact"
+            class="contact grid items-start"
             data-scroll
             data-scroll-stagger="0.1"
         >
-            <form class="contact__form flex flex-col gap-4.5">
-                <div class="contact__banner" aria-live="polite" />
+            <form class="contact__form flex flex-col gap-5">
+                <div class="contact__banner flex items-center absolute" aria-live="polite" />
                 <label class="flex flex-col">
                     <span class="label">Name</span>
                     <input
                         class="input"
+                        autocomplete="name"
                         name="name"
                         placeholder="Your name"
                         required
@@ -36,6 +36,7 @@ import { LINKS } from '@lib/utils';
                     <span class="label">Email</span>
                     <input
                         class="input"
+                        autocomplete="email"
                         name="email"
                         placeholder="you@domain.com"
                         required
@@ -69,13 +70,13 @@ import { LINKS } from '@lib/utils';
             </form>
             <aside class="flex flex-col gap-8">
                 <div>
-                    <h2 class="subhead">Direct Channels</h2>
+                    <h2 class="subhead flex items-baseline justify-between">Direct Channels</h2>
                     <dl>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Email</dt>
                             <dd class="contact__line-value"><a href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a></dd>
                         </div>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Instagram</dt>
                             <dd class="contact__line-value">
                                 <a
@@ -86,7 +87,7 @@ import { LINKS } from '@lib/utils';
                                 </a>
                             </dd>
                         </div>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Tickets</dt>
                             <dd class="contact__line-value">
                                 <a
@@ -97,7 +98,7 @@ import { LINKS } from '@lib/utils';
                                 </a>
                             </dd>
                         </div>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Pitch</dt>
                             <dd class="contact__line-value">
                                 <a
@@ -108,7 +109,7 @@ import { LINKS } from '@lib/utils';
                                 </a>
                             </dd>
                         </div>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Call</dt>
                             <dd class="contact__line-value">
                                 <a
@@ -122,13 +123,13 @@ import { LINKS } from '@lib/utils';
                     </dl>
                 </div>
                 <div>
-                    <h2 class="subhead">Founder</h2>
+                    <h2 class="subhead flex items-baseline justify-between">Founder</h2>
                     <dl>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Director</dt>
                             <dd class="contact__line-value">Anna Madewell</dd>
                         </div>
-                        <div class="contact__line">
+                        <div class="contact__line grid items-baseline">
                             <dt class="contact__line-label">Studio</dt>
                             <dd class="contact__line-value">Madewell Productions</dd>
                         </div>
@@ -141,21 +142,16 @@ import { LINKS } from '@lib/utils';
 
 <style>
     .contact {
-        align-items: start;
-        display: grid;
         gap: clamp(40px, 6.25vw, 80px);
         grid-template-columns: 1fr 1fr;
     }
 
     .contact__banner {
-        align-items: center;
         color: var(--color-night);
-        display: flex;
         font-family: var(--font-mono);
         font-size: 12px;
         gap: 12px;
         letter-spacing: 0.14em;
-        position: absolute;
         text-transform: uppercase;
     }
 
@@ -163,17 +159,15 @@ import { LINKS } from '@lib/utils';
         animation: contact__slide-in var(--duration-base) ease;
         background: var(--color-coral);
         margin-bottom: 8px;
-        padding: 14px 18px;
+        padding: 16px 24px;
         position: static;
     }
 
     .contact__line {
-        align-items: baseline;
         border-bottom: 1px solid var(--color-cream-15);
-        display: grid;
         gap: 16px;
         grid-template-columns: 100px 1fr;
-        padding: 14px 0;
+        padding: 16px 0;
         transition: padding var(--duration-fast) ease;
     }
 
@@ -241,7 +235,7 @@ import { LINKS } from '@lib/utils';
 
     function handleSubmit(event: SubmitEvent, banner: Element, form: HTMLFormElement) {
         event.preventDefault();
-        banner.textContent = '\u2713 MESSAGE SENT \u2014 WE\'LL BE IN TOUCH SHORTLY';
+        banner.textContent = '\u2713 Message sent \u2014 we\'ll be in touch shortly';
         banner.setAttribute('data-visible', '');
         form.reset();
         clearTimeout(bannerTimeout);

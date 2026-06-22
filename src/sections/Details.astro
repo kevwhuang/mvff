@@ -13,26 +13,25 @@ import SectionHead from '@components/SectionHead.astro';
             number="[ 01 ]"
         >
             The Coordinates
-            <Fragment slot="meta">CABANA CLUB / AUSTIN TX<br />SAT &middot; JUL 18 &middot; 2026</Fragment>
         </SectionHead>
         <dl
-            class="details__grid"
+            class="details__grid grid"
             data-scroll
             data-scroll-stagger="0.12"
         >
-            <div class="details__cell">
-                <dt class="details__label">Venue</dt>
+            <div class="details__cell flex flex-col cursor-default relative">
+                <dt class="details__label select-none">Venue</dt>
                 <dd class="details__value">Cabana Club</dd>
-                <dd class="details__note">Indoor screening room, outdoor pool, full bar.</dd>
+                <dd class="details__note">11703 Manchaca Rd, Austin, TX</dd>
             </div>
-            <div class="details__cell">
-                <dt class="details__label">Date</dt>
+            <div class="details__cell flex flex-col cursor-default relative">
+                <dt class="details__label select-none">Date</dt>
                 <dd class="details__value"><time datetime="2026-07-18">July 18</time></dd>
                 <dd class="details__note">Saturday night, 2026.</dd>
             </div>
-            <div class="details__cell">
-                <dt class="details__label">Time</dt>
-                <dd class="details__value">7 PM &rarr; 2 AM</dd>
+            <div class="details__cell flex flex-col cursor-default relative">
+                <dt class="details__label select-none">Time</dt>
+                <dd class="details__value">7 PM &ndash; 2 AM</dd>
                 <dd class="details__note">Seven hours, twelve acts.</dd>
             </div>
         </dl>
@@ -42,12 +41,8 @@ import SectionHead from '@components/SectionHead.astro';
 <style>
     .details__cell {
         border-right: 1px solid var(--color-cream-15);
-        cursor: default;
-        display: flex;
-        flex-direction: column;
         gap: 12px;
-        padding: clamp(28px, 4vw, 48px);
-        position: relative;
+        padding: clamp(32px, 4vw, 48px);
         transition: background var(--duration-fast) ease;
     }
 
@@ -62,7 +57,6 @@ import SectionHead from '@components/SectionHead.astro';
     .details__grid {
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
-        display: grid;
         grid-template-columns: repeat(3, 1fr);
     }
 
@@ -86,6 +80,8 @@ import SectionHead from '@components/SectionHead.astro';
         font-size: clamp(30px, 3.75vw, 48px);
         line-height: 1;
         margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
     }
 

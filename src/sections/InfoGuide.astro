@@ -47,18 +47,17 @@ const SCHEDULE = [
             number="[ I ]"
         >
             Info
-            <Fragment slot="meta">SCHEDULE &middot; VENUE<br />FAQ &middot; PRACTICAL</Fragment>
         </SectionHead>
         <div
-            class="info__grid"
+            class="info__grid grid"
             data-scroll
             data-scroll-stagger="0.1"
         >
             <div>
-                <h2 class="subhead">Run of Show <span class="subhead__badge">7PM &rarr; 2AM</span></h2>
+                <h2 class="subhead flex items-baseline justify-between">Run of Show <span class="subhead__badge">7pm &ndash; 2am</span></h2>
                 <ol class="schedule flex flex-col list-none">
                     {SCHEDULE.map(([time, event, tag]) => (
-                        <li class="schedule__row">
+                        <li class="schedule__row grid items-baseline relative">
                             <span class="schedule__time">{time}</span>
                             <span class="schedule__event">{event}</span>
                             <span class="schedule__tag">{tag}</span>
@@ -67,10 +66,10 @@ const SCHEDULE = [
                 </ol>
             </div>
             <div>
-                <h2 class="subhead">Venue <span class="subhead__badge">CAP 300</span></h2>
+                <h2 class="subhead flex items-baseline justify-between">Venue <span class="subhead__badge">Cap 300</span></h2>
                 <div class="venue">
                     <h3 class="venue__name">Cabana Club</h3>
-                    <address class="venue__address">AUSTIN &middot; TEXAS</address>
+                    <span class="venue__address">Austin &middot; Texas</span>
                     <p class="venue__description">Intimate venue, limited to 300 guests. Indoor screening room, outdoor pool area, full-service bar, and a dedicated VIP lounge. Street parking is available, but rideshare is strongly recommended given how late the night runs.</p>
                     <ul class="venue__features grid list-none">
                         <li>Indoor screen</li>
@@ -81,7 +80,7 @@ const SCHEDULE = [
                         <li>ADA access</li>
                     </ul>
                 </div>
-                <h2 class="subhead">Practical <span class="subhead__badge">READ FIRST</span></h2>
+                <h2 class="subhead flex items-baseline justify-between">Practical <span class="subhead__badge">Read First</span></h2>
                 <ul class="practical flex flex-col list-none">
                     {PRACTICAL.map(item => (
                         <li>{item}</li>
@@ -90,7 +89,7 @@ const SCHEDULE = [
             </div>
         </div>
         <div class="relative" data-scroll>
-            <h2 class="subhead">Frequently Asked <span class="subhead__badge">{FAQ.length} ENTRIES</span></h2>
+            <h2 class="subhead flex items-baseline justify-between">Frequently Asked <span class="subhead__badge">{FAQ.length} Entries</span></h2>
             <div class="faq flex flex-col">
                 {FAQ.map((entry, index) => (
                     <details
@@ -98,7 +97,7 @@ const SCHEDULE = [
                         name="faq"
                         open={index === 0}
                     >
-                        <summary class="faq__question">
+                        <summary class="faq__question flex items-center cursor-pointer justify-between select-none">
                             <span>{entry.question}</span>
                             <span
                                 class="faq__icon"
@@ -123,7 +122,7 @@ const SCHEDULE = [
         font-family: var(--font-serif);
         font-size: 15px;
         line-height: 1.55;
-        padding: 0 0 20px;
+        padding: 0 0 24px;
     }
 
     .faq__icon {
@@ -142,19 +141,14 @@ const SCHEDULE = [
     }
 
     .faq__question {
-        align-items: center;
         color: var(--color-cream);
-        cursor: pointer;
-        display: flex;
         font-family: var(--font-display);
         font-size: 20px;
         gap: 16px;
-        justify-content: space-between;
         letter-spacing: 0.02em;
         list-style: none;
-        padding: 18px 0;
+        padding: 16px 0;
         transition: color var(--duration-fast) ease;
-        user-select: none;
     }
 
     .faq__question:active,
@@ -167,14 +161,13 @@ const SCHEDULE = [
     }
 
     .info__grid {
-        display: grid;
         gap: clamp(40px, 6.25vw, 80px);
         grid-template-columns: 1fr 1fr;
-        margin-bottom: clamp(60px, 8vw, 100px);
+        margin-bottom: clamp(64px, 8vw, 96px);
     }
 
     .practical {
-        gap: 10px;
+        gap: 12px;
     }
 
     .practical li {
@@ -200,13 +193,10 @@ const SCHEDULE = [
     }
 
     .schedule__row {
-        align-items: baseline;
         border-bottom: 1px solid var(--color-cream-10);
-        display: grid;
-        gap: 18px;
-        grid-template-columns: 100px 1fr auto;
-        padding: 14px 0;
-        position: relative;
+        gap: 16px;
+        grid-template-columns: clamp(64px, 12vw, 100px) 1fr auto;
+        padding: 16px 0;
         transition: padding var(--duration-fast) ease;
     }
 
@@ -235,12 +225,9 @@ const SCHEDULE = [
     }
 
     .subhead {
-        align-items: baseline;
         border-bottom: 1px solid var(--color-cream-15);
-        display: flex;
         font-family: var(--font-display);
         font-size: clamp(28px, 3.6vw, 44px);
-        justify-content: space-between;
         margin-bottom: 24px;
         padding-bottom: 12px;
         text-transform: uppercase;
@@ -257,16 +244,16 @@ const SCHEDULE = [
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
         margin-bottom: 48px;
-        padding: 28px;
+        padding: 32px;
     }
 
     .venue__address {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
         font-size: 12px;
-        font-style: normal;
         letter-spacing: 0.1em;
-        margin-bottom: 14px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
     }
 
     .venue__description {
@@ -274,7 +261,7 @@ const SCHEDULE = [
         font-family: var(--font-serif);
         font-size: 15px;
         line-height: 1.5;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
     }
 
     .venue__features {
@@ -300,14 +287,21 @@ const SCHEDULE = [
 
     .venue__name {
         font-family: var(--font-display);
-        font-size: 36px;
+        font-size: clamp(28px, 5vw, 36px);
         line-height: 1;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
 
     @media (max-width: 1024px) {
         .info__grid {
             grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .schedule__row {
+            gap: 8px;
+            grid-template-columns: 70px 1fr auto;
         }
     }
 </style>

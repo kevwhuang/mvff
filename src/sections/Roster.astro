@@ -40,17 +40,16 @@ const TEAM = [
             number="[ T ]"
         >
             2026 Team
-            <Fragment slot="meta">11 CREDITS<br />FOUNDED BY ANNA MADEWELL</Fragment>
         </SectionHead>
         <ul
-            class="roster__grid list-none"
+            class="roster__grid grid list-none"
             data-scroll
             data-scroll-stagger="0.05"
         >
             {TEAM.map((member, index) => (
-                <li class="roster__card">
-                    <span class="roster__number">{pad(index + 1)}</span>
-                    <div class="roster__photo">
+                <li class="roster__card overflow-hidden relative">
+                    <span class="roster__number absolute select-none">{pad(index + 1)}</span>
+                    <div class="roster__photo overflow-hidden relative">
                         <Image
                             class="roster__image"
                             alt={member.name}
@@ -60,7 +59,7 @@ const TEAM = [
                             width={250}
                         />
                     </div>
-                    <div class="flex flex-col gap-1 pb-5 pt-4 px-4.5 border-t border-cream-15">
+                    <div class="flex flex-col gap-1 pb-6 pt-4 px-4 border-t border-cream-15">
                         <h2 class="roster__name">{member.name}</h2>
                         <span class="roster__role">{member.role}</span>
                     </div>
@@ -73,8 +72,6 @@ const TEAM = [
 <style>
     .roster__card {
         background: var(--color-navy);
-        overflow: hidden;
-        position: relative;
     }
 
     .roster__card:hover .roster__image {
@@ -85,7 +82,6 @@ const TEAM = [
     .roster__grid {
         background: var(--color-cream-15);
         border: 1px solid var(--color-cream-15);
-        display: grid;
         gap: 1px;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
@@ -113,7 +109,6 @@ const TEAM = [
         left: 12px;
         letter-spacing: 0.16em;
         mix-blend-mode: difference;
-        position: absolute;
         top: 10px;
         z-index: 2;
     }
@@ -121,8 +116,6 @@ const TEAM = [
     .roster__photo {
         aspect-ratio: 4 / 5;
         background: var(--color-slate);
-        overflow: hidden;
-        position: relative;
     }
 
     .roster__photo::after {

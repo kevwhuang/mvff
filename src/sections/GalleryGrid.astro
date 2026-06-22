@@ -34,17 +34,16 @@ const items = PALETTE.map((gradient, index) => ({
             number="[ G ]"
         >
             Gallery
-            <Fragment slot="meta">15 STILLS</Fragment>
         </SectionHead>
         <ul
-            class="gallery__grid list-none"
+            class="gallery__grid grid list-none"
             data-scroll
             data-scroll-stagger="0.04"
         >
             {items.map(item => (
-                <li class:list={['gallery__cell', `gallery__cell--${item.span}`]}>
+                <li class:list={['gallery__cell grid', `gallery__cell--${item.span}`]}>
                     <button
-                        class="gallery__tile"
+                        class="gallery__tile cursor-pointer overflow-hidden relative text-left"
                         aria-label={`View ${item.title}`}
                         data-gallery-block={item.block}
                         data-gallery-gradient={item.gradient}
@@ -56,7 +55,7 @@ const items = PALETTE.map((gradient, index) => ({
                             class="gallery__tile-image"
                             style={`background: ${item.gradient};`}
                         />
-                        <span class="gallery__tile-meta">
+                        <span class="gallery__tile-meta flex justify-between absolute select-none">
                             <span>{item.title}</span>
                             <span>{item.block}</span>
                         </span>
@@ -67,15 +66,15 @@ const items = PALETTE.map((gradient, index) => ({
     </div>
 </section>
 <div
-    class="lightbox"
+    class="lightbox fixed"
     aria-hidden="true"
     aria-labelledby="lightbox-title"
     aria-modal="true"
     role="dialog"
 >
-    <div class="lightbox__inner">
+    <div class="lightbox__inner cursor-default grid relative">
         <button
-            class="lightbox__close"
+            class="lightbox__close cursor-pointer absolute"
             aria-label="Close lightbox"
             type="button"
         >
@@ -83,19 +82,15 @@ const items = PALETTE.map((gradient, index) => ({
         </button>
         <div class="lightbox__image" />
         <div class="lightbox__info flex flex-col">
-            <div class="lightbox__meta" />
-            <h2 id="lightbox-title">&nbsp;</h2>
+            <div class="lightbox__meta lightbox__meta--dynamic" />
+            <h2 id="lightbox-title" aria-hidden="true">&nbsp;</h2>
             <p>Gallery content coming soon.</p>
-            <div class="lightbox__meta">SHOT BY ATX MVFF MEDIA TEAM</div>
+            <div class="lightbox__meta">Shot by ATX MVFF Media Team</div>
         </div>
     </div>
 </div>
 
 <style>
-    .gallery__cell {
-        display: grid;
-    }
-
     .gallery__cell--normal {
         grid-column: span 3;
         grid-row: span 3;
@@ -107,7 +102,6 @@ const items = PALETTE.map((gradient, index) => ({
     }
 
     .gallery__grid {
-        display: grid;
         gap: 12px;
         grid-auto-flow: dense;
         grid-auto-rows: 80px;
@@ -118,12 +112,8 @@ const items = PALETTE.map((gradient, index) => ({
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
         color: inherit;
-        cursor: pointer;
         font: inherit;
-        overflow: hidden;
         padding: 0;
-        position: relative;
-        text-align: left;
         transition: transform var(--duration-base) ease;
     }
 
@@ -157,15 +147,12 @@ const items = PALETTE.map((gradient, index) => ({
         background: linear-gradient(transparent, var(--color-black-85));
         bottom: 0;
         color: var(--color-cream);
-        display: flex;
         font-family: var(--font-mono);
         font-size: 10px;
-        justify-content: space-between;
         left: 0;
         letter-spacing: 0.14em;
         opacity: 0;
-        padding: 12px 14px;
-        position: absolute;
+        padding: 12px 16px;
         right: 0;
         transition: opacity var(--duration-fast) ease;
     }
@@ -177,9 +164,8 @@ const items = PALETTE.map((gradient, index) => ({
         cursor: zoom-out;
         display: none;
         inset: 0;
-        padding: clamp(20px, 5vw, 60px);
+        padding: clamp(24px, 5vw, 64px);
         place-items: center;
-        position: fixed;
         z-index: 200;
         -webkit-backdrop-filter: blur(8px);
     }
@@ -192,10 +178,8 @@ const items = PALETTE.map((gradient, index) => ({
         background: none;
         border: 1px solid var(--color-cream);
         color: var(--color-cream);
-        cursor: pointer;
         font-family: var(--font-mono);
         height: 32px;
-        position: absolute;
         right: 0;
         top: -40px;
         transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
@@ -228,7 +212,7 @@ const items = PALETTE.map((gradient, index) => ({
 
     .lightbox__info h2 {
         font-family: var(--font-display);
-        font-size: 36px;
+        font-size: clamp(24px, 5vw, 36px);
     }
 
     .lightbox__info p {
@@ -240,12 +224,9 @@ const items = PALETTE.map((gradient, index) => ({
     }
 
     .lightbox__inner {
-        cursor: default;
-        display: grid;
         gap: 32px;
         grid-template-columns: 1fr 280px;
         max-width: 1100px;
-        position: relative;
         width: 100%;
     }
 
@@ -261,6 +242,23 @@ const items = PALETTE.map((gradient, index) => ({
         .gallery__grid {
             grid-auto-rows: 44px;
             grid-template-columns: repeat(6, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .gallery__grid {
+            grid-auto-rows: 52px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .gallery__cell--normal {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery__cell--wide {
+            grid-column: span 4;
+            grid-row: span 2;
         }
 
         .lightbox__inner {
@@ -326,13 +324,14 @@ const items = PALETTE.map((gradient, index) => ({
     function openLightbox(tile: HTMLElement) {
         const image = document.querySelector<HTMLElement>('.lightbox__image');
         const lightbox = document.querySelector('.lightbox');
-        const meta = document.querySelector('.lightbox__meta');
+        const meta = document.querySelector('.lightbox__meta--dynamic');
         const title = document.getElementById('lightbox-title');
 
         if (!image || !lightbox || !meta || !title) return;
 
         image.style.background = tile.dataset.galleryGradient || '';
         title.textContent = tile.dataset.galleryTitle || '';
+        title.removeAttribute('aria-hidden');
         meta.textContent = `${tile.dataset.galleryBlock} \u00b7 ${tile.dataset.galleryYear}`;
         lastTile = tile;
         lightbox.setAttribute('data-active', '');

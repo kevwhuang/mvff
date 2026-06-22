@@ -11,7 +11,7 @@ const UNITS = [
 ---
 
 <section
-    class="hero overflow-hidden relative"
+    class="hero grid isolate overflow-hidden relative"
     aria-labelledby="hero-title"
 >
     <div
@@ -33,7 +33,7 @@ const UNITS = [
     <div class="hero__frame-bottom-left absolute" aria-hidden="true" />
     <div class="hero__frame-bottom-right absolute" aria-hidden="true" />
     <ul
-        class="hero__countdown list-none"
+        class="hero__countdown hero__reveal grid absolute select-none text-right list-none"
         aria-label="Event countdown"
         role="timer"
     >
@@ -50,40 +50,27 @@ const UNITS = [
         ))}
     </ul>
     <div class="hero__content shell relative">
-        <div
-            class="hero__meta flex flex-wrap items-center"
-            data-scroll
-        >
-            <span class="hero__meta-item">VOL. 01 / EST. 2026</span>
-            <span class="hero__meta-item">Cabana Club &middot; Austin TX</span>
-            <span class="hero__meta-item"><time datetime="2026-07-18T19:00-05:00">07 &middot; 18 &middot; 2026 &mdash; 19:00 CDT</time></span>
+        <div class="hero__meta hero__reveal flex flex-wrap items-center">
+            <span class="hero__meta-item flex items-center select-none">Vol. 01</span>
+            <span class="hero__meta-item flex items-center select-none"><time datetime="2026-07-18">July 18, 2026</time></span>
+            <span class="hero__meta-item flex items-center select-none">Cabana Club &middot; Austin, TX</span>
         </div>
         <h1
             id="hero-title"
-            class="hero__title"
-            data-scroll
-            data-scroll-delay="0.1"
+            class="hero__title hero__reveal"
         >
-            Music<br />Video<br />Film <span class="hero__title-fest">Fest</span>
+            Austin<br />Music Video<br />Film <span class="hero__title-fest">Fest</span>
         </h1>
-        <p
-            class="hero__subtitle"
-            data-scroll
-            data-scroll-delay="0.2"
-        >
-            One night where Austin's music and film worlds collide. Twelve programmed acts, four screening blocks, one pool party.
+        <p class="hero__subtitle hero__reveal">
+            Where Austin's music and film worlds collide. Live acts, screening blocks, awards, and a pool party, all under one roof.
         </p>
-        <div
-            class="flex flex-wrap items-center gap-3.5"
-            data-scroll
-            data-scroll-delay="0.3"
-        >
+        <div class="hero__reveal flex flex-wrap items-center gap-4">
             <a
                 class="btn btn--primary"
                 href={LINKS.sponsor}
                 target="_blank"
             >
-                Sponsor Us &rarr;
+                Sponsor Us
             </a>
             <a
                 class="btn"
@@ -98,10 +85,8 @@ const UNITS = [
 
 <style>
     .hero {
-        align-items: end;
-        display: grid;
-        isolation: isolate;
-        min-height: calc(100vh - 70px);
+        align-items: center;
+        height: calc(100svh - var(--header-height));
     }
 
     .hero__background {
@@ -126,24 +111,59 @@ const UNITS = [
     }
 
     .hero__content {
-        padding-bottom: clamp(40px, 8vh, 90px);
+        padding-block: clamp(32px, 4vw, 48px);
+    }
+
+    .hero__reveal {
+        animation: hero__fade-up 0.6s ease both;
+        opacity: 0;
+    }
+
+    .hero__reveal:nth-child(1) {
+        animation-delay: 0.15s;
+    }
+
+    .hero__reveal:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    .hero__reveal:nth-child(3) {
+        animation-delay: 0.7s;
+    }
+
+    .hero__reveal:nth-child(4) {
+        animation-delay: 1s;
+    }
+
+    @keyframes hero__fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero .btn {
+        font-size: 13px;
+        padding: 16px 32px;
     }
 
     .hero__countdown {
-        display: grid;
-        gap: 18px;
+        animation-delay: 0.4s;
+        gap: 24px;
         grid-template-columns: repeat(4, 1fr);
-        position: absolute;
         right: var(--shell-pad);
-        text-align: right;
         top: 60px;
-        user-select: none;
     }
 
     .hero__countdown-label {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.2em;
         text-transform: uppercase;
     }
@@ -151,9 +171,9 @@ const UNITS = [
     .hero__countdown-number {
         color: var(--color-cream);
         font-family: var(--font-display);
-        font-size: clamp(28px, 4.4vw, 56px);
+        font-size: clamp(36px, 5.5vw, 72px);
         line-height: 0.9;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
     }
 
     .hero__frame-bottom-left,
@@ -199,9 +219,7 @@ const UNITS = [
     }
 
     .hero__meta-item {
-        align-items: center;
         color: var(--color-cream-60);
-        display: flex;
         font-family: var(--font-mono);
         font-size: 11px;
         gap: 8px;
@@ -232,7 +250,7 @@ const UNITS = [
         font-weight: 400;
         letter-spacing: -0.02em;
         line-height: 0.86;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
         text-transform: uppercase;
     }
 
@@ -246,8 +264,23 @@ const UNITS = [
     }
 
     @media (max-width: 1024px) {
+        .hero .btn {
+            font-size: 12px;
+            padding: 16px 24px;
+        }
+
         .hero__countdown {
             display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero__meta-item::before {
+            display: none;
+        }
+
+        .hero__title {
+            font-size: clamp(38px, 12vw, 64px);
         }
     }
 </style>
@@ -283,6 +316,10 @@ const UNITS = [
         if (minutes) minutes.textContent = pad(parts.minutes);
         if (seconds) seconds.textContent = pad(parts.seconds);
     }
+
+    document.addEventListener('astro:before-swap', () => {
+        if (heroInterval) clearInterval(heroInterval);
+    });
 
     document.addEventListener('astro:page-load', initHeroCountdown);
 </script>

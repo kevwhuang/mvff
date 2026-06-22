@@ -7,9 +7,10 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
 <div
     class="loader fixed flex items-center justify-center"
     aria-hidden="true"
+    role="presentation"
 >
-    <div class="loader__inner text-center">
-        <div class="loader__mark">
+    <div class="loader__inner flex flex-col items-center">
+        <div class="loader__mark grid place-items-center">
             <Image
                 class="h-auto w-full"
                 alt=""
@@ -17,11 +18,11 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
                 fetchpriority="high"
                 loading="eager"
                 src={logo}
-                width={90}
+                width={160}
             />
         </div>
-        <div class="loader__text">Loading reel &middot; 2026</div>
-        <div class="loader__bar"><div class="loader__progress" /></div>
+        <div class="loader__text select-none">Loading reel &middot; 2026</div>
+        <div class="loader__bar relative overflow-hidden"><div class="loader__progress absolute" /></div>
     </div>
 </div>
 
@@ -29,50 +30,44 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
     .loader {
         background: var(--color-night);
         inset: 0;
+        padding: var(--shell-pad);
         transition: opacity var(--duration-slower) ease, visibility var(--duration-slower) ease;
         z-index: 300;
     }
 
     .loader[data-hidden] {
         opacity: 0;
+        pointer-events: none;
         visibility: hidden;
     }
 
     .loader__bar {
         background: var(--color-cream-15);
-        height: 1px;
-        margin: 0 auto;
-        max-width: 60vw;
-        overflow: hidden;
-        position: relative;
-        width: 280px;
+        height: 2px;
+        max-width: min(400px, 70vw);
+        width: 100%;
     }
 
     .loader__mark {
         animation: loader__pulse 2s ease-in-out infinite;
-        display: grid;
-        height: 90px;
-        margin: 0 auto 24px;
-        place-items: center;
-        width: 90px;
+        height: 160px;
+        margin-bottom: 48px;
+        width: 160px;
     }
 
     .loader__progress {
         animation: loader__sweep 1.4s ease-in-out infinite;
         background: var(--color-coral);
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        top: 0;
+        inset: 0;
         width: 30%;
     }
 
     .loader__text {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 11px;
-        letter-spacing: 0.3em;
-        margin-bottom: 24px;
+        font-size: 14px;
+        letter-spacing: 0.2em;
+        margin-bottom: 48px;
         text-transform: uppercase;
     }
 
@@ -97,11 +92,11 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
 
     @keyframes loader__sweep {
         0% {
-            left: -30%;
+            transform: translateX(-100%);
         }
 
         100% {
-            left: 100%;
+            transform: translateX(333%);
         }
     }
 </style>
@@ -109,8 +104,8 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
 <script is:inline>
     function initLoader() {
         const FLAG = 'mvff-loaded';
-        const MAX_DISPLAY = 6_000;
-        const MIN_DISPLAY = 1_100;
+        const MIN_DISPLAY = 700;
+        const MAX_DISPLAY = 3000;
 
         const loader = document.querySelector('.loader');
 
@@ -134,7 +129,7 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
             const elapsed = performance.now() - start;
             const remaining = Math.max(0, MIN_DISPLAY - elapsed);
 
-            setTimeout(() => {
+            setTimeout(function () {
                 loader.setAttribute('data-hidden', '');
                 try {
                     sessionStorage.setItem(FLAG, '1');
@@ -150,18 +145,14 @@ import logo from '@images/logos/atx_music_video_film_festival.webp';
             window.addEventListener('load', hide, { once: true });
         }
 
-        window.addEventListener('pageshow', (event) => {
+        window.addEventListener('pageshow', function (event) {
             if (event.persisted) hide();
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && performance.now() - start > MIN_DISPLAY) hide();
         });
 
         setTimeout(hide, MAX_DISPLAY);
     }
 
-    document.addEventListener('astro:after-swap', () => {
+    document.addEventListener('astro:after-swap', function () {
         document.querySelector('.loader')?.setAttribute('data-hidden', '');
     });
 

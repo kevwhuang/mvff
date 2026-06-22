@@ -3,49 +3,41 @@
 ---
 
 <section
-    class="error flex items-center justify-center text-center"
+    class="error relative flex items-center justify-center text-center"
     aria-label="Page not found"
 >
-    <div>
+    <div
+        data-scroll
+        data-scroll-stagger="0.12"
+    >
         <h1
-            class="error__glitch"
+            class="error__glitch inline-block relative select-none"
             data-text="404"
         >
             404
         </h1>
-        <p class="error__subtitle">This reel jumped the projector. The frame you're looking for isn't on the program.</p>
-        <div class="flex flex-wrap justify-center gap-3.5">
-            <a
-                class="btn btn--primary"
-                href="/"
-            >
-                &larr; Back to Home
-            </a>
-            <a
-                class="btn"
-                href="/info"
-            >
-                See the Schedule
-            </a>
-        </div>
+        <p class="error__subtitle">This frame isn't on the program.</p>
+        <a
+            class="btn btn--primary"
+            href="/"
+        >
+            Back to Home
+        </a>
     </div>
 </section>
 
 <style>
     .error {
-        min-height: calc(100vh - 70px);
-        padding: 60px 20px;
-        position: relative;
+        min-height: calc(100svh - var(--header-height));
+        padding: clamp(64px, 12vw, 160px) var(--shell-pad);
     }
 
     .error__glitch {
-        display: inline-block;
         font-family: var(--font-display);
         font-size: clamp(120px, 29.7vw, 380px);
         letter-spacing: -0.02em;
         line-height: 0.85;
-        margin-bottom: 20px;
-        position: relative;
+        margin-bottom: 24px;
     }
 
     .error__glitch::after,

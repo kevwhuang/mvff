@@ -3,43 +3,44 @@
 ---
 
 <section
-    class="tagline text-center"
+    class="tagline relative text-center"
     aria-labelledby="tagline-title"
-    data-scroll
 >
     <h2
         id="tagline-title"
-        class="tagline__main"
+        class="tagline__main select-none"
+        data-typewriter
     >
-        <span class="tagline__screens">Screens</span>
+        <span class="tagline__screens" data-typewriter-word>Screens</span>
         <span class="tagline__arrow">&rarr;</span>
-        <span class="tagline__stage">Stage</span>
+        <span class="tagline__stage" data-typewriter-word>Stage</span>
     </h2>
-    <p class="tagline__subtitle">An immersive production blending music and film, celebrating artists.</p>
 </section>
 
 <style>
     .tagline {
-        padding: clamp(80px, 14vh, 160px) var(--shell-pad);
-        position: relative;
+        padding: clamp(80px, 14vw, 180px) var(--shell-pad);
     }
 
     .tagline__arrow {
-        color: var(--color-coral);
+        color: var(--color-cream-60);
         font-family: var(--font-serif);
         font-size: 0.7em;
         font-style: italic;
+        opacity: 0;
         padding: 0 0.15em;
+        transition: opacity var(--duration-slow) ease;
     }
 
     .tagline__main {
         font-size: clamp(56px, 14.1vw, 180px);
         letter-spacing: -0.01em;
         line-height: 0.9;
-        margin-bottom: 32px;
-        position: relative;
         text-transform: uppercase;
-        z-index: 1;
+    }
+
+    .tagline__main[data-arrow-visible] .tagline__arrow {
+        opacity: 1;
     }
 
     .tagline__screens {
@@ -53,15 +54,125 @@
         font-style: italic;
     }
 
-    .tagline__subtitle {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: clamp(18px, 2.2vw, 26px);
-        font-style: italic;
-        line-height: 1.4;
-        margin: 0 auto;
-        max-width: 640px;
-        position: relative;
-        z-index: 2;
+    [data-typewriter-word] {
+        border-right: 0.06em solid transparent;
+    }
+
+    [data-typewriter-word][data-typing] {
+        border-right-color: var(--color-cream-60);
     }
 </style>
+
+<script>
+    interface TypewriterState {
+        charIndex: number;
+        container: HTMLElement;
+        originals: string[];
+        wordIndex: number;
+        words: NodeListOf<HTMLElement>;
+    }
+
+    const ARROW_PAUSE = 350;
+    const CHAR_DELAY = 65;
+
+    let typewriterController: AbortController | undefined;
+    let typewriterObserver: IntersectionObserver | undefined;
+    let typewriterTimeouts: Timer[] = [];
+
+    function clearTypewriterTimeouts() {
+        typewriterTimeouts.forEach(clearTimeout);
+        typewriterTimeouts = [];
+    }
+
+    function scheduleTimeout(fn: () => void, ms: number) {
+        typewriterTimeouts.push(setTimeout(fn, ms));
+    }
+
+    function initTypewriter() {
+        clearTypewriterTimeouts();
+        typewriterObserver?.disconnect();
+        typewriterController?.abort();
+        typewriterController = new AbortController();
+
+        const container = document.querySelector<HTMLElement>('[data-typewriter]');
+
+        if (!container) return;
+
+        const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
+        const originals = Array.from(words, el => el.textContent || '');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (container.hasAttribute('data-typed') || prefersReducedMotion) {
+            words.forEach((el, i) => {
+                el.textContent = originals[i];
+            });
+            container.setAttribute('data-typed', '');
+            container.setAttribute('data-arrow-visible', '');
+
+            return;
+        }
+
+        words.forEach((el) => {
+            el.textContent = '';
+        });
+
+        typewriterObserver = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return;
+
+            typewriterObserver?.disconnect();
+            typeNextWord({ charIndex: 0, container, originals, wordIndex: 0, words });
+        }, { rootMargin: '0px 0px -15% 0px' });
+
+        typewriterObserver.observe(container);
+    }
+
+    function typeChar(state: TypewriterState) {
+        if (typewriterController?.signal.aborted) return;
+
+        const { container, originals, words } = state;
+        const word = words[state.wordIndex];
+        const text = originals[state.wordIndex];
+
+        if (state.charIndex < text.length) {
+            word.textContent = text.slice(0, state.charIndex + 1);
+            state.charIndex++;
+            scheduleTimeout(() => typeChar(state), CHAR_DELAY);
+
+            return;
+        }
+
+        word.removeAttribute('data-typing');
+        state.wordIndex++;
+
+        if (state.wordIndex === 1) {
+            scheduleTimeout(() => {
+                container.setAttribute('data-arrow-visible', '');
+                scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
+            }, ARROW_PAUSE);
+        } else {
+            scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
+        }
+    }
+
+    function typeNextWord(state: TypewriterState) {
+        if (typewriterController?.signal.aborted) return;
+
+        if (state.wordIndex >= state.words.length) {
+            state.container.setAttribute('data-typed', '');
+
+            return;
+        }
+
+        state.charIndex = 0;
+        state.words[state.wordIndex].setAttribute('data-typing', '');
+        typeChar(state);
+    }
+
+    document.addEventListener('astro:before-swap', () => {
+        clearTypewriterTimeouts();
+        typewriterObserver?.disconnect();
+        typewriterController?.abort();
+    });
+
+    document.addEventListener('astro:page-load', initTypewriter);
+</script>

@@ -6,9 +6,9 @@ import { LINKS, ROUTES } from '@lib/utils';
 ---
 
 <header class="site-header sticky">
-    <div class="shell site-header__inner">
+    <div class="shell site-header__inner grid">
         <a
-            class="no-underline cursor-pointer select-none"
+            class="no-underline select-none"
             aria-label="ATX MVFF Home"
             href="/"
         >
@@ -35,7 +35,7 @@ import { LINKS, ROUTES } from '@lib/utils';
                 {ROUTES.map(route => (
                     <li>
                         <a
-                            class="site-nav__link"
+                            class="site-nav__link relative no-underline"
                             href={route.href}
                             target={route.href.startsWith('http') ? '_blank' : undefined}
                         >
@@ -46,7 +46,7 @@ import { LINKS, ROUTES } from '@lib/utils';
                 <li class="site-nav__divider" aria-hidden="true" />
                 <li class="site-nav__extra">
                     <a
-                        class="site-nav__link"
+                        class="site-nav__link relative no-underline"
                         href={LINKS.pitchDeck}
                         target="_blank"
                     >
@@ -55,7 +55,7 @@ import { LINKS, ROUTES } from '@lib/utils';
                 </li>
                 <li class="site-nav__extra">
                     <a
-                        class="site-nav__link"
+                        class="site-nav__link relative no-underline"
                         href={LINKS.calendly}
                         target="_blank"
                     >
@@ -64,29 +64,33 @@ import { LINKS, ROUTES } from '@lib/utils';
                 </li>
             </ul>
         </nav>
-        <div class="flex items-center justify-self-end gap-2.5">
+        <div class="flex items-center justify-self-end gap-3">
             <div
-                class="site-header__countdown"
+                class="site-header__countdown flex select-none"
                 aria-label="Event countdown"
                 role="timer"
             >
                 <span class="site-header__pulse" aria-hidden="true" />
-                <span class="site-header__countdown-text">T-00d 00:00:00</span>
+                <span class="site-header__countdown-text">00:00:00:00</span>
             </div>
             <a
-                class="site-header__tickets"
+                class="site-header__tickets inline-block relative no-underline select-none"
                 href={LINKS.posh}
                 target="_blank"
             >
                 Buy Tickets
             </a>
             <button
-                class="nav-toggle"
+                class="nav-toggle relative cursor-pointer"
                 aria-expanded="false"
                 aria-label="Toggle menu"
                 type="button"
             >
-                &equiv;
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+                    <line x1="0" y1="1" x2="16" y2="1" stroke="currentColor" stroke-width="1.5" />
+                    <line x1="0" y1="6" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" />
+                    <line x1="0" y1="11" x2="16" y2="11" stroke="currentColor" stroke-width="1.5" />
+                </svg>
             </button>
         </div>
     </div>
@@ -97,11 +101,9 @@ import { LINKS, ROUTES } from '@lib/utils';
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
         color: var(--color-cream);
-        cursor: pointer;
         display: none;
         height: 36px;
         place-items: center;
-        position: relative;
         transition: border-color var(--duration-fast) ease;
         width: 36px;
     }
@@ -142,21 +144,18 @@ import { LINKS, ROUTES } from '@lib/utils';
         background: var(--color-navy);
         border: 1px solid var(--color-cream-15);
         color: var(--color-cream);
-        display: flex;
         font-family: var(--font-mono);
         font-size: 13px;
         gap: 8px;
         letter-spacing: 0.1em;
-        padding: 10px 14px;
-        user-select: none;
+        padding: 12px 16px;
     }
 
     .site-header__inner {
         align-items: center;
-        display: grid;
-        gap: clamp(12px, 3vw, 28px);
+        gap: clamp(12px, 3vw, 32px);
         grid-template-columns: auto 1fr auto;
-        padding-block: 18px;
+        padding-block: 16px;
     }
 
     .site-header__pulse {
@@ -172,16 +171,19 @@ import { LINKS, ROUTES } from '@lib/utils';
         background: var(--color-coral);
         border: 1px solid var(--color-coral);
         color: var(--color-night);
-        cursor: pointer;
-        display: inline-block;
         font-family: var(--font-mono);
         font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.16em;
-        padding: 10px 16px;
-        text-decoration: none;
+        padding: 12px 16px;
         text-transform: uppercase;
         transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease;
+    }
+
+    .site-header__tickets::after {
+        content: '';
+        inset: -6px;
+        position: absolute;
     }
 
     .site-header__tickets:active {
@@ -205,13 +207,10 @@ import { LINKS, ROUTES } from '@lib/utils';
 
     .site-nav__link {
         color: var(--color-cream-60);
-        cursor: pointer;
         font-family: var(--font-mono);
         font-size: 11.5px;
         letter-spacing: 0.16em;
-        padding: 10px 9px;
-        position: relative;
-        text-decoration: none;
+        padding: 12px 8px;
         text-transform: uppercase;
         transition: color var(--duration-fast) ease;
     }
@@ -308,7 +307,7 @@ import { LINKS, ROUTES } from '@lib/utils';
             font-family: var(--font-display);
             font-size: 28px;
             letter-spacing: 0.04em;
-            padding: 14px 0;
+            padding: 16px 0;
             text-transform: none;
         }
 
@@ -326,6 +325,12 @@ import { LINKS, ROUTES } from '@lib/utils';
             flex-direction: column;
             gap: 8px;
             justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .site-header__tickets {
+            display: none;
         }
     }
 
@@ -437,13 +442,12 @@ import { LINKS, ROUTES } from '@lib/utils';
         const parts = getCountdownParts();
 
         if (parts.remaining <= 0) {
-            countdown.textContent = 'HAPPENING NOW';
+            countdown.textContent = 'Happening Now';
 
             return;
         }
 
-        countdown.textContent = 'T-'
-            + pad(parts.days) + 'd '
+        countdown.textContent = pad(parts.days) + ':'
             + pad(parts.hours) + ':'
             + pad(parts.minutes) + ':'
             + pad(parts.seconds);
