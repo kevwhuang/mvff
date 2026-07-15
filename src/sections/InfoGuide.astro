@@ -1,8 +1,17 @@
 ---
 import SectionHead from '@components/SectionHead.astro';
 
+const ESSENTIALS = [
+    '21+ with valid government-issued ID \u2014 no exceptions',
+    'Doors open at 7:00 PM, last entry at 11:30 PM',
+    'No outside food or drink \u2014 full-service bar on site',
+    'Pool access included with all ticket tiers \u2014 bring a suit',
+    'Wristband re-entry permitted up until midnight',
+    'Wheelchair-accessible venue \u2014 email us for any further accommodations',
+] as const;
+
 const FAQ = [
-    { answer: 'A one-night festival in Austin where music videos take the spotlight \u2014 paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.', question: 'What exactly is the ATX MVFF?' },
+    { answer: 'A one-night festival in Austin where music videos take the spotlight \u2014 paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.', question: 'What exactly is the Austin Music Video Film Festival?' },
     { answer: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.', question: 'When and where is it happening?' },
     { answer: 'Submissions for 2026 are now closed. Follow us on Instagram for announcements about the next submission window.', question: 'How do I submit a music video?' },
     { answer: 'Yes \u2014 21+ with valid ID. The bar is full-service and the pool party runs late.', question: 'Is there an age requirement?' },
@@ -10,16 +19,7 @@ const FAQ = [
     { answer: 'Phones and small personal cameras are welcome. Professional press / accredited media \u2014 please reach out in advance via the contact form.', question: 'Can I bring a camera?' },
     { answer: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.', question: 'Where do I park?' },
     { answer: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.', question: 'Will there be food and drinks?' },
-];
-
-const PRACTICAL = [
-    '21+ with valid government-issued ID \u2014 no exceptions',
-    'Doors open at 7:00 PM, last entry at 11:30 PM',
-    'No outside food or drink \u2014 full-service bar on site',
-    'Pool access included with all ticket tiers \u2014 bring a suit',
-    'Wristband re-entry permitted up until midnight',
-    'Wheelchair-accessible venue \u2014 email us for any further accommodations',
-];
+] as const;
 
 const SCHEDULE = [
     ['TBD', 'Event TBD', 'TBD'],
@@ -34,7 +34,7 @@ const SCHEDULE = [
     ['TBD', 'Event TBD', 'TBD'],
     ['TBD', 'Event TBD', 'TBD'],
     ['TBD', 'Event TBD', 'TBD'],
-];
+] as const;
 ---
 
 <section
@@ -44,7 +44,7 @@ const SCHEDULE = [
     <div class="shell">
         <SectionHead
             headingId="info-title"
-            number="[ I ]"
+            marker="[ I ]"
         >
             Info
         </SectionHead>
@@ -54,7 +54,7 @@ const SCHEDULE = [
             data-scroll-stagger="0.1"
         >
             <div>
-                <h2 class="subhead flex items-baseline justify-between">Run of Show <span class="subhead__badge">7pm &ndash; 2am</span></h2>
+                <h2 class="subhead flex items-baseline justify-between">Run of Show <span class="subhead__badge">7 PM &ndash; 2 AM</span></h2>
                 <ol class="schedule flex flex-col list-none">
                     {SCHEDULE.map(([time, event, tag]) => (
                         <li class="schedule__row grid items-baseline relative">
@@ -67,11 +67,11 @@ const SCHEDULE = [
             </div>
             <div>
                 <h2 class="subhead flex items-baseline justify-between">Venue <span class="subhead__badge">Cap 300</span></h2>
-                <div class="venue">
+                <div class="venue border border-cream-15 bg-navy">
                     <h3 class="venue__name">Cabana Club</h3>
-                    <span class="venue__address">Austin &middot; Texas</span>
+                    <span class="mb-4 font-mono text-xs tracking-widest uppercase text-cream-60">Austin &middot; Texas</span>
                     <p class="venue__description">Intimate venue, limited to 300 guests. Indoor screening room, outdoor pool area, full-service bar, and a dedicated VIP lounge. Street parking is available, but rideshare is strongly recommended given how late the night runs.</p>
-                    <ul class="venue__features grid list-none">
+                    <ul class="venue__features grid grid-cols-2 list-none gap-2">
                         <li>Indoor screen</li>
                         <li>Outdoor pool</li>
                         <li>Full bar</li>
@@ -81,23 +81,25 @@ const SCHEDULE = [
                     </ul>
                 </div>
                 <h2 class="subhead flex items-baseline justify-between">Practical <span class="subhead__badge">Read First</span></h2>
-                <ul class="practical flex flex-col list-none">
-                    {PRACTICAL.map(item => (
+                <ul class="practical flex flex-col list-none gap-3">
+                    {ESSENTIALS.map(item => (
                         <li>{item}</li>
                     ))}
                 </ul>
             </div>
         </div>
-        <div class="relative" data-scroll>
+        <div
+            class="relative"
+            data-scroll
+        >
             <h2 class="subhead flex items-baseline justify-between">Frequently Asked <span class="subhead__badge">{FAQ.length} Entries</span></h2>
             <div class="faq flex flex-col">
-                {FAQ.map((entry, index) => (
+                {FAQ.map(entry => (
                     <details
-                        class="faq__item"
+                        class="faq__item border-b border-cream-15"
                         name="faq"
-                        open={index === 0}
                     >
-                        <summary class="faq__question flex items-center cursor-pointer justify-between select-none">
+                        <summary class="faq__question flex items-center justify-between cursor-pointer select-none">
                             <span>{entry.question}</span>
                             <span
                                 class="faq__icon"
@@ -120,7 +122,7 @@ const SCHEDULE = [
     .faq__answer {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.55;
         padding: 0 0 24px;
     }
@@ -130,10 +132,6 @@ const SCHEDULE = [
         font-family: var(--font-mono);
         font-size: 20px;
         transition: transform var(--duration-fast) ease;
-    }
-
-    .faq__item {
-        border-bottom: 1px solid var(--color-cream-15);
     }
 
     .faq__item[open] .faq__icon {
@@ -161,20 +159,15 @@ const SCHEDULE = [
     }
 
     .info__grid {
-        gap: clamp(40px, 6.25vw, 80px);
+        gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
         grid-template-columns: 1fr 1fr;
-        margin-bottom: clamp(64px, 8vw, 96px);
-    }
-
-    .practical {
-        gap: 12px;
+        margin-bottom: clamp(64px, calc(53.33px + 3.33vw), 96px);
     }
 
     .practical li {
         align-items: baseline;
         color: var(--color-cream);
         display: grid;
-        font-family: var(--font-sans);
         font-size: 14px;
         gap: 12px;
         grid-template-columns: 24px 1fr;
@@ -194,8 +187,8 @@ const SCHEDULE = [
 
     .schedule__row {
         border-bottom: 1px solid var(--color-cream-10);
-        gap: 16px;
-        grid-template-columns: clamp(64px, 12vw, 100px) 1fr auto;
+        gap: clamp(8px, calc(5.33px + 0.83vw), 16px);
+        grid-template-columns: clamp(64px, calc(52px + 3.75vw), 100px) 1fr auto;
         padding: 16px 0;
         transition: padding var(--duration-fast) ease;
     }
@@ -211,7 +204,7 @@ const SCHEDULE = [
     .schedule__tag {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.2em;
         text-transform: uppercase;
     }
@@ -219,54 +212,22 @@ const SCHEDULE = [
     .schedule__time {
         color: var(--color-cream);
         font-family: var(--font-mono);
-        font-size: 13px;
+        font-size: 14px;
         letter-spacing: 0.06em;
         transition: color var(--duration-fast) ease;
     }
 
-    .subhead {
-        border-bottom: 1px solid var(--color-cream-15);
-        font-family: var(--font-display);
-        font-size: clamp(28px, 3.6vw, 44px);
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .subhead__badge {
-        color: var(--color-coral);
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.2em;
-    }
-
     .venue {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        margin-bottom: 48px;
-        padding: 32px;
-    }
-
-    .venue__address {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        margin-bottom: 16px;
-        text-transform: uppercase;
+        margin-bottom: clamp(32px, calc(26.67px + 1.67vw), 48px);
+        padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
     }
 
     .venue__description {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.5;
         margin-bottom: 16px;
-    }
-
-    .venue__features {
-        gap: 8px;
-        grid-template-columns: 1fr 1fr;
     }
 
     .venue__features li {
@@ -274,7 +235,7 @@ const SCHEDULE = [
         color: var(--color-cream);
         display: flex;
         font-family: var(--font-mono);
-        font-size: 11px;
+        font-size: 12px;
         gap: 8px;
         letter-spacing: 0.08em;
     }
@@ -286,8 +247,7 @@ const SCHEDULE = [
     }
 
     .venue__name {
-        font-family: var(--font-display);
-        font-size: clamp(28px, 5vw, 36px);
+        font-size: clamp(28px, calc(25.33px + 0.83vw), 36px);
         line-height: 1;
         margin-bottom: 8px;
     }
@@ -295,13 +255,6 @@ const SCHEDULE = [
     @media (max-width: 1024px) {
         .info__grid {
             grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .schedule__row {
-            gap: 8px;
-            grid-template-columns: 70px 1fr auto;
         }
     }
 </style>

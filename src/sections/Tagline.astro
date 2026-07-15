@@ -11,15 +11,25 @@
         class="tagline__main select-none"
         data-typewriter
     >
-        <span class="tagline__screens" data-typewriter-word>Screens</span>
+        <span
+            class="tagline__screens text-cream"
+            data-typewriter-word
+        >
+            Screens
+        </span>
         <span class="tagline__arrow">&rarr;</span>
-        <span class="tagline__stage" data-typewriter-word>Stage</span>
+        <span
+            class="tagline__stage"
+            data-typewriter-word
+        >
+            Stage
+        </span>
     </h2>
 </section>
 
 <style>
     .tagline {
-        padding: clamp(80px, 14vw, 180px) var(--shell-pad);
+        padding: clamp(80px, calc(46.67px + 10.42vw), 180px) var(--shell-pad);
     }
 
     .tagline__arrow {
@@ -33,7 +43,7 @@
     }
 
     .tagline__main {
-        font-size: clamp(56px, 14.1vw, 180px);
+        font-size: clamp(44px, calc(-1.33px + 14.17vw), 180px);
         letter-spacing: -0.01em;
         line-height: 0.9;
         text-transform: uppercase;
@@ -41,10 +51,6 @@
 
     .tagline__main[data-arrow-visible] .tagline__arrow {
         opacity: 1;
-    }
-
-    .tagline__screens {
-        color: var(--color-cream);
     }
 
     .tagline__stage {
@@ -65,7 +71,7 @@
 
 <script>
     interface TypewriterState {
-        charIndex: number;
+        characterIndex: number;
         container: HTMLElement;
         originals: string[];
         wordIndex: number;
@@ -73,7 +79,7 @@
     }
 
     const ARROW_PAUSE = 350;
-    const CHAR_DELAY = 65;
+    const CHARACTER_DELAY = 65;
 
     let typewriterController: AbortController | undefined;
     let typewriterObserver: IntersectionObserver | undefined;
@@ -82,10 +88,6 @@
     function clearTypewriterTimeouts() {
         typewriterTimeouts.forEach(clearTimeout);
         typewriterTimeouts = [];
-    }
-
-    function scheduleTimeout(fn: () => void, ms: number) {
-        typewriterTimeouts.push(setTimeout(fn, ms));
     }
 
     function initTypewriter() {
@@ -99,12 +101,13 @@
         if (!container) return;
 
         const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
-        const originals = Array.from(words, el => el.textContent || '');
+
+        const originals = Array.from(words, element => element.textContent || '');
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (container.hasAttribute('data-typed') || prefersReducedMotion) {
-            words.forEach((el, i) => {
-                el.textContent = originals[i];
+            words.forEach((element, index) => {
+                element.textContent = originals[index];
             });
             container.setAttribute('data-typed', '');
             container.setAttribute('data-arrow-visible', '');
@@ -112,31 +115,36 @@
             return;
         }
 
-        words.forEach((el) => {
-            el.textContent = '';
+        words.forEach((element) => {
+            element.textContent = '';
         });
 
         typewriterObserver = new IntersectionObserver(([entry]) => {
             if (!entry.isIntersecting) return;
 
             typewriterObserver?.disconnect();
-            typeNextWord({ charIndex: 0, container, originals, wordIndex: 0, words });
+            typeNextWord({ characterIndex: 0, container, originals, wordIndex: 0, words });
         }, { rootMargin: '0px 0px -15% 0px' });
 
         typewriterObserver.observe(container);
     }
 
-    function typeChar(state: TypewriterState) {
+    function scheduleTimeout(callback: () => void, delay: number) {
+        typewriterTimeouts.push(setTimeout(callback, delay));
+    }
+
+    function typeCharacter(state: TypewriterState) {
         if (typewriterController?.signal.aborted) return;
 
         const { container, originals, words } = state;
-        const word = words[state.wordIndex];
-        const text = originals[state.wordIndex];
 
-        if (state.charIndex < text.length) {
-            word.textContent = text.slice(0, state.charIndex + 1);
-            state.charIndex++;
-            scheduleTimeout(() => typeChar(state), CHAR_DELAY);
+        const text = originals[state.wordIndex];
+        const word = words[state.wordIndex];
+
+        if (state.characterIndex < text.length) {
+            word.textContent = text.slice(0, state.characterIndex + 1);
+            state.characterIndex++;
+            scheduleTimeout(() => typeCharacter(state), CHARACTER_DELAY);
 
             return;
         }
@@ -163,9 +171,9 @@
             return;
         }
 
-        state.charIndex = 0;
+        state.characterIndex = 0;
         state.words[state.wordIndex].setAttribute('data-typing', '');
-        typeChar(state);
+        typeCharacter(state);
     }
 
     document.addEventListener('astro:before-swap', () => {

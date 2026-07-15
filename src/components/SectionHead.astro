@@ -2,14 +2,17 @@
 interface Props {
     headingId: string;
     level?: 'h1' | 'h2';
-    number: string;
+    marker: string;
 }
 
-const { headingId, level: Heading = 'h1', number } = Astro.props;
+const { headingId, level: Heading = 'h1', marker } = Astro.props;
 ---
 
-<div class="section__head grid select-none" data-scroll>
-    <span class="section__number">{number}</span>
+<div
+    class="section__head grid select-none"
+    data-scroll
+>
+    <span class="section__number">{marker}</span>
     <Heading
         id={headingId}
         class="section__title"
@@ -24,7 +27,7 @@ const { headingId, level: Heading = 'h1', number } = Astro.props;
         border-bottom: 1px solid var(--color-cream-15);
         gap: 12px 24px;
         grid-template-columns: auto 1fr;
-        margin-bottom: clamp(48px, 6vw, 80px);
+        margin-bottom: clamp(48px, calc(37.33px + 3.33vw), 80px);
         padding-bottom: 16px;
     }
 
@@ -36,7 +39,7 @@ const { headingId, level: Heading = 'h1', number } = Astro.props;
     }
 
     .section__title {
-        font-size: clamp(40px, 7vw, 88px);
+        font-size: clamp(40px, calc(24px + 5vw), 88px);
         line-height: 0.9;
         text-transform: uppercase;
     }

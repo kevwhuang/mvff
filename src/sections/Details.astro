@@ -10,29 +10,29 @@ import SectionHead from '@components/SectionHead.astro';
         <SectionHead
             headingId="details-title"
             level="h2"
-            number="[ 01 ]"
+            marker="[ 01 ]"
         >
             The Coordinates
         </SectionHead>
         <dl
-            class="details__grid grid"
+            class="details__grid grid grid-cols-3 border border-cream-15 bg-navy"
             data-scroll
             data-scroll-stagger="0.12"
         >
-            <div class="details__cell flex flex-col cursor-default relative">
+            <div class="details__cell flex flex-col relative gap-3 cursor-default">
                 <dt class="details__label select-none">Venue</dt>
                 <dd class="details__value">Cabana Club</dd>
-                <dd class="details__note">11703 Manchaca Rd, Austin, TX</dd>
+                <dd class="details__note font-serif italic text-base text-cream-60">11703 Manchaca Rd, Austin, TX</dd>
             </div>
-            <div class="details__cell flex flex-col cursor-default relative">
+            <div class="details__cell flex flex-col relative gap-3 cursor-default">
                 <dt class="details__label select-none">Date</dt>
                 <dd class="details__value"><time datetime="2026-07-18">July 18</time></dd>
-                <dd class="details__note">Saturday night, 2026.</dd>
+                <dd class="details__note font-serif italic text-base text-cream-60">Saturday night, 2026.</dd>
             </div>
-            <div class="details__cell flex flex-col cursor-default relative">
+            <div class="details__cell flex flex-col relative gap-3 cursor-default">
                 <dt class="details__label select-none">Time</dt>
                 <dd class="details__value">7 PM &ndash; 2 AM</dd>
-                <dd class="details__note">Seven hours, twelve acts.</dd>
+                <dd class="details__note font-serif italic text-base text-cream-60">Seven hours, twelve acts.</dd>
             </div>
         </dl>
     </div>
@@ -41,8 +41,7 @@ import SectionHead from '@components/SectionHead.astro';
 <style>
     .details__cell {
         border-right: 1px solid var(--color-cream-15);
-        gap: 12px;
-        padding: clamp(32px, 4vw, 48px);
+        padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
         transition: background var(--duration-fast) ease;
     }
 
@@ -54,12 +53,6 @@ import SectionHead from '@components/SectionHead.astro';
         border-right: none;
     }
 
-    .details__grid {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        grid-template-columns: repeat(3, 1fr);
-    }
-
     .details__label {
         color: var(--color-coral);
         font-family: var(--font-mono);
@@ -68,16 +61,9 @@ import SectionHead from '@components/SectionHead.astro';
         text-transform: uppercase;
     }
 
-    .details__note {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: 16px;
-        font-style: italic;
-    }
-
     .details__value {
         font-family: var(--font-display);
-        font-size: clamp(30px, 3.75vw, 48px);
+        font-size: clamp(30px, calc(24px + 1.88vw), 48px);
         line-height: 1;
         margin-bottom: 4px;
         overflow: hidden;

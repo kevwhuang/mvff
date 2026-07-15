@@ -4,31 +4,11 @@ const MS_PER_HOUR = 3_600_000;
 const MS_PER_MINUTE = 60_000;
 const MS_PER_SECOND = 1_000;
 const PAD_LENGTH = 2;
-
-export const LINKS = {
-    calendly: 'https://calendly.com/madewellanna99/30min',
-    email: 'mailto:contact@atxmusicvideofilmfestival.com',
-    filmfreeway: 'https://filmfreeway.com/atxmusicvideofilmfestival',
-    instagram: 'https://instagram.com/atxmvff',
-    partner: 'https://form.jotform.com/261292517666060',
-    posh: 'https://posh.vip/e/austin-texas-music-video-film-festival',
-    pitchDeck: '/atx_music_video_film_festival_pitch_deck.pdf',
-    sponsor: 'https://form.jotform.com/261316235757055',
-} as const;
-
-const STORE_HREF = 'https://shop.atxmusicvideofilmfestival.com';
-
-export const ROUTES = [
-    { href: '/', label: 'Home' },
-    { href: '/info', label: 'Info' },
-    { href: STORE_HREF, label: 'Store' },
-    { href: '/team', label: 'Team' },
-    { href: '/gallery', label: 'Gallery' },
-    { href: '/contact', label: 'Contact' },
-] as const;
+const REFRESH_INTERVAL = 1_000;
 
 export function getCountdownParts(): CountdownParts {
     const remaining = EVENT_DATE - Date.now();
+
     const days = Math.floor(remaining / MS_PER_DAY);
     const hours = Math.floor((remaining % MS_PER_DAY) / MS_PER_HOUR);
     const minutes = Math.floor((remaining % MS_PER_HOUR) / MS_PER_MINUTE);
@@ -39,4 +19,12 @@ export function getCountdownParts(): CountdownParts {
 
 export function pad(value: number, length = PAD_LENGTH): string {
     return String(value).padStart(length, '0');
+}
+
+export function startCountdown(render: (parts: CountdownParts) => void): () => void {
+    render(getCountdownParts());
+
+    const interval = setInterval(() => render(getCountdownParts()), REFRESH_INTERVAL);
+
+    return () => clearInterval(interval);
 }

@@ -1,5 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
 
-export const onRequest = defineMiddleware((_context, next) => {
+export const onRequest = defineMiddleware((_, next) => {
     return next();
 });

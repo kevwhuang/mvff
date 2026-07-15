@@ -5,8 +5,6 @@ const SCROLL_DURATION = 0.8;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 let parallaxLayers: NodeListOf<HTMLElement> | undefined;
 let parallaxQueued = false;
 
@@ -20,7 +18,7 @@ function handleScroll() {
 function initScrollAnimations() {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
-    if (prefersReducedMotion) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         elements.forEach((element) => {
             element.style.opacity = '1';
         });
@@ -94,6 +92,6 @@ export function initMotion(): void {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     initScrollAnimations();
 
-    parallaxLayers = prefersReducedMotion ? undefined : document.querySelectorAll('[data-parallax]');
+    parallaxLayers = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? undefined : document.querySelectorAll('[data-parallax]');
     updateParallax();
 }

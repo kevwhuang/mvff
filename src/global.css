@@ -33,8 +33,15 @@
     --duration-slow: 0.4s;
     --duration-slower: 0.6s;
     --header-height: 70px;
-    --shell-max: 1280px;
-    --shell-pad: clamp(20px, 4.4vw, 56px);
+    --section-padding: clamp(64px, calc(32px + 10vw), 160px);
+    --shell-pad: clamp(20px, calc(8px + 3.75vw), 56px);
+}
+
+a,
+button,
+label,
+select {
+    cursor: pointer;
 }
 
 h1,
@@ -47,11 +54,22 @@ h4 {
     line-height: 0.94;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 24px);
+    scrollbar-color: var(--color-cream-15) var(--color-night);
+    scrollbar-width: thin;
+}
+
+:disabled {
+    cursor: not-allowed;
+}
+
 :focus {
     outline: none;
 }
 
-:focus-visible {
+:focus-visible:not(input, textarea, select) {
     outline: 2px solid var(--color-coral);
     outline-offset: 3px;
 }
@@ -78,6 +96,10 @@ h4 {
     user-select: none;
 }
 
+::selection {
+    background: var(--color-cream-15);
+}
+
 [data-scroll] {
     opacity: 0;
 }
@@ -89,6 +111,7 @@ h4 {
         animation-duration: 0.01s !important;
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
+        transition-delay: 0s !important;
         transition-duration: 0.01s !important;
     }
 }

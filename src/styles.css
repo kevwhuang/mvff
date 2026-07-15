@@ -12,7 +12,12 @@
     padding: 16px 24px;
     text-decoration: none;
     text-transform: uppercase;
-    transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease;
+    transition:
+        background var(--duration-fast) ease,
+        border-color var(--duration-fast) ease,
+        color var(--duration-fast) ease,
+        opacity var(--duration-fast) ease,
+        transform var(--duration-fast) ease;
 }
 
 .btn:active {
@@ -52,43 +57,6 @@
     border-color: var(--color-cream);
 }
 
-.input,
-.select,
-.textarea {
-    background: var(--color-night);
-    border: 1px solid var(--color-cream-15);
-    color: var(--color-cream);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    outline: none;
-    padding: 12px 16px;
-    transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease;
-    width: 100%;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-    background: var(--color-navy);
-    border-color: var(--color-coral);
-}
-
-.input:hover,
-.select:hover,
-.textarea:hover {
-    border-color: var(--color-cream-40);
-}
-
-.label {
-    color: var(--color-cream-60);
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}
-
 .prose {
     overflow-wrap: break-word;
 }
@@ -104,7 +72,7 @@
 }
 
 .prose h2 {
-    font-size: clamp(20px, 2.5vw, 24px);
+    font-size: clamp(20px, calc(18.67px + 0.42vw), 24px);
     margin-bottom: 12px;
     padding-top: 32px;
 }
@@ -127,20 +95,28 @@
 }
 
 .section {
-    padding: clamp(64px, 12vw, 160px) 0;
+    padding: var(--section-padding) 0;
     position: relative;
 }
 
 .shell {
     margin: 0 auto;
-    max-width: var(--shell-max);
+    max-width: 1280px;
     padding: 0 var(--shell-pad);
     width: 100%;
 }
 
-.textarea {
-    font-family: var(--font-sans);
-    line-height: 1.5;
-    min-height: 140px;
-    resize: vertical;
+.subhead {
+    border-bottom: 1px solid var(--color-cream-15);
+    font-size: clamp(28px, calc(22.67px + 1.67vw), 44px);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.subhead__badge {
+    color: var(--color-coral);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
 }

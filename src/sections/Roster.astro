@@ -27,7 +27,7 @@ const TEAM = [
     { image: phillip, name: 'Phillip', role: 'Volunteer Coordinator' },
     { image: killian, name: 'Killian', role: 'Visual Tech' },
     { image: ben, name: 'Ben', role: 'Audio Tech' },
-];
+] as const;
 ---
 
 <section
@@ -37,7 +37,7 @@ const TEAM = [
     <div class="shell">
         <SectionHead
             headingId="roster-title"
-            number="[ T ]"
+            marker="[ T ]"
         >
             2026 Team
         </SectionHead>
@@ -47,7 +47,7 @@ const TEAM = [
             data-scroll-stagger="0.05"
         >
             {TEAM.map((member, index) => (
-                <li class="roster__card overflow-hidden relative">
+                <li class="roster__card overflow-hidden relative bg-navy">
                     <span class="roster__number absolute select-none">{pad(index + 1)}</span>
                     <div class="roster__photo overflow-hidden relative">
                         <Image
@@ -70,10 +70,6 @@ const TEAM = [
 </section>
 
 <style>
-    .roster__card {
-        background: var(--color-navy);
-    }
-
     .roster__card:hover .roster__image {
         filter: grayscale(0) contrast(1.05) brightness(1);
         transform: scale(1.05);
@@ -90,13 +86,14 @@ const TEAM = [
         filter: grayscale(0.85) contrast(1.1) brightness(0.95);
         height: 100%;
         object-fit: cover;
-        transition: filter var(--duration-slow) ease, transform var(--duration-slower) ease;
+        transition:
+            filter var(--duration-slow) ease,
+            transform var(--duration-slower) ease;
         width: 100%;
     }
 
     .roster__name {
-        font-family: var(--font-display);
-        font-size: 26px;
+        font-size: 24px;
         letter-spacing: normal;
         line-height: 1;
         margin-bottom: 0;
@@ -109,7 +106,7 @@ const TEAM = [
         left: 12px;
         letter-spacing: 0.16em;
         mix-blend-mode: difference;
-        top: 10px;
+        top: 12px;
         z-index: 2;
     }
 

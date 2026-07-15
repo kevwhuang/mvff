@@ -3,14 +3,15 @@
 ---
 
 <section
-    class="error relative flex items-center justify-center text-center"
-    aria-label="Page not found"
+    class="error flex items-center justify-center relative text-center"
+    aria-labelledby="error-title"
 >
     <div
         data-scroll
         data-scroll-stagger="0.12"
     >
         <h1
+            id="error-title"
             class="error__glitch inline-block relative select-none"
             data-text="404"
         >
@@ -29,12 +30,11 @@
 <style>
     .error {
         min-height: calc(100svh - var(--header-height));
-        padding: clamp(64px, 12vw, 160px) var(--shell-pad);
+        padding: var(--section-padding) var(--shell-pad);
     }
 
     .error__glitch {
-        font-family: var(--font-display);
-        font-size: clamp(120px, 29.7vw, 380px);
+        font-size: clamp(120px, calc(33.33px + 27.08vw), 380px);
         letter-spacing: -0.02em;
         line-height: 0.85;
         margin-bottom: 24px;
@@ -67,7 +67,7 @@
     .error__subtitle {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
-        font-size: clamp(20px, 2.6vw, 32px);
+        font-size: clamp(20px, calc(16px + 1.25vw), 32px);
         font-style: italic;
         margin-bottom: 32px;
         max-width: 540px;

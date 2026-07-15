@@ -29,6 +29,7 @@ const { description, title } = Astro.props;
         <meta content={description} name="description" />
         <meta content="Kevin Huang" name="author" />
         <meta content="#0a0a0f" name="theme-color" />
+        <meta content="index, follow" name="robots" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link href="/favicon.png" rel="icon" type="image/png" />
@@ -36,7 +37,7 @@ const { description, title } = Astro.props;
         <meta content={description} property="og:description" />
         <meta content={`${Astro.site}og.png`} property="og:image" />
         <meta content={canonicalUrl} property="og:url" />
-        <meta content="ATX Music Video Film Festival" property="og:site_name" />
+        <meta content="Austin Music Video Film Festival" property="og:site_name" />
         <meta content="website" property="og:type" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta content={title} name="twitter:title" />
@@ -49,21 +50,21 @@ const { description, title } = Astro.props;
                 '@type': 'WebSite',
                 'author': {
                     '@type': 'Person',
-                    'name': 'Anna Madewell',
+                    'name': 'Kevin Huang',
                 },
-                'name': 'ATX Music Video Film Festival',
+                'name': 'Austin Music Video Film Festival',
                 'url': Astro.site,
             })}
             type="application/ld+json"
         />
         <ClientRouter />
     </head>
-    <body class="flex flex-col overflow-x-clip relative isolate min-h-screen antialiased font-sans bg-night text-cream">
+    <body class="flex flex-col isolate overflow-x-clip relative min-h-screen antialiased font-sans bg-night text-cream">
         <div class="grain fixed pointer-events-none" aria-hidden="true" />
         <div class="vignette fixed pointer-events-none" aria-hidden="true" />
         <Stars />
         <Navbar />
-        <main class="flex flex-1 flex-col mb-[clamp(64px,12vw,160px)]">
+        <main class="flex flex-col flex-1 mb-(--section-padding)">
             <slot />
         </main>
         <Footer />

@@ -1,5 +1,5 @@
 ---
-import { LINKS, ROUTES } from '@lib/utils';
+import { LINKS, ROUTES } from '@lib/constants';
 ---
 
 <footer
@@ -8,7 +8,12 @@ import { LINKS, ROUTES } from '@lib/utils';
 >
     <div class="shell site-footer__inner grid items-start">
         <div class="flex flex-col gap-4">
-            <a class="site-footer__title" href="/">ATX Music Video Film Festival</a>
+            <a
+                class="site-footer__title"
+                href="/"
+            >
+                Austin Music Video Film Festival
+            </a>
             <p class="site-footer__tag">An immersive production where Austin's music and film worlds collide. Official selections, live acts, screening blocks, and a pool party. Every screen and stage active.</p>
         </div>
         <div class="site-footer__col">
@@ -72,16 +77,18 @@ import { LINKS, ROUTES } from '@lib/utils';
             </ul>
         </div>
     </div>
-    <div class="shell site-footer__bottom flex flex-wrap justify-between select-none">
-        <span>&copy; 2026 ATX MVFF &middot; All rights reserved</span>
-        <span><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; 7pm &ndash; 2am &middot; Cabana Club &middot; Austin, TX</span>
-        <nav
-            class="flex gap-3"
-            aria-label="Legal"
-        >
-            <a href="/privacy">Privacy</a>
-            <span aria-hidden="true">&middot;</span>
-            <a href="/terms">Terms</a>
+    <div class="shell site-footer__bottom flex flex-wrap justify-between">
+        <span>&copy; 2026 Austin Music Video Film Festival &middot; All rights reserved</span>
+        <span><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; 7 PM &ndash; 2 AM &middot; Cabana Club &middot; Austin, TX</span>
+        <nav aria-label="Legal">
+            <ul class="site-footer__legal flex list-none gap-3">
+                <li>
+                    <a href="/privacy">Privacy</a>
+                </li>
+                <li>
+                    <a href="/terms">Terms</a>
+                </li>
+            </ul>
         </nav>
     </div>
 </footer>
@@ -90,18 +97,28 @@ import { LINKS, ROUTES } from '@lib/utils';
     .site-footer {
         background: var(--color-navy);
         border-top: 1px solid var(--color-cream-15);
-        padding: clamp(48px, 8vw, 80px) 0 clamp(24px, 3vw, 32px);
+        padding: clamp(48px, calc(37.33px + 3.33vw), 80px) 0 clamp(24px, calc(21.33px + 0.83vw), 32px);
     }
 
     .site-footer__bottom {
         border-top: 1px solid var(--color-cream-15);
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 10.5px;
+        font-size: 10px;
         gap: 12px;
         letter-spacing: 0.16em;
         padding-block: 16px 0;
         text-transform: uppercase;
+    }
+
+    .site-footer__bottom a {
+        color: var(--color-cream-60);
+        transition: color var(--duration-fast) ease;
+    }
+
+    .site-footer__bottom a:active,
+    .site-footer__bottom a:hover {
+        color: var(--color-coral);
     }
 
     .site-footer__col a {
@@ -111,7 +128,9 @@ import { LINKS, ROUTES } from '@lib/utils';
         font-size: 18px;
         padding: 8px 0;
         text-decoration: none;
-        transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+        transition:
+            color var(--duration-fast) ease,
+            transform var(--duration-fast) ease;
     }
 
     .site-footer__col a:active,
@@ -131,9 +150,14 @@ import { LINKS, ROUTES } from '@lib/utils';
     }
 
     .site-footer__inner {
-        gap: clamp(24px, 4vw, 48px);
+        gap: clamp(24px, calc(16px + 2.5vw), 48px);
         grid-template-columns: 2fr 1fr 1fr 1fr;
-        margin-bottom: clamp(48px, 5vw, 64px);
+        margin-bottom: clamp(48px, calc(42.67px + 1.67vw), 64px);
+    }
+
+    .site-footer__legal li:nth-child(2)::before {
+        content: '\00B7';
+        padding-right: 12px;
     }
 
     .site-footer__tag {
@@ -148,7 +172,7 @@ import { LINKS, ROUTES } from '@lib/utils';
     .site-footer__title {
         color: var(--color-cream);
         font-family: var(--font-display);
-        font-size: clamp(36px, 5vw, 52px);
+        font-size: clamp(36px, calc(30.67px + 1.67vw), 52px);
         letter-spacing: 0.04em;
         line-height: 1.1;
         text-decoration: none;

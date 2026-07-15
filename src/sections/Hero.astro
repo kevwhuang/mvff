@@ -1,13 +1,16 @@
 ---
+import { Image } from 'astro:assets';
+
+import logo from '@images/logos/austin_music_video_film_festival.webp';
 import poster from '@images/poster.webp';
-import { LINKS } from '@lib/utils';
+import { LINKS } from '@lib/constants';
 
 const UNITS = [
     { label: 'Days', unit: 'days' },
     { label: 'Hours', unit: 'hours' },
     { label: 'Minutes', unit: 'minutes' },
     { label: 'Seconds', unit: 'seconds' },
-];
+] as const;
 ---
 
 <section
@@ -32,34 +35,41 @@ const UNITS = [
     <div class="hero__frame-top-right absolute" aria-hidden="true" />
     <div class="hero__frame-bottom-left absolute" aria-hidden="true" />
     <div class="hero__frame-bottom-right absolute" aria-hidden="true" />
-    <ul
-        class="hero__countdown hero__reveal grid absolute select-none text-right list-none"
+    <dl
+        class="hero__countdown hero__reveal absolute grid text-right select-none"
         aria-label="Event countdown"
         role="timer"
     >
         {UNITS.map(({ label, unit }) => (
-            <li>
-                <div
+            <div>
+                <dt class="hero__countdown-label">{label}</dt>
+                <dd
                     class="hero__countdown-number"
                     data-unit={unit}
                 >
                     00
-                </div>
-                <div class="hero__countdown-label">{label}</div>
-            </li>
+                </dd>
+            </div>
         ))}
-    </ul>
+    </dl>
     <div class="hero__content shell relative">
-        <div class="hero__meta hero__reveal flex flex-wrap items-center">
-            <span class="hero__meta-item flex items-center select-none">Vol. 01</span>
-            <span class="hero__meta-item flex items-center select-none"><time datetime="2026-07-18">July 18, 2026</time></span>
-            <span class="hero__meta-item flex items-center select-none">Cabana Club &middot; Austin, TX</span>
+        <div class="hero__meta hero__reveal flex flex-wrap items-center gap-6 mb-6">
+            <span class="hero__meta-item flex items-center">Vol. 01</span>
+            <span class="hero__meta-item flex items-center"><time datetime="2026-07-18">July 18, 2026</time></span>
+            <span class="hero__meta-item flex items-center">Cabana Club &middot; Austin, TX</span>
         </div>
         <h1
             id="hero-title"
-            class="hero__title hero__reveal"
+            class="hero__title hero__reveal mb-6"
         >
-            Austin<br />Music Video<br />Film <span class="hero__title-fest">Fest</span>
+            <Image
+                class="hero__logo block h-auto w-full"
+                alt="Austin Music Video Film Festival"
+                densities={[1, 2]}
+                loading="eager"
+                src={logo}
+                width={620}
+            />
         </h1>
         <p class="hero__subtitle hero__reveal">
             Where Austin's music and film worlds collide. Live acts, screening blocks, awards, and a pool party, all under one roof.
@@ -67,17 +77,17 @@ const UNITS = [
         <div class="hero__reveal flex flex-wrap items-center gap-4">
             <a
                 class="btn btn--primary"
+                href={LINKS.posh}
+                target="_blank"
+            >
+                Buy Tickets
+            </a>
+            <a
+                class="btn"
                 href={LINKS.sponsor}
                 target="_blank"
             >
                 Sponsor Us
-            </a>
-            <a
-                class="btn"
-                href={LINKS.partner}
-                target="_blank"
-            >
-                Partner Up
             </a>
         </div>
     </div>
@@ -111,45 +121,7 @@ const UNITS = [
     }
 
     .hero__content {
-        padding-block: clamp(32px, 4vw, 48px);
-    }
-
-    .hero__reveal {
-        animation: hero__fade-up 0.6s ease both;
-        opacity: 0;
-    }
-
-    .hero__reveal:nth-child(1) {
-        animation-delay: 0.15s;
-    }
-
-    .hero__reveal:nth-child(2) {
-        animation-delay: 0.4s;
-    }
-
-    .hero__reveal:nth-child(3) {
-        animation-delay: 0.7s;
-    }
-
-    .hero__reveal:nth-child(4) {
-        animation-delay: 1s;
-    }
-
-    @keyframes hero__fade-up {
-        from {
-            opacity: 0;
-            transform: translateY(24px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .hero .btn {
-        font-size: 13px;
-        padding: 16px 32px;
+        padding-block: clamp(32px, calc(26.67px + 1.67vw), 48px);
     }
 
     .hero__countdown {
@@ -158,6 +130,11 @@ const UNITS = [
         grid-template-columns: repeat(4, 1fr);
         right: var(--shell-pad);
         top: 60px;
+    }
+
+    .hero__countdown div {
+        display: flex;
+        flex-direction: column-reverse;
     }
 
     .hero__countdown-label {
@@ -171,7 +148,7 @@ const UNITS = [
     .hero__countdown-number {
         color: var(--color-cream);
         font-family: var(--font-display);
-        font-size: clamp(36px, 5.5vw, 72px);
+        font-size: clamp(36px, calc(24px + 3.75vw), 72px);
         line-height: 0.9;
         margin-bottom: 8px;
     }
@@ -213,15 +190,14 @@ const UNITS = [
         top: 24px;
     }
 
-    .hero__meta {
-        gap: 24px;
-        margin-bottom: 24px;
+    .hero__logo {
+        max-width: clamp(280px, calc(166.67px + 35.42vw), 620px);
     }
 
     .hero__meta-item {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 11px;
+        font-size: 12px;
         gap: 8px;
         letter-spacing: 0.18em;
         text-transform: uppercase;
@@ -235,90 +211,89 @@ const UNITS = [
         width: 18px;
     }
 
+    .hero__reveal {
+        animation: hero__fade-up 0.6s ease both;
+        opacity: 0;
+    }
+
+    .hero__reveal:nth-child(1) {
+        animation-delay: 0.2s;
+    }
+
+    .hero__reveal:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    .hero__reveal:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+
+    .hero__reveal:nth-child(4) {
+        animation-delay: 0.8s;
+    }
+
     .hero__subtitle {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
-        font-size: clamp(20px, 2.4vw, 30px);
+        font-size: clamp(20px, calc(16.67px + 1.04vw), 30px);
         font-style: italic;
         line-height: 1.3;
         margin-bottom: 32px;
         max-width: 540px;
     }
 
-    .hero__title {
-        font-size: clamp(64px, 15.7vw, 200px);
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        line-height: 0.86;
-        margin-bottom: 16px;
-        text-transform: uppercase;
-    }
-
-    .hero__title-fest {
-        color: var(--color-coral);
-        font-family: var(--font-serif);
-        font-size: 0.85em;
-        font-style: italic;
-        padding: 0 0.05em;
-        vertical-align: 0.05em;
-    }
-
     @media (max-width: 1024px) {
-        .hero .btn {
-            font-size: 12px;
-            padding: 16px 24px;
-        }
-
         .hero__countdown {
             display: none;
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         .hero__meta-item::before {
             display: none;
         }
+    }
 
-        .hero__title {
-            font-size: clamp(38px, 12vw, 64px);
+    @keyframes hero__fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 </style>
 
 <script>
-    import { getCountdownParts, pad } from '@lib/utils';
+    import { pad, startCountdown } from '@lib/utils';
 
-    let heroInterval: Timer | undefined;
+    const UNITS = ['days', 'hours', 'minutes', 'seconds'] as const;
+
+    let stopHeroCountdown: (() => void) | undefined;
 
     function initHeroCountdown() {
-        if (heroInterval) clearInterval(heroInterval);
+        stopHeroCountdown?.();
 
         if (!document.querySelector('[data-unit="days"]')) return;
 
-        updateHeroCountdown();
-        heroInterval = setInterval(updateHeroCountdown, 1_000);
+        stopHeroCountdown = startCountdown(renderHeroCountdown);
     }
 
-    function updateHeroCountdown() {
-        const days = document.querySelector('[data-unit="days"]');
-        const hours = document.querySelector('[data-unit="hours"]');
-        const minutes = document.querySelector('[data-unit="minutes"]');
-        const seconds = document.querySelector('[data-unit="seconds"]');
-
-        if (!days) return;
-
-        const parts = getCountdownParts();
-
+    function renderHeroCountdown(parts: CountdownParts) {
         if (parts.remaining <= 0) return;
 
-        days.textContent = pad(parts.days);
-        if (hours) hours.textContent = pad(parts.hours);
-        if (minutes) minutes.textContent = pad(parts.minutes);
-        if (seconds) seconds.textContent = pad(parts.seconds);
+        UNITS.forEach((unit) => {
+            const element = document.querySelector(`[data-unit="${unit}"]`);
+
+            if (element) element.textContent = pad(parts[unit]);
+        });
     }
 
     document.addEventListener('astro:before-swap', () => {
-        if (heroInterval) clearInterval(heroInterval);
+        stopHeroCountdown?.();
     });
 
     document.addEventListener('astro:page-load', initHeroCountdown);

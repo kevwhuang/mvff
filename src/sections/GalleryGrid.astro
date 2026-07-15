@@ -1,5 +1,9 @@
 ---
+import { Image, getImage } from 'astro:assets';
+
 import SectionHead from '@components/SectionHead.astro';
+import teamSeated from '@images/gallery/team_seated.webp';
+import teamStanding from '@images/gallery/team_standing.webp';
 import { pad } from '@lib/utils';
 
 const PALETTE = [
@@ -8,19 +12,33 @@ const PALETTE = [
     ['#2c1414', '#7a2a2a'], ['#1c2424', '#4a6e6e'], ['#241c0e', '#8a6a2a'],
     ['#14242c', '#2a6a8a'], ['#2a2414', '#8a7a3a'], ['#1c1424', '#5a3a7a'],
     ['#0e1c14', '#2a8a4a'], ['#241414', '#8a4a4a'], ['#14241c', '#2a8a6a'],
-];
+] as const;
 
-const WIDES = [0, 7, 11, 13, 14];
+const PHOTOS = new Map([
+    [0, { caption: 'The 2026 festival team, suited up in studio.', image: teamStanding, title: 'The 2026 Team' }],
+    [7, { caption: 'The crew settles in ahead of the 2026 season.', image: teamSeated, title: 'Crew Portrait' }],
+]);
 
-const titles = Array.from({ length: PALETTE.length }, (_, index) => `Frame ${pad(index + 1)}`);
+const WIDE_INDICES = [0, 7, 11, 13, 14] as const;
 
-const items = PALETTE.map((gradient, index) => ({
-    block: `BLK_${pad(index + 1, 3)}`,
-    gradient: `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
-    id: index,
-    span: WIDES.includes(index) ? 'wide' : 'normal',
-    title: titles[index],
-    year: '2025',
+const items = await Promise.all(PALETTE.map(async (gradient, index) => {
+    const photo = PHOTOS.get(index);
+
+    const fullImage = photo
+        ? await getImage({ src: photo.image, width: 1600 })
+        : undefined;
+
+    return {
+        background: fullImage
+            ? `url('${fullImage.src}') center / cover no-repeat`
+            : `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
+        block: `BLK_${pad(index + 1, 3)}`,
+        caption: photo?.caption ?? '',
+        image: photo?.image,
+        span: WIDE_INDICES.some(wideIndex => wideIndex === index) ? 'wide' : 'normal',
+        title: photo?.title ?? `Frame ${pad(index + 1)}`,
+        year: '2026',
+    };
 }));
 ---
 
@@ -31,7 +49,7 @@ const items = PALETTE.map((gradient, index) => ({
     <div class="shell">
         <SectionHead
             headingId="gallery-title"
-            number="[ G ]"
+            marker="[ G ]"
         >
             Gallery
         </SectionHead>
@@ -43,19 +61,33 @@ const items = PALETTE.map((gradient, index) => ({
             {items.map(item => (
                 <li class:list={['gallery__cell grid', `gallery__cell--${item.span}`]}>
                     <button
-                        class="gallery__tile cursor-pointer overflow-hidden relative text-left"
+                        class="gallery__tile overflow-hidden relative text-left cursor-pointer"
                         aria-label={`View ${item.title}`}
+                        data-gallery-background={item.background}
                         data-gallery-block={item.block}
-                        data-gallery-gradient={item.gradient}
+                        data-gallery-caption={item.caption}
                         data-gallery-title={item.title}
                         data-gallery-year={item.year}
                         type="button"
                     >
-                        <span
-                            class="gallery__tile-image"
-                            style={`background: ${item.gradient};`}
-                        />
-                        <span class="gallery__tile-meta flex justify-between absolute select-none">
+                        {item.image
+                            ? (
+                                    <Image
+                                        class="gallery__tile-image object-cover"
+                                        alt=""
+                                        densities={[1, 2]}
+                                        loading="lazy"
+                                        src={item.image}
+                                        width={720}
+                                    />
+                                )
+                            : (
+                                    <span
+                                        class="gallery__tile-image"
+                                        style={`background: ${item.background};`}
+                                    />
+                                )}
+                        <span class="gallery__tile-meta absolute flex justify-between select-none">
                             <span>{item.title}</span>
                             <span>{item.block}</span>
                         </span>
@@ -64,31 +96,42 @@ const items = PALETTE.map((gradient, index) => ({
             ))}
         </ul>
     </div>
-</section>
-<div
-    class="lightbox fixed"
-    aria-hidden="true"
-    aria-labelledby="lightbox-title"
-    aria-modal="true"
-    role="dialog"
->
-    <div class="lightbox__inner cursor-default grid relative">
-        <button
-            class="lightbox__close cursor-pointer absolute"
-            aria-label="Close lightbox"
-            type="button"
-        >
-            &times;
-        </button>
-        <div class="lightbox__image" />
-        <div class="lightbox__info flex flex-col">
-            <div class="lightbox__meta lightbox__meta--dynamic" />
-            <h2 id="lightbox-title" aria-hidden="true">&nbsp;</h2>
-            <p>Gallery content coming soon.</p>
-            <div class="lightbox__meta">Shot by ATX MVFF Media Team</div>
+    <div
+        class="lightbox fixed"
+        aria-describedby="lightbox-caption"
+        aria-hidden="true"
+        aria-labelledby="lightbox-title"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="lightbox__inner grid relative cursor-default">
+            <button
+                class="lightbox__close absolute cursor-pointer"
+                aria-label="Close lightbox"
+                type="button"
+            >
+                &times;
+            </button>
+            <div class="lightbox__image" />
+            <div class="lightbox__info flex flex-col gap-3 text-cream">
+                <div class="lightbox__meta lightbox__meta--dynamic" />
+                <h2
+                    id="lightbox-title"
+                    aria-hidden="true"
+                >
+                    &nbsp;
+                </h2>
+                <p
+                    id="lightbox-caption"
+                    class="lightbox__caption"
+                >
+                    Gallery content coming soon.
+                </p>
+                <div class="lightbox__meta">Shot by Austin Music Video Film Festival Media Team</div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
 <style>
     .gallery__cell--normal {
@@ -164,10 +207,9 @@ const items = PALETTE.map((gradient, index) => ({
         cursor: zoom-out;
         display: none;
         inset: 0;
-        padding: clamp(24px, 5vw, 64px);
+        padding: clamp(24px, calc(10.67px + 4.17vw), 64px);
         place-items: center;
         z-index: 200;
-        -webkit-backdrop-filter: blur(8px);
     }
 
     .lightbox[data-active] {
@@ -182,7 +224,9 @@ const items = PALETTE.map((gradient, index) => ({
         height: 32px;
         right: 0;
         top: -40px;
-        transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+        transition:
+            border-color var(--duration-fast) ease,
+            color var(--duration-fast) ease;
         width: 32px;
     }
 
@@ -205,14 +249,8 @@ const items = PALETTE.map((gradient, index) => ({
         border: 1px solid var(--color-cream-15);
     }
 
-    .lightbox__info {
-        color: var(--color-cream);
-        gap: 12px;
-    }
-
     .lightbox__info h2 {
-        font-family: var(--font-display);
-        font-size: clamp(24px, 5vw, 36px);
+        font-size: clamp(24px, calc(20px + 1.25vw), 36px);
     }
 
     .lightbox__info p {
@@ -233,24 +271,12 @@ const items = PALETTE.map((gradient, index) => ({
     .lightbox__meta {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
-        font-size: 11px;
+        font-size: 12px;
         letter-spacing: 0.16em;
         text-transform: uppercase;
     }
 
     @media (max-width: 768px) {
-        .gallery__grid {
-            grid-auto-rows: 44px;
-            grid-template-columns: repeat(6, 1fr);
-        }
-    }
-
-    @media (max-width: 480px) {
-        .gallery__grid {
-            grid-auto-rows: 52px;
-            grid-template-columns: repeat(4, 1fr);
-        }
-
         .gallery__cell--normal {
             grid-column: span 2;
             grid-row: span 2;
@@ -259,6 +285,11 @@ const items = PALETTE.map((gradient, index) => ({
         .gallery__cell--wide {
             grid-column: span 4;
             grid-row: span 2;
+        }
+
+        .gallery__grid {
+            grid-auto-rows: 52px;
+            grid-template-columns: repeat(4, 1fr);
         }
 
         .lightbox__inner {
@@ -280,10 +311,9 @@ const items = PALETTE.map((gradient, index) => ({
 <script>
     let galleryController: AbortController | undefined;
     let lastTile: HTMLElement | undefined;
+    let lightbox: HTMLElement | null = null;
 
     function closeLightbox() {
-        const lightbox = document.querySelector('.lightbox');
-
         if (!lightbox?.hasAttribute('data-active')) return;
 
         lightbox.removeAttribute('data-active');
@@ -295,15 +325,16 @@ const items = PALETTE.map((gradient, index) => ({
     function handleLightboxKeydown(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             closeLightbox();
-        } else if (event.key === 'Tab' && document.querySelector('.lightbox')?.hasAttribute('data-active')) {
+        } else if (event.key === 'Tab' && lightbox?.hasAttribute('data-active')) {
             event.preventDefault();
-            document.querySelector<HTMLElement>('.lightbox__close')?.focus();
+            lightbox.querySelector<HTMLElement>('.lightbox__close')?.focus();
         }
     }
 
     function initGallery() {
         galleryController?.abort();
         galleryController = new AbortController();
+        lightbox = document.querySelector<HTMLElement>('.lightbox');
 
         const { signal } = galleryController;
 
@@ -311,9 +342,8 @@ const items = PALETTE.map((gradient, index) => ({
             tile.addEventListener('click', () => openLightbox(tile), { signal });
         });
 
-        const close = document.querySelector('.lightbox__close');
-        const inner = document.querySelector('.lightbox__inner');
-        const lightbox = document.querySelector('.lightbox');
+        const close = lightbox?.querySelector('.lightbox__close');
+        const inner = lightbox?.querySelector('.lightbox__inner');
 
         close?.addEventListener('click', closeLightbox, { signal });
         inner?.addEventListener('click', event => event.stopPropagation(), { signal });
@@ -322,21 +352,24 @@ const items = PALETTE.map((gradient, index) => ({
     }
 
     function openLightbox(tile: HTMLElement) {
-        const image = document.querySelector<HTMLElement>('.lightbox__image');
-        const lightbox = document.querySelector('.lightbox');
-        const meta = document.querySelector('.lightbox__meta--dynamic');
-        const title = document.getElementById('lightbox-title');
+        if (!lightbox) return;
 
-        if (!image || !lightbox || !meta || !title) return;
+        const caption = lightbox.querySelector('.lightbox__caption');
+        const image = lightbox.querySelector<HTMLElement>('.lightbox__image');
+        const meta = lightbox.querySelector('.lightbox__meta--dynamic');
+        const title = lightbox.querySelector<HTMLElement>('#lightbox-title');
 
-        image.style.background = tile.dataset.galleryGradient || '';
+        if (!caption || !image || !meta || !title) return;
+
+        caption.textContent = tile.dataset.galleryCaption || 'Gallery content coming soon.';
+        image.style.background = tile.dataset.galleryBackground || '';
         title.textContent = tile.dataset.galleryTitle || '';
         title.removeAttribute('aria-hidden');
         meta.textContent = `${tile.dataset.galleryBlock} \u00b7 ${tile.dataset.galleryYear}`;
         lastTile = tile;
         lightbox.setAttribute('data-active', '');
         lightbox.setAttribute('aria-hidden', 'false');
-        document.querySelector<HTMLElement>('.lightbox__close')?.focus();
+        lightbox.querySelector<HTMLElement>('.lightbox__close')?.focus();
     }
 
     document.addEventListener('astro:page-load', initGallery);

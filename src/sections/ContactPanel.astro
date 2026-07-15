@@ -1,28 +1,28 @@
 ---
 import SectionHead from '@components/SectionHead.astro';
-import { LINKS } from '@lib/utils';
+import { LINKS } from '@lib/constants';
 ---
 
 <section
-    class="section"
+    class="contact section"
     aria-labelledby="contact-title"
 >
     <div class="shell">
         <SectionHead
             headingId="contact-title"
-            number="[ C ]"
+            marker="[ C ]"
         >
             Contact
         </SectionHead>
         <div
-            class="contact grid items-start"
+            class="contact__grid grid items-start"
             data-scroll
             data-scroll-stagger="0.1"
         >
             <form class="contact__form flex flex-col gap-5">
-                <div class="contact__banner flex items-center absolute" aria-live="polite" />
+                <div class="contact__banner absolute flex items-center" aria-live="polite" />
                 <label class="flex flex-col">
-                    <span class="label">Name</span>
+                    <span class="label">Name <span class="label__required">*</span></span>
                     <input
                         class="input"
                         autocomplete="name"
@@ -33,7 +33,7 @@ import { LINKS } from '@lib/utils';
                     />
                 </label>
                 <label class="flex flex-col">
-                    <span class="label">Email</span>
+                    <span class="label">Email <span class="label__required">*</span></span>
                     <input
                         class="input"
                         autocomplete="email"
@@ -57,7 +57,7 @@ import { LINKS } from '@lib/utils';
                     </select>
                 </label>
                 <label class="flex flex-col">
-                    <span class="label">Message</span>
+                    <span class="label">Message <span class="label__required">*</span></span>
                     <textarea class="textarea" name="message" placeholder="Tell us what brought you here." required />
                 </label>
                 <button
@@ -141,11 +141,6 @@ import { LINKS } from '@lib/utils';
 </section>
 
 <style>
-    .contact {
-        gap: clamp(40px, 6.25vw, 80px);
-        grid-template-columns: 1fr 1fr;
-    }
-
     .contact__banner {
         color: var(--color-night);
         font-family: var(--font-mono);
@@ -161,6 +156,11 @@ import { LINKS } from '@lib/utils';
         margin-bottom: 8px;
         padding: 16px 24px;
         position: static;
+    }
+
+    .contact__grid {
+        gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
+        grid-template-columns: 1fr 1fr;
     }
 
     .contact__line {
@@ -196,13 +196,63 @@ import { LINKS } from '@lib/utils';
 
     .contact__line-value {
         font-family: var(--font-display);
-        font-size: clamp(16px, calc(10px + 1.875vw), 22px);
+        font-size: clamp(16px, calc(14px + 0.63vw), 22px);
         min-width: 0;
         overflow-wrap: break-word;
     }
 
+    .input,
+    .select,
+    .textarea {
+        background: var(--color-night);
+        border: 1px solid var(--color-cream-15);
+        color: var(--color-cream);
+        font-family: var(--font-mono);
+        font-size: 14px;
+        outline: none;
+        padding: 12px 16px;
+        transition:
+            background var(--duration-fast) ease,
+            border-color var(--duration-fast) ease;
+        width: 100%;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+        background: var(--color-navy);
+        border-color: var(--color-coral);
+    }
+
+    .input:hover,
+    .select:hover,
+    .textarea:hover {
+        border-color: var(--color-cream-40);
+    }
+
+    .label {
+        color: var(--color-cream-60);
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .label__required {
+        color: var(--color-coral);
+    }
+
+    .textarea {
+        font-family: var(--font-sans);
+        line-height: 1.5;
+        min-height: 140px;
+        resize: vertical;
+    }
+
     @media (max-width: 1024px) {
-        .contact {
+        .contact__grid {
             grid-template-columns: 1fr;
         }
     }
@@ -259,6 +309,10 @@ import { LINKS } from '@lib/utils';
 
         form.addEventListener('submit', event => handleSubmit(event, banner, form), { signal });
     }
+
+    document.addEventListener('astro:before-swap', () => {
+        clearTimeout(bannerTimeout);
+    });
 
     document.addEventListener('astro:page-load', initContact);
 </script>

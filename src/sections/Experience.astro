@@ -8,18 +8,18 @@ const HIGHLIGHTS = [
     { description: 'Conversations with directors, producers, and artists after each screening block. Community partner spotlights.', title: 'Q&A Panel' },
     { description: 'Nominee performances across all music genres. Opening mixer and closing celebration set. Where Austin\'s music and film worlds collide.', title: 'Live Music' },
     { description: 'Cabana Club night swim atmosphere. Red carpet meets pool party.', title: 'Pool Party' },
-];
+] as const;
 ---
 
 <section
-    class="section"
+    class="experience section"
     aria-labelledby="experience-title"
 >
     <div class="shell">
         <SectionHead
             headingId="experience-title"
             level="h2"
-            number="[ 02 ]"
+            marker="[ 02 ]"
         >
             The Experience
         </SectionHead>
@@ -29,7 +29,7 @@ const HIGHLIGHTS = [
             data-scroll-stagger="0.08"
         >
             {HIGHLIGHTS.map((highlight, index) => (
-                <li class="highlight grid isolate relative items-baseline">
+                <li class="highlight grid isolate items-baseline relative">
                     <span class="highlight__number select-none">/ {pad(index + 1)}</span>
                     <h3 class="highlight__title">{highlight.title}</h3>
                     <p class="highlight__description">{highlight.description}</p>
@@ -42,9 +42,9 @@ const HIGHLIGHTS = [
 <style>
     .highlight {
         border-bottom: 1px solid var(--color-cream-15);
-        gap: clamp(16px, 3.13vw, 40px);
+        gap: clamp(16px, calc(8px + 2.5vw), 40px);
         grid-template-columns: 80px 1fr 1.2fr;
-        padding: clamp(32px, 4vw, 48px) 0;
+        padding: clamp(32px, calc(26.67px + 1.67vw), 48px) 0;
     }
 
     .highlight:first-child {
@@ -74,7 +74,7 @@ const HIGHLIGHTS = [
     .highlight__description {
         color: var(--color-cream-60);
         font-family: var(--font-serif);
-        font-size: clamp(15px, 1.33vw, 17px);
+        font-size: 16px;
         line-height: 1.45;
     }
 
@@ -86,10 +86,12 @@ const HIGHLIGHTS = [
     }
 
     .highlight__title {
-        font-size: clamp(34px, 5vw, 64px);
+        font-size: clamp(34px, calc(24px + 3.13vw), 64px);
         line-height: 0.95;
         text-transform: uppercase;
-        transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
+        transition:
+            color var(--duration-fast) ease,
+            transform var(--duration-fast) ease;
     }
 
     @media (max-width: 768px) {

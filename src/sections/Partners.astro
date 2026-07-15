@@ -62,7 +62,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
         border-bottom: 1px solid var(--color-cream-15);
         border-top: 1px solid var(--color-cream-15);
         overflow-x: clip;
-        padding: clamp(48px, 6vw, 80px) 0;
+        padding: clamp(48px, calc(37.33px + 3.33vw), 80px) 0;
     }
 
     .marquee__diamond {
@@ -76,7 +76,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
     .marquee__item {
         color: var(--color-cream-60);
         font-family: var(--font-display);
-        font-size: clamp(40px, 6.25vw, 80px);
+        font-size: clamp(40px, calc(26.67px + 4.17vw), 80px);
         gap: 32px;
         letter-spacing: 0.04em;
         line-height: 1;
@@ -88,7 +88,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
     }
 
     .marquee__logo {
-        height: clamp(40px, 6vw, 70px);
+        height: clamp(40px, calc(30px + 3.13vw), 70px);
         object-fit: contain;
         opacity: 0.85;
         vertical-align: middle;
@@ -100,7 +100,7 @@ import logoMadewellProductions from '@images/logos/madewell_productions.webp';
     }
 
     .marquee__track {
-        --marquee-gap: clamp(40px, 6.25vw, 80px);
+        --marquee-gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
         animation: marquee__scroll 28s linear infinite;
         gap: var(--marquee-gap);
         width: max-content;
