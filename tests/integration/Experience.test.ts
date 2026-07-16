@@ -40,8 +40,8 @@ describe('Experience', () => {
     });
 
     test('renders each highlight description', () => {
-        expect(html).toContain('28 official selections across all genres.');
-        expect(html).toContain('Best Music Video, Best Director, Best Producer, Best Song, Audience Choice, and partner organization awards.');
+        expect(html).toContain('Three screening blocks, 22 official selections');
+        expect(html).toContain('Ten jury awards and the Spotlight Partner Award');
         expect(html.split('class="highlight__description"').length - 1).toBe(HIGHLIGHTS.length);
     });
 });

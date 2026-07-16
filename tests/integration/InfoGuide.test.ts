@@ -3,8 +3,8 @@ import { beforeAll, describe, expect, test } from 'vitest';
 
 import InfoGuide from '../../src/sections/InfoGuide.astro';
 
-const FAQ_COUNT = 8;
-const SCHEDULE_COUNT = 12;
+const FAQ_COUNT = 9;
+const SCHEDULE_COUNT = 16;
 const VENUE_FEATURES = ['Indoor screen', 'Outdoor pool', 'Full bar', 'VIP lounge', 'Red carpet', 'ADA access'] as const;
 
 describe('InfoGuide', () => {
@@ -22,9 +22,12 @@ describe('InfoGuide', () => {
         expect(html).toMatch(/<h1 id="info-title"[^>]*>Info<\/h1>/);
     });
 
-    test('renders a schedule row for every slot', () => {
+    test('renders a schedule row for every slot from doors to close', () => {
         expect(html.split('class="schedule__row').length - 1).toBe(SCHEDULE_COUNT);
-        expect(html).toMatch(/<span class="schedule__event"[^>]*>Event TBD<\/span>/);
+        expect(html).toMatch(/<span class="schedule__time"[^>]*>7:00 PM<\/span>/);
+        expect(html).toMatch(/<span class="schedule__event"[^>]*>Doors \u00b7 Ryley Hall<\/span>/);
+        expect(html).toMatch(/<span class="schedule__time"[^>]*>2:00 AM<\/span>/);
+        expect(html).toMatch(/<span class="schedule__event"[^>]*>Lights Up<\/span>/);
     });
 
     test('renders the venue card and its feature list', () => {
@@ -34,11 +37,6 @@ describe('InfoGuide', () => {
         for (const feature of VENUE_FEATURES) {
             expect(html).toMatch(new RegExp(`<li[^>]*>${feature}</li>`));
         }
-    });
-
-    test('renders the practical essentials with the accessibility note', () => {
-        expect(html).toContain('21+ with valid government-issued ID \u2014 no exceptions');
-        expect(html).toContain('Wheelchair-accessible venue \u2014 email us for any further accommodations');
     });
 
     test('renders every faq as a grouped disclosure with all closed on load', () => {

@@ -90,6 +90,23 @@ describe('Layout', () => {
         expect(jsonLd.author).toEqual({ '@type': 'Person', 'name': 'Kevin Huang' });
     });
 
+    test('embeds event json-ld with the venue and ticketing facts', () => {
+        const matches = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+
+        expect(matches).toHaveLength(2);
+
+        const event = JSON.parse(matches[1][1]);
+
+        expect(event['@type']).toBe('Event');
+        expect(event.name).toBe(SITE_NAME);
+        expect(event.startDate).toBe('2026-07-18T19:00:00-05:00');
+        expect(event.endDate).toBe('2026-07-19T02:00:00-05:00');
+        expect(event.location.name).toBe('Cabana Club');
+        expect(event.location.address.streetAddress).toBe('5012 E 7th St');
+        expect(event.offers.url).toBe('https://posh.vip/e/austin-texas-music-video-film-festival');
+        expect(event.organizer.name).toBe('Madewell Productions');
+    });
+
     test('enables the client router', () => {
         expect(html).toContain('<meta name="astro-view-transitions-enabled" content="true">');
         expect(html).toContain('<meta name="astro-view-transitions-fallback" content="animate">');
@@ -108,5 +125,34 @@ describe('Layout', () => {
         expect(html).toContain(SLOT);
         expect(html.indexOf(SLOT)).toBeGreaterThan(html.indexOf('<body'));
         expect(html.indexOf(SLOT)).toBeLessThan(html.indexOf('</body>'));
+    });
+});
+
+describe('Layout noindex', () => {
+    let html: string;
+
+    beforeAll(async () => {
+        const container = await AstroContainer.create();
+
+        vi.stubGlobal('URL', SiteAwareUrl);
+
+        try {
+            html = await container.renderToString(Layout, {
+                partial: false,
+                props: { description: DESCRIPTION, noindex: true, title: TITLE },
+                slots: { default: SLOT },
+            });
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
+
+    test('switches the robots meta to noindex, nofollow', () => {
+        expect(html).toContain('<meta content="noindex, nofollow" name="robots">');
+        expect(html).not.toContain('<meta content="index, follow" name="robots">');
+    });
+
+    test('renders exactly one robots meta', () => {
+        expect(html.split('name="robots"').length - 1).toBe(1);
     });
 });

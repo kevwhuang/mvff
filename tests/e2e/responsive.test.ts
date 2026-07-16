@@ -8,8 +8,6 @@ const PAGES = [
     { name: 'team', path: '/team' },
     { name: 'gallery', path: '/gallery' },
     { name: 'contact', path: '/contact' },
-    { name: 'terms', path: '/terms' },
-    { name: 'privacy', path: '/privacy' },
     { name: 'not found', path: '/this-page-does-not-exist' },
 ] as const;
 

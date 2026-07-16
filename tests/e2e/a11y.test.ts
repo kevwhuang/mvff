@@ -9,7 +9,7 @@ const FOCUS_TARGETS = [
 ] as const;
 
 const MAX_TAB_PRESSES = 12;
-const PUBLIC_PATHS = ['/', '/info', '/team', '/gallery', '/contact', '/terms', '/privacy', '/this-page-does-not-exist'] as const;
+const PUBLIC_PATHS = ['/', '/info', '/team', '/gallery', '/contact', '/this-page-does-not-exist', '/500'] as const;
 const TITLE_PATTERN = /^.+ — Austin Music Video Film Festival$/;
 
 function readOutline(selector: string, page: Page) {

@@ -1,8 +1,10 @@
 ---
-import '@fontsource/bebas-neue/index.css';
-import '@fontsource/instrument-serif/index.css';
-import '@fontsource/inter/index.css';
-import '@fontsource/jetbrains-mono/index.css';
+import '@fontsource/bebas-neue/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/600.css';
 import { ClientRouter } from 'astro:transitions';
 
 import '@/global.css';
@@ -10,14 +12,16 @@ import '@/styles.css';
 import Footer from '@sections/Footer.astro';
 import Navbar from '@sections/Navbar.astro';
 import Stars from '@components/Stars.astro';
+import { LINKS } from '@lib/constants';
 
 interface Props {
     description: string;
+    noindex?: boolean;
     title: string;
 }
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const { description, title } = Astro.props;
+const { description, noindex, title } = Astro.props;
 ---
 
 <!doctype html>
@@ -29,7 +33,7 @@ const { description, title } = Astro.props;
         <meta content={description} name="description" />
         <meta content="Kevin Huang" name="author" />
         <meta content="#0a0a0f" name="theme-color" />
-        <meta content="index, follow" name="robots" />
+        <meta content={noindex ? 'noindex, nofollow' : 'index, follow'} name="robots" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link href="/favicon.png" rel="icon" type="image/png" />
@@ -57,6 +61,36 @@ const { description, title } = Astro.props;
             })}
             type="application/ld+json"
         />
+        <script
+            is:inline
+            set:html={JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Event',
+                'endDate': '2026-07-19T02:00:00-05:00',
+                'image': `${Astro.site}og.png`,
+                'location': {
+                    '@type': 'Place',
+                    'address': {
+                        '@type': 'PostalAddress',
+                        'addressLocality': 'Austin',
+                        'addressRegion': 'TX',
+                        'streetAddress': '5012 E 7th St',
+                    },
+                    'name': 'Cabana Club',
+                },
+                'name': 'Austin Music Video Film Festival',
+                'offers': {
+                    '@type': 'Offer',
+                    'url': LINKS.posh,
+                },
+                'organizer': {
+                    '@type': 'Organization',
+                    'name': 'Madewell Productions',
+                },
+                'startDate': '2026-07-18T19:00:00-05:00',
+            })}
+            type="application/ld+json"
+        />
         <ClientRouter />
     </head>
     <body class="flex flex-col isolate overflow-x-clip relative min-h-screen antialiased font-sans bg-night text-cream">
@@ -73,17 +107,13 @@ const { description, title } = Astro.props;
 
 <style>
     .grain {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
-        inset: 0;
-        mix-blend-mode: overlay;
-        opacity: 0.18;
-        z-index: 100;
+        z-index: -10;
     }
 
     .vignette {
         background: radial-gradient(ellipse at center, transparent 30%, var(--color-black-55) 100%);
         inset: 0;
-        z-index: 99;
+        z-index: -20;
     }
 </style>
 

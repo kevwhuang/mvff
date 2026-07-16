@@ -28,7 +28,7 @@ describe('Hero', () => {
     });
 
     test('renders the muted autoplay video with a poster and webm source', () => {
-        expect(html).toMatch(/<video autoplay loop muted playsinline poster="[^"]*poster\.webp[^"]*"/);
+        expect(html).toMatch(/<video class="hero__video" autoplay loop muted playsinline poster="[^"]*poster\.webp[^"]*"/);
         expect(html).toContain('<source src="/videos/hero.webm" type="video/webm"');
     });
 

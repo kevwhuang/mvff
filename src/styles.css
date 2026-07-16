@@ -26,7 +26,7 @@
 
 .btn:disabled {
     cursor: not-allowed;
-    opacity: 0.55;
+    opacity: 0.7;
 }
 
 .btn:disabled:hover {
@@ -57,41 +57,11 @@
     border-color: var(--color-cream);
 }
 
-.prose {
-    overflow-wrap: break-word;
-}
-
-.prose a {
-    color: var(--color-cream);
-    transition: color var(--duration-fast) ease;
-}
-
-.prose a:active,
-.prose a:hover {
-    color: var(--color-coral);
-}
-
-.prose h2 {
-    font-size: clamp(20px, calc(18.67px + 0.42vw), 24px);
-    margin-bottom: 12px;
-    padding-top: 32px;
-}
-
-.prose li,
-.prose p {
-    color: var(--color-cream-60);
-    line-height: 1.6;
-    margin-bottom: 12px;
-}
-
-.prose strong {
-    color: var(--color-cream);
-}
-
-.prose ul {
-    list-style: disc;
-    margin-bottom: 12px;
-    padding-left: 24px;
+.grain {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
+    inset: 0;
+    mix-blend-mode: overlay;
+    opacity: 0.18;
 }
 
 .section {

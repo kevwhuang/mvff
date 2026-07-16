@@ -1,13 +1,20 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const CALENDLY_URL = 'https://calendly.com/madewellanna99/30min';
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
 const EMAIL_URL = 'mailto:contact@atxmusicvideofilmfestival.com';
+const FORMS_ENDPOINT = '**/forms/';
 const INSTAGRAM_URL = 'https://instagram.com/atxmvff';
 const PITCH_DECK_URL = '/austin_music_video_film_festival_pitch_deck.pdf';
 const POSH_URL = 'https://posh.vip/e/austin-texas-music-video-film-festival';
 const REQUIRED_FIELDS = ['name', 'email', 'message'] as const;
+
+async function fillContactForm(page: Page) {
+    await page.fill('.contact__form input[name="name"]', 'Test User');
+    await page.fill('.contact__form input[name="email"]', 'test@example.com');
+    await page.fill('.contact__form textarea[name="message"]', 'Hello from the test suite.');
+}
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -35,17 +42,73 @@ test.describe('contact form', () => {
         }
     });
 
-    test('shows a disabled Coming Soon submit button', async ({ page }) => {
+    test('wires the form for netlify forms', async ({ page }) => {
+        const form = page.locator('.contact__form');
+
+        await expect(form).toHaveAttribute('data-netlify', 'true');
+        await expect(form).toHaveAttribute('data-netlify-honeypot', 'bot-field');
+        await expect(form).toHaveAttribute('method', 'POST');
+        await expect(form).toHaveAttribute('name', 'contact');
+        await expect(form.locator('input[name="form-name"]')).toHaveAttribute('value', 'contact');
+        await expect(form.locator('input[name="bot-field"]')).toHaveCount(1);
+    });
+
+    test('enables the Send Message submit button', async ({ page }) => {
         const submit = page.locator('.contact__form button[type="submit"]');
 
-        await expect(submit).toBeDisabled();
-        await expect(submit).toHaveText('Coming Soon');
+        await expect(submit).toBeEnabled();
+        await expect(submit).toHaveText('Send Message');
+    });
+
+    test('confirms a success banner and resets after a submission', async ({ page }) => {
+        await page.route(FORMS_ENDPOINT, route => route.fulfill({ body: '', status: 200 }));
+        await fillContactForm(page);
+        await page.click('.contact__form button[type="submit"]');
+
+        const banner = page.locator('.contact__banner');
+
+        await expect(banner).toHaveAttribute('data-visible', '');
+        await expect(banner).toContainText('Message sent');
+        await expect(page.locator('.contact__form input[name="name"]')).toHaveValue('');
+        await expect(page.locator('.contact__form button[type="submit"]')).toBeEnabled();
+    });
+
+    test('surfaces an error banner when the submission fails', async ({ page }) => {
+        await page.route(FORMS_ENDPOINT, route => route.fulfill({ body: '', status: 500 }));
+        await fillContactForm(page);
+        await page.click('.contact__form button[type="submit"]');
+
+        const banner = page.locator('.contact__banner');
+
+        await expect(banner).toHaveAttribute('data-variant', 'error');
+        await expect(banner).toContainText('Something went wrong');
+        await expect(page.locator('.contact__form button[type="submit"]')).toBeEnabled();
     });
 });
 
 test.describe('contact directory', () => {
+    test('renders the directory ahead of the form', async ({ page }) => {
+        const directoryBeforeForm = await page.evaluate(() => {
+            const directory = document.querySelector('.contact__directory');
+            const form = document.querySelector('.contact__form');
+
+            if (!directory || !form) return false;
+
+            return Boolean(directory.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING);
+        });
+
+        expect(directoryBeforeForm).toBe(true);
+    });
+
+    test('elevates the directory into two contact cards', async ({ page }) => {
+        await expect(page.locator('.contact__card')).toHaveCount(2);
+        await expect(page.locator('.contact__card .subhead', { hasText: 'Direct Channels' })).toBeVisible();
+        await expect(page.locator('.contact__card .subhead', { hasText: 'Founder' })).toBeVisible();
+    });
+
     test('lists the direct channels with the correct targets', async ({ page }) => {
         await expect(page.locator(`.contact__line a[href="${EMAIL_URL}"]`)).toBeVisible();
+        await expect(page.locator('.contact__line a[href="tel:+12814669387"]')).toHaveText('(281) 466-9387');
         await expect(page.locator(`.contact__line a[href="${INSTAGRAM_URL}"]`)).toHaveAttribute('target', '_blank');
         await expect(page.locator(`.contact__line a[href="${POSH_URL}"]`)).toHaveAttribute('target', '_blank');
         await expect(page.locator(`.contact__line a[href="${CALENDLY_URL}"]`)).toHaveAttribute('target', '_blank');

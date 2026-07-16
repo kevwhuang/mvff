@@ -19,8 +19,99 @@ import { LINKS } from '@lib/constants';
             data-scroll
             data-scroll-stagger="0.1"
         >
-            <form class="contact__form flex flex-col gap-5">
+            <aside class="contact__directory flex flex-col gap-8">
+                <div class="contact__card">
+                    <h2 class="subhead">Direct Channels</h2>
+                    <dl>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Email</dt>
+                            <dd class="contact__line-value"><a class="contact__line-link" href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a></dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Phone</dt>
+                            <dd class="contact__line-value"><a class="contact__line-link" href={LINKS.phone}>(281) 466-9387</a></dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Instagram</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    class="contact__line-link"
+                                    href={LINKS.instagram}
+                                    target="_blank"
+                                >
+                                    @atxmvff
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Tickets</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    class="contact__line-link"
+                                    href={LINKS.posh}
+                                    target="_blank"
+                                >
+                                    Posh &rarr;
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Pitch</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    class="contact__line-link"
+                                    href={LINKS.pitchDeck}
+                                    target="_blank"
+                                >
+                                    Pitch Deck
+                                </a>
+                            </dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Call</dt>
+                            <dd class="contact__line-value">
+                                <a
+                                    class="contact__line-link"
+                                    href={LINKS.calendly}
+                                    target="_blank"
+                                >
+                                    Calendly &rarr;
+                                </a>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="contact__card">
+                    <h2 class="subhead">Founder</h2>
+                    <dl>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Director</dt>
+                            <dd class="contact__line-value">Anna Madewell</dd>
+                        </div>
+                        <div class="contact__line grid items-baseline">
+                            <dt class="contact__line-label">Studio</dt>
+                            <dd class="contact__line-value">Madewell Productions</dd>
+                        </div>
+                    </dl>
+                </div>
+            </aside>
+            <form
+                class="contact__form flex flex-col gap-5"
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                method="POST"
+                name="contact"
+            >
                 <div class="contact__banner absolute flex items-center" aria-live="polite" />
+                <input
+                    name="form-name"
+                    type="hidden"
+                    value="contact"
+                />
+                <label class="hidden">
+                    Leave this field empty
+                    <input name="bot-field" />
+                </label>
                 <label class="flex flex-col">
                     <span class="label">Name <span class="label__required">*</span></span>
                     <input
@@ -58,84 +149,20 @@ import { LINKS } from '@lib/constants';
                 </label>
                 <label class="flex flex-col">
                     <span class="label">Message <span class="label__required">*</span></span>
-                    <textarea class="textarea" name="message" placeholder="Tell us what brought you here." required />
+                    <textarea
+                        class="textarea"
+                        name="message"
+                        placeholder="Tell us what brought you here."
+                        required
+                    />
                 </label>
                 <button
                     class="btn btn--primary justify-center"
-                    disabled
                     type="submit"
                 >
-                    Coming Soon
+                    Send Message
                 </button>
             </form>
-            <aside class="flex flex-col gap-8">
-                <div>
-                    <h2 class="subhead flex items-baseline justify-between">Direct Channels</h2>
-                    <dl>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Email</dt>
-                            <dd class="contact__line-value"><a href={LINKS.email}>contact@atxmusicvideofilmfestival.com</a></dd>
-                        </div>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Instagram</dt>
-                            <dd class="contact__line-value">
-                                <a
-                                    href={LINKS.instagram}
-                                    target="_blank"
-                                >
-                                    @atxmvff
-                                </a>
-                            </dd>
-                        </div>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Tickets</dt>
-                            <dd class="contact__line-value">
-                                <a
-                                    href={LINKS.posh}
-                                    target="_blank"
-                                >
-                                    Posh &rarr;
-                                </a>
-                            </dd>
-                        </div>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Pitch</dt>
-                            <dd class="contact__line-value">
-                                <a
-                                    href={LINKS.pitchDeck}
-                                    target="_blank"
-                                >
-                                    Pitch Deck
-                                </a>
-                            </dd>
-                        </div>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Call</dt>
-                            <dd class="contact__line-value">
-                                <a
-                                    href={LINKS.calendly}
-                                    target="_blank"
-                                >
-                                    Calendly &rarr;
-                                </a>
-                            </dd>
-                        </div>
-                    </dl>
-                </div>
-                <div>
-                    <h2 class="subhead flex items-baseline justify-between">Founder</h2>
-                    <dl>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Director</dt>
-                            <dd class="contact__line-value">Anna Madewell</dd>
-                        </div>
-                        <div class="contact__line grid items-baseline">
-                            <dt class="contact__line-label">Studio</dt>
-                            <dd class="contact__line-value">Madewell Productions</dd>
-                        </div>
-                    </dl>
-                </div>
-            </aside>
         </div>
     </div>
 </section>
@@ -158,6 +185,28 @@ import { LINKS } from '@lib/constants';
         position: static;
     }
 
+    .contact__banner[data-visible][data-variant='error'] {
+        background: var(--color-navy);
+        box-shadow: inset 0 0 0 1px var(--color-coral);
+        color: var(--color-coral);
+    }
+
+    .contact__card {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        padding: clamp(24px, calc(20px + 1.25vw), 36px);
+        transition:
+            background var(--duration-base) ease,
+            border-color var(--duration-base) ease,
+            box-shadow var(--duration-base) ease;
+    }
+
+    .contact__card:hover {
+        background: var(--color-slate);
+        border-color: var(--color-coral);
+        box-shadow: 0 24px 48px -16px color-mix(in oklab, var(--color-coral) 22%, transparent);
+    }
+
     .contact__grid {
         gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
         grid-template-columns: 1fr 1fr;
@@ -168,22 +217,10 @@ import { LINKS } from '@lib/constants';
         gap: 16px;
         grid-template-columns: 100px 1fr;
         padding: 16px 0;
-        transition: padding var(--duration-fast) ease;
     }
 
-    .contact__line:hover {
-        padding-left: 8px;
-    }
-
-    .contact__line a {
-        color: var(--color-cream);
-        text-decoration: none;
-        transition: color var(--duration-fast) ease;
-    }
-
-    .contact__line a:active,
-    .contact__line a:hover {
-        color: var(--color-coral);
+    .contact__line:last-child {
+        border-bottom: none;
     }
 
     .contact__line-label {
@@ -192,6 +229,17 @@ import { LINKS } from '@lib/constants';
         font-size: 10px;
         letter-spacing: 0.2em;
         text-transform: uppercase;
+    }
+
+    .contact__line-link {
+        color: var(--color-cream);
+        text-decoration: none;
+        transition: color var(--duration-fast) ease;
+    }
+
+    .contact__line-link:active,
+    .contact__line-link:hover {
+        color: var(--color-coral);
     }
 
     .contact__line-value {
@@ -205,7 +253,7 @@ import { LINKS } from '@lib/constants';
     .select,
     .textarea {
         background: var(--color-night);
-        border: 1px solid var(--color-cream-15);
+        border: 1px solid var(--color-cream-40);
         color: var(--color-cream);
         font-family: var(--font-mono);
         font-size: 14px;
@@ -227,7 +275,7 @@ import { LINKS } from '@lib/constants';
     .input:hover,
     .select:hover,
     .textarea:hover {
-        border-color: var(--color-cream-40);
+        border-color: var(--color-cream-60);
     }
 
     .label {
@@ -279,21 +327,34 @@ import { LINKS } from '@lib/constants';
 
 <script>
     const BANNER_DURATION = 4_000;
+    const ERROR_MESSAGE = '\u2717 Something went wrong \u2014 email us directly instead';
+    const SUCCESS_MESSAGE = '\u2713 Message sent \u2014 we\'ll be in touch shortly';
 
     let bannerTimeout: Timer | undefined;
     let contactController: AbortController | undefined;
 
-    function handleSubmit(event: SubmitEvent, banner: Element, form: HTMLFormElement) {
+    async function handleSubmit(event: SubmitEvent, banner: Element, button: HTMLButtonElement, form: HTMLFormElement) {
         event.preventDefault();
-        banner.textContent = '\u2713 Message sent \u2014 we\'ll be in touch shortly';
-        banner.setAttribute('data-visible', '');
-        form.reset();
-        clearTimeout(bannerTimeout);
+        button.disabled = true;
 
-        bannerTimeout = setTimeout(() => {
-            banner.removeAttribute('data-visible');
-            banner.textContent = '';
-        }, BANNER_DURATION);
+        try {
+            const response = await fetch('/forms/', {
+                body: new URLSearchParams([...new FormData(form)].map(([key, value]) => [key, String(value)])).toString(),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                showBanner(banner, SUCCESS_MESSAGE);
+                form.reset();
+            } else {
+                showBanner(banner, ERROR_MESSAGE, 'error');
+            }
+        } catch {
+            showBanner(banner, ERROR_MESSAGE, 'error');
+        } finally {
+            button.disabled = false;
+        }
     }
 
     function initContact() {
@@ -307,7 +368,30 @@ import { LINKS } from '@lib/constants';
 
         if (!banner || !form) return;
 
-        form.addEventListener('submit', event => handleSubmit(event, banner, form), { signal });
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+        if (!button) return;
+
+        form.addEventListener('submit', event => handleSubmit(event, banner, button, form), { signal });
+    }
+
+    function showBanner(banner: Element, message: string, variant?: string) {
+        banner.textContent = message;
+        banner.setAttribute('data-visible', '');
+
+        if (variant) {
+            banner.setAttribute('data-variant', variant);
+        } else {
+            banner.removeAttribute('data-variant');
+        }
+
+        clearTimeout(bannerTimeout);
+
+        bannerTimeout = setTimeout(() => {
+            banner.removeAttribute('data-variant');
+            banner.removeAttribute('data-visible');
+            banner.textContent = '';
+        }, BANNER_DURATION);
     }
 
     document.addEventListener('astro:before-swap', () => {

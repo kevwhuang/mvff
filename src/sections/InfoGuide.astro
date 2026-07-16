@@ -1,39 +1,35 @@
 ---
 import SectionHead from '@components/SectionHead.astro';
 
-const ESSENTIALS = [
-    '21+ with valid government-issued ID \u2014 no exceptions',
-    'Doors open at 7:00 PM, last entry at 11:30 PM',
-    'No outside food or drink \u2014 full-service bar on site',
-    'Pool access included with all ticket tiers \u2014 bring a suit',
-    'Wristband re-entry permitted up until midnight',
-    'Wheelchair-accessible venue \u2014 email us for any further accommodations',
-] as const;
-
 const FAQ = [
-    { answer: 'A one-night festival in Austin where music videos take the spotlight \u2014 paired with live performances by nominee artists, a Q&A panel with directors, an awards ceremony, and a closing pool party. One night, one venue, every screen and stage active.', question: 'What exactly is the Austin Music Video Film Festival?' },
-    { answer: 'Saturday, July 18, 2026, from 7 PM until 2 AM at Cabana Club in Austin, TX. Twelve programmed acts across the night, all under one roof.', question: 'When and where is it happening?' },
-    { answer: 'Submissions for 2026 are now closed. Follow us on Instagram for announcements about the next submission window.', question: 'How do I submit a music video?' },
-    { answer: 'Yes \u2014 21+ with valid ID. The bar is full-service and the pool party runs late.', question: 'Is there an age requirement?' },
-    { answer: 'Red carpet meets pool party. Dress to be photographed \u2014 and bring a swimsuit if you plan to take a dip after midnight.', question: 'What\'s the dress code?' },
-    { answer: 'Phones and small personal cameras are welcome. Professional press / accredited media \u2014 please reach out in advance via the contact form.', question: 'Can I bring a camera?' },
-    { answer: 'Street parking is available around the venue, but rideshare is strongly recommended given how late the event runs.', question: 'Where do I park?' },
-    { answer: 'Cabana Club\'s full-service bar is open all night. Light bites are served during the mixer; no outside food or drink permitted.', question: 'Will there be food and drinks?' },
+    { answer: 'One night in Austin where the music video takes center stage \u2014 three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit.', question: 'What exactly is the Austin Music Video Film Festival?' },
+    { answer: 'Saturday, July 18, 2026, from 7 PM to 2 AM at Cabana Club \u2014 5012 E 7th St, Austin, TX. Live sets, three screening blocks, and an awards ceremony, indoors and out.', question: 'When and where is it happening?' },
+    { answer: 'Just before midnight \u2014 11:45 PM, right after the third and final screening block. The after party runs from there to the 2 AM close.', question: 'What time is the award ceremony?' },
+    { answer: 'Submissions for 2026 are closed \u2014 the official selections are locked and screening July 18. Follow us on Instagram for the next open call.', question: 'How do I submit a music video?' },
+    { answer: 'Yes \u2014 21+ with valid ID, no exceptions. Full bar all night, and doors close at 2 AM.', question: 'Is there an age requirement?' },
+    { answer: 'Red carpet attire \u2014 silk, tuxedos, and a swimsuit if you\'re feeling bold. Dress to be photographed; the pool deck\'s open under the stars.', question: 'What do I wear?' },
+    { answer: 'Phones and small personal cameras, absolutely. Accredited press and media \u2014 reach out through the contact form ahead of the night.', question: 'Can I bring a camera?' },
+    { answer: 'Street parking is available around the venue, but with a 2 AM close, rideshare is the move.', question: 'Where do I park?' },
+    { answer: 'Cabana Club\'s full bar is open all night \u2014 21+ with valid ID. Outside food and drinks aren\'t permitted.', question: 'Will there be food and drinks?' },
 ] as const;
 
 const SCHEDULE = [
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
-    ['TBD', 'Event TBD', 'TBD'],
+    ['7:00 PM', 'Doors \u00B7 Ryley Hall', 'Live'],
+    ['7:25 PM', 'Dasmayan Daydreamers', 'Live'],
+    ['8:00 PM', 'Tipping Culture', 'Live'],
+    ['8:35 PM', 'Anna Madewell', 'Live'],
+    ['9:30 PM', 'Music Video Block 1', 'Screening'],
+    ['10:00 PM', 'Raffle + Q&A with Kay Cote', 'Panel'],
+    ['10:15 PM', 'Music Video Block 2', 'Screening'],
+    ['10:45 PM', 'Raffle + Q&A with Lauren', 'Panel'],
+    ['11:00 PM', 'Music Video Block 3', 'Screening'],
+    ['11:30 PM', 'Raffle + Q&A with Carmela', 'Panel'],
+    ['11:45 PM', 'Award Ceremony', 'Awards'],
+    ['12:05 AM', 'Jyme', 'After Party'],
+    ['12:35 AM', 'Natia', 'After Party'],
+    ['1:05 AM', 'Amiiri Tafari', 'After Party'],
+    ['1:35 AM', 'Surprise', 'After Party'],
+    ['2:00 AM', 'Lights Up', 'Close'],
 ] as const;
 ---
 
@@ -54,7 +50,7 @@ const SCHEDULE = [
             data-scroll-stagger="0.1"
         >
             <div>
-                <h2 class="subhead flex items-baseline justify-between">Run of Show <span class="subhead__badge">7 PM &ndash; 2 AM</span></h2>
+                <h2 class="subhead flex items-baseline justify-between">Program <span class="subhead__badge">7 PM&ndash;2 AM</span></h2>
                 <ol class="schedule flex flex-col list-none">
                     {SCHEDULE.map(([time, event, tag]) => (
                         <li class="schedule__row grid items-baseline relative">
@@ -64,13 +60,14 @@ const SCHEDULE = [
                         </li>
                     ))}
                 </ol>
+                <p class="schedule__note font-serif italic text-cream-60">Live schedule &mdash; subject to change.</p>
             </div>
             <div>
                 <h2 class="subhead flex items-baseline justify-between">Venue <span class="subhead__badge">Cap 300</span></h2>
                 <div class="venue border border-cream-15 bg-navy">
                     <h3 class="venue__name">Cabana Club</h3>
-                    <span class="mb-4 font-mono text-xs tracking-widest uppercase text-cream-60">Austin &middot; Texas</span>
-                    <p class="venue__description">Intimate venue, limited to 300 guests. Indoor screening room, outdoor pool area, full-service bar, and a dedicated VIP lounge. Street parking is available, but rideshare is strongly recommended given how late the night runs.</p>
+                    <span class="mb-4 font-mono text-xs tracking-widest uppercase text-cream-60">5012 E 7th St &middot; Austin, TX</span>
+                    <p class="venue__description">A single screening room and an open-air pool deck, capped at 300 &mdash; full bar, red carpet, and a dedicated VIP lounge.</p>
                     <ul class="venue__features grid grid-cols-2 list-none gap-2">
                         <li>Indoor screen</li>
                         <li>Outdoor pool</li>
@@ -80,19 +77,13 @@ const SCHEDULE = [
                         <li>ADA access</li>
                     </ul>
                 </div>
-                <h2 class="subhead flex items-baseline justify-between">Practical <span class="subhead__badge">Read First</span></h2>
-                <ul class="practical flex flex-col list-none gap-3">
-                    {ESSENTIALS.map(item => (
-                        <li>{item}</li>
-                    ))}
-                </ul>
             </div>
         </div>
         <div
             class="relative"
             data-scroll
         >
-            <h2 class="subhead flex items-baseline justify-between">Frequently Asked <span class="subhead__badge">{FAQ.length} Entries</span></h2>
+            <h2 class="subhead flex items-baseline justify-between">Frequently Asked Questions <span class="subhead__badge">{FAQ.length} Entries</span></h2>
             <div class="faq flex flex-col">
                 {FAQ.map(entry => (
                     <details
@@ -164,21 +155,6 @@ const SCHEDULE = [
         margin-bottom: clamp(64px, calc(53.33px + 3.33vw), 96px);
     }
 
-    .practical li {
-        align-items: baseline;
-        color: var(--color-cream);
-        display: grid;
-        font-size: 14px;
-        gap: 12px;
-        grid-template-columns: 24px 1fr;
-    }
-
-    .practical li::before {
-        color: var(--color-coral);
-        content: '\25BA';
-        font-size: 10px;
-    }
-
     .schedule__event {
         font-family: var(--font-display);
         font-size: 18px;
@@ -190,11 +166,11 @@ const SCHEDULE = [
         gap: clamp(8px, calc(5.33px + 0.83vw), 16px);
         grid-template-columns: clamp(64px, calc(52px + 3.75vw), 100px) 1fr auto;
         padding: 16px 0;
-        transition: padding var(--duration-fast) ease;
+        transition: transform var(--duration-fast) ease;
     }
 
     .schedule__row:hover {
-        padding-left: 8px;
+        transform: translateX(8px);
     }
 
     .schedule__row:hover .schedule__time {

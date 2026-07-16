@@ -9,7 +9,7 @@ const ASSETS = [
 ] as const;
 
 const DIST = join(process.cwd(), 'dist');
-const PAGE_PATHS = ['/', '/info', '/team', '/gallery', '/contact', '/terms', '/privacy'] as const;
+const PAGE_PATHS = ['/', '/info', '/team', '/gallery', '/contact'] as const;
 const SECURITY_HEADERS = {
     'content-security-policy': 'default-src \'self\'',
     'referrer-policy': 'strict-origin-when-cross-origin',

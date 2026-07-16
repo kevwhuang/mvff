@@ -4,9 +4,9 @@ import { beforeAll, describe, expect, test } from 'vitest';
 import Details from '../../src/sections/Details.astro';
 
 const CELLS = [
-    { label: 'Venue', note: '11703 Manchaca Rd, Austin, TX' },
-    { label: 'Date', note: 'Saturday night, 2026.' },
-    { label: 'Time', note: 'Seven hours, twelve acts.' },
+    { label: 'Venue', note: '5012 E 7th St, Austin, TX' },
+    { label: 'Date', note: 'A Saturday night in Austin.' },
+    { label: 'Time', note: 'Seven hours, doors to pool.' },
 ] as const;
 
 describe('Details', () => {
@@ -40,6 +40,6 @@ describe('Details', () => {
     test('renders the venue, date, and time values', () => {
         expect(html).toMatch(/<dd class="details__value"[^>]*>Cabana Club<\/dd>/);
         expect(html).toMatch(/<time datetime="2026-07-18"[^>]*>July 18<\/time>/);
-        expect(html).toMatch(/<dd class="details__value"[^>]*>7 PM &ndash; 2 AM<\/dd>/);
+        expect(html).toMatch(/<dd class="details__value"[^>]*>7 PM&ndash;2 AM<\/dd>/);
     });
 });

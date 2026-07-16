@@ -1,42 +1,65 @@
 import { expect, test } from '@playwright/test';
 
-const TILE_COUNT = 15;
+const FIGURE_COUNT = 2;
+const WIDTHS = [320, 768, 1280];
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/gallery');
 });
 
-test.describe('gallery grid', () => {
-    test('renders the full tile grid', async ({ page }) => {
-        await expect(page.locator('.gallery__tile')).toHaveCount(TILE_COUNT);
+test.describe('gallery composition', () => {
+    test('renders exactly two portrait figures', async ({ page }) => {
+        await expect(page.locator('.gallery__frame')).toHaveCount(FIGURE_COUNT);
+        await expect(page.locator('.gallery__frame img')).toHaveCount(FIGURE_COUNT);
+        await expect(page.locator('.gallery__figure--lead')).toBeVisible();
+        await expect(page.locator('.gallery__figure--trail')).toBeVisible();
     });
 
-    test('includes the team photographs', async ({ page }) => {
-        await expect(page.locator('.gallery__tile img')).toHaveCount(2);
-        await expect(page.locator('.gallery__tile[data-gallery-title="The 2026 Team"]')).toBeVisible();
-        await expect(page.locator('.gallery__tile[data-gallery-title="Crew Portrait"]')).toBeVisible();
+    test('describes each portrait with specific alt text', async ({ page }) => {
+        await expect(page.locator('.gallery__figure--lead img')).toHaveAttribute('alt', /standing shoulder to shoulder/);
+        await expect(page.locator('.gallery__figure--trail img')).toHaveAttribute('alt', /seated and leaning together/);
     });
 
-    test('labels every tile with the 2026 year', async ({ page }) => {
-        const years = await page.locator('.gallery__tile').evaluateAll(
-            tiles => tiles.map(tile => tile.getAttribute('data-gallery-year')),
-        );
+    test('captions the portraits with their titles and year', async ({ page }) => {
+        await expect(page.locator('.gallery__meta').first()).toContainText('The Team, Standing');
+        await expect(page.locator('.gallery__meta').nth(1)).toContainText('The Team, Seated');
+        await expect(page.locator('.gallery__year')).toHaveCount(FIGURE_COUNT);
+    });
 
-        expect(years).toEqual(Array(TILE_COUNT).fill('2026'));
+    test('leaves everything visible under reduced motion', async ({ page }) => {
+        const composition = page.locator('.gallery__composition');
+        const note = page.locator('.gallery__note');
+
+        await expect(composition).toHaveCSS('opacity', '1');
+        await expect(note).toHaveCSS('opacity', '1');
+    });
+
+    test('never overflows the viewport width', async ({ page }) => {
+        for (const width of WIDTHS) {
+            await page.setViewportSize({ height: 900, width });
+
+            const overflow = await page.evaluate(() => {
+                const root = document.documentElement;
+
+                return root.scrollWidth - root.clientWidth;
+            });
+
+            expect(overflow, `overflow at ${width}px`).toBeLessThanOrEqual(0);
+        }
     });
 });
 
 test.describe('gallery lightbox', () => {
-    test('opens a modal dialog from a tile and closes on escape', async ({ page }) => {
+    test('opens a modal dialog from a figure and closes on escape', async ({ page }) => {
         const lightbox = page.locator('.lightbox');
-        const tile = page.locator('.gallery__tile').first();
+        const frame = page.locator('.gallery__frame').first();
 
         await expect(lightbox).toBeHidden();
         await expect(lightbox).toHaveAttribute('role', 'dialog');
         await expect(lightbox).toHaveAttribute('aria-modal', 'true');
 
-        await tile.click();
+        await frame.click();
 
         await expect(lightbox).toBeVisible();
         await expect(lightbox).toHaveAttribute('aria-hidden', 'false');
@@ -45,28 +68,41 @@ test.describe('gallery lightbox', () => {
         await page.keyboard.press('Escape');
 
         await expect(lightbox).toBeHidden();
-        await expect(tile).toBeFocused();
+        await expect(frame).toBeFocused();
     });
 
-    test('closes from the close button and restores focus to the tile', async ({ page }) => {
-        const lightbox = page.locator('.lightbox');
-        const tile = page.locator('.gallery__tile').first();
+    test('shows only the image with no caption block', async ({ page }) => {
+        await page.locator('.gallery__frame').first().click();
 
-        await tile.click();
+        await expect(page.locator('.lightbox__caption')).toHaveCount(0);
+        await expect(page.locator('.lightbox__info')).toHaveCount(0);
+
+        const background = await page.locator('.lightbox__image').evaluate(
+            node => getComputedStyle(node).backgroundImage,
+        );
+
+        expect(background).toContain('url(');
+    });
+
+    test('closes from the close button and restores focus to the figure', async ({ page }) => {
+        const lightbox = page.locator('.lightbox');
+        const frame = page.locator('.gallery__frame').first();
+
+        await frame.click();
 
         await expect(lightbox).toBeVisible();
 
         await page.locator('.lightbox__close').click();
 
         await expect(lightbox).toBeHidden();
-        await expect(tile).toBeFocused();
+        await expect(frame).toBeFocused();
     });
 
     test('closes when the backdrop is clicked', async ({ page }) => {
         const lightbox = page.locator('.lightbox');
-        const tile = page.locator('.gallery__tile').nth(2);
+        const frame = page.locator('.gallery__frame').nth(1);
 
-        await tile.click();
+        await frame.click();
 
         await expect(lightbox).toBeVisible();
 

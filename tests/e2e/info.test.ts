@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-const FAQ_COUNT = 8;
-const SCHEDULE_COUNT = 12;
+const FAQ_COUNT = 9;
+const SCHEDULE_COUNT = 16;
 const VENUE_FEATURE_COUNT = 6;
 
 test.beforeEach(async ({ page }) => {
@@ -40,19 +40,16 @@ test.describe('info faq', () => {
 });
 
 test.describe('info schedule and venue', () => {
-    test('renders twelve run-of-show rows as TBD placeholders', async ({ page }) => {
+    test('renders the full run of show from doors to close', async ({ page }) => {
         await expect(page.locator('.schedule__row')).toHaveCount(SCHEDULE_COUNT);
-
-        for (const time of await page.locator('.schedule__time').allInnerTexts()) expect(time.trim()).toBe('TBD');
-        for (const event of await page.locator('.schedule__event').allInnerTexts()) expect(event.trim()).toBe('Event TBD');
+        await expect(page.locator('.schedule__time').first()).toHaveText('7:00 PM');
+        await expect(page.locator('.schedule__event').first()).toHaveText('Doors \u00b7 Ryley Hall');
+        await expect(page.locator('.schedule__time').last()).toHaveText('2:00 AM');
+        await expect(page.locator('.schedule__event').last()).toHaveText('Lights Up');
     });
 
     test('renders the venue features grid', async ({ page }) => {
         await expect(page.locator('.venue__name')).toHaveText('Cabana Club');
         await expect(page.locator('.venue__features li')).toHaveCount(VENUE_FEATURE_COUNT);
-    });
-
-    test('renders the essentials list', async ({ page }) => {
-        await expect(page.locator('.practical li')).toHaveCount(VENUE_FEATURE_COUNT);
     });
 });

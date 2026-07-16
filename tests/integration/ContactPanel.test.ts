@@ -19,8 +19,17 @@ describe('ContactPanel', () => {
         expect(html).toMatch(/<h1 id="contact-title"[^>]*>Contact<\/h1>/);
     });
 
-    test('wraps every field control in its label', () => {
-        expect(html.split('<label ').length - 1).toBe(4);
+    test('wires the form for netlify forms submissions', () => {
+        expect(html).toMatch(/<form class="contact__form[^"]*" data-netlify="true" data-netlify-honeypot="bot-field" method="POST" name="contact"/);
+    });
+
+    test('carries the hidden form-name and honeypot fields', () => {
+        expect(html).toMatch(/<input name="form-name" type="hidden" value="contact"[^>]*>/);
+        expect(html).toMatch(/<label class="hidden"[^>]*>\s*Leave this field empty\s*<input name="bot-field"[^>]*>\s*<\/label>/);
+    });
+
+    test('wraps every visible field control in its label', () => {
+        expect(html.split('<label class="flex flex-col"').length - 1).toBe(4);
         expect(html).toMatch(/<span class="label"[^>]*>Name <span class="label__required"[^>]*>\*<\/span><\/span>/);
         expect(html).toMatch(/<span class="label"[^>]*>Email <span class="label__required"[^>]*>\*<\/span><\/span>/);
         expect(html).toMatch(/<span class="label"[^>]*>Message <span class="label__required"[^>]*>\*<\/span><\/span>/);
@@ -39,12 +48,28 @@ describe('ContactPanel', () => {
         }
     });
 
-    test('renders a disabled coming-soon submit button', () => {
-        expect(html).toMatch(/<button class="btn btn--primary[^"]*" disabled type="submit"[^>]*>Coming Soon<\/button>/);
+    test('renders an enabled send-message submit button', () => {
+        expect(html).toMatch(/<button class="btn btn--primary[^"]*" type="submit"[^>]*>\s*Send Message\s*<\/button>/);
+        expect(html).not.toMatch(/<button[^>]*disabled/);
+        expect(html).not.toContain('Coming Soon');
+    });
+
+    test('renders the directory column ahead of the form', () => {
+        const directoryIndex = html.indexOf('contact__directory');
+        const formIndex = html.indexOf('contact__form');
+
+        expect(directoryIndex).toBeGreaterThanOrEqual(0);
+        expect(formIndex).toBeGreaterThan(directoryIndex);
+    });
+
+    test('elevates the directory into two contact cards', () => {
+        expect(html.split('class="contact__card"').length - 1).toBe(2);
+        expect(html).toMatch(/<div class="contact__card"[^>]*>\s*<h2 class="subhead"[^>]*>Direct Channels<\/h2>/);
+        expect(html).toMatch(/<div class="contact__card"[^>]*>\s*<h2 class="subhead"[^>]*>Founder<\/h2>/);
     });
 
     test('renders the direct contact directory', () => {
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.email}"[^>]*>contact@atxmusicvideofilmfestival.com</a>`));
+        expect(html).toMatch(new RegExp(`<a class="contact__line-link" href="${LINKS.email}"[^>]*>contact@atxmusicvideofilmfestival.com</a>`));
         expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.instagram}" target="_blank"[^>]*>\\s*@atxmvff\\s*</a>`));
         expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.posh}" target="_blank"[^>]*>\\s*Posh &rarr;\\s*</a>`));
         expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.pitchDeck}" target="_blank"[^>]*>\\s*Pitch Deck\\s*</a>`));

@@ -14,14 +14,15 @@ import { LINKS, ROUTES } from '@lib/constants';
             >
                 Austin Music Video Film Festival
             </a>
-            <p class="site-footer__tag">An immersive production where Austin's music and film worlds collide. Official selections, live acts, screening blocks, and a pool party. Every screen and stage active.</p>
+            <p class="site-footer__tag">Austin's music video scene, staged like a premiere &mdash; music-video screenings, live nominee sets, awards, and a pool party that runs to 2 AM. One night at Cabana Club.</p>
         </div>
         <div class="site-footer__col">
-            <h2>Site</h2>
+            <h2 class="site-footer__heading">Site</h2>
             <ul class="list-none">
                 {ROUTES.map(route => (
                     <li>
                         <a
+                            class="site-footer__link"
                             href={route.href}
                             target={route.href.startsWith('http') ? '_blank' : undefined}
                         >
@@ -32,10 +33,11 @@ import { LINKS, ROUTES } from '@lib/constants';
             </ul>
         </div>
         <div class="site-footer__col">
-            <h2>Connect</h2>
+            <h2 class="site-footer__heading">Connect</h2>
             <ul class="list-none">
                 <li>
                     <a
+                        class="site-footer__link"
                         href={LINKS.instagram}
                         target="_blank"
                     >
@@ -43,10 +45,11 @@ import { LINKS, ROUTES } from '@lib/constants';
                     </a>
                 </li>
                 <li>
-                    <a href={LINKS.email}>Email</a>
+                    <a class="site-footer__link" href={LINKS.email}>Email</a>
                 </li>
                 <li>
                     <a
+                        class="site-footer__link"
                         href={LINKS.calendly}
                         target="_blank"
                     >
@@ -56,10 +59,11 @@ import { LINKS, ROUTES } from '@lib/constants';
             </ul>
         </div>
         <div class="site-footer__col">
-            <h2>Insider</h2>
+            <h2 class="site-footer__heading">Insider</h2>
             <ul class="list-none">
                 <li>
                     <a
+                        class="site-footer__link"
                         href={LINKS.filmfreeway}
                         target="_blank"
                     >
@@ -68,6 +72,7 @@ import { LINKS, ROUTES } from '@lib/constants';
                 </li>
                 <li>
                     <a
+                        class="site-footer__link"
                         href={LINKS.pitchDeck}
                         target="_blank"
                     >
@@ -79,17 +84,7 @@ import { LINKS, ROUTES } from '@lib/constants';
     </div>
     <div class="shell site-footer__bottom flex flex-wrap justify-between">
         <span>&copy; 2026 Austin Music Video Film Festival &middot; All rights reserved</span>
-        <span><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; 7 PM &ndash; 2 AM &middot; Cabana Club &middot; Austin, TX</span>
-        <nav aria-label="Legal">
-            <ul class="site-footer__legal flex list-none gap-3">
-                <li>
-                    <a href="/privacy">Privacy</a>
-                </li>
-                <li>
-                    <a href="/terms">Terms</a>
-                </li>
-            </ul>
-        </nav>
+        <span><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; 7 PM&ndash;2 AM &middot; Cabana Club &middot; Austin, TX</span>
     </div>
 </footer>
 
@@ -111,35 +106,7 @@ import { LINKS, ROUTES } from '@lib/constants';
         text-transform: uppercase;
     }
 
-    .site-footer__bottom a {
-        color: var(--color-cream-60);
-        transition: color var(--duration-fast) ease;
-    }
-
-    .site-footer__bottom a:active,
-    .site-footer__bottom a:hover {
-        color: var(--color-coral);
-    }
-
-    .site-footer__col a {
-        color: var(--color-cream);
-        display: block;
-        font-family: var(--font-display);
-        font-size: 18px;
-        padding: 8px 0;
-        text-decoration: none;
-        transition:
-            color var(--duration-fast) ease,
-            transform var(--duration-fast) ease;
-    }
-
-    .site-footer__col a:active,
-    .site-footer__col a:hover {
-        color: var(--color-coral);
-        transform: translateX(4px);
-    }
-
-    .site-footer__col h2 {
+    .site-footer__heading {
         color: var(--color-cream-60);
         font-family: var(--font-mono);
         font-size: 10px;
@@ -155,9 +122,22 @@ import { LINKS, ROUTES } from '@lib/constants';
         margin-bottom: clamp(48px, calc(42.67px + 1.67vw), 64px);
     }
 
-    .site-footer__legal li:nth-child(2)::before {
-        content: '\00B7';
-        padding-right: 12px;
+    .site-footer__link {
+        color: var(--color-cream);
+        display: block;
+        font-family: var(--font-display);
+        font-size: 18px;
+        padding: 8px 0;
+        text-decoration: none;
+        transition:
+            color var(--duration-fast) ease,
+            transform var(--duration-fast) ease;
+    }
+
+    .site-footer__link:active,
+    .site-footer__link:hover {
+        color: var(--color-coral);
+        transform: translateX(4px);
     }
 
     .site-footer__tag {

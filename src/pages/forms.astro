@@ -1,0 +1,43 @@
+---
+
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="noindex" name="robots" />
+        <title>Netlify Form Detection</title>
+    </head>
+    <body>
+        <form
+            data-netlify="true"
+            hidden
+            name="contact"
+            netlify-honeypot="bot-field"
+        >
+            <input
+                name="form-name"
+                type="hidden"
+                value="contact"
+            />
+            <input name="bot-field" />
+            <input
+                name="name"
+                type="text"
+            />
+            <input
+                name="email"
+                type="email"
+            />
+            <select name="subject">
+                <option>General Inquiry</option>
+                <option>Press &amp; Media</option>
+                <option>Sponsorship</option>
+                <option>Submissions</option>
+                <option>Volunteering</option>
+            </select>
+            <textarea name="message" />
+        </form>
+    </body>
+</html>

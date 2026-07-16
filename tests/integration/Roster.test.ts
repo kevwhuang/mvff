@@ -4,18 +4,19 @@ import { beforeAll, describe, expect, test } from 'vitest';
 import Roster from '../../src/sections/Roster.astro';
 
 const TEAM = [
-    { name: 'Anna', role: 'Founder &amp; Director' },
-    { name: 'Rocky', role: 'Film Director' },
-    { name: 'Jasmine', role: 'Event Coordinator' },
-    { name: 'Jymes', role: 'Talent Programmer' },
-    { name: 'Amiiri', role: 'Promotions Queen' },
-    { name: 'Donovan', role: 'Social Media Manager' },
-    { name: 'Marissa', role: 'Graphic Designer' },
-    { name: 'Sebastian', role: 'Community Outreach' },
-    { name: 'Phillip', role: 'Volunteer Coordinator' },
-    { name: 'Killian', role: 'Visual Tech' },
-    { name: 'Ben', role: 'Audio Tech' },
+    { name: 'Anna', portrait: true, role: 'Executive Festival Director' },
+    { name: 'Ashleigh', portrait: false, role: 'Marketing Director' },
+    { name: 'Jyme', portrait: true, role: 'Film Programming Director' },
+    { name: 'Dan', portrait: false, role: 'Operations Director' },
+    { name: 'Amiiri', portrait: true, role: 'Partnerships Director' },
+    { name: 'Rocky', portrait: true, role: 'Sponsorship Admin Lead' },
+    { name: 'Greta', portrait: false, role: 'Content Strategist' },
+    { name: 'Marissa', portrait: true, role: 'Graphics Director' },
+    { name: 'Jasmine', portrait: true, role: 'Event Coordinator' },
 ] as const;
+
+const PORTRAITS = TEAM.filter(member => member.portrait).length;
+const MONOGRAMS = TEAM.length - PORTRAITS;
 
 describe('Roster', () => {
     let html: string;
@@ -36,12 +37,17 @@ describe('Roster', () => {
         expect(html).toMatch(/<h1 id="roster-title"[^>]*>2026 Team<\/h1>/);
     });
 
-    test('renders a card with a portrait for every team member', () => {
-        expect(html.split('class="roster__card').length - 1).toBe(TEAM.length);
-        expect(html.split('class="roster__image"').length - 1).toBe(TEAM.length);
+    test('renders an article card for every team member with a portrait or monogram', () => {
+        expect(html.split('<article class="roster__card').length - 1).toBe(TEAM.length);
+        expect(html.split('class="roster__image').length - 1).toBe(PORTRAITS);
+        expect(html.split('class="roster__monogram').length - 1).toBe(MONOGRAMS);
 
         for (const member of TEAM) {
-            expect(html).toMatch(new RegExp(`<img[^>]*alt="${member.name}"`));
+            if (member.portrait) {
+                expect(html).toMatch(new RegExp(`<img[^>]*alt="${member.name}, ${member.role}"`));
+            } else {
+                expect(html).toMatch(new RegExp(`<span class="roster__monogram[^"]*" aria-hidden="true"[^>]*>\\s*${member.name.charAt(0)}\\s*</span>`));
+            }
         }
     });
 
@@ -49,6 +55,16 @@ describe('Roster', () => {
         for (const member of TEAM) {
             expect(html).toMatch(new RegExp(`<h2 class="roster__name"[^>]*>${member.name}</h2>`));
             expect(html).toMatch(new RegExp(`<span class="roster__role"[^>]*>${member.role}</span>`));
+        }
+    });
+
+    test('numbers every card with an aria-hidden padded index badge', () => {
+        expect(html.split('class="roster__index').length - 1).toBe(TEAM.length);
+
+        for (const [index] of TEAM.entries()) {
+            const badge = String(index + 1).padStart(2, '0');
+
+            expect(html).toMatch(new RegExp(`<span class="roster__index[^"]*" aria-hidden="true"[^>]*>\\s*${badge}\\s*</span>`));
         }
     });
 });

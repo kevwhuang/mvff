@@ -13,7 +13,7 @@ export default defineConfig({
     integrations: [
         react(),
         robots(),
-        sitemap({ lastmod: new Date() }),
+        sitemap({ filter: page => !page.includes('/forms'), lastmod: new Date() }),
     ],
     site: 'https://atxmusicvideofilmfestival.com',
     vite: {

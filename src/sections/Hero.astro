@@ -22,6 +22,7 @@ const UNITS = [
         aria-hidden="true"
     >
         <video
+            class="hero__video"
             autoplay
             loop
             muted
@@ -30,6 +31,7 @@ const UNITS = [
         >
             <source src="/videos/hero.webm" type="video/webm" />
         </video>
+        <div class="grain absolute" aria-hidden="true" />
     </div>
     <div class="hero__frame-top-left absolute" aria-hidden="true" />
     <div class="hero__frame-top-right absolute" aria-hidden="true" />
@@ -41,7 +43,7 @@ const UNITS = [
         role="timer"
     >
         {UNITS.map(({ label, unit }) => (
-            <div>
+            <div class="flex flex-col-reverse">
                 <dt class="hero__countdown-label">{label}</dt>
                 <dd
                     class="hero__countdown-number"
@@ -53,14 +55,14 @@ const UNITS = [
         ))}
     </dl>
     <div class="hero__content shell relative">
-        <div class="hero__meta hero__reveal flex flex-wrap items-center gap-6 mb-6">
+        <div class="hero__meta hero__reveal flex flex-wrap items-center gap-6 mb-8">
             <span class="hero__meta-item flex items-center">Vol. 01</span>
             <span class="hero__meta-item flex items-center"><time datetime="2026-07-18">July 18, 2026</time></span>
             <span class="hero__meta-item flex items-center">Cabana Club &middot; Austin, TX</span>
         </div>
         <h1
             id="hero-title"
-            class="hero__title hero__reveal mb-6"
+            class="hero__title hero__reveal mb-8"
         >
             <Image
                 class="hero__logo block h-auto w-full"
@@ -72,7 +74,7 @@ const UNITS = [
             />
         </h1>
         <p class="hero__subtitle hero__reveal">
-            Where Austin's music and film worlds collide. Live acts, screening blocks, awards, and a pool party, all under one roof.
+            A red carpet music video film experience celebrating bold artists &mdash; screens to stage.
         </p>
         <div class="hero__reveal flex flex-wrap items-center gap-4">
             <a
@@ -106,14 +108,15 @@ const UNITS = [
 
     .hero__background::after {
         background:
+            linear-gradient(90deg, var(--color-night-70) 0%, transparent 65%),
             linear-gradient(180deg, var(--color-night-40) 0%, transparent 30%, transparent 60%, var(--color-night) 100%),
-            radial-gradient(ellipse at 50% 70%, transparent 30%, var(--color-night-70) 100%);
+            radial-gradient(ellipse at 50% 70%, var(--color-night-40) 30%, var(--color-night-70) 100%);
         content: '';
         inset: 0;
         position: absolute;
     }
 
-    .hero__background video {
+    .hero__video {
         filter: brightness(0.55) contrast(1.1) saturate(1.15);
         height: 100%;
         object-fit: cover;
@@ -121,7 +124,7 @@ const UNITS = [
     }
 
     .hero__content {
-        padding-block: clamp(32px, calc(26.67px + 1.67vw), 48px);
+        padding-block: clamp(48px, calc(37.33px + 3.33vw), 80px);
     }
 
     .hero__countdown {
@@ -130,11 +133,6 @@ const UNITS = [
         grid-template-columns: repeat(4, 1fr);
         right: var(--shell-pad);
         top: 60px;
-    }
-
-    .hero__countdown div {
-        display: flex;
-        flex-direction: column-reverse;
     }
 
     .hero__countdown-label {
@@ -212,7 +210,7 @@ const UNITS = [
     }
 
     .hero__reveal {
-        animation: hero__fade-up 0.6s ease both;
+        animation: hero__fade-up var(--duration-slower) ease both;
         opacity: 0;
     }
 
@@ -233,7 +231,7 @@ const UNITS = [
     }
 
     .hero__subtitle {
-        color: var(--color-cream-60);
+        color: var(--color-cream-80);
         font-family: var(--font-serif);
         font-size: clamp(20px, calc(16.67px + 1.04vw), 30px);
         font-style: italic;

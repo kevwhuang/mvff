@@ -4,29 +4,22 @@ import { Image } from 'astro:assets';
 import SectionHead from '@components/SectionHead.astro';
 import amiiri from '@images/team/amiiri.webp';
 import anna from '@images/team/anna.webp';
-import ben from '@images/team/ben.webp';
-import donovan from '@images/team/donovan.webp';
 import jasmine from '@images/team/jasmine.webp';
 import jymes from '@images/team/jymes.webp';
-import killian from '@images/team/killian.webp';
 import marissa from '@images/team/marissa.webp';
-import phillip from '@images/team/phillip.webp';
 import rocky from '@images/team/rocky.webp';
-import sebastian from '@images/team/sebastian.webp';
 import { pad } from '@lib/utils';
 
 const TEAM = [
-    { image: anna, name: 'Anna', role: 'Founder & Director' },
-    { image: rocky, name: 'Rocky', role: 'Film Director' },
+    { image: anna, name: 'Anna', role: 'Executive Festival Director' },
+    { name: 'Ashleigh', role: 'Marketing Director' },
+    { image: jymes, name: 'Jyme', role: 'Film Programming Director' },
+    { name: 'Dan', role: 'Operations Director' },
+    { image: amiiri, name: 'Amiiri', role: 'Partnerships Director' },
+    { image: rocky, name: 'Rocky', role: 'Sponsorship Admin Lead' },
+    { name: 'Greta', role: 'Content Strategist' },
+    { image: marissa, name: 'Marissa', role: 'Graphics Director' },
     { image: jasmine, name: 'Jasmine', role: 'Event Coordinator' },
-    { image: jymes, name: 'Jymes', role: 'Talent Programmer' },
-    { image: amiiri, name: 'Amiiri', role: 'Promotions Queen' },
-    { image: donovan, name: 'Donovan', role: 'Social Media Manager' },
-    { image: marissa, name: 'Marissa', role: 'Graphic Designer' },
-    { image: sebastian, name: 'Sebastian', role: 'Community Outreach' },
-    { image: phillip, name: 'Phillip', role: 'Volunteer Coordinator' },
-    { image: killian, name: 'Killian', role: 'Visual Tech' },
-    { image: ben, name: 'Ben', role: 'Audio Tech' },
 ] as const;
 ---
 
@@ -44,25 +37,43 @@ const TEAM = [
         <ul
             class="roster__grid grid list-none"
             data-scroll
-            data-scroll-stagger="0.05"
+            data-scroll-stagger="0.04"
         >
             {TEAM.map((member, index) => (
-                <li class="roster__card overflow-hidden relative bg-navy">
-                    <span class="roster__number absolute select-none">{pad(index + 1)}</span>
-                    <div class="roster__photo overflow-hidden relative">
-                        <Image
-                            class="roster__image"
-                            alt={member.name}
-                            height={250}
-                            loading="lazy"
-                            src={member.image}
-                            width={250}
-                        />
-                    </div>
-                    <div class="flex flex-col gap-1 pb-6 pt-4 px-4 border-t border-cream-15">
-                        <h2 class="roster__name">{member.name}</h2>
-                        <span class="roster__role">{member.role}</span>
-                    </div>
+                <li>
+                    <article class="roster__card flex flex-col">
+                        <div class="roster__frame overflow-hidden relative">
+                            <span
+                                class="roster__index absolute select-none"
+                                aria-hidden="true"
+                            >
+                                {pad(index + 1)}
+                            </span>
+                            {'image' in member
+                                ? (
+                                        <Image
+                                            class="roster__image object-cover"
+                                            alt={`${member.name}, ${member.role}`}
+                                            densities={[1, 2]}
+                                            loading="lazy"
+                                            src={member.image}
+                                            width={400}
+                                        />
+                                    )
+                                : (
+                                        <span
+                                            class="roster__monogram flex items-center justify-center h-full w-full select-none"
+                                            aria-hidden="true"
+                                        >
+                                            {member.name.charAt(0)}
+                                        </span>
+                                    )}
+                        </div>
+                        <div class="roster__body flex flex-1 flex-col gap-2">
+                            <h2 class="roster__name">{member.name}</h2>
+                            <span class="roster__role">{member.role}</span>
+                        </div>
+                    </article>
                 </li>
             ))}
         </ul>
@@ -70,57 +81,103 @@ const TEAM = [
 </section>
 
 <style>
+    .roster__body {
+        border-top: 1px solid var(--color-cream-15);
+        padding: clamp(16px, calc(13.33px + 0.83vw), 24px);
+    }
+
+    .roster__card {
+        background: var(--color-navy);
+        border: 1px solid var(--color-cream-15);
+        height: 100%;
+        transition:
+            border-color var(--duration-base) ease,
+            box-shadow var(--duration-base) ease,
+            transform var(--duration-base) ease;
+    }
+
+    .roster__card:hover {
+        border-color: var(--color-coral);
+        box-shadow: 0 24px 48px -16px color-mix(in oklab, var(--color-coral) 35%, transparent);
+        transform: translateY(-4px);
+    }
+
     .roster__card:hover .roster__image {
-        filter: grayscale(0) contrast(1.05) brightness(1);
+        filter: grayscale(0) brightness(1) contrast(1.05);
         transform: scale(1.05);
     }
 
+    .roster__card:hover .roster__index {
+        border-color: var(--color-coral);
+        color: var(--color-coral);
+    }
+
+    .roster__card:hover .roster__monogram {
+        color: var(--color-coral);
+        transform: scale(1.05);
+    }
+
+    .roster__card:hover .roster__role {
+        color: var(--color-coral);
+    }
+
+    .roster__frame {
+        aspect-ratio: 4 / 5;
+        background: var(--color-slate);
+    }
+
+    .roster__frame::after {
+        background: linear-gradient(180deg, transparent 55%, var(--color-black-55) 100%);
+        content: '';
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+    }
+
     .roster__grid {
-        background: var(--color-cream-15);
-        border: 1px solid var(--color-cream-15);
-        gap: 1px;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: clamp(16px, calc(13.33px + 0.83vw), 24px);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .roster__image {
-        filter: grayscale(0.85) contrast(1.1) brightness(0.95);
+        display: block;
+        filter: grayscale(0.9) brightness(0.95) contrast(1.05);
         height: 100%;
-        object-fit: cover;
         transition:
             filter var(--duration-slow) ease,
             transform var(--duration-slower) ease;
         width: 100%;
     }
 
-    .roster__name {
-        font-size: 24px;
-        letter-spacing: normal;
-        line-height: 1;
-        margin-bottom: 0;
-    }
-
-    .roster__number {
+    .roster__index {
+        background: var(--color-night-70);
+        border: 1px solid var(--color-cream-15);
         color: var(--color-cream);
         font-family: var(--font-mono);
         font-size: 10px;
         left: 12px;
         letter-spacing: 0.16em;
-        mix-blend-mode: difference;
+        padding: 4px 8px;
         top: 12px;
+        transition:
+            border-color var(--duration-fast) ease,
+            color var(--duration-fast) ease;
         z-index: 2;
     }
 
-    .roster__photo {
-        aspect-ratio: 4 / 5;
-        background: var(--color-slate);
+    .roster__monogram {
+        color: var(--color-cream-15);
+        font-family: var(--font-display);
+        font-size: clamp(80px, calc(48px + 10vw), 176px);
+        line-height: 1;
+        transition:
+            color var(--duration-slow) ease,
+            transform var(--duration-slower) ease;
     }
 
-    .roster__photo::after {
-        background: linear-gradient(180deg, transparent 50%, var(--color-black-70) 100%);
-        content: '';
-        inset: 0;
-        pointer-events: none;
-        position: absolute;
+    .roster__name {
+        font-size: clamp(22px, calc(20px + 0.63vw), 28px);
+        line-height: 1;
     }
 
     .roster__role {
@@ -129,5 +186,18 @@ const TEAM = [
         font-size: 10px;
         letter-spacing: 0.18em;
         text-transform: uppercase;
+        transition: color var(--duration-fast) ease;
+    }
+
+    @media (max-width: 1024px) {
+        .roster__grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .roster__grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 </style>

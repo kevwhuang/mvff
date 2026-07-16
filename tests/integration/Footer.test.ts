@@ -28,18 +28,11 @@ describe('Footer', () => {
     });
 
     test('renders the connect and insider channels', () => {
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.instagram}" target="_blank"[^>]*>Instagram</a>`));
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.email}"[^>]*>Email</a>`));
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.calendly}" target="_blank"[^>]*>Schedule a Call</a>`));
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.filmfreeway}" target="_blank"[^>]*>FilmFreeway</a>`));
-        expect(html).toMatch(new RegExp(`<a href="${LINKS.pitchDeck}" target="_blank"[^>]*>Pitch Deck</a>`));
-    });
-
-    test('renders the legal nav as a list of policy links', () => {
-        expect(html).toMatch(/<nav aria-label="Legal"/);
-        expect(html).toMatch(/<ul class="site-footer__legal[^"]*"/);
-        expect(html).toMatch(/<a href="\/privacy"[^>]*>Privacy<\/a>/);
-        expect(html).toMatch(/<a href="\/terms"[^>]*>Terms<\/a>/);
+        expect(html).toMatch(new RegExp(`<a class="site-footer__link" href="${LINKS.instagram}" target="_blank"[^>]*>Instagram</a>`));
+        expect(html).toMatch(new RegExp(`<a class="site-footer__link" href="${LINKS.email}"[^>]*>Email</a>`));
+        expect(html).toMatch(new RegExp(`<a class="site-footer__link" href="${LINKS.calendly}" target="_blank"[^>]*>Schedule a Call</a>`));
+        expect(html).toMatch(new RegExp(`<a class="site-footer__link" href="${LINKS.filmfreeway}" target="_blank"[^>]*>FilmFreeway</a>`));
+        expect(html).toMatch(new RegExp(`<a class="site-footer__link" href="${LINKS.pitchDeck}" target="_blank"[^>]*>Pitch Deck</a>`));
     });
 
     test('renders the copyright and event coordinates', () => {

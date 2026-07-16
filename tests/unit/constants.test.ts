@@ -8,7 +8,7 @@ const PAGES_DIR = join(process.cwd(), 'src', 'pages');
 const PUBLIC_DIR = join(process.cwd(), 'public');
 
 function isPublicLink(value: string) {
-    return value.startsWith('https://') || value.startsWith('mailto:') || value.startsWith('/');
+    return value.startsWith('https://') || value.startsWith('mailto:') || value.startsWith('tel:') || value.startsWith('/');
 }
 
 function pageForHref(href: string) {
@@ -16,7 +16,7 @@ function pageForHref(href: string) {
 }
 
 describe('LINKS', () => {
-    test('exposes only https, mailto, or root-relative values', () => {
+    test('exposes only https, mailto, tel, or root-relative values', () => {
         for (const value of Object.values(LINKS)) expect(isPublicLink(value)).toBe(true);
     });
 
@@ -32,6 +32,7 @@ describe('LINKS', () => {
 
     test('sends the email link to a festival mailbox', () => {
         expect(LINKS.email).toBe('mailto:contact@atxmusicvideofilmfestival.com');
+        expect(LINKS.phone).toBe('tel:+12814669387');
     });
 
     test('serves the pitch deck from a file that ships in public', () => {
