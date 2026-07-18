@@ -1,0 +1,307 @@
+---
+import { Image, getImage } from 'astro:assets';
+
+import SectionHeader from '@components/SectionHeader.astro';
+import teamSeated from '@images/gallery/team_seated.webp';
+import teamStanding from '@images/gallery/team_standing.webp';
+
+const FIGURES = [
+    {
+        alt: 'The 2026 Austin Music Video Film Festival team posed together in a studio, standing shoulder to shoulder in mostly black outfits against a soft gray backdrop.',
+        image: teamStanding,
+        label: 'The Team, Standing',
+        year: '2026',
+    },
+    {
+        alt: 'Members of the 2026 Austin Music Video Film Festival team gathered close to the studio floor, seated and leaning together for a relaxed group portrait.',
+        image: teamSeated,
+        label: 'The Team, Seated',
+        year: '2026',
+    },
+] as const;
+
+const GRID_WIDTH = 920;
+const LIGHTBOX_WIDTH = 1_600;
+
+const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
+    const renderedImage = await getImage({ src: figure.image, width: LIGHTBOX_WIDTH });
+
+    return { ...figure, source: renderedImage.src };
+}));
+---
+
+<section
+    class="gallery section"
+    aria-labelledby="gallery-title"
+>
+    <div class="shell">
+        <SectionHeader headingId="gallery-title">
+            Gallery
+        </SectionHeader>
+        <ul
+            class="gallery__grid flex flex-col list-none"
+            data-scroll
+            data-scroll-stagger="0.12"
+        >
+            {resolvedFigures.map(figure => (
+                <li class="gallery__figure self-center">
+                    <figure class="flex flex-col gap-3">
+                        <button
+                            class="gallery__frame aspect-3/2 bg-navy block border border-cream-15 overflow-hidden p-0 relative w-full"
+                            aria-label={`View ${figure.label}`}
+                            data-gallery-alt={figure.alt}
+                            data-gallery-label={figure.label}
+                            data-gallery-source={figure.source}
+                            data-gallery-year={figure.year}
+                            type="button"
+                        >
+                            <Image
+                                class="gallery__image object-cover h-full w-full"
+                                alt={figure.alt}
+                                densities={[1, 2]}
+                                loading="lazy"
+                                src={figure.image}
+                                width={GRID_WIDTH}
+                            />
+                        </button>
+                        <figcaption class="gallery__meta flex font-mono justify-between text-cream-60 uppercase">
+                            <span>{figure.label}</span>
+                            <time class="gallery__year text-coral" datetime={figure.year}>{figure.year}</time>
+                        </figcaption>
+                    </figure>
+                </li>
+            ))}
+        </ul>
+    </div>
+    <div
+        class="gallery__lightbox backdrop-blur-sm bg-black-95 cursor-zoom-out fixed grid inset-0 place-items-center z-200"
+        aria-hidden="true"
+        aria-labelledby="lightbox-title"
+        aria-modal="true"
+        role="dialog"
+    >
+        <div class="gallery__lightbox-inner flex flex-col gap-3 relative cursor-default">
+            <button
+                class="gallery__lightbox-close absolute bg-navy border border-cream-15 flex font-mono items-center justify-center leading-none right-3 size-9 text-cream text-xl top-3"
+                aria-label="Close image"
+                type="button"
+            >
+                &times;
+            </button>
+            <h2
+                id="lightbox-title"
+                class="sr-only"
+            >
+                &nbsp;
+            </h2>
+            <img class="gallery__lightbox-image aspect-3/2 block border border-cream-15 object-cover w-full" alt="" />
+            <div class="gallery__lightbox-meta flex font-mono justify-between text-cream-60 uppercase">
+                <span class="gallery__lightbox-label" />
+                <span class="gallery__lightbox-year text-coral" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .gallery__figure {
+        width: 76%;
+    }
+
+    .gallery__frame {
+        color: inherit;
+        transition: transform var(--duration-base) ease;
+    }
+
+    .gallery__frame:focus-visible,
+    .gallery__frame:hover {
+        transform: scale(1.01);
+    }
+
+    .gallery__frame:active {
+        transform: scale(0.99);
+    }
+
+    .gallery__frame:focus-visible .gallery__image,
+    .gallery__frame:hover .gallery__image {
+        filter: grayscale(0) contrast(1.08);
+        transform: scale(1.03);
+    }
+
+    .gallery__frame:focus-visible::after,
+    .gallery__frame:hover::after {
+        border-color: var(--color-coral);
+    }
+
+    .gallery__frame::after {
+        border: 1px solid var(--color-cream-15);
+        content: '';
+        inset: 12px;
+        pointer-events: none;
+        position: absolute;
+        transition: border-color var(--duration-base) ease;
+    }
+
+    .gallery__grid {
+        gap: var(--section-padding-sm);
+    }
+
+    .gallery__image {
+        filter: grayscale(0.45) contrast(1.05);
+        transition:
+            filter var(--duration-slow) ease,
+            transform var(--duration-slower) ease;
+    }
+
+    .gallery__lightbox {
+        opacity: 0;
+        padding: clamp(16px, 5vw, 64px);
+        pointer-events: none;
+        transition:
+            opacity var(--duration-fast) ease,
+            visibility 0s var(--duration-fast);
+        visibility: hidden;
+    }
+
+    .gallery__lightbox[data-open] {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity var(--duration-fast) ease;
+        visibility: visible;
+    }
+
+    .gallery__lightbox[data-open] .gallery__lightbox-inner {
+        transform: scale(1);
+    }
+
+    .gallery__lightbox-close {
+        transition:
+            border-color var(--duration-fast) ease,
+            color var(--duration-fast) ease;
+    }
+
+    .gallery__lightbox-close:active,
+    .gallery__lightbox-close:hover {
+        border-color: var(--color-coral);
+        color: var(--color-coral);
+    }
+
+    .gallery__lightbox-close::after {
+        content: '';
+        inset: -8px;
+        position: absolute;
+    }
+
+    .gallery__lightbox-inner {
+        max-width: min(calc(1280px - 2 * var(--shell-pad)), calc((100dvh - 128px) * 3 / 2));
+        transform: scale(0.97);
+        transition: transform var(--duration-fast) ease;
+        width: 100%;
+    }
+
+    .gallery__lightbox-meta {
+        font-size: 12px;
+        letter-spacing: 0.16em;
+    }
+
+    .gallery__meta {
+        font-size: 12px;
+        letter-spacing: 0.16em;
+    }
+
+    @media (max-width: 768px) {
+        .gallery__figure {
+            width: 92%;
+        }
+
+        .gallery__lightbox-image {
+            max-height: 80dvh;
+            object-fit: contain;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .gallery__lightbox-inner {
+            transform: none;
+            transition: none;
+        }
+    }
+</style>
+
+<script>
+    let controller: AbortController | undefined;
+    let lastTrigger: HTMLElement | undefined;
+    let lightbox: HTMLElement | null = null;
+
+    function closeLightbox() {
+        if (!lightbox?.hasAttribute('data-open')) return;
+
+        document.documentElement.style.overflow = '';
+        lightbox.removeAttribute('data-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        lastTrigger?.focus();
+        lastTrigger = undefined;
+    }
+
+    function handleLightboxKeydown(event: KeyboardEvent) {
+        if (!lightbox?.hasAttribute('data-open')) return;
+
+        if (event.key === 'Escape') {
+            closeLightbox();
+        } else if (event.key === 'Tab') {
+            event.preventDefault();
+            lightbox.querySelector<HTMLElement>('.gallery__lightbox-close')?.focus();
+        }
+    }
+
+    function initGallery() {
+        controller?.abort();
+        document.documentElement.style.overflow = '';
+        controller = new AbortController();
+        lightbox = document.querySelector<HTMLElement>('.gallery__lightbox');
+
+        if (!lightbox) return;
+
+        const closeButton = lightbox.querySelector('.gallery__lightbox-close');
+        const inner = lightbox.querySelector('.gallery__lightbox-inner');
+        const { signal } = controller;
+
+        document.querySelectorAll<HTMLElement>('.gallery__frame').forEach((frame) => {
+            frame.addEventListener('click', () => openLightbox(frame), { signal });
+        });
+
+        closeButton?.addEventListener('click', closeLightbox, { signal });
+        inner?.addEventListener('click', event => event.stopPropagation(), { signal });
+        lightbox.addEventListener('click', closeLightbox, { signal });
+        document.addEventListener('keydown', handleLightboxKeydown, { signal });
+    }
+
+    function openLightbox(frame: HTMLElement) {
+        if (!lightbox) return;
+
+        const image = lightbox.querySelector<HTMLImageElement>('.gallery__lightbox-image');
+        const label = lightbox.querySelector<HTMLElement>('.gallery__lightbox-label');
+        const title = lightbox.querySelector<HTMLElement>('#lightbox-title');
+        const year = lightbox.querySelector<HTMLElement>('.gallery__lightbox-year');
+
+        if (!image || !label || !title || !year) return;
+
+        image.src = frame.dataset.gallerySource ?? '';
+        image.alt = frame.dataset.galleryAlt ?? '';
+        label.textContent = frame.dataset.galleryLabel || '';
+        title.textContent = frame.dataset.galleryAlt || '';
+        year.textContent = frame.dataset.galleryYear || '';
+        document.documentElement.style.overflow = 'hidden';
+        lastTrigger = frame;
+        lightbox.setAttribute('data-open', '');
+        lightbox.removeAttribute('aria-hidden');
+        lightbox.querySelector<HTMLElement>('.gallery__lightbox-close')?.focus();
+    }
+
+    document.addEventListener('astro:before-swap', () => {
+        document.documentElement.style.overflow = '';
+        controller?.abort();
+    });
+
+    document.addEventListener('astro:page-load', initGallery);
+</script>

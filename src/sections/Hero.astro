@@ -4,25 +4,18 @@ import { Image } from 'astro:assets';
 import logo from '@images/logos/austin_music_video_film_festival.webp';
 import poster from '@images/poster.webp';
 import { LINKS } from '@lib/constants';
-
-const UNITS = [
-    { label: 'Days', unit: 'days' },
-    { label: 'Hours', unit: 'hours' },
-    { label: 'Minutes', unit: 'minutes' },
-    { label: 'Seconds', unit: 'seconds' },
-] as const;
 ---
 
 <section
-    class="hero grid isolate overflow-hidden relative"
+    class="hero grid items-center overflow-hidden relative isolate"
     aria-labelledby="hero-title"
 >
     <div
-        class="hero__background absolute"
+        class="hero__background absolute inset-0 -z-1"
         aria-hidden="true"
     >
         <video
-            class="hero__video"
+            class="hero__video object-cover h-full w-full"
             autoplay
             loop
             muted
@@ -33,36 +26,23 @@ const UNITS = [
         </video>
         <div class="grain absolute" aria-hidden="true" />
     </div>
-    <div class="hero__frame-top-left absolute" aria-hidden="true" />
-    <div class="hero__frame-top-right absolute" aria-hidden="true" />
-    <div class="hero__frame-bottom-left absolute" aria-hidden="true" />
-    <div class="hero__frame-bottom-right absolute" aria-hidden="true" />
-    <dl
-        class="hero__countdown hero__reveal absolute grid text-right select-none"
-        aria-label="Event countdown"
-        role="timer"
-    >
-        {UNITS.map(({ label, unit }) => (
-            <div class="flex flex-col-reverse">
-                <dt class="hero__countdown-label">{label}</dt>
-                <dd
-                    class="hero__countdown-number"
-                    data-unit={unit}
-                >
-                    00
-                </dd>
-            </div>
-        ))}
+    <div class="hero__corner hero__corner--top-left absolute border border-cream" aria-hidden="true" />
+    <div class="hero__corner hero__corner--top-right absolute border border-cream" aria-hidden="true" />
+    <div class="hero__corner hero__corner--bottom-left absolute border border-cream" aria-hidden="true" />
+    <div class="hero__corner hero__corner--bottom-right absolute border border-cream" aria-hidden="true" />
+    <dl class="hero__countdown hero__reveal absolute top-15 select-none">
+        <dt class="sr-only">Status</dt>
+        <dd class="hero__countdown-over font-display whitespace-nowrap text-coral">That's a wrap.</dd>
     </dl>
     <div class="hero__content shell relative">
-        <div class="hero__meta hero__reveal flex flex-wrap items-center gap-6 mb-8">
-            <span class="hero__meta-item flex items-center">Vol. 01</span>
-            <span class="hero__meta-item flex items-center"><time datetime="2026-07-18">July 18, 2026</time></span>
-            <span class="hero__meta-item flex items-center">Cabana Club &middot; Austin, TX</span>
-        </div>
+        <ul class="hero__meta hero__reveal flex flex-wrap items-center gap-6 list-none">
+            <li class="hero__meta-item flex items-center gap-2 font-mono uppercase text-cream-60">Vol. 01</li>
+            <li class="hero__meta-item flex items-center gap-2 font-mono uppercase text-cream-60"><time datetime="2026-07-18">July 18, 2026</time></li>
+            <li class="hero__meta-item flex items-center gap-2 font-mono uppercase text-cream-60">Cabana Club &middot; Austin, TX</li>
+        </ul>
         <h1
             id="hero-title"
-            class="hero__title hero__reveal mb-8"
+            class="hero__reveal hero__title"
         >
             <Image
                 class="hero__logo block h-auto w-full"
@@ -70,135 +50,126 @@ const UNITS = [
                 densities={[1, 2]}
                 loading="eager"
                 src={logo}
-                width={620}
+                width={560}
             />
         </h1>
-        <p class="hero__subtitle hero__reveal">
-            A red carpet music video film experience celebrating bold artists &mdash; screens to stage.
+        <p class="hero__reveal hero__subtitle font-serif italic text-cream-80">
+            <span class="block">A red carpet premiere for the music video.</span>
+            <span class="block">Bold artists, screens to stage.</span>
         </p>
-        <div class="hero__reveal flex flex-wrap items-center gap-4">
+        <div class="hero__actions hero__reveal flex flex-wrap items-center gap-4">
             <a
-                class="btn btn--primary"
+                class="button button--primary button--disabled"
+                aria-disabled="true"
                 href={LINKS.posh}
+                rel="noopener"
+                tabindex="-1"
                 target="_blank"
             >
                 Buy Tickets
             </a>
             <a
-                class="btn"
+                class="button button--disabled"
+                aria-disabled="true"
                 href={LINKS.sponsor}
+                rel="noopener"
+                tabindex="-1"
                 target="_blank"
             >
                 Sponsor Us
             </a>
+        </div>
+        <div class="hero__clock hero__reveal hidden border border-cream-15 px-4 py-3 font-mono tracking-widest bg-navy text-cream select-none">
+            <span class="hero__clock-over">That's a wrap.</span>
         </div>
     </div>
 </section>
 
 <style>
     .hero {
-        align-items: center;
-        height: calc(100svh - var(--header-height));
-    }
-
-    .hero__background {
-        inset: 0;
-        z-index: -1;
+        --hero-corner-inset: clamp(12px, calc(5.33px + 2.08vw), 32px);
+        --hero-corner-size: clamp(14px, calc(11.33px + 0.83vw), 22px);
+        --hero-stagger: 0.2s;
+        min-height: calc(100svh - var(--header-height));
     }
 
     .hero__background::after {
         background:
-            linear-gradient(90deg, var(--color-night-70) 0%, transparent 65%),
+            radial-gradient(ellipse 55% 40% at 100% 0%, var(--color-night-70), transparent),
+            radial-gradient(ellipse 72% 60% at 84% 76%, var(--color-coral-15), transparent 66%),
+            linear-gradient(90deg, var(--color-night-70) 0%, transparent min(65%, calc(50% + 192px))),
             linear-gradient(180deg, var(--color-night-40) 0%, transparent 30%, transparent 60%, var(--color-night) 100%),
-            radial-gradient(ellipse at 50% 70%, var(--color-night-40) 30%, var(--color-night-70) 100%);
+            radial-gradient(ellipse at 50% 70%, var(--color-night-40) 38%, var(--color-night-70) 100%);
         content: '';
         inset: 0;
         position: absolute;
     }
 
-    .hero__video {
-        filter: brightness(0.55) contrast(1.1) saturate(1.15);
-        height: 100%;
-        object-fit: cover;
-        width: 100%;
+    .hero__clock {
+        font-size: 14px;
     }
 
     .hero__content {
-        padding-block: clamp(48px, calc(37.33px + 3.33vw), 80px);
+        padding-block: clamp(20px, 6.25vw, 80px);
+    }
+
+    .hero__corner {
+        height: var(--hero-corner-size);
+        width: var(--hero-corner-size);
+    }
+
+    .hero__corner--bottom-left {
+        border-right: none;
+        border-top: none;
+        bottom: var(--hero-corner-inset);
+        left: var(--hero-corner-inset);
+    }
+
+    .hero__corner--bottom-right {
+        border-left: none;
+        border-top: none;
+        bottom: var(--hero-corner-inset);
+        right: var(--hero-corner-inset);
+    }
+
+    .hero__corner--top-left {
+        border-bottom: none;
+        border-right: none;
+        left: var(--hero-corner-inset);
+        top: var(--hero-corner-inset);
+    }
+
+    .hero__corner--top-right {
+        border-bottom: none;
+        border-left: none;
+        right: var(--hero-corner-inset);
+        top: var(--hero-corner-inset);
     }
 
     .hero__countdown {
-        animation-delay: 0.4s;
-        gap: 24px;
-        grid-template-columns: repeat(4, 1fr);
-        right: var(--shell-pad);
-        top: 60px;
+        right: max(var(--shell-pad), calc((100% - var(--shell-max)) / 2 + var(--shell-pad)));
     }
 
-    .hero__countdown-label {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
+    .hero__countdown.hero__reveal {
+        animation-delay: calc(var(--hero-stagger) * 2);
     }
 
-    .hero__countdown-number {
-        color: var(--color-cream);
-        font-family: var(--font-display);
+    .hero__countdown-over {
         font-size: clamp(36px, calc(24px + 3.75vw), 72px);
         line-height: 0.9;
-        margin-bottom: 8px;
-    }
-
-    .hero__frame-bottom-left,
-    .hero__frame-bottom-right,
-    .hero__frame-top-left,
-    .hero__frame-top-right {
-        border: 1px solid var(--color-cream);
-        height: 28px;
-        width: 28px;
-    }
-
-    .hero__frame-bottom-left {
-        border-right: none;
-        border-top: none;
-        bottom: 24px;
-        left: 24px;
-    }
-
-    .hero__frame-bottom-right {
-        border-left: none;
-        border-top: none;
-        bottom: 24px;
-        right: 24px;
-    }
-
-    .hero__frame-top-left {
-        border-bottom: none;
-        border-right: none;
-        left: 24px;
-        top: 24px;
-    }
-
-    .hero__frame-top-right {
-        border-bottom: none;
-        border-left: none;
-        right: 24px;
-        top: 24px;
     }
 
     .hero__logo {
-        max-width: clamp(280px, calc(166.67px + 35.42vw), 620px);
+        max-width: clamp(280px, calc(186.67px + 29.17vw), 560px);
+    }
+
+    .hero__meta {
+        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
     }
 
     .hero__meta-item {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
         font-size: 12px;
-        gap: 8px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+        letter-spacing: 0.16em;
     }
 
     .hero__meta-item::before {
@@ -210,37 +181,53 @@ const UNITS = [
     }
 
     .hero__reveal {
-        animation: hero__fade-up var(--duration-slower) ease both;
-        opacity: 0;
+        animation: hero__fade-up var(--duration-slower) ease-out both;
     }
 
     .hero__reveal:nth-child(1) {
-        animation-delay: 0.2s;
+        animation-delay: var(--hero-stagger);
     }
 
     .hero__reveal:nth-child(2) {
-        animation-delay: 0.4s;
+        animation-delay: calc(var(--hero-stagger) * 2);
     }
 
     .hero__reveal:nth-child(3) {
-        animation-delay: 0.6s;
+        animation-delay: calc(var(--hero-stagger) * 3);
     }
 
     .hero__reveal:nth-child(4) {
-        animation-delay: 0.8s;
+        animation-delay: calc(var(--hero-stagger) * 4);
+    }
+
+    .hero__reveal:nth-child(5) {
+        animation-delay: calc(var(--hero-stagger) * 5);
     }
 
     .hero__subtitle {
-        color: var(--color-cream-80);
-        font-family: var(--font-serif);
-        font-size: clamp(20px, calc(16.67px + 1.04vw), 30px);
-        font-style: italic;
+        font-size: clamp(20px, calc(16px + 1.25vw), 32px);
         line-height: 1.3;
-        margin-bottom: 32px;
-        max-width: 540px;
+        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+        max-width: var(--measure-prose);
+    }
+
+    .hero__title {
+        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+    }
+
+    .hero__video {
+        filter: brightness(0.62) contrast(1.08) saturate(1.2);
     }
 
     @media (max-width: 1024px) {
+        .hero__actions {
+            margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+        }
+
+        .hero__clock {
+            display: inline-flex;
+        }
+
         .hero__countdown {
             display: none;
         }
@@ -266,33 +253,31 @@ const UNITS = [
 </style>
 
 <script>
-    import { pad, startCountdown } from '@lib/utils';
+    import { REDUCED_MOTION_QUERY } from '@lib/constants';
+    import { registerPageScript } from '@lib/utils';
 
-    const UNITS = ['days', 'hours', 'minutes', 'seconds'] as const;
-
-    let stopHeroCountdown: (() => void) | undefined;
-
-    function initHeroCountdown() {
-        stopHeroCountdown?.();
-
-        if (!document.querySelector('[data-unit="days"]')) return;
-
-        stopHeroCountdown = startCountdown(renderHeroCountdown);
-    }
-
-    function renderHeroCountdown(parts: CountdownParts) {
-        if (parts.remaining <= 0) return;
-
-        UNITS.forEach((unit) => {
-            const element = document.querySelector(`[data-unit="${unit}"]`);
-
-            if (element) element.textContent = pad(parts[unit]);
+    function initHero(signal: AbortSignal) {
+        document.querySelectorAll('.button--disabled').forEach((button) => {
+            button.addEventListener('click', event => event.preventDefault(), { signal });
         });
+
+        const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+
+        syncHeroVideo(reducedMotionQuery.matches);
+        reducedMotionQuery.addEventListener('change', event => syncHeroVideo(event.matches), { signal });
     }
 
-    document.addEventListener('astro:before-swap', () => {
-        stopHeroCountdown?.();
-    });
+    function syncHeroVideo(prefersReducedMotion: boolean) {
+        const video = document.querySelector<HTMLVideoElement>('.hero__video');
 
-    document.addEventListener('astro:page-load', initHeroCountdown);
+        if (!video) return;
+
+        if (prefersReducedMotion) {
+            video.pause();
+        } else {
+            video.play().catch(() => {});
+        }
+    }
+
+    registerPageScript(initHero);
 </script>

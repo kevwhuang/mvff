@@ -4,17 +4,20 @@ import { Image } from 'astro:assets';
 import IconMenu from '@components/IconMenu.astro';
 import logo from '@images/logos/austin_music_video_film_festival.webp';
 import { LINKS, ROUTES } from '@lib/constants';
+import { externalLinkProps } from '@lib/utils';
+
+const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
 ---
 
-<header class="site-header sticky">
-    <div class="shell site-header__inner grid">
+<header class="navbar sticky top-0 z-50 border-b border-cream-15">
+    <div class="navbar__inner shell grid items-center h-full">
         <a
-            class="site-header__brand no-underline select-none"
+            class="navbar__brand active:opacity-80 hover:opacity-80 relative no-underline select-none"
             aria-label="Austin Music Video Film Festival Home"
             href="/"
         >
             <Image
-                class="site-header__logo block h-auto"
+                class="navbar__logo block h-auto"
                 alt=""
                 densities={[1, 2]}
                 src={logo}
@@ -22,69 +25,57 @@ import { LINKS, ROUTES } from '@lib/constants';
             />
         </a>
         <nav
-            class="site-nav"
+            class="navbar__menu"
             aria-label="Primary"
         >
             <button
-                class="site-nav__close"
-                aria-label="Close menu"
+                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 bg-navy text-cream font-mono text-xl leading-none"
+                aria-label="Close navigation"
                 type="button"
             >
                 &times;
             </button>
-            <ul class="site-nav__list flex items-center justify-center list-none">
-                {ROUTES.map(route => (
-                    <li>
-                        <a
-                            class="site-nav__link relative no-underline"
-                            href={route.href}
-                            target={route.href.startsWith('http') ? '_blank' : undefined}
-                        >
-                            {route.label}
-                        </a>
-                    </li>
-                ))}
-                <li class="site-nav__divider" aria-hidden="true" />
-                <li class="site-nav__extra">
-                    <a
-                        class="site-nav__link relative no-underline"
-                        href={LINKS.pitchDeck}
-                        target="_blank"
-                    >
-                        Pitch Deck &rarr;
-                    </a>
-                </li>
-                <li class="site-nav__extra">
-                    <a
-                        class="site-nav__link relative no-underline"
-                        href={LINKS.calendly}
-                        target="_blank"
-                    >
-                        Schedule a Call &rarr;
-                    </a>
-                </li>
+            <ul class="navbar__menu-list flex items-center justify-center list-none gap-1">
+                {ROUTES.map((route) => {
+                    const isDisabled = route.label === 'Store';
+
+                    return (
+                        <li>
+                            <a
+                                class="navbar__menu-link active:text-coral hover:text-coral relative px-2 py-3 font-mono no-underline uppercase text-cream-60"
+                                aria-disabled={isDisabled ? 'true' : undefined}
+                                href={route.href}
+                                tabindex={isDisabled ? -1 : undefined}
+                                {...(isDisabled ? {} : externalLinkProps(route.href))}
+                            >
+                                {route.label}
+                            </a>
+                        </li>
+                    );
+                })}
             </ul>
-        </nav>
-        <div class="flex items-center justify-self-end gap-3">
-            <div
-                class="site-header__countdown flex select-none"
-                aria-label="Event countdown"
-                role="timer"
-            >
-                <span class="site-header__pulse" aria-hidden="true" />
-                <span class="site-header__countdown-text">00:00:00:00</span>
-            </div>
             <a
-                class="site-header__tickets inline-block relative no-underline select-none"
+                class="button button--primary navbar__menu-tickets no-underline select-none"
                 href={LINKS.posh}
+                rel="noopener"
                 target="_blank"
             >
                 Buy Tickets
             </a>
+        </nav>
+        <div class="flex items-center justify-self-end gap-3">
+            <div
+                class="navbar__countdown flex items-center gap-2 px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none"
+                aria-hidden="true"
+                data-visible={isHome ? 'false' : 'true'}
+            >
+                <span class="navbar__pulse inline-block size-1.5 rounded-full bg-red" aria-hidden="true" />
+                <span>00:00:00:00</span>
+            </div>
             <button
-                class="nav-toggle relative cursor-pointer"
+                class="navbar__icon-button navbar__toggle hidden place-items-center relative size-9 border border-cream-15 bg-navy text-cream"
                 aria-expanded="false"
-                aria-label="Toggle menu"
+                aria-label="Toggle navigation"
                 type="button"
             >
                 <IconMenu />
@@ -94,179 +85,140 @@ import { LINKS, ROUTES } from '@lib/constants';
 </header>
 
 <style>
-    .nav-toggle {
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        color: var(--color-cream);
-        display: none;
-        height: 36px;
-        place-items: center;
-        transition: border-color var(--duration-fast) ease;
-        width: 36px;
+    .navbar {
+        height: var(--header-height);
     }
 
-    .nav-toggle:active,
-    .nav-toggle:hover {
-        border-color: var(--color-cream-40);
-    }
-
-    .nav-toggle::after {
-        content: '';
-        inset: -8px;
-        position: absolute;
-    }
-
-    .site-header {
-        border-bottom: 1px solid var(--color-cream-15);
-        top: 0;
-        z-index: 50;
-    }
-
-    .site-header::before {
+    .navbar::before {
         backdrop-filter: blur(14px) saturate(120%);
-        background: color-mix(in oklab, var(--color-night) 88%, transparent);
+        background: var(--color-night-90);
         content: '';
         inset: 0;
         position: absolute;
         z-index: -1;
     }
 
-    .site-header__brand {
+    .navbar__brand {
         transition: opacity var(--duration-fast) ease;
     }
 
-    .site-header__brand:active,
-    .site-header__brand:hover {
-        opacity: 0.8;
-    }
-
-    .site-header__countdown {
-        align-items: baseline;
-        background: var(--color-navy);
-        border: 1px solid var(--color-cream-15);
-        color: var(--color-cream);
-        font-family: var(--font-mono);
-        font-size: 14px;
-        gap: 8px;
-        letter-spacing: 0.1em;
-        padding: 12px 16px;
-    }
-
-    .site-header__inner {
-        align-items: center;
-        gap: clamp(12px, calc(5.33px + 2.08vw), 32px);
-        grid-template-columns: auto 1fr auto;
-        padding-block: 16px;
-    }
-
-    .site-header__pulse {
-        animation: site-header__pulse 1.6s ease-in-out infinite;
-        background: var(--color-coral);
-        border-radius: 50%;
-        display: inline-block;
-        height: 6px;
-        width: 6px;
-    }
-
-    .site-header__tickets {
-        background: var(--color-coral);
-        border: 1px solid var(--color-coral);
-        color: var(--color-night);
-        font-family: var(--font-mono);
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.16em;
-        padding: 12px 16px;
-        text-transform: uppercase;
-        transition:
-            background var(--duration-fast) ease,
-            border-color var(--duration-fast) ease,
-            color var(--duration-fast) ease,
-            transform var(--duration-fast) ease;
-    }
-
-    .site-header__tickets:active {
-        transform: translateY(1px);
-    }
-
-    .site-header__tickets:hover {
-        background: var(--color-cream);
-        border-color: var(--color-cream);
-        color: var(--color-night);
-    }
-
-    .site-header__tickets::after {
+    .navbar__brand::after {
         content: '';
         inset: -8px;
         position: absolute;
     }
 
-    .site-nav__close {
-        display: none;
+    .navbar__countdown {
+        font-size: 14px;
     }
 
-    .site-nav__divider,
-    .site-nav__extra {
-        display: none;
+    .navbar__countdown[data-observing] {
+        transition: opacity var(--duration-base) ease;
     }
 
-    .site-nav__link {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
+    .navbar__countdown[data-visible='false'] {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .navbar__icon-button {
+        transition:
+            border-color var(--duration-fast) ease,
+            color var(--duration-fast) ease;
+    }
+
+    .navbar__icon-button:active,
+    .navbar__icon-button:hover {
+        border-color: var(--color-coral);
+        color: var(--color-coral);
+    }
+
+    .navbar__icon-button::after {
+        content: '';
+        inset: -8px;
+        position: absolute;
+    }
+
+    .navbar__inner {
+        gap: clamp(12px, calc(5.33px + 2.08vw), 32px);
+        grid-template-columns: auto 1fr auto;
+    }
+
+    .navbar__menu-link {
         font-size: 12px;
         letter-spacing: 0.16em;
-        padding: 12px 8px;
-        text-transform: uppercase;
         transition: color var(--duration-fast) ease;
     }
 
-    .site-nav__link:active,
-    .site-nav__link:hover {
-        color: var(--color-cream);
+    .navbar__menu-link::after {
+        content: '';
+        inset: -4px 0;
+        position: absolute;
     }
 
-    .site-nav__link[aria-current='page'] {
-        color: var(--color-cream);
-    }
-
-    .site-nav__link[aria-current='page']::before {
+    .navbar__menu-link::before {
         background: var(--color-coral);
         bottom: 4px;
         content: '';
         height: 2px;
         left: 8px;
+        opacity: 0;
         position: absolute;
         right: 8px;
+        transition: opacity var(--duration-fast) ease;
     }
 
-    .site-nav__list {
-        gap: 4px;
+    .navbar__menu-link[aria-current='page'] {
+        color: var(--color-cream);
+    }
+
+    .navbar__menu-link[aria-current='page']:hover {
+        color: var(--color-coral);
+    }
+
+    .navbar__menu-link[aria-current='page']::before {
+        opacity: 1;
+    }
+
+    .navbar__menu-link[aria-disabled='true'] {
+        color: var(--color-cream-60);
+        cursor: not-allowed;
+        opacity: 0.4;
+    }
+
+    .navbar__menu-tickets {
+        display: none;
+    }
+
+    .navbar__pulse {
+        animation: live-dot__pulse var(--duration-pulse) ease-in-out infinite;
     }
 
     @media (max-width: 1024px) {
-        .nav-toggle {
-            display: grid;
-        }
-
-        .site-header__countdown {
+        .navbar__countdown {
             display: none;
         }
 
-        .site-nav {
+        .navbar__inner {
+            grid-template-columns: auto 1fr;
+        }
+
+        .navbar__menu {
             background: var(--color-night);
+            display: flex;
+            flex-direction: column;
             inset: 0;
-            overflow-y: auto;
-            padding: 88px 32px 32px;
+            padding: 96px 32px 32px;
             position: fixed;
             transform: translateX(100%);
             transition:
                 transform var(--duration-base) ease,
                 visibility 0s var(--duration-base);
             visibility: hidden;
-            z-index: 60;
+            z-index: var(--z-drawer);
         }
 
-        .site-nav[data-open] {
+        .navbar__menu[data-open] {
             transform: translateX(0);
             transition:
                 transform var(--duration-base) ease,
@@ -274,42 +226,14 @@ import { LINKS, ROUTES } from '@lib/constants';
             visibility: visible;
         }
 
-        .site-nav__close {
-            background: var(--color-navy);
-            border: 1px solid var(--color-cream-15);
-            color: var(--color-cream);
-            cursor: pointer;
+        .navbar__menu-close {
             display: block;
-            height: 36px;
             position: absolute;
             right: 16px;
             top: 16px;
-            transition: border-color var(--duration-fast) ease;
-            width: 36px;
         }
 
-        .site-nav__close:active,
-        .site-nav__close:hover {
-            border-color: var(--color-cream-40);
-        }
-
-        .site-nav__close::after {
-            content: '';
-            inset: -8px;
-            position: absolute;
-        }
-
-        .site-nav__divider {
-            border-top: 1px solid var(--color-cream-15);
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .site-nav__extra {
-            display: block;
-        }
-
-        .site-nav__link {
+        .navbar__menu-link {
             border-bottom: 1px solid var(--color-cream-15);
             color: var(--color-cream);
             display: block;
@@ -320,52 +244,54 @@ import { LINKS, ROUTES } from '@lib/constants';
             text-transform: none;
         }
 
-        .site-nav__link:active,
-        .site-nav__link:hover {
+        .navbar__menu-link:active,
+        .navbar__menu-link:hover {
             color: var(--color-coral);
         }
 
-        .site-nav__link[aria-current='page']::before {
+        .navbar__menu-link::after {
             content: none;
         }
 
-        .site-nav__list {
+        .navbar__menu-link::before {
+            content: none;
+        }
+
+        .navbar__menu-link[aria-current='page'] {
+            color: var(--color-coral);
+        }
+
+        .navbar__menu-list {
             align-items: stretch;
+            flex: 1 1 auto;
             flex-direction: column;
             gap: 8px;
             justify-content: flex-start;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .site-header__tickets {
-            display: none;
-        }
-    }
-
-    @keyframes site-header__pulse {
-        0%,
-        100% {
-            opacity: 0.4;
-            transform: scale(0.9);
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
         }
 
-        50% {
-            box-shadow: 0 0 12px var(--color-coral);
-            opacity: 1;
-            transform: scale(1.2);
+        .navbar__menu-tickets {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .navbar__toggle {
+            display: grid;
         }
     }
 </style>
 
 <script>
-    import { pad, startCountdown } from '@lib/utils';
-
-    let navController: AbortController | undefined;
-    let stopNavCountdown: (() => void) | undefined;
+    let controller: AbortController | undefined;
 
     function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
+        document.documentElement.style.overflow = '';
+        menu.removeAttribute('aria-modal');
         menu.removeAttribute('data-open');
+        menu.removeAttribute('role');
         toggle.setAttribute('aria-expanded', 'false');
         toggle.focus();
     }
@@ -389,28 +315,44 @@ import { LINKS, ROUTES } from '@lib/constants';
     }
 
     function initNavbar() {
-        stopNavCountdown?.();
-        navController?.abort();
-        navController = new AbortController();
+        controller?.abort();
+        controller = new AbortController();
 
-        const { signal } = navController;
-
-        stopNavCountdown = startCountdown(renderNavCountdown);
-
-        const close = document.querySelector<HTMLElement>('.site-nav__close');
-        const menu = document.querySelector<HTMLElement>('.site-nav');
-        const toggle = document.querySelector<HTMLElement>('.nav-toggle');
+        const { signal } = controller;
+        const menu = document.querySelector<HTMLElement>('.navbar__menu');
+        const toggle = document.querySelector<HTMLElement>('.navbar__toggle');
 
         if (menu && toggle) {
-            close?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+            const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close');
+
+            closeButton?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
             document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
             toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
         }
 
-        const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+        const countdownChip = document.querySelector<HTMLElement>('.navbar__countdown');
+        const heroCountdown = document.querySelector('.hero__countdown');
 
-        document.querySelectorAll('.site-nav__link').forEach((link) => {
-            const href = link.getAttribute('href')?.replace(/\/$/, '') || '/';
+        if (countdownChip && heroCountdown) {
+            countdownChip.dataset.visible = 'false';
+
+            const observer = new IntersectionObserver(([entry]) => {
+                countdownChip.dataset.visible = entry.isIntersecting ? 'false' : 'true';
+            });
+
+            observer.observe(heroCountdown);
+            signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+            requestAnimationFrame(() => countdownChip.setAttribute('data-observing', ''));
+        }
+
+        document.querySelectorAll('.navbar__menu-link[aria-disabled="true"]').forEach((link) => {
+            link.addEventListener('click', event => event.preventDefault(), { signal });
+        });
+
+        const currentPath = normalizePath(window.location.pathname);
+
+        document.querySelectorAll('.navbar__menu-link').forEach((link) => {
+            const href = normalizePath(link.getAttribute('href') || '');
 
             if (href === currentPath) {
                 link.setAttribute('aria-current', 'page');
@@ -420,26 +362,20 @@ import { LINKS, ROUTES } from '@lib/constants';
         });
     }
 
-    function openMenu(menu: HTMLElement, toggle: HTMLElement) {
-        menu.setAttribute('data-open', '');
-        toggle.setAttribute('aria-expanded', 'true');
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => menu.querySelector<HTMLElement>('.site-nav__close')?.focus());
-        });
+    function normalizePath(path: string) {
+        return path.replace(/\/$/, '') || '/';
     }
 
-    function renderNavCountdown(parts: CountdownParts) {
-        const countdown = document.querySelector('.site-header__countdown-text');
+    function openMenu(menu: HTMLElement, toggle: HTMLElement) {
+        document.documentElement.style.overflow = 'hidden';
+        menu.setAttribute('aria-modal', 'true');
+        menu.setAttribute('data-open', '');
+        menu.setAttribute('role', 'dialog');
+        toggle.setAttribute('aria-expanded', 'true');
 
-        if (!countdown) return;
-
-        if (parts.remaining <= 0) {
-            countdown.textContent = 'Happening Now';
-
-            return;
-        }
-
-        countdown.textContent = `${pad(parts.days)}:${pad(parts.hours)}:${pad(parts.minutes)}:${pad(parts.seconds)}`;
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => menu.querySelector<HTMLElement>('.navbar__menu-close')?.focus());
+        });
     }
 
     function trapFocus(event: KeyboardEvent, menu: HTMLElement) {
@@ -448,7 +384,7 @@ import { LINKS, ROUTES } from '@lib/constants';
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
 
-        if (event.shiftKey && document.activeElement === first) {
+        if (document.activeElement === first && event.shiftKey) {
             event.preventDefault();
             last.focus();
         } else if (!event.shiftKey && document.activeElement === last) {
@@ -458,8 +394,8 @@ import { LINKS, ROUTES } from '@lib/constants';
     }
 
     document.addEventListener('astro:before-swap', () => {
-        stopNavCountdown?.();
-        navController?.abort();
+        document.documentElement.style.overflow = '';
+        controller?.abort();
     });
 
     document.addEventListener('astro:page-load', initNavbar);

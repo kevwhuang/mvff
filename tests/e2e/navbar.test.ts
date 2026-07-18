@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const CALENDLY_URL = 'https://calendly.com/madewellanna99/30min';
 const COUNTDOWN_PATTERN = /^\d{2}:\d{2}:\d{2}:\d{2}$/;
 const FOCUS_SETTLE = 300;
-const PITCH_DECK_URL = '/austin_music_video_film_festival_pitch_deck.pdf';
+const PITCH_DECK_URL = '/assets/austin_music_video_film_festival_pitch_deck.pdf';
 const ROUTE_HREFS = ['/', '/info', 'https://shop.atxmusicvideofilmfestival.com', '/team', '/gallery', '/contact'] as const;
 const STORE_URL = 'https://shop.atxmusicvideofilmfestival.com';
 

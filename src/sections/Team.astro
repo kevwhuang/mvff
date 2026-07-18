@@ -1,0 +1,159 @@
+---
+import { Image } from 'astro:assets';
+
+import SectionHeader from '@components/SectionHeader.astro';
+import amiiri from '@images/team/amiiri.webp';
+import anna from '@images/team/anna.webp';
+import dan from '@images/team/dan.webp';
+import greta from '@images/team/greta.webp';
+import jyme from '@images/team/jyme.webp';
+import may from '@images/team/may.webp';
+import rocky from '@images/team/rocky.webp';
+
+const TEAM = [
+    { image: anna, name: 'Anna', role: 'Founder & Executive Producer' },
+    { name: 'Ashleigh', role: 'Social Media Marketing Director' },
+    { image: jyme, name: 'Jyme', role: 'Film Programming Director' },
+    { image: dan, name: 'Dan', role: 'Operations Production Manager' },
+    { image: amiiri, name: 'Amiiri', role: 'PR & Outreach Director' },
+    { image: rocky, name: 'Rocky', role: 'Sponsorship Admin' },
+    { image: greta, name: 'Greta', role: 'Content Strategist' },
+    { name: 'Marissa', role: 'Graphics Manager' },
+    { name: 'Jasmine', role: 'Executive Coordinator' },
+    { image: may, name: 'May', role: 'Dance Director & Fashion Designer' },
+] as const;
+---
+
+<section
+    class="section team"
+    aria-labelledby="team-title"
+>
+    <div class="shell">
+        <SectionHeader headingId="team-title">
+            2026 Team
+        </SectionHeader>
+        <ul
+            class="team__grid grid grid-cols-5 list-none"
+            data-scroll
+            data-scroll-stagger="0.04"
+        >
+            {TEAM.map(member => (
+                <li>
+                    <article class="team__card flex flex-col h-full border border-cream-15 bg-navy">
+                        <div class="team__frame aspect-square overflow-hidden relative bg-slate">
+                            {'image' in member
+                                ? (
+                                        <Image
+                                            class="team__image block object-cover h-full w-full"
+                                            alt={`${member.name}, ${member.role}`}
+                                            densities={[1, 2]}
+                                            loading="lazy"
+                                            src={member.image}
+                                            width={400}
+                                        />
+                                    )
+                                : (
+                                        <span
+                                            class="team__monogram flex items-center justify-center h-full w-full font-display leading-none text-cream-15 select-none"
+                                            aria-hidden="true"
+                                        >
+                                            {member.name.charAt(0)}
+                                        </span>
+                                    )}
+                        </div>
+                        <div class="team__body flex flex-1 flex-col gap-2 border-cream-15 border-t">
+                            <h2 class="team__name">{member.name}</h2>
+                            <p class="team__role font-mono uppercase text-cream-60">{member.role}</p>
+                        </div>
+                    </article>
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>
+
+<style>
+    .team__body {
+        padding: clamp(16px, calc(13.33px + 0.83vw), 24px);
+    }
+
+    .team__card {
+        transition:
+            border-color var(--duration-base) ease,
+            box-shadow var(--duration-base) ease,
+            transform var(--duration-base) ease;
+    }
+
+    .team__card:hover {
+        border-color: var(--color-coral);
+        box-shadow: 0 24px 48px -16px var(--color-coral-35);
+        transform: translateY(-4px);
+    }
+
+    .team__card:hover .team__image {
+        filter: grayscale(0) brightness(1) contrast(1.05);
+        transform: scale(1.05);
+    }
+
+    .team__card:hover .team__monogram {
+        color: color-mix(in oklab, var(--color-coral) 70%, var(--color-navy));
+        transform: scale(1.05);
+    }
+
+    .team__card:hover .team__role {
+        color: var(--color-coral);
+    }
+
+    .team__frame::after {
+        background: linear-gradient(180deg, transparent 55%, var(--color-black-55) 100%);
+        content: '';
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .team__grid {
+        gap: clamp(16px, calc(13.33px + 0.83vw), 24px);
+    }
+
+    .team__image {
+        filter: grayscale(0.6) brightness(0.95) contrast(1.05);
+        transition:
+            filter var(--duration-slow) ease,
+            transform var(--duration-slower) ease;
+    }
+
+    .team__monogram {
+        font-size: clamp(80px, calc(48px + 10vw), 176px);
+        transition:
+            color var(--duration-slow) ease,
+            transform var(--duration-slower) ease;
+    }
+
+    .team__name {
+        font-size: clamp(20px, calc(17.33px + 0.83vw), 28px);
+        line-height: 1;
+    }
+
+    .team__role {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        transition: color var(--duration-fast) ease;
+    }
+
+    @media (max-width: 1024px) {
+        .team__grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .team__grid {
+            grid-template-columns: 1fr;
+        }
+
+        .team__monogram {
+            font-size: clamp(128px, calc(48px + 24vw), 240px);
+        }
+    }
+</style>

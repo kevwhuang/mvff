@@ -1,12 +1,12 @@
 ---
-import SectionHead from '@components/SectionHead.astro';
+import SectionHeader from '@components/SectionHeader.astro';
 import { pad } from '@lib/utils';
 
 const HIGHLIGHTS = [
     { description: 'Three screening blocks, 22 official selections \u2014 the year\'s boldest music videos, from first-timers to veterans, back to back on the big screen.', title: 'Screenings' },
     { description: 'Ten jury awards and the Spotlight Partner Award, called at 11:45 PM \u2014 the directors behind the year\'s best videos, up on the stage.', title: 'Awards' },
     { description: 'A raffle and a filmmaker Q&A after every block \u2014 directors and artists in conversation with hosts Kay Cote, Lauren, and Carmela.', title: 'Q&A Panel' },
-    { description: 'Live sets from nominee artists all night \u2014 with flash mobs and a fire performer lighting up the floor.', title: 'Live Music' },
+    { description: 'Live sets from nominee artists all night \u2014 flash mobs and a fire performer lighting up the floor.', title: 'Live Music' },
     { description: 'Glamour, then chlorine. When the awards wrap, the winners take the plunge off the open-air deck \u2014 the last shot of the night, dressed to be seen.', title: 'Pool Party' },
 ] as const;
 ---
@@ -16,23 +16,23 @@ const HIGHLIGHTS = [
     aria-labelledby="experience-title"
 >
     <div class="shell">
-        <SectionHead
+        <SectionHeader
             headingId="experience-title"
             level="h2"
             marker="[ 02 ]"
         >
             The Experience
-        </SectionHead>
+        </SectionHeader>
         <ol
             class="list-none"
             data-scroll
             data-scroll-stagger="0.08"
         >
             {HIGHLIGHTS.map((highlight, index) => (
-                <li class="highlight grid isolate items-baseline relative">
-                    <span class="highlight__number select-none">/ {pad(index + 1)}</span>
-                    <h3 class="highlight__title">{highlight.title}</h3>
-                    <p class="highlight__description">{highlight.description}</p>
+                <li class="experience__highlight grid items-start relative isolate border-b border-cream-15">
+                    <span class="experience__highlight-number font-mono text-cream-60 select-none">/ {pad(index + 1)}</span>
+                    <h3 class="experience__highlight-title uppercase">{highlight.title}</h3>
+                    <p class="experience__highlight-description font-serif text-cream-60">{highlight.description}</p>
                 </li>
             ))}
         </ol>
@@ -40,28 +40,27 @@ const HIGHLIGHTS = [
 </section>
 
 <style>
-    .highlight {
-        border-bottom: 1px solid var(--color-cream-15);
-        gap: clamp(16px, calc(8px + 2.5vw), 40px);
+    .experience__highlight {
+        gap: 16px clamp(16px, calc(8px + 2.5vw), 40px);
         grid-template-columns: 80px 1fr 1.2fr;
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px) 0;
     }
 
-    .highlight:first-child {
+    .experience__highlight:first-child {
         border-top: 1px solid var(--color-cream-15);
     }
 
-    .highlight:hover::after {
+    .experience__highlight:hover::after {
         opacity: 1;
     }
 
-    .highlight:hover .highlight__title {
+    .experience__highlight:hover .experience__highlight-title {
         color: var(--color-coral);
         transform: translateX(8px);
     }
 
-    .highlight::after {
-        background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-coral) 8%, transparent), transparent);
+    .experience__highlight::after {
+        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
         content: '';
         inset: 0;
         opacity: 0;
@@ -71,40 +70,34 @@ const HIGHLIGHTS = [
         z-index: -1;
     }
 
-    .highlight__description {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: 16px;
-        line-height: 1.45;
+    .experience__highlight-description {
+        font-size: 20px;
+        line-height: 1.4;
     }
 
-    .highlight__number {
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
+    .experience__highlight-number {
         font-size: 12px;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.16em;
     }
 
-    .highlight__title {
-        font-size: clamp(34px, calc(24px + 3.13vw), 64px);
+    .experience__highlight-title {
+        font-size: clamp(32px, calc(21.33px + 3.33vw), 64px);
         line-height: 0.95;
-        text-transform: uppercase;
         transition:
             color var(--duration-fast) ease,
             transform var(--duration-fast) ease;
     }
 
     @media (max-width: 768px) {
-        .highlight {
-            gap: 16px;
+        .experience__highlight {
             grid-template-columns: 1fr;
         }
 
-        .highlight__description {
+        .experience__highlight-description {
             grid-column: 1 / -1;
         }
 
-        .highlight__number {
+        .experience__highlight-number {
             display: none;
         }
     }

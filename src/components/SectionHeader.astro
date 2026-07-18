@@ -1,0 +1,49 @@
+---
+interface Props {
+    headingId: string;
+    level?: 'h1' | 'h2';
+    marker?: string;
+}
+
+const { headingId, level: Heading = 'h1', marker } = Astro.props;
+---
+
+<div
+    class:list={['section-header grid items-baseline gap-x-6 gap-y-3 pb-4 border-b border-cream-15', { 'section-header--bare': !marker }]}
+    data-scroll
+>
+    {marker && <span class="section-header__marker font-mono text-coral select-none">{marker}</span>}
+    <Heading
+        id={headingId}
+        class="section-header__title uppercase"
+    >
+        <slot />
+    </Heading>
+</div>
+
+<style>
+    .section-header {
+        grid-template-columns: auto 1fr;
+        margin-bottom: var(--section-padding-sm);
+    }
+
+    .section-header--bare {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header__marker {
+        font-size: 12px;
+        letter-spacing: 0.16em;
+    }
+
+    .section-header__title {
+        font-size: clamp(40px, calc(24px + 5vw), 88px);
+        line-height: 0.9;
+    }
+
+    @media (max-width: 768px) {
+        .section-header {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

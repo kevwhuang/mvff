@@ -1,0 +1,268 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+
+const FAQ = [
+    { answer: 'One night in Austin where the music video takes center stage \u2014 three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit \u2014 built to pull Austin\'s music and film worlds into one room.', question: 'What exactly is the Austin Music Video Film Festival?' },
+    { answer: 'Yes \u2014 21+ with valid ID, no exceptions.', question: 'Is there an age requirement?' },
+    { answer: 'Red carpet attire \u2014 silk, tuxedos, and a swimsuit if you\'re feeling bold. Dress to be photographed; the pool deck\'s open under the stars.', question: 'What do I wear?' },
+    { answer: 'With a 2 AM close, rideshare is the move, but street parking is available around the venue.', question: 'Where do I park?' },
+    { answer: 'The full bar is open all night at Cabana Club. Outside food and drinks aren\'t permitted.', question: 'Will there be food and drinks?' },
+    { answer: 'Phones and small personal cameras, absolutely. Accredited press and media \u2014 reach out by email ahead of the night.', question: 'Can I bring a camera?' },
+    { answer: 'Submissions for 2026 are closed \u2014 this year\'s 22 official selections are locked into the July 18 program. Follow us on Instagram for the next open call.', question: 'How do I submit a music video?' },
+] as const;
+
+const SCHEDULE = [
+    ['7:00 PM', 'Doors \u00B7 Ryley Hall', 'Live', '2026-07-18T19:00-05:00'],
+    ['7:25 PM', 'Dasmayan Daydreamers', 'Live', '2026-07-18T19:25-05:00'],
+    ['8:00 PM', 'Tipping Culture', 'Live', '2026-07-18T20:00-05:00'],
+    ['8:35 PM', 'Anna Madewell', 'Live', '2026-07-18T20:35-05:00'],
+    ['9:30 PM', 'Music Video Block One', 'Screening', '2026-07-18T21:30-05:00'],
+    ['10:00 PM', 'Raffle & Q&A \u00B7 Kay Cote', 'Panel', '2026-07-18T22:00-05:00'],
+    ['10:15 PM', 'Music Video Block Two', 'Screening', '2026-07-18T22:15-05:00'],
+    ['10:45 PM', 'Raffle & Q&A \u00B7 Lauren', 'Panel', '2026-07-18T22:45-05:00'],
+    ['11:00 PM', 'Music Video Block Three', 'Screening', '2026-07-18T23:00-05:00'],
+    ['11:30 PM', 'Raffle & Q&A \u00B7 Carmela', 'Panel', '2026-07-18T23:30-05:00'],
+    ['11:45 PM', 'Awards Ceremony', 'Awards', '2026-07-18T23:45-05:00'],
+    ['12:05 AM', 'Jyme', 'After Party', '2026-07-19T00:05-05:00'],
+    ['12:35 AM', 'Natia', 'After Party', '2026-07-19T00:35-05:00'],
+    ['1:05 AM', 'Amiiri Tafari', 'After Party', '2026-07-19T01:05-05:00'],
+    ['1:35 AM', 'Surprise Set', 'After Party', '2026-07-19T01:35-05:00'],
+    ['2:00 AM', 'Lights Up', 'Close', '2026-07-19T02:00-05:00'],
+] as const;
+---
+
+<section
+    class="info section"
+    aria-labelledby="info-title"
+>
+    <div class="shell">
+        <SectionHeader headingId="info-title">
+            Info
+        </SectionHeader>
+        <div
+            class="info__stack flex flex-col"
+            data-scroll
+            data-scroll-stagger="0.12"
+        >
+            <div>
+                <h2 class="subheading">Venue</h2>
+                <div class="info__venue relative isolate border border-cream-15 bg-navy">
+                    <h3 class="info__venue-name mb-2">Cabana Club</h3>
+                    <p class="info__venue-address mb-4 font-mono uppercase text-cream-60">5012 E 7th St &middot; Austin,&nbsp;TX</p>
+                    <p class="info__venue-description mb-4 font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lights the pool deck and a live stage carries the music. A red carpet leads in from the street, and the night is capped at 300&nbsp;tickets.</p>
+                    <ul class="info__venue-features grid grid-cols-2 gap-2 list-none">
+                        <li>Outdoor screen</li>
+                        <li>Live stage</li>
+                        <li>Outdoor pool</li>
+                        <li>Full bar</li>
+                        <li>21+ only</li>
+                        <li>ADA access</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h2 class="subheading">Program</h2>
+                <ol class="info__schedule flex flex-col list-none">
+                    {SCHEDULE.map(([time, event, tag, datetime]) => (
+                        <li class="info__schedule-row grid items-baseline relative py-4 border-b border-cream-10">
+                            <time class="info__schedule-time" datetime={datetime}>{time}</time>
+                            <span class="info__schedule-event font-display">{event}</span>
+                            <span class:list={['info__schedule-tag font-mono uppercase', tag === 'Awards' || tag === 'Screening' ? 'text-coral' : 'text-cream-60']}>{tag}</span>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+        </div>
+        <div
+            class="relative"
+            data-scroll
+        >
+            <h2 class="subheading flex items-baseline justify-between">Frequently Asked Questions <span class="subheading__badge">{FAQ.length} Entries</span></h2>
+            <div class="info__faq flex flex-col">
+                {FAQ.map(entry => (
+                    <details
+                        class="info__faq-item border-b border-cream-15"
+                        name="faq"
+                    >
+                        <summary class="info__faq-question active:text-coral hover:text-coral flex items-center justify-between gap-4 py-4 font-display list-none text-cream cursor-pointer select-none">
+                            <span>{entry.question}</span>
+                            <span
+                                class="info__faq-icon font-mono text-coral"
+                                aria-hidden="true"
+                            >
+                                +
+                            </span>
+                        </summary>
+                        <p class="info__faq-answer pb-6 font-serif text-cream-60">
+                            {entry.answer}
+                        </p>
+                    </details>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .info__faq {
+        interpolate-size: allow-keywords;
+    }
+
+    .info__faq-answer {
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+    .info__faq-icon {
+        font-size: 20px;
+        transition: transform var(--duration-fast) ease;
+    }
+
+    .info__faq-item::details-content {
+        content-visibility: hidden;
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+            content-visibility var(--duration-base) allow-discrete,
+            height var(--duration-base) ease,
+            opacity var(--duration-base) ease;
+    }
+
+    .info__faq-item[open] .info__faq-icon {
+        transform: rotate(45deg);
+    }
+
+    .info__faq-item[open] .info__faq-question {
+        color: var(--color-coral);
+    }
+
+    .info__faq-item[open]::details-content {
+        content-visibility: visible;
+        height: auto;
+        opacity: 1;
+    }
+
+    .info__faq-question {
+        font-size: 20px;
+        letter-spacing: 0.02em;
+        transition: color var(--duration-fast) ease;
+    }
+
+    .info__faq-question::-webkit-details-marker {
+        display: none;
+    }
+
+    .info__schedule-event {
+        font-size: 20px;
+        letter-spacing: 0.02em;
+        transition: transform var(--duration-fast) ease;
+    }
+
+    .info__schedule-row {
+        gap: clamp(8px, calc(5.33px + 0.83vw), 16px);
+        grid-template-columns: clamp(78px, calc(70.67px + 2.29vw), 100px) 1fr auto;
+    }
+
+    .info__schedule-row:hover .info__schedule-event,
+    .info__schedule-row:hover .info__schedule-time {
+        transform: translateX(8px);
+    }
+
+    .info__schedule-row:hover .info__schedule-time {
+        color: var(--color-coral);
+    }
+
+    .info__schedule-tag {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+    }
+
+    .info__schedule-time {
+        color: var(--color-cream);
+        font-family: var(--font-mono);
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        transition:
+            color var(--duration-fast) ease,
+            transform var(--duration-fast) ease;
+        white-space: nowrap;
+    }
+
+    .info__stack {
+        gap: var(--section-padding-sm);
+        margin-bottom: var(--section-padding-sm);
+    }
+
+    .info__venue {
+        padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
+    }
+
+    .info__venue:hover::after {
+        opacity: 1;
+    }
+
+    .info__venue:hover .info__venue-name {
+        color: var(--color-coral);
+    }
+
+    .info__venue::after {
+        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
+        content: '';
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        transition: opacity var(--duration-fast) ease;
+        z-index: -1;
+    }
+
+    .info__venue-address {
+        font-size: 12px;
+        letter-spacing: 0.16em;
+    }
+
+    .info__venue-features li {
+        align-items: baseline;
+        color: var(--color-cream);
+        display: flex;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        gap: 8px;
+        letter-spacing: 0.16em;
+    }
+
+    .info__venue-features li::before {
+        color: var(--color-coral);
+        content: '+';
+        font-weight: 600;
+    }
+
+    .info__venue-name {
+        font-size: clamp(24px, calc(20px + 1.25vw), 36px);
+        line-height: 1;
+        transition: color var(--duration-fast) ease;
+    }
+
+    .subheading {
+        border-bottom: 1px solid var(--color-cream-15);
+        font-size: clamp(28px, calc(22.67px + 1.67vw), 44px);
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .subheading__badge {
+        color: var(--color-coral);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        white-space: nowrap;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .info__faq-item::details-content {
+            transition: none;
+        }
+    }
+</style>

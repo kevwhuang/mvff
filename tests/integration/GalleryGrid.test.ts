@@ -36,7 +36,7 @@ describe('GalleryGrid', () => {
     });
 
     test('composes exactly two staggered portrait figures', () => {
-        expect(html).toContain('data-scroll-stagger="0.14"');
+        expect(html).toContain('data-scroll-stagger="0.1"');
         expect(html.split('class="gallery__frame ').length - 1).toBe(FIGURE_COUNT);
         expect(html.split('aria-label="View ').length - 1).toBe(FIGURE_COUNT);
         expect(html.split('gallery__figure--lead').length - 1).toBe(1);

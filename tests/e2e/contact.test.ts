@@ -6,7 +6,7 @@ const DESCRIPTION_MIN = 120;
 const EMAIL_URL = 'mailto:contact@atxmusicvideofilmfestival.com';
 const FORMS_ENDPOINT = '**/forms/';
 const INSTAGRAM_URL = 'https://instagram.com/atxmvff';
-const PITCH_DECK_URL = '/austin_music_video_film_festival_pitch_deck.pdf';
+const PITCH_DECK_URL = '/assets/austin_music_video_film_festival_pitch_deck.pdf';
 const POSH_URL = 'https://posh.vip/e/austin-texas-music-video-film-festival';
 const REQUIRED_FIELDS = ['name', 'email', 'message'] as const;
 

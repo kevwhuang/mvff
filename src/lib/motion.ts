@@ -1,74 +1,82 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const SCROLL_DURATION = 0.8;
+import { REDUCED_MOTION_QUERY } from '@lib/constants';
+
+const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+const SCROLL_DURATION = 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
+const SCROLL_START = 'top 85%';
 
-let parallaxLayers: NodeListOf<HTMLElement> | undefined;
-let parallaxQueued = false;
+let isParallaxQueued = false;
+let parallaxLayers: { element: HTMLElement; factor: number }[] = [];
 
 function handleScroll() {
-    if (!parallaxLayers?.length || parallaxQueued) return;
+    if (!parallaxLayers.length || isParallaxQueued) return;
 
-    parallaxQueued = true;
+    isParallaxQueued = true;
     requestAnimationFrame(updateParallax);
 }
 
-function initScrollAnimations() {
+export function initMotion(): void {
+    const prefersReducedMotion = reducedMotionQuery.matches;
+
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    initScrollAnimations(prefersReducedMotion);
+    initParallax(prefersReducedMotion);
+}
+
+function initParallax(prefersReducedMotion: boolean) {
+    if (prefersReducedMotion) {
+        parallaxLayers.forEach(({ element }) => {
+            element.style.transform = '';
+        });
+        parallaxLayers = [];
+
+        return;
+    }
+
+    parallaxLayers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'), element => ({
+        element,
+        factor: Number.parseFloat(element.dataset.parallax || '0'),
+    }));
+
+    updateParallax();
+}
+
+function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion) {
         elements.forEach((element) => {
             element.style.opacity = '1';
+            gsap.set(element, { clearProps: 'transform' });
+            gsap.set(element.children, { clearProps: 'transform', opacity: 1 });
         });
 
         return;
     }
 
     elements.forEach((element) => {
-        const delay = Number.parseFloat(element.dataset.scrollDelay || '0');
-        const direction = (element.dataset.scroll || 'up') as Direction;
-        const duration = Number.parseFloat(element.dataset.scrollDuration || String(SCROLL_DURATION));
-        const from: gsap.TweenVars = { opacity: 0 };
+        const from = { opacity: 0, y: SCROLL_OFFSET };
         const stagger = Number.parseFloat(element.dataset.scrollStagger || '0');
 
         const to: gsap.TweenVars = {
-            delay,
-            duration,
+            duration: SCROLL_DURATION,
             ease: SCROLL_EASE,
             opacity: 1,
             scrollTrigger: {
-                start: 'top 85%',
+                start: SCROLL_START,
                 trigger: element,
             },
+            y: 0,
         };
 
-        switch (direction) {
-            case 'down':
-                from.y = -SCROLL_OFFSET;
-                to.y = 0;
-                break;
-            case 'left':
-                from.x = SCROLL_OFFSET;
-                to.x = 0;
-                break;
-            case 'right':
-                from.x = -SCROLL_OFFSET;
-                to.x = 0;
-                break;
-            case 'up':
-                from.y = SCROLL_OFFSET;
-                to.y = 0;
-        }
-
         if (stagger > 0) {
-            const children = element.children;
-
             gsap.set(element, { opacity: 1 });
-            gsap.set(children, from);
             to.stagger = stagger;
-            gsap.to(children, to);
+            gsap.fromTo(element.children, from, to);
         } else {
             gsap.fromTo(element, from, to);
         }
@@ -76,22 +84,16 @@ function initScrollAnimations() {
 }
 
 function updateParallax() {
-    parallaxQueued = false;
+    isParallaxQueued = false;
 
     const scrollY = window.scrollY;
 
-    parallaxLayers?.forEach((layer) => {
-        layer.style.transform = `translateY(${scrollY * Number.parseFloat(layer.dataset.parallax || '0')}px)`;
+    parallaxLayers.forEach(({ element, factor }) => {
+        element.style.transform = `translateY(${scrollY * factor}px)`;
     });
 }
 
 gsap.registerPlugin(ScrollTrigger);
 window.addEventListener('scroll', handleScroll, { passive: true });
-
-export function initMotion(): void {
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    initScrollAnimations();
-
-    parallaxLayers = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? undefined : document.querySelectorAll('[data-parallax]');
-    updateParallax();
-}
+reducedMotionQuery.addEventListener('change', initMotion);
+document.addEventListener('astro:after-swap', () => initParallax(reducedMotionQuery.matches));

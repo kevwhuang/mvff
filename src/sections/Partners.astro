@@ -3,118 +3,104 @@ import { Image } from 'astro:assets';
 
 import logoCabanaClub from '@images/logos/cabana_club.webp';
 import logoMadewellProductions from '@images/logos/madewell_productions.webp';
+
+const MARQUEE_COPIES = 2;
 ---
 
 <section
-    class="marquee relative select-none"
+    class="partners section border-y border-cream-15 bg-navy select-none"
     aria-label="Partners"
     data-scroll
 >
-    <div class="marquee__track flex items-center">
-        {Array.from({ length: 2 }).flatMap((_, copy) => [
-            <div
-                class="marquee__item flex items-center whitespace-nowrap"
-                aria-hidden={copy > 0 ? 'true' : undefined}
-            >
-                <Image
-                    class="marquee__logo marquee__logo--madewell"
-                    alt=""
+    <div class="partners__viewport overflow-x-clip">
+        <ul class="partners__track flex items-center w-max list-none">
+            {Array.from({ length: MARQUEE_COPIES }).flatMap((_, copy) => [
+                <li
+                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream-80"
+                    aria-hidden={copy > 0 ? 'true' : undefined}
+                >
+                    <Image
+                        class="partners__logo partners__logo--madewell object-contain w-auto align-middle opacity-75"
+                        alt=""
+                        aria-hidden="true"
+                        densities={[1, 2]}
+                        src={logoMadewellProductions}
+                        width={99}
+                    />
+                    <span>Madewell Productions</span>
+                </li>,
+                <li
+                    class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
                     aria-hidden="true"
-                    densities={[1, 2]}
-                    src={logoMadewellProductions}
-                    width={99}
-                />
-                <span>Madewell Productions</span>
-            </div>,
-            <div
-                class="marquee__item flex items-center"
-                aria-hidden="true"
-            >
-                <span class="marquee__diamond inline-block" />
-            </div>,
-            <div
-                class="marquee__item flex items-center whitespace-nowrap"
-                aria-hidden={copy > 0 ? 'true' : undefined}
-            >
-                <Image
-                    class="marquee__logo"
-                    alt=""
+                >
+                    <span class="partners__diamond inline-block shrink-0 aspect-square w-3.5 bg-coral rotate-45" />
+                </li>,
+                <li
+                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream-80"
+                    aria-hidden={copy > 0 ? 'true' : undefined}
+                >
+                    <Image
+                        class="partners__logo object-contain w-auto align-middle opacity-75"
+                        alt="Cabana Club"
+                        densities={[1, 2]}
+                        src={logoCabanaClub}
+                        width={375}
+                    />
+                </li>,
+                <li
+                    class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
                     aria-hidden="true"
-                    densities={[1, 2]}
-                    src={logoCabanaClub}
-                    width={180}
-                />
-                <span>Cabana Club</span>
-            </div>,
-            <div
-                class="marquee__item flex items-center"
-                aria-hidden="true"
-            >
-                <span class="marquee__diamond inline-block" />
-            </div>,
-        ])}
+                >
+                    <span class="partners__diamond inline-block shrink-0 aspect-square w-3.5 bg-coral rotate-45" />
+                </li>,
+            ])}
+        </ul>
     </div>
 </section>
 
 <style>
-    .marquee {
-        background: var(--color-navy);
-        border-bottom: 1px solid var(--color-cream-15);
-        border-top: 1px solid var(--color-cream-15);
-        overflow-x: clip;
-        padding: clamp(48px, calc(37.33px + 3.33vw), 80px) 0;
+    .partners {
+        margin-bottom: var(--section-padding);
+        padding-block: var(--section-padding-sm);
     }
 
-    .marquee__diamond {
-        aspect-ratio: 1;
-        background: var(--color-coral);
-        flex-shrink: 0;
-        rotate: 45deg;
-        width: 14px;
-    }
-
-    .marquee__item {
-        color: var(--color-cream-60);
-        font-family: var(--font-display);
+    .partners__item {
         font-size: clamp(40px, calc(26.67px + 4.17vw), 80px);
-        gap: 32px;
+        gap: var(--partners-gap);
         letter-spacing: 0.04em;
-        line-height: 1;
-        text-transform: uppercase;
     }
 
-    .marquee__item span {
+    .partners__item span {
         transform: translateY(0.08em);
     }
 
-    .marquee__logo {
-        height: clamp(40px, calc(30px + 3.13vw), 70px);
-        object-fit: contain;
-        opacity: 0.85;
-        vertical-align: middle;
-        width: auto;
+    .partners__logo {
+        filter: brightness(0) invert(0.82) sepia(0.16);
+        height: clamp(40px, calc(30px + 3.125vw), 70px);
     }
 
-    .marquee__logo--madewell {
-        filter: invert(0.85);
+    .partners__logo--madewell {
+        filter: invert(0.82) sepia(0.16);
     }
 
-    .marquee__track {
-        --marquee-gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
-        animation: marquee__scroll 28s linear infinite;
-        gap: var(--marquee-gap);
-        width: max-content;
+    .partners__track {
+        --partners-gap: clamp(40px, calc(26.67px + 4.17vw), 80px);
+        animation: partners__scroll var(--duration-marquee) linear infinite;
+        gap: var(--partners-gap);
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .marquee__track {
+        .partners__track {
             animation: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: auto;
         }
     }
 
-    @keyframes marquee__scroll {
+    @keyframes partners__scroll {
         to {
-            transform: translateX(calc(-50% - var(--marquee-gap) / 2));
+            transform: translateX(calc(-50% - var(--partners-gap) / 2));
         }
     }
 </style>

@@ -1,178 +1,197 @@
 ---
 import { LINKS, ROUTES } from '@lib/constants';
+import { externalLinkProps } from '@lib/utils';
 ---
 
 <footer
-    class="site-footer"
+    class="footer border-cream-15 border-t bg-navy"
     aria-label="Site footer"
 >
-    <div class="shell site-footer__inner grid items-start">
+    <div class="footer__inner shell grid items-start">
         <div class="flex flex-col gap-4">
             <a
-                class="site-footer__title"
+                class="footer__title active:text-coral hover:text-coral py-1 font-display no-underline text-cream"
                 href="/"
             >
                 Austin Music Video Film Festival
             </a>
-            <p class="site-footer__tag">Austin's music video scene, staged like a premiere &mdash; music-video screenings, live nominee sets, awards, and a pool party that runs to 2 AM. One night at Cabana Club.</p>
+            <p class="footer__tag max-w-90 font-serif italic text-xl text-cream-60">Austin's music video scene, staged like a premiere &mdash; screening blocks, live nominee sets, awards, and a pool party that runs to 2 AM. One night at Cabana Club.</p>
         </div>
-        <div class="site-footer__col">
-            <h2 class="site-footer__heading">Site</h2>
-            <ul class="list-none">
-                {ROUTES.map(route => (
+        <nav
+            class="contents"
+            aria-label="Footer"
+        >
+            <div class="footer__column">
+                <h2 class="footer__heading mb-4 uppercase text-cream-60">Site</h2>
+                <ul class="footer__list list-none">
+                    {ROUTES.map((route) => {
+                        const isDisabled = route.label === 'Store';
+
+                        return (
+                            <li>
+                                <a
+                                    class="footer__link block py-3 font-display no-underline text-cream"
+                                    aria-disabled={isDisabled ? 'true' : undefined}
+                                    href={route.href}
+                                    tabindex={isDisabled ? -1 : undefined}
+                                    {...(isDisabled ? {} : externalLinkProps(route.href))}
+                                >
+                                    {route.label}
+                                </a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h2 class="footer__heading mb-4 uppercase text-cream-60">Connect</h2>
+                <ul class="list-none">
                     <li>
                         <a
-                            class="site-footer__link"
-                            href={route.href}
-                            target={route.href.startsWith('http') ? '_blank' : undefined}
+                            class="footer__link block py-3 font-display no-underline text-cream"
+                            href={LINKS.instagram}
+                            rel="noopener"
+                            target="_blank"
                         >
-                            {route.label}
+                            Instagram
                         </a>
                     </li>
-                ))}
-            </ul>
-        </div>
-        <div class="site-footer__col">
-            <h2 class="site-footer__heading">Connect</h2>
-            <ul class="list-none">
-                <li>
-                    <a
-                        class="site-footer__link"
-                        href={LINKS.instagram}
-                        target="_blank"
-                    >
-                        Instagram
-                    </a>
-                </li>
-                <li>
-                    <a class="site-footer__link" href={LINKS.email}>Email</a>
-                </li>
-                <li>
-                    <a
-                        class="site-footer__link"
-                        href={LINKS.calendly}
-                        target="_blank"
-                    >
-                        Schedule a Call
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="site-footer__col">
-            <h2 class="site-footer__heading">Insider</h2>
-            <ul class="list-none">
-                <li>
-                    <a
-                        class="site-footer__link"
-                        href={LINKS.filmfreeway}
-                        target="_blank"
-                    >
-                        FilmFreeway
-                    </a>
-                </li>
-                <li>
-                    <a
-                        class="site-footer__link"
-                        href={LINKS.pitchDeck}
-                        target="_blank"
-                    >
-                        Pitch Deck
-                    </a>
-                </li>
-            </ul>
-        </div>
+                    <li>
+                        <a
+                            class="footer__link block py-3 font-display no-underline text-cream"
+                            href={LINKS.email}
+                        >
+                            Email
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="footer__link block py-3 font-display no-underline text-cream"
+                            href={LINKS.calendly}
+                            rel="noopener"
+                            target="_blank"
+                        >
+                            Schedule Call
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer__column">
+                <h2 class="footer__heading mb-4 uppercase text-cream-60">Insider</h2>
+                <ul class="list-none">
+                    <li>
+                        <a
+                            class="footer__link block py-3 font-display no-underline text-cream"
+                            href={LINKS.filmfreeway}
+                            rel="noopener"
+                            target="_blank"
+                        >
+                            FilmFreeway
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="footer__link block py-3 font-display no-underline text-cream"
+                            href={LINKS.pitchDeck}
+                            rel="noopener"
+                            target="_blank"
+                        >
+                            Pitch Deck
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <div class="shell site-footer__bottom flex flex-wrap justify-between">
-        <span>&copy; 2026 Austin Music Video Film Festival &middot; All rights reserved</span>
-        <span><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; 7 PM&ndash;2 AM &middot; Cabana Club &middot; Austin, TX</span>
+    <div class="footer__bottom shell flex flex-wrap justify-between gap-3 border-cream-15 border-t font-mono uppercase text-cream-60">
+        <p>&copy; 2026 Austin Music Video Film Festival &middot; All rights reserved</p>
+        <p><time datetime="2026-07-18T19:00-05:00">July 18, 2026</time> &middot; <time datetime="2026-07-18T19:00-05:00">7 PM</time>&nbsp;&ndash;&nbsp;<time datetime="2026-07-19T02:00-05:00">2 AM</time> &middot; Cabana Club &middot; Austin, TX</p>
     </div>
 </footer>
 
 <style>
-    .site-footer {
-        background: var(--color-navy);
-        border-top: 1px solid var(--color-cream-15);
-        padding: clamp(48px, calc(37.33px + 3.33vw), 80px) 0 clamp(24px, calc(21.33px + 0.83vw), 32px);
+    .footer {
+        padding: var(--section-padding-sm) 0 clamp(24px, calc(21.33px + 0.83vw), 32px);
     }
 
-    .site-footer__bottom {
-        border-top: 1px solid var(--color-cream-15);
-        color: var(--color-cream-60);
-        font-family: var(--font-mono);
+    .footer__bottom {
         font-size: 10px;
-        gap: 12px;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.2em;
         padding-block: 16px 0;
-        text-transform: uppercase;
     }
 
-    .site-footer__heading {
-        color: var(--color-cream-60);
+    .footer__heading {
         font-family: var(--font-mono);
         font-size: 10px;
-        font-weight: 400;
-        letter-spacing: 0.22em;
-        margin-bottom: 16px;
-        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        line-height: 1.5;
+        padding-top: 10px;
     }
 
-    .site-footer__inner {
+    .footer__inner {
         gap: clamp(24px, calc(16px + 2.5vw), 48px);
         grid-template-columns: 2fr 1fr 1fr 1fr;
         margin-bottom: clamp(48px, calc(42.67px + 1.67vw), 64px);
     }
 
-    .site-footer__link {
-        color: var(--color-cream);
-        display: block;
-        font-family: var(--font-display);
-        font-size: 18px;
-        padding: 8px 0;
-        text-decoration: none;
+    .footer__link {
+        font-size: 20px;
         transition:
             color var(--duration-fast) ease,
             transform var(--duration-fast) ease;
     }
 
-    .site-footer__link:active,
-    .site-footer__link:hover {
+    .footer__link:active,
+    .footer__link:hover {
         color: var(--color-coral);
-        transform: translateX(4px);
+        transform: translateX(8px);
     }
 
-    .site-footer__tag {
+    .footer__link[aria-disabled='true'] {
         color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: 16px;
-        font-style: italic;
-        line-height: 1.4;
-        max-width: 360px;
+        cursor: not-allowed;
+        opacity: 0.4;
     }
 
-    .site-footer__title {
-        color: var(--color-cream);
-        font-family: var(--font-display);
-        font-size: clamp(36px, calc(30.67px + 1.67vw), 52px);
+    .footer__link[aria-disabled='true']:active,
+    .footer__link[aria-disabled='true']:hover {
+        color: var(--color-cream-60);
+        transform: none;
+    }
+
+    .footer__title {
+        font-size: clamp(32px, calc(26.67px + 1.67vw), 48px);
         letter-spacing: 0.04em;
         line-height: 1.1;
-        text-decoration: none;
         transition: color var(--duration-fast) ease;
     }
 
-    .site-footer__title:active,
-    .site-footer__title:hover {
-        color: var(--color-coral);
-    }
-
     @media (max-width: 1024px) {
-        .site-footer__inner {
+        .footer__inner {
             grid-template-columns: 1fr 1fr;
         }
     }
 
     @media (max-width: 768px) {
-        .site-footer__inner {
+        .footer__inner {
             grid-template-columns: 1fr;
+        }
+
+        .footer__list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
     }
 </style>
+
+<script>
+    import { registerPageScript } from '@lib/utils';
+
+    function initFooter(signal: AbortSignal) {
+        document.querySelectorAll('.footer__link[aria-disabled="true"]').forEach((link) => {
+            link.addEventListener('click', event => event.preventDefault(), { signal });
+        });
+    }
+
+    registerPageScript(initFooter);
+</script>

@@ -2,7 +2,6 @@
 import '@fontsource/bebas-neue/400.css';
 import '@fontsource/instrument-serif/400-italic.css';
 import '@fontsource/instrument-serif/400.css';
-import '@fontsource/inter/400.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/600.css';
 import { ClientRouter } from 'astro:transitions';
@@ -11,17 +10,17 @@ import '@/global.css';
 import '@/styles.css';
 import Footer from '@sections/Footer.astro';
 import Navbar from '@sections/Navbar.astro';
-import Stars from '@components/Stars.astro';
-import { LINKS } from '@lib/constants';
+import Starfield from '@components/Starfield.astro';
+import { EVENT_START, LINKS, STYLES } from '@lib/constants';
 
 interface Props {
     description: string;
-    noindex?: boolean;
     title: string;
 }
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const { description, noindex, title } = Astro.props;
+const ogImage = `${Astro.site}og.png`;
+const { description, title } = Astro.props;
 ---
 
 <!doctype html>
@@ -32,73 +31,72 @@ const { description, noindex, title } = Astro.props;
         <title>{title}</title>
         <meta content={description} name="description" />
         <meta content="Kevin Huang" name="author" />
-        <meta content="#0a0a0f" name="theme-color" />
-        <meta content={noindex ? 'noindex, nofollow' : 'index, follow'} name="robots" />
+        <meta content={STYLES.night} name="theme-color" />
+        <meta content="index, follow" name="robots" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link href="/favicon.png" rel="icon" type="image/png" />
         <meta content={title} property="og:title" />
         <meta content={description} property="og:description" />
-        <meta content={`${Astro.site}og.png`} property="og:image" />
+        <meta content={ogImage} property="og:image" />
         <meta content={canonicalUrl} property="og:url" />
         <meta content="Austin Music Video Film Festival" property="og:site_name" />
         <meta content="website" property="og:type" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta content={title} name="twitter:title" />
         <meta content={description} name="twitter:description" />
-        <meta content={`${Astro.site}og.png`} name="twitter:image" />
+        <meta content={ogImage} name="twitter:image" />
         <script
             is:inline
             set:html={JSON.stringify({
                 '@context': 'https://schema.org',
-                '@type': 'WebSite',
-                'author': {
-                    '@type': 'Person',
-                    'name': 'Kevin Huang',
-                },
-                'name': 'Austin Music Video Film Festival',
-                'url': Astro.site,
-            })}
-            type="application/ld+json"
-        />
-        <script
-            is:inline
-            set:html={JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'Event',
-                'endDate': '2026-07-19T02:00:00-05:00',
-                'image': `${Astro.site}og.png`,
-                'location': {
-                    '@type': 'Place',
-                    'address': {
-                        '@type': 'PostalAddress',
-                        'addressLocality': 'Austin',
-                        'addressRegion': 'TX',
-                        'streetAddress': '5012 E 7th St',
+                '@graph': [
+                    {
+                        '@type': 'WebSite',
+                        'author': {
+                            '@type': 'Person',
+                            'name': 'Kevin Huang',
+                        },
+                        'name': 'Austin Music Video Film Festival',
+                        'url': Astro.site,
                     },
-                    'name': 'Cabana Club',
-                },
-                'name': 'Austin Music Video Film Festival',
-                'offers': {
-                    '@type': 'Offer',
-                    'url': LINKS.posh,
-                },
-                'organizer': {
-                    '@type': 'Organization',
-                    'name': 'Madewell Productions',
-                },
-                'startDate': '2026-07-18T19:00:00-05:00',
+                    {
+                        '@type': 'Event',
+                        'endDate': '2026-07-19T02:00:00-05:00',
+                        'image': ogImage,
+                        'location': {
+                            '@type': 'Place',
+                            'address': {
+                                '@type': 'PostalAddress',
+                                'addressLocality': 'Austin',
+                                'addressRegion': 'TX',
+                                'streetAddress': '5012 E 7th St',
+                            },
+                            'name': 'Cabana Club',
+                        },
+                        'name': 'Austin Music Video Film Festival',
+                        'offers': {
+                            '@type': 'Offer',
+                            'url': LINKS.posh,
+                        },
+                        'organizer': {
+                            '@type': 'Organization',
+                            'name': 'Madewell Productions',
+                        },
+                        'startDate': EVENT_START,
+                    },
+                ],
             })}
             type="application/ld+json"
         />
         <ClientRouter />
     </head>
-    <body class="flex flex-col isolate overflow-x-clip relative min-h-screen antialiased font-sans bg-night text-cream">
-        <div class="grain fixed pointer-events-none" aria-hidden="true" />
-        <div class="vignette fixed pointer-events-none" aria-hidden="true" />
-        <Stars />
+    <body class="flex flex-col overflow-x-clip relative isolate min-h-screen antialiased bg-night text-cream">
+        <div class="grain fixed -z-10 pointer-events-none" aria-hidden="true" />
+        <div class="vignette fixed inset-0 -z-20 pointer-events-none" aria-hidden="true" />
+        <Starfield />
         <Navbar />
-        <main class="flex flex-col flex-1 mb-(--section-padding)">
+        <main class="flex flex-1 flex-col">
             <slot />
         </main>
         <Footer />
@@ -106,14 +104,8 @@ const { description, noindex, title } = Astro.props;
 </html>
 
 <style>
-    .grain {
-        z-index: -10;
-    }
-
     .vignette {
         background: radial-gradient(ellipse at center, transparent 30%, var(--color-black-55) 100%);
-        inset: 0;
-        z-index: -20;
     }
 </style>
 

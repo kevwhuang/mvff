@@ -1,5 +1,5 @@
 ---
-import SectionHead from '@components/SectionHead.astro';
+import SectionHeader from '@components/SectionHeader.astro';
 ---
 
 <section
@@ -7,32 +7,29 @@ import SectionHead from '@components/SectionHead.astro';
     aria-labelledby="details-title"
 >
     <div class="shell">
-        <SectionHead
+        <SectionHeader
             headingId="details-title"
             level="h2"
             marker="[ 01 ]"
         >
             The Coordinates
-        </SectionHead>
+        </SectionHeader>
         <dl
             class="details__grid grid grid-cols-3 border border-cream-15 bg-navy"
             data-scroll
             data-scroll-stagger="0.12"
         >
-            <div class="details__cell flex flex-col relative gap-3 cursor-default">
-                <dt class="details__label select-none">Venue</dt>
-                <dd class="details__value">Cabana Club</dd>
-                <dd class="details__note font-serif italic text-base text-cream-60">5012 E 7th St, Austin, TX</dd>
+            <div class="details__cell flex flex-col relative isolate gap-3 border-cream-15 border-r cursor-default">
+                <dt class="details__label font-mono uppercase text-cream-60">Date</dt>
+                <dd class="details__value font-display leading-none truncate"><time datetime="2026-07-18">July 18, 2026</time></dd>
             </div>
-            <div class="details__cell flex flex-col relative gap-3 cursor-default">
-                <dt class="details__label select-none">Date</dt>
-                <dd class="details__value"><time datetime="2026-07-18">July 18</time></dd>
-                <dd class="details__note font-serif italic text-base text-cream-60">A Saturday night in Austin.</dd>
+            <div class="details__cell flex flex-col relative isolate gap-3 border-cream-15 border-r cursor-default">
+                <dt class="details__label font-mono uppercase text-cream-60">Time</dt>
+                <dd class="details__value font-display leading-none truncate"><time datetime="2026-07-18T19:00-05:00">7 PM</time>&nbsp;&ndash;&nbsp;<time datetime="2026-07-19T02:00-05:00">2 AM</time></dd>
             </div>
-            <div class="details__cell flex flex-col relative gap-3 cursor-default">
-                <dt class="details__label select-none">Time</dt>
-                <dd class="details__value">7 PM&ndash;2 AM</dd>
-                <dd class="details__note font-serif italic text-base text-cream-60">Seven hours, doors to pool.</dd>
+            <div class="details__cell flex flex-col relative isolate gap-3 border-cream-15 border-r cursor-default">
+                <dt class="details__label font-mono uppercase text-cream-60">Venue</dt>
+                <dd class="details__value font-display leading-none truncate">Cabana Club</dd>
             </div>
         </dl>
     </div>
@@ -40,38 +37,43 @@ import SectionHead from '@components/SectionHead.astro';
 
 <style>
     .details__cell {
-        border-right: 1px solid var(--color-cream-15);
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
-        transition: background var(--duration-fast) ease;
     }
 
-    .details__cell:hover {
-        background: var(--color-slate);
+    .details__cell:hover::after {
+        opacity: 1;
+    }
+
+    .details__cell:hover .details__value {
+        color: var(--color-coral);
     }
 
     .details__cell:last-child {
         border-right: none;
     }
 
+    .details__cell::after {
+        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
+        content: '';
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        transition: opacity var(--duration-fast) ease;
+        z-index: -1;
+    }
+
     .details__label {
-        color: var(--color-coral);
-        font-family: var(--font-mono);
         font-size: 10px;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
+        letter-spacing: 0.2em;
     }
 
     .details__value {
-        font-family: var(--font-display);
-        font-size: clamp(30px, calc(24px + 1.88vw), 48px);
-        line-height: 1;
-        margin-bottom: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        font-size: clamp(28px, calc(21.33px + 2.08vw), 48px);
+        transition: color var(--duration-fast) ease;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .details__cell {
             border-bottom: 1px solid var(--color-cream-15);
             border-right: none;

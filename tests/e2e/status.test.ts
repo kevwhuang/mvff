@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ASSETS = [
-    { path: '/austin_music_video_film_festival_pitch_deck.pdf', type: 'application/pdf' },
+    { path: '/assets/austin_music_video_film_festival_pitch_deck.pdf', type: 'application/pdf' },
     { path: '/og.png', type: 'image/png' },
     { path: '/favicon.png', type: 'image/png' },
 ] as const;

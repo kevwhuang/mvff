@@ -4,14 +4,14 @@
 
 <section
     class="error flex items-center justify-center relative text-center"
-    aria-labelledby="error-title"
+    aria-labelledby="error-server-title"
 >
     <div
         data-scroll
         data-scroll-stagger="0.12"
     >
         <h1
-            id="error-title"
+            id="error-server-title"
             class="error__glitch inline-block relative select-none"
             data-text="500"
         >
@@ -19,80 +19,10 @@
         </h1>
         <p class="error__subtitle">The projector jammed mid-reel.</p>
         <a
-            class="btn btn--primary"
+            class="button button--primary"
             href="/"
         >
             Back to Home
         </a>
     </div>
 </section>
-
-<style>
-    .error {
-        min-height: calc(100svh - var(--header-height));
-        padding: var(--section-padding) var(--shell-pad);
-    }
-
-    .error__glitch {
-        font-size: clamp(120px, calc(33.33px + 27.08vw), 380px);
-        letter-spacing: -0.02em;
-        line-height: 0.85;
-        margin-bottom: 24px;
-    }
-
-    .error__glitch::after,
-    .error__glitch::before {
-        content: attr(data-text);
-        inset: 0;
-        pointer-events: none;
-        position: absolute;
-    }
-
-    .error__glitch::after {
-        animation: error__glitch 2.4s ease infinite reverse;
-        clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
-        color: var(--color-teal);
-        mix-blend-mode: screen;
-        transform: translate(4px, 0);
-    }
-
-    .error__glitch::before {
-        animation: error__glitch 3s ease infinite;
-        clip-path: polygon(0 5%, 100% 5%, 100% 25%, 0 25%);
-        color: var(--color-coral);
-        mix-blend-mode: screen;
-        transform: translate(-4px, 0);
-    }
-
-    .error__subtitle {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
-        font-size: clamp(20px, calc(16px + 1.25vw), 32px);
-        font-style: italic;
-        margin-bottom: 32px;
-        max-width: 540px;
-    }
-
-    @keyframes error__glitch {
-        0%,
-        100% {
-            transform: translate(-4px, 0);
-        }
-
-        20% {
-            transform: translate(4px, -2px);
-        }
-
-        40% {
-            transform: translate(-2px, 2px);
-        }
-
-        60% {
-            transform: translate(3px, -1px);
-        }
-
-        80% {
-            transform: translate(-3px, 1px);
-        }
-    }
-</style>

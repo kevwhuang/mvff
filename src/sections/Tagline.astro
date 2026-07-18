@@ -1,71 +1,82 @@
----
-
----
-
 <section
-    class="tagline relative text-center"
+    class="section tagline text-center"
     aria-labelledby="tagline-title"
 >
-    <h2
-        id="tagline-title"
-        class="tagline__main select-none"
-        data-typewriter
-    >
-        <span
-            class="tagline__screens text-cream"
-            data-typewriter-word
+    <div class="shell">
+        <h2
+            id="tagline-title"
+            class="tagline__title uppercase select-none"
+            data-typewriter
         >
-            Screens
-        </span>
-        <span class="tagline__arrow">&rarr;</span>
-        <span
-            class="tagline__stage"
-            data-typewriter-word
-        >
-            Stage
-        </span>
-    </h2>
+            <span
+                class="tagline__screens"
+                data-typewriter-word
+            >
+                Screens
+            </span>
+            <span class="tagline__arrow font-serif italic text-cream-60">&rarr;</span>
+            <span
+                class="tagline__stage font-serif italic text-coral"
+                data-typewriter-word
+            >
+                Stage
+            </span>
+        </h2>
+    </div>
 </section>
 
 <style>
-    .tagline {
-        padding: clamp(80px, calc(46.67px + 10.42vw), 180px) var(--shell-pad);
-    }
-
     .tagline__arrow {
-        color: var(--color-cream-60);
-        font-family: var(--font-serif);
         font-size: 0.7em;
-        font-style: italic;
         opacity: 0;
         padding: 0 0.15em;
-        transition: opacity var(--duration-slow) ease;
-    }
-
-    .tagline__main {
-        font-size: clamp(44px, calc(-1.33px + 14.17vw), 180px);
-        letter-spacing: -0.01em;
-        line-height: 0.9;
-        text-transform: uppercase;
-    }
-
-    .tagline__main[data-arrow-visible] .tagline__arrow {
-        opacity: 1;
+        transition: opacity var(--duration-slow) ease-out;
     }
 
     .tagline__stage {
-        color: var(--color-coral);
-        font-family: var(--font-serif);
         font-size: 0.92em;
-        font-style: italic;
+        padding-right: 0.12em;
+        position: relative;
+    }
+
+    .tagline__title {
+        font-size: clamp(44px, 13.75vw, 176px);
+        letter-spacing: -0.01em;
+        line-height: 0.9;
+    }
+
+    .tagline__title[data-arrow-visible] .tagline__arrow {
+        opacity: 1;
+    }
+
+    .tagline__title[data-typed] .tagline__stage::after {
+        animation: tagline__blink var(--duration-blink) step-end infinite;
+        background: var(--color-coral);
+        bottom: 0;
+        content: '';
+        position: absolute;
+        right: -0.04em;
+        top: 0;
+        width: 0.04em;
     }
 
     [data-typewriter-word] {
-        border-right: 0.06em solid transparent;
+        border-right: 0.04em solid transparent;
     }
 
     [data-typewriter-word][data-typing] {
-        border-right-color: var(--color-cream-60);
+        border-right-color: var(--color-coral);
+    }
+
+    @keyframes tagline__blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0;
+        }
     }
 </style>
 
@@ -73,15 +84,16 @@
     interface TypewriterState {
         characterIndex: number;
         container: HTMLElement;
-        originals: string[];
+        originalTexts: string[];
         wordIndex: number;
         words: NodeListOf<HTMLElement>;
     }
 
     const ARROW_PAUSE = 350;
     const CHARACTER_DELAY = 65;
+    const TYPEWRITER_ROOT_MARGIN = '0px 0px -15% 0px';
 
-    let typewriterController: AbortController | undefined;
+    let controller: AbortController | undefined;
     let typewriterObserver: IntersectionObserver | undefined;
     let typewriterTimeouts: Timer[] = [];
 
@@ -93,8 +105,8 @@
     function initTypewriter() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
-        typewriterController?.abort();
-        typewriterController = new AbortController();
+        controller?.abort();
+        controller = new AbortController();
 
         const container = document.querySelector<HTMLElement>('[data-typewriter]');
 
@@ -102,13 +114,10 @@
 
         const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
 
-        const originals = Array.from(words, element => element.textContent || '');
+        const originalTexts = Array.from(words, element => element.textContent || '');
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (container.hasAttribute('data-typed') || prefersReducedMotion) {
-            words.forEach((element, index) => {
-                element.textContent = originals[index];
-            });
             container.setAttribute('data-typed', '');
             container.setAttribute('data-arrow-visible', '');
 
@@ -123,8 +132,8 @@
             if (!entry.isIntersecting) return;
 
             typewriterObserver?.disconnect();
-            typeNextWord({ characterIndex: 0, container, originals, wordIndex: 0, words });
-        }, { rootMargin: '0px 0px -15% 0px' });
+            typeNextWord({ characterIndex: 0, container, originalTexts, wordIndex: 0, words });
+        }, { rootMargin: TYPEWRITER_ROOT_MARGIN });
 
         typewriterObserver.observe(container);
     }
@@ -134,11 +143,11 @@
     }
 
     function typeCharacter(state: TypewriterState) {
-        if (typewriterController?.signal.aborted) return;
+        if (controller?.signal.aborted) return;
 
-        const { container, originals, words } = state;
+        const { container, originalTexts, words } = state;
 
-        const text = originals[state.wordIndex];
+        const text = originalTexts[state.wordIndex];
         const word = words[state.wordIndex];
 
         if (state.characterIndex < text.length) {
@@ -158,12 +167,12 @@
                 scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
             }, ARROW_PAUSE);
         } else {
-            scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
+            typeNextWord(state);
         }
     }
 
     function typeNextWord(state: TypewriterState) {
-        if (typewriterController?.signal.aborted) return;
+        if (controller?.signal.aborted) return;
 
         if (state.wordIndex >= state.words.length) {
             state.container.setAttribute('data-typed', '');
@@ -179,7 +188,7 @@
     document.addEventListener('astro:before-swap', () => {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
-        typewriterController?.abort();
+        controller?.abort();
     });
 
     document.addEventListener('astro:page-load', initTypewriter);
