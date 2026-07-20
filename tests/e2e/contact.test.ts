@@ -1,129 +1,71 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-const CALENDLY_URL = 'https://calendly.com/madewellanna99/30min';
+const CHANNEL_INDICES = ['/ 01', '/ 02', '/ 03'] as const;
+const CHANNEL_LABELS = ['Instagram', 'Email', 'Phone'] as const;
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
 const EMAIL_URL = 'mailto:contact@atxmusicvideofilmfestival.com';
-const FORMS_ENDPOINT = '**/forms/';
 const INSTAGRAM_URL = 'https://instagram.com/atxmvff';
-const PITCH_DECK_URL = '/assets/austin_music_video_film_festival_pitch_deck.pdf';
-const POSH_URL = 'https://posh.vip/e/austin-texas-music-video-film-festival';
-const REQUIRED_FIELDS = ['name', 'email', 'message'] as const;
-
-async function fillContactForm(page: Page) {
-    await page.fill('.contact__form input[name="name"]', 'Test User');
-    await page.fill('.contact__form input[name="email"]', 'test@example.com');
-    await page.fill('.contact__form textarea[name="message"]', 'Hello from the test suite.');
-}
+const PHONE_URL = 'tel:+12814669387';
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/contact');
+    await page.goto('/info');
 });
 
-test.describe('contact form', () => {
-    test('wraps each required field in a label with a visible marker', async ({ page }) => {
-        const form = page.locator('.contact__form');
+test.describe('contact section', () => {
+    test('labels the section by its heading for assistive tech', async ({ page }) => {
+        const section = page.locator('section#contact');
 
-        for (const field of REQUIRED_FIELDS) {
-            const control = form.locator(`[name="${field}"]`);
-
-            await expect(control).toHaveAttribute('required', '');
-
-            const inLabel = await control.evaluate(element => element.closest('label') !== null);
-
-            expect(inLabel, `${field} is wrapped in a label`).toBe(true);
-        }
-
-        await expect(form.locator('.label__required')).toHaveCount(REQUIRED_FIELDS.length);
-
-        for (let index = 0; index < REQUIRED_FIELDS.length; index += 1) {
-            await expect(form.locator('.label__required').nth(index)).toBeVisible();
-        }
+        await expect(section).toHaveAttribute('aria-labelledby', 'contact-title');
+        await expect(page.locator('#contact-title')).toHaveText('Contact Us');
     });
 
-    test('wires the form for netlify forms', async ({ page }) => {
-        const form = page.locator('.contact__form');
+    test('places the contact section after the guest info', async ({ page }) => {
+        const contactAfterInfo = await page.evaluate(() => {
+            const info = document.querySelector('.info');
+            const contact = document.querySelector('#contact');
 
-        await expect(form).toHaveAttribute('data-netlify', 'true');
-        await expect(form).toHaveAttribute('data-netlify-honeypot', 'bot-field');
-        await expect(form).toHaveAttribute('method', 'POST');
-        await expect(form).toHaveAttribute('name', 'contact');
-        await expect(form.locator('input[name="form-name"]')).toHaveAttribute('value', 'contact');
-        await expect(form.locator('input[name="bot-field"]')).toHaveCount(1);
-    });
+            if (!info || !contact) return false;
 
-    test('enables the Send Message submit button', async ({ page }) => {
-        const submit = page.locator('.contact__form button[type="submit"]');
-
-        await expect(submit).toBeEnabled();
-        await expect(submit).toHaveText('Send Message');
-    });
-
-    test('confirms a success banner and resets after a submission', async ({ page }) => {
-        await page.route(FORMS_ENDPOINT, route => route.fulfill({ body: '', status: 200 }));
-        await fillContactForm(page);
-        await page.click('.contact__form button[type="submit"]');
-
-        const banner = page.locator('.contact__banner');
-
-        await expect(banner).toHaveAttribute('data-visible', '');
-        await expect(banner).toContainText('Message sent');
-        await expect(page.locator('.contact__form input[name="name"]')).toHaveValue('');
-        await expect(page.locator('.contact__form button[type="submit"]')).toBeEnabled();
-    });
-
-    test('surfaces an error banner when the submission fails', async ({ page }) => {
-        await page.route(FORMS_ENDPOINT, route => route.fulfill({ body: '', status: 500 }));
-        await fillContactForm(page);
-        await page.click('.contact__form button[type="submit"]');
-
-        const banner = page.locator('.contact__banner');
-
-        await expect(banner).toHaveAttribute('data-variant', 'error');
-        await expect(banner).toContainText('Something went wrong');
-        await expect(page.locator('.contact__form button[type="submit"]')).toBeEnabled();
-    });
-});
-
-test.describe('contact directory', () => {
-    test('renders the directory ahead of the form', async ({ page }) => {
-        const directoryBeforeForm = await page.evaluate(() => {
-            const directory = document.querySelector('.contact__directory');
-            const form = document.querySelector('.contact__form');
-
-            if (!directory || !form) return false;
-
-            return Boolean(directory.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING);
+            return Boolean(info.compareDocumentPosition(contact) & Node.DOCUMENT_POSITION_FOLLOWING);
         });
 
-        expect(directoryBeforeForm).toBe(true);
+        expect(contactAfterInfo).toBe(true);
     });
 
-    test('elevates the directory into two contact cards', async ({ page }) => {
-        await expect(page.locator('.contact__card')).toHaveCount(2);
-        await expect(page.locator('.contact__card .subhead', { hasText: 'Direct Channels' })).toBeVisible();
-        await expect(page.locator('.contact__card .subhead', { hasText: 'Founder' })).toBeVisible();
+    test('renders a channel for every direct line', async ({ page }) => {
+        await expect(page.locator('.contact__channel')).toHaveCount(CHANNEL_LABELS.length);
+        await expect(page.locator('.contact__channel-label')).toHaveText([...CHANNEL_LABELS]);
     });
 
     test('lists the direct channels with the correct targets', async ({ page }) => {
-        await expect(page.locator(`.contact__line a[href="${EMAIL_URL}"]`)).toBeVisible();
-        await expect(page.locator('.contact__line a[href="tel:+12814669387"]')).toHaveText('(281) 466-9387');
-        await expect(page.locator(`.contact__line a[href="${INSTAGRAM_URL}"]`)).toHaveAttribute('target', '_blank');
-        await expect(page.locator(`.contact__line a[href="${POSH_URL}"]`)).toHaveAttribute('target', '_blank');
-        await expect(page.locator(`.contact__line a[href="${CALENDLY_URL}"]`)).toHaveAttribute('target', '_blank');
-        await expect(page.locator(`.contact__line a[href="${PITCH_DECK_URL}"]`)).toHaveAttribute('target', '_blank');
+        await expect(page.locator(`.contact__channel-link[href="${INSTAGRAM_URL}"] .contact__channel-value`)).toContainText('@atxmvff');
+        await expect(page.locator(`.contact__channel-link[href="${EMAIL_URL}"] .contact__channel-value`)).toContainText('contact@atxmusicvideofilmfestival.com');
+        await expect(page.locator(`.contact__channel-link[href="${PHONE_URL}"] .contact__channel-value`)).toContainText('(281) 466-9387');
     });
 
-    test('serves the linked pitch deck pdf', async ({ request }) => {
-        const response = await request.get(PITCH_DECK_URL);
+    test('opens only the external channel in a new tab', async ({ page }) => {
+        const instagram = page.locator(`.contact__channel-link[href="${INSTAGRAM_URL}"]`);
 
-        expect(response.status()).toBe(200);
-        expect(response.headers()['content-type']).toContain('application/pdf');
+        await expect(instagram).toHaveAttribute('target', '_blank');
+        await expect(instagram).toHaveAttribute('rel', /noopener/);
+        await expect(page.locator(`.contact__channel-link[href="${EMAIL_URL}"]`)).not.toHaveAttribute('target', '_blank');
+        await expect(page.locator(`.contact__channel-link[href="${PHONE_URL}"]`)).not.toHaveAttribute('target', '_blank');
+    });
+
+    test('hides the channel indices and external cue from assistive tech', async ({ page }) => {
+        await expect(page.locator('.contact__channel-index')).toHaveText([...CHANNEL_INDICES]);
+        await expect(page.locator('.contact__channel-index[aria-hidden="true"]')).toHaveCount(CHANNEL_LABELS.length);
+
+        const cue = page.locator('.contact__channel-cue');
+
+        await expect(cue).toHaveCount(1);
+        await expect(cue).toHaveAttribute('aria-hidden', 'true');
     });
 });
 
-test.describe('contact page metadata', () => {
+test.describe('contact section metadata', () => {
     test('exposes a meta description of the expected length', async ({ page }) => {
         const description = await page.locator('meta[name="description"]').getAttribute('content');
 
@@ -132,8 +74,8 @@ test.describe('contact page metadata', () => {
         expect(String(description).length).toBeLessThanOrEqual(DESCRIPTION_MAX);
     });
 
-    test('renders the subheads in the display typeface', async ({ page }) => {
-        const fontFamily = await page.locator('.subhead').first().evaluate(element => getComputedStyle(element).fontFamily);
+    test('renders the channel labels in the display typeface', async ({ page }) => {
+        const fontFamily = await page.locator('.contact__channel-label').first().evaluate(element => getComputedStyle(element).fontFamily);
 
         expect(fontFamily).toContain('Bebas Neue');
     });

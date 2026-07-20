@@ -1,3 +1,7 @@
+---
+
+---
+
 <section
     class="section tagline text-center"
     aria-labelledby="tagline-title"
@@ -83,6 +87,8 @@
 
 <script>
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
+
+    type Timer = ReturnType<typeof setTimeout>;
 
     interface TypewriterState {
         characterIndex: number;

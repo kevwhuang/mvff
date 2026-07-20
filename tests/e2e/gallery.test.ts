@@ -5,34 +5,35 @@ const WIDTHS = [320, 768, 1280];
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/gallery');
+    await page.goto('/team');
 });
 
 test.describe('gallery composition', () => {
     test('renders exactly two portrait figures', async ({ page }) => {
         await expect(page.locator('.gallery__frame')).toHaveCount(FIGURE_COUNT);
         await expect(page.locator('.gallery__frame img')).toHaveCount(FIGURE_COUNT);
-        await expect(page.locator('.gallery__figure--lead')).toBeVisible();
-        await expect(page.locator('.gallery__figure--trail')).toBeVisible();
+        await expect(page.locator('.gallery__figure')).toHaveCount(FIGURE_COUNT);
+        await expect(page.locator('.gallery__figure').first()).toBeVisible();
+        await expect(page.locator('.gallery__figure').last()).toBeVisible();
     });
 
     test('describes each portrait with specific alt text', async ({ page }) => {
-        await expect(page.locator('.gallery__figure--lead img')).toHaveAttribute('alt', /standing shoulder to shoulder/);
-        await expect(page.locator('.gallery__figure--trail img')).toHaveAttribute('alt', /seated and leaning together/);
+        await expect(page.locator('.gallery__frame img').first()).toHaveAttribute('alt', /standing shoulder to shoulder/);
+        await expect(page.locator('.gallery__frame img').last()).toHaveAttribute('alt', /seated and leaning together/);
     });
 
-    test('captions the portraits with their titles and year', async ({ page }) => {
+    test('captions the portraits with their titles', async ({ page }) => {
+        await expect(page.locator('.gallery__meta')).toHaveCount(FIGURE_COUNT);
         await expect(page.locator('.gallery__meta').first()).toContainText('The Team, Standing');
         await expect(page.locator('.gallery__meta').nth(1)).toContainText('The Team, Seated');
-        await expect(page.locator('.gallery__year')).toHaveCount(FIGURE_COUNT);
     });
 
     test('leaves everything visible under reduced motion', async ({ page }) => {
-        const composition = page.locator('.gallery__composition');
-        const note = page.locator('.gallery__note');
+        const grid = page.locator('.gallery__grid');
+        const figure = page.locator('.gallery__figure').first();
 
-        await expect(composition).toHaveCSS('opacity', '1');
-        await expect(note).toHaveCSS('opacity', '1');
+        await expect(grid).toHaveCSS('opacity', '1');
+        await expect(figure).toHaveCSS('opacity', '1');
     });
 
     test('never overflows the viewport width', async ({ page }) => {
@@ -52,18 +53,20 @@ test.describe('gallery composition', () => {
 
 test.describe('gallery lightbox', () => {
     test('opens a modal dialog from a figure and closes on escape', async ({ page }) => {
-        const lightbox = page.locator('.lightbox');
+        const lightbox = page.locator('.gallery__lightbox');
         const frame = page.locator('.gallery__frame').first();
 
         await expect(lightbox).toBeHidden();
         await expect(lightbox).toHaveAttribute('role', 'dialog');
         await expect(lightbox).toHaveAttribute('aria-modal', 'true');
+        await expect(lightbox).toHaveAttribute('aria-hidden', 'true');
 
         await frame.click();
 
         await expect(lightbox).toBeVisible();
-        await expect(lightbox).toHaveAttribute('aria-hidden', 'false');
-        await expect(page.locator('.lightbox__close')).toBeFocused();
+        await expect(lightbox).toHaveAttribute('data-open', '');
+        await expect(lightbox).not.toHaveAttribute('aria-hidden', 'true');
+        await expect(page.locator('.gallery__lightbox-inner')).toBeFocused();
 
         await page.keyboard.press('Escape');
 
@@ -71,35 +74,31 @@ test.describe('gallery lightbox', () => {
         await expect(frame).toBeFocused();
     });
 
-    test('shows only the image with no caption block', async ({ page }) => {
-        await page.locator('.gallery__frame').first().click();
+    test('mirrors the selected figure image and label', async ({ page }) => {
+        const frame = page.locator('.gallery__frame').first();
+        const source = await frame.getAttribute('data-gallery-source');
 
-        await expect(page.locator('.lightbox__caption')).toHaveCount(0);
-        await expect(page.locator('.lightbox__info')).toHaveCount(0);
+        await frame.click();
 
-        const background = await page.locator('.lightbox__image').evaluate(
-            node => getComputedStyle(node).backgroundImage,
-        );
-
-        expect(background).toContain('url(');
+        await expect(page.locator('.gallery__lightbox-image')).toHaveAttribute('src', source ?? '');
+        await expect(page.locator('.gallery__lightbox-label')).toHaveText('The Team, Standing');
     });
 
-    test('closes from the close button and restores focus to the figure', async ({ page }) => {
-        const lightbox = page.locator('.lightbox');
+    test('stays open when the dialog inner is clicked', async ({ page }) => {
+        const lightbox = page.locator('.gallery__lightbox');
         const frame = page.locator('.gallery__frame').first();
 
         await frame.click();
 
         await expect(lightbox).toBeVisible();
 
-        await page.locator('.lightbox__close').click();
+        await page.locator('.gallery__lightbox-inner').click();
 
-        await expect(lightbox).toBeHidden();
-        await expect(frame).toBeFocused();
+        await expect(lightbox).toBeVisible();
     });
 
-    test('closes when the backdrop is clicked', async ({ page }) => {
-        const lightbox = page.locator('.lightbox');
+    test('closes when the backdrop is clicked and restores focus to the figure', async ({ page }) => {
+        const lightbox = page.locator('.gallery__lightbox');
         const frame = page.locator('.gallery__frame').nth(1);
 
         await frame.click();
@@ -109,5 +108,6 @@ test.describe('gallery lightbox', () => {
         await lightbox.click({ position: { x: 5, y: 5 } });
 
         await expect(lightbox).toBeHidden();
+        await expect(frame).toBeFocused();
     });
 });

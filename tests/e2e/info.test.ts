@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const FAQ_COUNT = 9;
+const FAQ_COUNT = 8;
 const SCHEDULE_COUNT = 16;
 const VENUE_FEATURE_COUNT = 6;
 
@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('info faq', () => {
     test('renders a native details and summary accordion', async ({ page }) => {
-        const items = page.locator('.faq__item');
+        const items = page.locator('.info__faq-item');
 
         await expect(items).toHaveCount(FAQ_COUNT);
 
@@ -19,12 +19,12 @@ test.describe('info faq', () => {
 
         expect(tagNames).toEqual(Array(FAQ_COUNT).fill('DETAILS'));
 
-        await expect(page.locator('.faq__item > summary')).toHaveCount(FAQ_COUNT);
-        await expect(page.locator('.faq__item[open]')).toHaveCount(0);
+        await expect(page.locator('.info__faq-item > summary')).toHaveCount(FAQ_COUNT);
+        await expect(page.locator('.info__faq-item[open]')).toHaveCount(0);
     });
 
     test('opens an entry and closes it when another opens', async ({ page }) => {
-        const items = page.locator('.faq__item');
+        const items = page.locator('.info__faq-item');
         const first = items.first();
         const third = items.nth(2);
 
@@ -41,15 +41,15 @@ test.describe('info faq', () => {
 
 test.describe('info schedule and venue', () => {
     test('renders the full run of show from doors to close', async ({ page }) => {
-        await expect(page.locator('.schedule__row')).toHaveCount(SCHEDULE_COUNT);
-        await expect(page.locator('.schedule__time').first()).toHaveText('7:00 PM');
-        await expect(page.locator('.schedule__event').first()).toHaveText('Doors \u00b7 Ryley Hall');
-        await expect(page.locator('.schedule__time').last()).toHaveText('2:00 AM');
-        await expect(page.locator('.schedule__event').last()).toHaveText('Lights Up');
+        await expect(page.locator('.info__schedule-row')).toHaveCount(SCHEDULE_COUNT);
+        await expect(page.locator('.info__schedule-time').first()).toHaveText('7:00 PM');
+        await expect(page.locator('.info__schedule-event').first()).toHaveText('Doors \u00b7 Ryley Hall');
+        await expect(page.locator('.info__schedule-time').last()).toHaveText('2:00 AM');
+        await expect(page.locator('.info__schedule-event').last()).toHaveText('Lights Up');
     });
 
     test('renders the venue features grid', async ({ page }) => {
-        await expect(page.locator('.venue__name')).toHaveText('Cabana Club');
-        await expect(page.locator('.venue__features li')).toHaveCount(VENUE_FEATURE_COUNT);
+        await expect(page.locator('.info__venue-name')).toHaveText('Cabana Club');
+        await expect(page.locator('.info__venue-features li')).toHaveCount(VENUE_FEATURE_COUNT);
     });
 });

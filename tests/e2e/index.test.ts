@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
 const POSH_URL = 'https://posh.vip/e/austin-texas-music-video-film-festival';
-const SECTIONS = ['.hero', '.tagline', '.details', '.experience', '.marquee'] as const;
+const SECTIONS = ['.hero', '.tagline', '.details', '.experience', '.partners'] as const;
 const SPONSOR_URL = 'https://form.jotform.com/261316235757055';
 
 test.describe('index page', () => {
@@ -67,12 +67,13 @@ test.describe('index page', () => {
 });
 
 test.describe('index countdown', () => {
-    test('ticks the hero countdown values every second', async ({ page }) => {
+    test('freezes the hero countdown on the wrapped banner', async ({ page }) => {
         await page.goto('/');
 
-        const seconds = page.locator('.hero__countdown-number[data-unit="seconds"]');
-        const first = (await seconds.textContent())?.trim();
+        const banner = page.locator('.hero__countdown-over');
 
-        await expect.poll(async () => (await seconds.textContent())?.trim(), { timeout: 3_000 }).not.toBe(first);
+        await expect(banner).toBeVisible();
+        await expect(banner).toHaveText('That\'s a wrap.');
+        await expect(page.locator('.hero__countdown-number')).toHaveCount(0);
     });
 });

@@ -11,7 +11,6 @@ import '@/styles.css';
 import Footer from '@sections/Footer.astro';
 import Navbar from '@sections/Navbar.astro';
 import Starfield from '@components/Starfield.astro';
-import { EVENT_START, LINKS, STYLES } from '@lib/constants';
 
 interface Props {
     description: string;
@@ -31,7 +30,7 @@ const { description, title } = Astro.props;
         <title>{title}</title>
         <meta content={description} name="description" />
         <meta content="Kevin Huang" name="author" />
-        <meta content={STYLES.night} name="theme-color" />
+        <meta content="#0a0a0f" name="theme-color" />
         <meta content="index, follow" name="robots" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
@@ -50,42 +49,14 @@ const { description, title } = Astro.props;
             is:inline
             set:html={JSON.stringify({
                 '@context': 'https://schema.org',
-                '@graph': [
-                    {
-                        '@type': 'WebSite',
-                        'author': {
-                            '@type': 'Person',
-                            'name': 'Kevin Huang',
-                        },
-                        'name': 'Austin Music Video Film Festival',
-                        'url': Astro.site,
-                    },
-                    {
-                        '@type': 'Event',
-                        'endDate': '2026-07-19T02:00:00-05:00',
-                        'image': ogImage,
-                        'location': {
-                            '@type': 'Place',
-                            'address': {
-                                '@type': 'PostalAddress',
-                                'addressLocality': 'Austin',
-                                'addressRegion': 'TX',
-                                'streetAddress': '5012 E 7th St',
-                            },
-                            'name': 'Cabana Club',
-                        },
-                        'name': 'Austin Music Video Film Festival',
-                        'offers': {
-                            '@type': 'Offer',
-                            'url': LINKS.posh,
-                        },
-                        'organizer': {
-                            '@type': 'Organization',
-                            'name': 'Madewell Productions',
-                        },
-                        'startDate': EVENT_START,
-                    },
-                ],
+                '@type': 'WebSite',
+                'author': {
+                    '@type': 'Person',
+                    'name': 'Kevin Huang',
+                },
+                'inLanguage': 'en',
+                'name': 'Austin Music Video Film Festival',
+                'url': Astro.site,
             })}
             type="application/ld+json"
         />
@@ -110,12 +81,17 @@ const { description, title } = Astro.props;
 </style>
 
 <script>
+    import { LOADER_SHOWN_KEY } from '@lib/constants';
     import { initMotion } from '@lib/motion';
 
     function handlePageLoad() {
-        sessionStorage.setItem('mvff-loader-shown', '1');
-
         initMotion();
+
+        try {
+            sessionStorage.setItem(LOADER_SHOWN_KEY, '1');
+        } catch {
+            return;
+        }
     }
 
     document.addEventListener('astro:page-load', handlePageLoad);

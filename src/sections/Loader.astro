@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 
 import logo from '@images/logos/austin_music_video_film_festival.webp';
+import { LOADER_SHOWN_KEY } from '@lib/constants';
 ---
 
 <div
@@ -94,10 +95,11 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
     }
 </style>
 
-<script is:inline>
+<script
+    define:vars={{ loaderShownKey: LOADER_SHOWN_KEY }}
+    is:inline
+>
     function initLoader() {
-        const LOADER_SHOWN_KEY = 'mvff-loader-shown';
-        const MAX_DISPLAY_DURATION = 3_000;
         const MIN_DISPLAY_DURATION = 300;
 
         const loader = document.querySelector('.loader');
@@ -115,7 +117,7 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
         let hasShownLoader;
 
         try {
-            hasShownLoader = Boolean(sessionStorage.getItem(LOADER_SHOWN_KEY));
+            hasShownLoader = Boolean(sessionStorage.getItem(loaderShownKey));
         } catch {
             hasShownLoader = false;
         }
@@ -147,7 +149,7 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
                 document.removeEventListener('keydown', handleLoaderKeydown);
 
                 try {
-                    sessionStorage.setItem(LOADER_SHOWN_KEY, '1');
+                    sessionStorage.setItem(loaderShownKey, '1');
                 } catch {
                     return;
                 }
@@ -163,8 +165,6 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) hide();
         });
-
-        setTimeout(hide, MAX_DISPLAY_DURATION);
     }
 
     document.addEventListener('astro:after-swap', () => {

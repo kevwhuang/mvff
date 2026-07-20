@@ -35,9 +35,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
             >
                 &times;
             </button>
-            <ul
-                class="navbar__menu-list flex items-center justify-center gap-1 list-none"
-            >
+            <ul class="navbar__menu-list flex items-center justify-center gap-1 list-none">
                 {ROUTES.map((route) => {
                     const isDisabled = route.label === 'Store';
 
@@ -178,6 +176,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
     .navbar__menu-link[aria-disabled='true']:active,
     .navbar__menu-link[aria-disabled='true']:hover {
         color: var(--color-cream-60);
+        transform: none;
     }
 
     .navbar__pulse {
@@ -198,6 +197,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
     @media (hover: hover) and (max-width: 1024px) {
         .navbar__menu-link:hover {
             color: var(--color-coral);
+            transform: translateX(8px);
         }
     }
 
@@ -222,7 +222,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
                 transform var(--duration-base) ease,
                 visibility 0s var(--duration-base);
             visibility: hidden;
-            z-index: var(--z-drawer);
+            z-index: 60;
         }
 
         .navbar__menu[data-open] {
@@ -249,10 +249,14 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
             letter-spacing: 0.04em;
             padding: 16px 0;
             text-transform: none;
+            transition:
+                color var(--duration-fast) ease,
+                transform var(--duration-fast) ease;
         }
 
         .navbar__menu-link:active {
             color: var(--color-coral);
+            transform: translateX(8px);
         }
 
         .navbar__menu-link::after {
@@ -280,6 +284,19 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
 
         .navbar__toggle {
             display: grid;
+        }
+    }
+
+    @keyframes navbar__pulse {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(0.9);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
         }
     }
 </style>

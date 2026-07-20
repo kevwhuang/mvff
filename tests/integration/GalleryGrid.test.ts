@@ -1,80 +1,64 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import GalleryGrid from '../../src/sections/GalleryGrid.astro';
+import Gallery from '../../src/sections/Gallery.astro';
 
 const FIGURE_COUNT = 2;
-const PLACEHOLDER_TOKENS = [
-    'gallery__cell',
-    'gallery__tile',
-    'gallery__grid',
-    'BLK_',
-    'Frame 0',
-    'linear-gradient',
-    'data-gallery-block',
-    'data-gallery-year',
-    'data-gallery-caption',
-    'lightbox__caption',
-    'lightbox__info',
-    'lightbox__meta',
-    'Gallery content coming soon',
-];
+const FIGURES = [
+    { alt: 'standing shoulder to shoulder', label: 'The Team, Standing', source: 'team_standing.webp' },
+    { alt: 'seated and leaning together', label: 'The Team, Seated', source: 'team_seated.webp' },
+] as const;
 
-describe('GalleryGrid', () => {
+describe('Gallery', () => {
     let html: string;
 
     beforeAll(async () => {
         const container = await AstroContainer.create();
 
-        html = await container.renderToString(GalleryGrid);
+        html = await container.renderToString(Gallery);
     });
 
     test('labels the section by its heading for assistive tech', () => {
-        expect(html).toMatch(/<section class="gallery[^"]*" aria-labelledby="gallery-title"/);
-        expect(html).toMatch(/<span class="section__number"[^>]*>\[ G \]<\/span>/);
-        expect(html).toMatch(/<h1 id="gallery-title"[^>]*>Gallery<\/h1>/);
+        expect(html).toMatch(/<section id="gallery" class="gallery[^"]*" aria-labelledby="gallery-title"/);
+        expect(html).toMatch(/<h2 id="gallery-title" class="section-header__title[^"]*"[^>]*>Gallery<\/h2>/);
     });
 
     test('composes exactly two staggered portrait figures', () => {
-        expect(html).toContain('data-scroll-stagger="0.1"');
-        expect(html.split('class="gallery__frame ').length - 1).toBe(FIGURE_COUNT);
+        expect(html).toContain('data-scroll-stagger="0.12"');
+        expect(html.split('class="gallery__figure').length - 1).toBe(FIGURE_COUNT);
+        expect(html.split('class="gallery__frame').length - 1).toBe(FIGURE_COUNT);
         expect(html.split('aria-label="View ').length - 1).toBe(FIGURE_COUNT);
-        expect(html.split('gallery__figure--lead').length - 1).toBe(1);
-        expect(html.split('gallery__figure--trail').length - 1).toBe(1);
-        expect(html.split('<img').length - 1).toBe(FIGURE_COUNT);
-        expect(html).toContain('team_standing.webp');
-        expect(html).toContain('team_seated.webp');
+
+        for (const figure of FIGURES) {
+            expect(html).toContain(figure.source);
+        }
     });
 
     test('carries a descriptive label and a full-size source on each frame', () => {
+        expect(html.split('data-gallery-alt="').length - 1).toBe(FIGURE_COUNT);
         expect(html.split('data-gallery-label="').length - 1).toBe(FIGURE_COUNT);
         expect(html.split('data-gallery-source="').length - 1).toBe(FIGURE_COUNT);
-        expect(html).toContain('standing shoulder to shoulder');
-        expect(html).toContain('seated and leaning together');
+
+        for (const figure of FIGURES) {
+            expect(html).toContain(figure.alt);
+        }
     });
 
-    test('captions each portrait with its title and the 2026 year', () => {
+    test('captions each portrait with its title and no year chip', () => {
         expect(html).toMatch(/<span[^>]*>The Team, Standing<\/span>/);
         expect(html).toMatch(/<span[^>]*>The Team, Seated<\/span>/);
-        expect(html.split('class="gallery__year"').length - 1).toBe(FIGURE_COUNT);
-        expect(html).toMatch(/<span class="gallery__year"[^>]*>2026<\/span>/);
+        expect(html).not.toContain('gallery__year');
     });
 
-    test('keeps a single coming-soon note for the section', () => {
-        expect(html).toMatch(/<p class="gallery__note"[^>]*>\s*Full event photography lands after July 18\.\s*<\/p>/);
-    });
-
-    test('renders the lightbox as a labelled modal dialog without caption text', () => {
-        expect(html).toMatch(/<div class="lightbox[^"]*" aria-hidden="true" aria-labelledby="lightbox-title" aria-modal="true" role="dialog"/);
+    test('renders the lightbox as a labelled modal dialog with no close control', () => {
+        expect(html).toMatch(/<div class="gallery__lightbox[^"]*" aria-hidden="true" aria-labelledby="lightbox-title" aria-modal="true" role="dialog"/);
         expect(html).toMatch(/<h2 id="lightbox-title" class="sr-only"[^>]*>/);
-        expect(html).toMatch(/<button class="lightbox__close[^"]*" aria-label="Close image" type="button"/);
-        expect(html).toMatch(/<div class="lightbox__image"[^>]*>/);
-        expect(html.split('type="button"').length - 1).toBe(FIGURE_COUNT + 1);
+        expect(html).toMatch(/<div class="gallery__lightbox-inner[^"]*" tabindex="-1"/);
+        expect(html).not.toContain('lightbox__close');
+        expect(html).not.toContain('gallery__lightbox-close');
     });
 
-    test('drops every placeholder-tile artifact', () => {
-        for (const token of PLACEHOLDER_TOKENS) {
-            expect(html).not.toContain(token);
-        }
+    test('marks every gallery frame as a button and adds no others', () => {
+        expect(html.split('type="button"').length - 1).toBe(FIGURE_COUNT);
     });
 });

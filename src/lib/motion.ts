@@ -2,48 +2,15 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { REDUCED_MOTION_QUERY } from '@lib/constants';
+import { initParallax } from '@lib/parallax';
 
-const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-const SCROLL_DURATION = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
+const SCROLL_DURATION = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 const SCROLL_START = 'top 85%';
+const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
-let isParallaxQueued = false;
-let parallaxLayers: { element: HTMLElement; factor: number }[] = [];
-
-function handleScroll() {
-    if (!parallaxLayers.length || isParallaxQueued) return;
-
-    isParallaxQueued = true;
-    requestAnimationFrame(updateParallax);
-}
-
-export function initMotion(): void {
-    const prefersReducedMotion = reducedMotionQuery.matches;
-
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    initScrollAnimations(prefersReducedMotion);
-    initParallax(prefersReducedMotion);
-}
-
-function initParallax(prefersReducedMotion: boolean) {
-    if (prefersReducedMotion) {
-        parallaxLayers.forEach(({ element }) => {
-            element.style.transform = '';
-        });
-        parallaxLayers = [];
-
-        return;
-    }
-
-    parallaxLayers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'), element => ({
-        element,
-        factor: Number.parseFloat(element.dataset.parallax || '0'),
-    }));
-
-    updateParallax();
-}
+let batchFlushCalls: gsap.core.Animation[] = [];
 
 function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
@@ -72,14 +39,21 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
         if (stagger > 0) {
             gsap.set(element, { opacity: 1 });
             gsap.set(element.children, fromState);
+
+            const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
+
             ScrollTrigger.batch(Array.from(element.children), {
                 onEnter: batch => gsap.fromTo(batch, fromState, { ...toState, stagger }),
+                once: true,
                 start: SCROLL_START,
             });
+
+            batchFlushCalls.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !timelineBefore.has(tween)));
         } else {
             gsap.fromTo(element, fromState, {
                 ...toState,
                 scrollTrigger: {
+                    once: true,
                     start: SCROLL_START,
                     trigger: element,
                 },
@@ -88,16 +62,16 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
     });
 }
 
-function updateParallax() {
-    isParallaxQueued = false;
-
-    const scrollY = window.scrollY;
-
-    parallaxLayers.forEach(({ element, factor }) => {
-        element.style.transform = `translateY(${scrollY * factor}px)`;
-    });
-}
-
 gsap.registerPlugin(ScrollTrigger);
-window.addEventListener('scroll', handleScroll, { passive: true });
 reducedMotionQuery.addEventListener('change', initMotion);
+
+export function initMotion(): void {
+    const prefersReducedMotion = reducedMotionQuery.matches;
+
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    batchFlushCalls.forEach(tween => tween.kill());
+    batchFlushCalls = [];
+
+    initScrollAnimations(prefersReducedMotion);
+    initParallax(prefersReducedMotion);
+}

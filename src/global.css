@@ -8,10 +8,8 @@
     --color-coral-15: #ff735e26;
     --color-coral-35: #ff735e59;
     --color-cream: #f4f1ea;
-    --color-cream-10: #f4f1ea1a;
     --color-cream-15: #f4f1ea26;
     --color-cream-35: #f4f1ea59;
-    --color-cream-40: #f4f1ea66;
     --color-cream-60: #f4f1ea99;
     --color-cream-70: #f4f1eab3;
     --color-cream-80: #f4f1eacc;
@@ -58,7 +56,6 @@
     --section-padding-sm: clamp(48px, calc(37.33px + 3.33vw), 80px);
     --shell-max: 1280px;
     --shell-pad: clamp(20px, calc(8px + 3.75vw), 56px);
-    --z-drawer: 60;
 }
 
 a,
@@ -79,8 +76,6 @@ h4 {
 html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-height) + 24px);
-    scrollbar-color: var(--color-cream-40) var(--color-night);
-    scrollbar-width: thin;
 }
 
 :focus {
@@ -90,24 +85,6 @@ html {
 :focus-visible {
     outline: 2px solid var(--color-coral);
     outline-offset: 3px;
-}
-
-::-webkit-scrollbar {
-    height: 10px;
-    width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--color-cream-40);
-    border: 2px solid var(--color-night);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-coral);
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-night);
 }
 
 ::selection {
@@ -127,7 +104,7 @@ html {
 }
 
 [data-scroll]:focus-within,
-[data-scroll] :focus-within {
+[data-scroll] > :focus-within {
     opacity: 1 !important;
     transform: none !important;
 }
@@ -151,5 +128,15 @@ html {
 
     [data-scroll] {
         opacity: 1 !important;
+    }
+}
+
+@keyframes page__fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

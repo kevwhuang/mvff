@@ -29,7 +29,7 @@ const HIGHLIGHTS = [
             data-scroll-stagger="0.08"
         >
             {HIGHLIGHTS.map((highlight, index) => (
-                <li class="experience__highlight grid items-center relative isolate border-b border-cream-15">
+                <li class="experience__highlight sweep grid items-center relative isolate border-b border-cream-15">
                     <span
                         class="experience__highlight-number font-mono text-cream-60 select-none"
                         aria-hidden="true"
@@ -55,20 +55,10 @@ const HIGHLIGHTS = [
         border-bottom: none;
     }
 
-    .experience__highlight::after {
-        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
-        content: '';
-        inset: 0;
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        transition: opacity var(--duration-fast) ease;
-        z-index: -1;
-    }
-
     .experience__highlight-description {
         font-size: 20px;
         line-height: 1.4;
+        transition: color var(--duration-fast) ease;
     }
 
     .experience__highlight-number {
@@ -85,6 +75,10 @@ const HIGHLIGHTS = [
     }
 
     @media (hover: hover) {
+        .experience__highlight:hover .experience__highlight-description {
+            color: var(--color-cream);
+        }
+
         .experience__highlight:hover .experience__highlight-title {
             color: var(--color-coral);
             transform: translateX(8px);

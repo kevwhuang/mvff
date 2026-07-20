@@ -1,83 +1,53 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import ContactPanel from '../../src/sections/ContactPanel.astro';
+import Contact from '../../src/sections/Contact.astro';
 import { LINKS } from '../../src/lib/constants';
 
-describe('ContactPanel', () => {
+const CHANNELS = [
+    { href: LINKS.instagram, index: '/ 01', label: 'Instagram' },
+    { href: LINKS.email, index: '/ 02', label: 'Email' },
+    { href: LINKS.phone, index: '/ 03', label: 'Phone' },
+] as const;
+
+describe('Contact', () => {
     let html: string;
 
     beforeAll(async () => {
         const container = await AstroContainer.create();
 
-        html = await container.renderToString(ContactPanel);
+        html = await container.renderToString(Contact);
     });
 
     test('labels the section by its heading for assistive tech', () => {
-        expect(html).toMatch(/<section class="contact[^"]*" aria-labelledby="contact-title"/);
-        expect(html).toMatch(/<span class="section__number"[^>]*>\[ C \]<\/span>/);
-        expect(html).toMatch(/<h1 id="contact-title"[^>]*>Contact<\/h1>/);
+        expect(html).toMatch(/<section id="contact" class="contact[^"]*" aria-labelledby="contact-title"/);
+        expect(html).toMatch(/<h2 id="contact-title" class="section-header__title[^"]*"[^>]*>Contact Us<\/h2>/);
     });
 
-    test('wires the form for netlify forms submissions', () => {
-        expect(html).toMatch(/<form class="contact__form[^"]*" data-netlify="true" data-netlify-honeypot="bot-field" method="POST" name="contact"/);
-    });
+    test('renders a channel row for every contact method', () => {
+        expect(html.split('class="contact__channel border').length - 1).toBe(CHANNELS.length);
 
-    test('carries the hidden form-name and honeypot fields', () => {
-        expect(html).toMatch(/<input name="form-name" type="hidden" value="contact"[^>]*>/);
-        expect(html).toMatch(/<label class="hidden"[^>]*>\s*Leave this field empty\s*<input name="bot-field"[^>]*>\s*<\/label>/);
-    });
-
-    test('wraps every visible field control in its label', () => {
-        expect(html.split('<label class="flex flex-col"').length - 1).toBe(4);
-        expect(html).toMatch(/<span class="label"[^>]*>Name <span class="label__required"[^>]*>\*<\/span><\/span>/);
-        expect(html).toMatch(/<span class="label"[^>]*>Email <span class="label__required"[^>]*>\*<\/span><\/span>/);
-        expect(html).toMatch(/<span class="label"[^>]*>Message <span class="label__required"[^>]*>\*<\/span><\/span>/);
-    });
-
-    test('marks the name, email, and message controls required', () => {
-        expect(html.split('class="label__required"').length - 1).toBe(3);
-        expect(html).toMatch(/<input[^>]*name="name"[^>]*required/);
-        expect(html).toMatch(/<input[^>]*name="email"[^>]*type="email"[^>]*>/);
-        expect(html).toMatch(/<textarea[^>]*name="message"[^>]*required/);
-    });
-
-    test('renders the subject options', () => {
-        for (const option of ['General Inquiry', 'Press &amp; Media', 'Sponsorship', 'Submissions', 'Volunteering']) {
-            expect(html).toMatch(new RegExp(`<option[^>]*>${option}</option>`));
+        for (const channel of CHANNELS) {
+            expect(html).toContain(`href="${channel.href}"`);
+            expect(html).toMatch(new RegExp(`<span class="contact__channel-index[^"]*" aria-hidden="true"[^>]*>${channel.index}</span>`));
+            expect(html).toMatch(new RegExp(`<span class="contact__channel-label[^"]*"[^>]*>${channel.label}</span>`));
         }
     });
 
-    test('renders an enabled send-message submit button', () => {
-        expect(html).toMatch(/<button class="btn btn--primary[^"]*" type="submit"[^>]*>\s*Send Message\s*<\/button>/);
-        expect(html).not.toMatch(/<button[^>]*disabled/);
-        expect(html).not.toContain('Coming Soon');
+    test('opens only the external instagram channel in a new tab', () => {
+        expect(html).toMatch(new RegExp(`href="${LINKS.instagram}" rel="noopener" target="_blank"`));
+        expect(html.split('target="_blank"').length - 1).toBe(1);
+        expect(html.split('rel="noopener"').length - 1).toBe(1);
     });
 
-    test('renders the directory column ahead of the form', () => {
-        const directoryIndex = html.indexOf('contact__directory');
-        const formIndex = html.indexOf('contact__form');
-
-        expect(directoryIndex).toBeGreaterThanOrEqual(0);
-        expect(formIndex).toBeGreaterThan(directoryIndex);
+    test('marks the external channel with a directional cue', () => {
+        expect(html.split('class="contact__channel-cue"').length - 1).toBe(1);
+        expect(html).toMatch(/<span class="contact__channel-cue" aria-hidden="true"[^>]*>&rarr;<\/span>/);
     });
 
-    test('elevates the directory into two contact cards', () => {
-        expect(html.split('class="contact__card"').length - 1).toBe(2);
-        expect(html).toMatch(/<div class="contact__card"[^>]*>\s*<h2 class="subhead"[^>]*>Direct Channels<\/h2>/);
-        expect(html).toMatch(/<div class="contact__card"[^>]*>\s*<h2 class="subhead"[^>]*>Founder<\/h2>/);
-    });
-
-    test('renders the direct contact directory', () => {
-        expect(html).toMatch(new RegExp(`<a class="contact__line-link" href="${LINKS.email}"[^>]*>contact@atxmusicvideofilmfestival.com</a>`));
-        expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.instagram}" target="_blank"[^>]*>\\s*@atxmvff\\s*</a>`));
-        expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.posh}" target="_blank"[^>]*>\\s*Posh &rarr;\\s*</a>`));
-        expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.pitchDeck}" target="_blank"[^>]*>\\s*Pitch Deck\\s*</a>`));
-        expect(html).toMatch(new RegExp(`<a[^>]*href="${LINKS.calendly}" target="_blank"[^>]*>\\s*Calendly &rarr;\\s*</a>`));
-    });
-
-    test('credits the founder and studio', () => {
-        expect(html).toContain('Anna Madewell');
-        expect(html).toContain('Madewell Productions');
+    test('prints each contact value', () => {
+        expect(html).toContain('@atxmvff');
+        expect(html).toContain('@atxmusicvideofilmfestival.com');
+        expect(html).toContain('(281) 466-9387');
     });
 });

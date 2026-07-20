@@ -1,70 +1,59 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import Roster from '../../src/sections/Roster.astro';
+import Team from '../../src/sections/Team.astro';
 
 const TEAM = [
-    { name: 'Anna', portrait: true, role: 'Executive Festival Director' },
-    { name: 'Ashleigh', portrait: false, role: 'Marketing Director' },
+    { name: 'Anna', portrait: true, role: 'Founder &amp; Executive Producer' },
+    { name: 'Ashleigh', portrait: false, role: 'Social Media Marketing Director' },
     { name: 'Jyme', portrait: true, role: 'Film Programming Director' },
-    { name: 'Dan', portrait: false, role: 'Operations Director' },
-    { name: 'Amiiri', portrait: true, role: 'Partnerships Director' },
-    { name: 'Rocky', portrait: true, role: 'Sponsorship Admin Lead' },
-    { name: 'Greta', portrait: false, role: 'Content Strategist' },
-    { name: 'Marissa', portrait: true, role: 'Graphics Director' },
-    { name: 'Jasmine', portrait: true, role: 'Event Coordinator' },
+    { name: 'Dan', portrait: true, role: 'Operations &amp; Production Manager' },
+    { name: 'Amiiri', portrait: true, role: 'PR &amp; Outreach Director' },
+    { name: 'Rocky', portrait: true, role: 'Sponsorship Administrator' },
+    { name: 'Greta', portrait: true, role: 'Content Strategist' },
+    { name: 'Marissa', portrait: false, role: 'Graphics Manager' },
+    { name: 'Jasmine', portrait: false, role: 'Executive Coordinator' },
+    { name: 'May', portrait: true, role: 'Dance Director &amp; Fashion Designer' },
 ] as const;
 
 const PORTRAITS = TEAM.filter(member => member.portrait).length;
 const MONOGRAMS = TEAM.length - PORTRAITS;
 
-describe('Roster', () => {
+describe('Team', () => {
     let html: string;
 
     beforeAll(async () => {
         const container = await AstroContainer.create();
 
-        html = await container.renderToString(Roster);
+        html = await container.renderToString(Team);
     });
 
     test('labels the section by its heading for assistive tech', () => {
-        expect(html).toMatch(/<section class="roster[^"]*" aria-labelledby="roster-title"/);
-        expect(html).toMatch(/<h1 id="roster-title" class="section__title"/);
+        expect(html).toMatch(/<section class="section team" aria-labelledby="team-title"/);
+        expect(html).toMatch(/<h1 id="team-title" class="section-header__title[^"]*"[^>]*>Meet the Team<\/h1>/);
     });
 
-    test('renders the section marker and title', () => {
-        expect(html).toMatch(/<span class="section__number"[^>]*>\[ T \]<\/span>/);
-        expect(html).toMatch(/<h1 id="roster-title"[^>]*>2026 Team<\/h1>/);
-    });
-
-    test('renders an article card for every team member with a portrait or monogram', () => {
-        expect(html.split('<article class="roster__card').length - 1).toBe(TEAM.length);
-        expect(html.split('class="roster__image').length - 1).toBe(PORTRAITS);
-        expect(html.split('class="roster__monogram').length - 1).toBe(MONOGRAMS);
+    test('renders a card for every member with a portrait or monogram', () => {
+        expect(html.split('<article class="team__card').length - 1).toBe(TEAM.length);
+        expect(html.split('class="team__image').length - 1).toBe(PORTRAITS);
+        expect(html.split('class="team__monogram').length - 1).toBe(MONOGRAMS);
 
         for (const member of TEAM) {
-            if (member.portrait) {
-                expect(html).toMatch(new RegExp(`<img[^>]*alt="${member.name}, ${member.role}"`));
-            } else {
-                expect(html).toMatch(new RegExp(`<span class="roster__monogram[^"]*" aria-hidden="true"[^>]*>\\s*${member.name.charAt(0)}\\s*</span>`));
+            if (!member.portrait) {
+                expect(html).toMatch(new RegExp(`<span class="team__monogram[^"]*" aria-hidden="true"[^>]*>\\s*${member.name.charAt(0)}\\s*</span>`));
             }
         }
     });
 
-    test('renders every member name and role', () => {
-        for (const member of TEAM) {
-            expect(html).toMatch(new RegExp(`<h2 class="roster__name"[^>]*>${member.name}</h2>`));
-            expect(html).toMatch(new RegExp(`<span class="roster__role"[^>]*>${member.role}</span>`));
-        }
+    test('leaves portrait alt text empty for decorative images', () => {
+        expect(html.split('class="team__image').length - 1).toBe(PORTRAITS);
+        expect(html).not.toContain('alt="');
     });
 
-    test('numbers every card with an aria-hidden padded index badge', () => {
-        expect(html.split('class="roster__index').length - 1).toBe(TEAM.length);
-
-        for (const [index] of TEAM.entries()) {
-            const badge = String(index + 1).padStart(2, '0');
-
-            expect(html).toMatch(new RegExp(`<span class="roster__index[^"]*" aria-hidden="true"[^>]*>\\s*${badge}\\s*</span>`));
+    test('renders every member name and role', () => {
+        for (const member of TEAM) {
+            expect(html).toMatch(new RegExp(`<h2 class="team__name"[^>]*>${member.name}</h2>`));
+            expect(html).toMatch(new RegExp(`<p class="team__role[^"]*"[^>]*>${member.role}</p>`));
         }
     });
 });

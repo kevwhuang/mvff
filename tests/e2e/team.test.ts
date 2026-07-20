@@ -3,15 +3,16 @@ import { expect, test } from '@playwright/test';
 const CORAL = 'rgb(255, 115, 94)';
 
 const TEAM = [
-    { name: 'Anna', portrait: true, role: 'Executive Festival Director' },
-    { name: 'Ashleigh', portrait: false, role: 'Marketing Director' },
+    { name: 'Anna', portrait: true, role: 'Founder & Executive Producer' },
+    { name: 'Ashleigh', portrait: false, role: 'Social Media Marketing Director' },
     { name: 'Jyme', portrait: true, role: 'Film Programming Director' },
-    { name: 'Dan', portrait: false, role: 'Operations Director' },
-    { name: 'Amiiri', portrait: true, role: 'Partnerships Director' },
-    { name: 'Rocky', portrait: true, role: 'Sponsorship Admin Lead' },
-    { name: 'Greta', portrait: false, role: 'Content Strategist' },
-    { name: 'Marissa', portrait: true, role: 'Graphics Director' },
-    { name: 'Jasmine', portrait: true, role: 'Event Coordinator' },
+    { name: 'Dan', portrait: true, role: 'Operations & Production Manager' },
+    { name: 'Amiiri', portrait: true, role: 'PR & Outreach Director' },
+    { name: 'Rocky', portrait: true, role: 'Sponsorship Administrator' },
+    { name: 'Greta', portrait: true, role: 'Content Strategist' },
+    { name: 'Marissa', portrait: false, role: 'Graphics Manager' },
+    { name: 'Jasmine', portrait: false, role: 'Executive Coordinator' },
+    { name: 'May', portrait: true, role: 'Dance Director & Fashion Designer' },
 ] as const;
 
 const PORTRAITS = TEAM.filter(member => member.portrait).length;
@@ -24,44 +25,43 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('team roster', () => {
     test('renders the section heading', async ({ page }) => {
-        await expect(page.locator('#roster-title')).toHaveText('2026 Team');
+        await expect(page.locator('#team-title')).toHaveText('Meet the Team');
     });
 
     test('renders one card per team member with a portrait or monogram', async ({ page }) => {
-        await expect(page.locator('.roster__card')).toHaveCount(TEAM.length);
-        await expect(page.locator('.roster__image')).toHaveCount(PORTRAITS);
-        await expect(page.locator('.roster__monogram')).toHaveCount(MONOGRAMS);
+        await expect(page.locator('.team__card')).toHaveCount(TEAM.length);
+        await expect(page.locator('.team__image')).toHaveCount(PORTRAITS);
+        await expect(page.locator('.team__monogram')).toHaveCount(MONOGRAMS);
     });
 
     test('shows each member name, role, and portrait or monogram', async ({ page }) => {
         for (const [index, member] of TEAM.entries()) {
-            const card = page.locator('.roster__card').nth(index);
+            const card = page.locator('.team__card').nth(index);
 
-            await expect(card.locator('.roster__name')).toHaveText(member.name);
-            await expect(card.locator('.roster__role')).toHaveText(member.role);
+            await expect(card.locator('.team__name')).toHaveText(member.name);
+            await expect(card.locator('.team__role')).toHaveText(member.role);
 
             if (member.portrait) {
-                await expect(card.locator('.roster__image')).toHaveAttribute('alt', `${member.name}, ${member.role}`);
+                await expect(card.locator('.team__image')).toHaveAttribute('alt', '');
             } else {
-                await expect(card.locator('.roster__image')).toHaveCount(0);
-                await expect(card.locator('.roster__monogram')).toHaveText(member.name.charAt(0));
+                const monogram = card.locator('.team__monogram');
+
+                await expect(card.locator('.team__image')).toHaveCount(0);
+                await expect(monogram).toHaveText(member.name.charAt(0));
+                await expect(monogram).toHaveAttribute('aria-hidden', 'true');
             }
         }
     });
 
-    test('numbers each card with a padded index badge', async ({ page }) => {
-        const badges = page.locator('.roster__index');
-
-        await expect(badges).toHaveCount(TEAM.length);
-        await expect(badges.first()).toHaveText('01');
-        await expect(badges.last()).toHaveText('09');
+    test('keeps the roster visible under reduced motion', async ({ page }) => {
+        await expect(page.locator('.team__grid')).toHaveCSS('opacity', '1');
     });
 
     test('reveals the coral accent when a card is hovered', async ({ page }) => {
-        const card = page.locator('.roster__card').first();
+        const card = page.locator('.team__card').first();
 
-        await expect(card.locator('.roster__role')).not.toHaveCSS('color', CORAL);
+        await expect(card.locator('.team__role')).not.toHaveCSS('color', CORAL);
         await card.hover();
-        await expect(card.locator('.roster__role')).toHaveCSS('color', CORAL);
+        await expect(card.locator('.team__role')).toHaveCSS('color', CORAL);
     });
 });

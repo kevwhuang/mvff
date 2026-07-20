@@ -80,14 +80,10 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         aria-modal="true"
         role="dialog"
     >
-        <div class="gallery__lightbox-inner flex flex-col relative gap-3 cursor-default">
-            <button
-                class="gallery__lightbox-close absolute flex items-center justify-center right-3 top-3 size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream"
-                aria-label="Close image"
-                type="button"
-            >
-                &times;
-            </button>
+        <div
+            class="gallery__lightbox-inner flex flex-col relative gap-3 cursor-default"
+            tabindex="-1"
+        >
             <h2
                 id="lightbox-title"
                 class="sr-only"
@@ -114,6 +110,19 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
 
     .gallery__frame:active {
         transform: scale(0.99);
+    }
+
+    .gallery__frame:focus-visible:not(:active) {
+        transform: scale(1.01);
+    }
+
+    .gallery__frame:focus-visible .gallery__image {
+        filter: grayscale(0) contrast(1.08);
+        transform: scale(1.03);
+    }
+
+    .gallery__frame:focus-visible::after {
+        border-color: var(--color-coral);
     }
 
     .gallery__frame::after {
@@ -157,23 +166,6 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         transform: scale(1);
     }
 
-    .gallery__lightbox-close {
-        transition:
-            border-color var(--duration-fast) ease,
-            color var(--duration-fast) ease;
-    }
-
-    .gallery__lightbox-close:active {
-        border-color: var(--color-coral);
-        color: var(--color-coral);
-    }
-
-    .gallery__lightbox-close::after {
-        content: '';
-        inset: -8px;
-        position: absolute;
-    }
-
     .gallery__lightbox-inner {
         max-width: min(calc(1280px - 2 * var(--shell-pad)), calc((100dvh - 128px) * 3 / 2));
         transform: scale(0.97);
@@ -192,25 +184,17 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
     }
 
     @media (hover: hover) {
-        .gallery__frame:focus-visible,
-        .gallery__frame:hover {
+        .gallery__frame:hover:not(:active) {
             transform: scale(1.01);
         }
 
-        .gallery__frame:focus-visible .gallery__image,
         .gallery__frame:hover .gallery__image {
             filter: grayscale(0) contrast(1.08);
             transform: scale(1.03);
         }
 
-        .gallery__frame:focus-visible::after,
         .gallery__frame:hover::after {
             border-color: var(--color-coral);
-        }
-
-        .gallery__lightbox-close:hover {
-            border-color: var(--color-coral);
-            color: var(--color-coral);
         }
     }
 
@@ -256,7 +240,7 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
             closeLightbox();
         } else if (event.key === 'Tab') {
             event.preventDefault();
-            lightbox.querySelector<HTMLElement>('.gallery__lightbox-close')?.focus();
+            lightbox.querySelector<HTMLElement>('.gallery__lightbox-inner')?.focus();
         }
     }
 
@@ -271,14 +255,12 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
 
         if (!lightbox) return;
 
-        const closeButton = lightbox.querySelector('.gallery__lightbox-close');
         const inner = lightbox.querySelector('.gallery__lightbox-inner');
 
         document.querySelectorAll<HTMLElement>('.gallery__frame').forEach((frame) => {
             frame.addEventListener('click', () => openLightbox(frame), { signal });
         });
 
-        closeButton?.addEventListener('click', closeLightbox, { signal });
         inner?.addEventListener('click', event => event.stopPropagation(), { signal });
         lightbox.addEventListener('click', closeLightbox, { signal });
         document.addEventListener('keydown', handleLightboxKeydown, { signal });
@@ -301,7 +283,7 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         lastTrigger = frame;
         lightbox.setAttribute('data-open', '');
         lightbox.removeAttribute('aria-hidden');
-        lightbox.querySelector<HTMLElement>('.gallery__lightbox-close')?.focus();
+        lightbox.querySelector<HTMLElement>('.gallery__lightbox-inner')?.focus();
     }
 
     registerPageScript(initGallery);

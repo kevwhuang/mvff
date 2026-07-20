@@ -90,21 +90,21 @@ describe('Layout', () => {
         expect(jsonLd.author).toEqual({ '@type': 'Person', 'name': 'Kevin Huang' });
     });
 
-    test('embeds event json-ld with the venue and ticketing facts', () => {
+    test('embeds a single site json-ld with no event schema', () => {
         const matches = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
 
-        expect(matches).toHaveLength(2);
+        expect(matches).toHaveLength(1);
 
-        const event = JSON.parse(matches[1][1]);
+        const jsonLd = JSON.parse(matches[0][1]);
 
-        expect(event['@type']).toBe('Event');
-        expect(event.name).toBe(SITE_NAME);
-        expect(event.startDate).toBe('2026-07-18T19:00:00-05:00');
-        expect(event.endDate).toBe('2026-07-19T02:00:00-05:00');
-        expect(event.location.name).toBe('Cabana Club');
-        expect(event.location.address.streetAddress).toBe('5012 E 7th St');
-        expect(event.offers.url).toBe('https://posh.vip/e/austin-texas-music-video-film-festival');
-        expect(event.organizer.name).toBe('Madewell Productions');
+        expect(jsonLd['@type']).toBe('WebSite');
+        expect(html).not.toContain('"@type":"Event"');
+        expect(html).not.toContain('startDate');
+    });
+
+    test('renders exactly one robots meta set to index, follow', () => {
+        expect(html.split('name="robots"').length - 1).toBe(1);
+        expect(html).toContain('<meta content="index, follow" name="robots">');
     });
 
     test('enables the client router', () => {
@@ -125,34 +125,5 @@ describe('Layout', () => {
         expect(html).toContain(SLOT);
         expect(html.indexOf(SLOT)).toBeGreaterThan(html.indexOf('<body'));
         expect(html.indexOf(SLOT)).toBeLessThan(html.indexOf('</body>'));
-    });
-});
-
-describe('Layout noindex', () => {
-    let html: string;
-
-    beforeAll(async () => {
-        const container = await AstroContainer.create();
-
-        vi.stubGlobal('URL', SiteAwareUrl);
-
-        try {
-            html = await container.renderToString(Layout, {
-                partial: false,
-                props: { description: DESCRIPTION, noindex: true, title: TITLE },
-                slots: { default: SLOT },
-            });
-        } finally {
-            vi.unstubAllGlobals();
-        }
-    });
-
-    test('switches the robots meta to noindex, nofollow', () => {
-        expect(html).toContain('<meta content="noindex, nofollow" name="robots">');
-        expect(html).not.toContain('<meta content="index, follow" name="robots">');
-    });
-
-    test('renders exactly one robots meta', () => {
-        expect(html.split('name="robots"').length - 1).toBe(1);
     });
 });

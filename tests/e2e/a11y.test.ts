@@ -3,13 +3,13 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 const FOCUS_TARGETS = [
-    { name: 'home nav link', selector: '.site-nav__link[href="/"]' },
-    { name: 'info nav link', selector: '.site-nav__link[href="/info"]' },
-    { name: 'buy tickets link', selector: '.site-header__tickets' },
+    { name: 'home nav link', selector: '.navbar__menu-link[href="/"]' },
+    { name: 'info nav link', selector: '.navbar__menu-link[href="/info"]' },
+    { name: 'team nav link', selector: '.navbar__menu-link[href="/team"]' },
 ] as const;
 
 const MAX_TAB_PRESSES = 12;
-const PUBLIC_PATHS = ['/', '/info', '/team', '/gallery', '/contact', '/this-page-does-not-exist', '/500'] as const;
+const PUBLIC_PATHS = ['/', '/info', '/team', '/this-page-does-not-exist', '/500'] as const;
 const TITLE_PATTERN = /^.+ — Austin Music Video Film Festival$/;
 
 function readOutline(selector: string, page: Page) {
@@ -36,7 +36,7 @@ test.describe('document structure', () => {
                 headingLevels: [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].map(heading => Number(heading.tagName.slice(1))),
                 mainCount: document.querySelectorAll('main, [role="main"]').length,
                 missingAltCount: [...document.querySelectorAll('img')].filter(image => !image.hasAttribute('alt')).length,
-                nestedLandmarkCount: document.querySelectorAll('main footer, main header').length,
+                nestedLandmarkCount: document.querySelectorAll('main main, main [role="banner"], main [role="contentinfo"], main [role="main"]').length,
                 unresolvedLabelIds: [...document.querySelectorAll('[aria-labelledby]')]
                     .flatMap(element => (element.getAttribute('aria-labelledby') || '').split(/\s+/))
                     .filter(id => id && !document.getElementById(id)),
@@ -57,7 +57,7 @@ test.describe('document structure', () => {
 });
 
 test.describe('keyboard navigation', () => {
-    test('tab from body reaches the nav links and Buy Tickets with a visible focus outline', async ({ page }) => {
+    test('tab from body reaches the nav links with a visible focus outline', async ({ page }) => {
         await page.goto('/');
 
         const baseline: Record<string, string> = {};

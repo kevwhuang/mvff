@@ -16,11 +16,11 @@ const MARQUEE_COPIES = 2;
         <ul class="partners__track flex items-center w-max list-none">
             {Array.from({ length: MARQUEE_COPIES }).flatMap((_, copy) => [
                 <li
-                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream-80"
+                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream"
                     aria-hidden={copy > 0 ? 'true' : undefined}
                 >
                     <Image
-                        class="partners__logo partners__logo--madewell object-contain w-auto align-middle opacity-75"
+                        class="partners__logo partners__logo--madewell object-contain w-auto align-middle"
                         alt=""
                         aria-hidden="true"
                         densities={[1, 2]}
@@ -30,17 +30,17 @@ const MARQUEE_COPIES = 2;
                     <span>Madewell Productions</span>
                 </li>,
                 <li
-                    class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
+                    class="partners__item flex items-center font-display leading-none uppercase text-cream"
                     aria-hidden="true"
                 >
                     <span class="partners__diamond aspect-square inline-block shrink-0 w-3.5 bg-coral rotate-45" />
                 </li>,
                 <li
-                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream-80"
+                    class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream"
                     aria-hidden={copy > 0 ? 'true' : undefined}
                 >
                     <Image
-                        class="partners__logo object-contain w-auto align-middle opacity-75"
+                        class="partners__logo object-contain w-auto align-middle"
                         alt="Cabana Club"
                         densities={[1, 2]}
                         src={logoCabanaClub}
@@ -48,7 +48,7 @@ const MARQUEE_COPIES = 2;
                     />
                 </li>,
                 <li
-                    class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
+                    class="partners__item flex items-center font-display leading-none uppercase text-cream"
                     aria-hidden="true"
                 >
                     <span class="partners__diamond aspect-square inline-block shrink-0 w-3.5 bg-coral rotate-45" />

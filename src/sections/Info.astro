@@ -2,7 +2,7 @@
 import SectionHeader from '@components/SectionHeader.astro';
 
 const FAQ = [
-    { answer: 'One night in Austin where the music video takes center stage \u2014 three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit \u2014 built to pull Austin\'s music and film worlds into one room.', question: 'What exactly is the Austin Music Video Film Festival?' },
+    { answer: 'One night in Austin where the music video takes center stage \u2014 three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit \u2014 built to pull Austin\'s music and film worlds into one room.', question: 'What is the Austin Music Video Film Festival?' },
     { answer: 'Yes \u2014 21+ with valid ID, no exceptions.', question: 'Is there an age requirement?' },
     { answer: 'Red carpet attire \u2014 silk, tuxedos, and a swimsuit if you\'re feeling bold. Dress to be photographed; the pool deck\'s open under the stars.', question: 'What do I wear?' },
     { answer: 'With a 2 AM close, rideshare is the move, but street parking is available around the venue.', question: 'Where do I park?' },
@@ -47,13 +47,11 @@ const SCHEDULE = [
         >
             <div>
                 <h2 class="subheading">Venue</h2>
-                <div class="info__venue relative isolate border border-cream-15 bg-navy">
+                <div class="info__venue sweep relative isolate border border-cream-15 bg-navy">
                     <h3 class="info__venue-name mb-2">Cabana Club</h3>
                     <p class="info__venue-address mb-4 font-mono uppercase text-cream-60">5012 E 7th St &middot; Austin, TX</p>
                     <p class="info__venue-description mb-4 font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lights the pool deck and a live stage carries the music. A red carpet leads in from the street, and the night is capped at 300&nbsp;tickets.</p>
-                    <ul
-                        class="info__venue-features grid grid-cols-2 gap-2 list-none"
-                    >
+                    <ul class="info__venue-features grid grid-cols-2 gap-2 list-none">
                         <li>Outdoor screen</li>
                         <li>Live stage</li>
                         <li>Outdoor pool</li>
@@ -65,11 +63,9 @@ const SCHEDULE = [
             </div>
             <div>
                 <h2 class="subheading">Program</h2>
-                <ol
-                    class="info__schedule flex flex-col list-none"
-                >
+                <ol class="info__schedule flex flex-col list-none">
                     {SCHEDULE.map(([time, event, tag, datetime]) => (
-                        <li class="info__schedule-row grid items-baseline relative py-4 border-b border-cream-10">
+                        <li class="info__schedule-row grid items-baseline relative py-4 border-b border-cream-15">
                             <time
                                 class="info__schedule-time"
                                 datetime={datetime}
@@ -184,7 +180,7 @@ const SCHEDULE = [
         color: var(--color-cream);
         font-family: var(--font-mono);
         font-size: 14px;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.1em;
         transition:
             color var(--duration-fast) ease,
             transform var(--duration-fast) ease;
@@ -198,17 +194,6 @@ const SCHEDULE = [
 
     .info__venue {
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
-    }
-
-    .info__venue::after {
-        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
-        content: '';
-        inset: 0;
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        transition: opacity var(--duration-fast) ease;
-        z-index: -1;
     }
 
     .info__venue-address {
@@ -270,6 +255,12 @@ const SCHEDULE = [
 
         .info__venue:hover::after {
             opacity: 0.5;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .info__venue-features {
+            grid-template-columns: 1fr;
         }
     }
 

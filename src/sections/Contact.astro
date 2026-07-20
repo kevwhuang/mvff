@@ -30,7 +30,7 @@ const CHANNELS = [
             {CHANNELS.map((channel, index) => (
                 <li class="contact__channel border-b border-cream-15">
                     <a
-                        class="contact__channel-link grid items-center relative isolate no-underline text-cream"
+                        class="contact__channel-link sweep grid items-center relative isolate no-underline text-cream"
                         href={channel.href}
                         rel={channel.isExternal ? 'noopener' : undefined}
                         target={channel.isExternal ? '_blank' : undefined}
@@ -46,7 +46,7 @@ const CHANNELS = [
                             <span class="min-w-0">{channel.value.split('@').flatMap((part, index) => (index === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
                             {channel.isExternal && (
                                 <span
-                                    class="contact__channel-cue not-italic"
+                                    class="contact__channel-cue"
                                     aria-hidden="true"
                                 >
                                     &rarr;
@@ -66,12 +66,13 @@ const CHANNELS = [
     }
 
     .contact__channel-index {
-        font-size: 14px;
+        font-size: 12px;
         letter-spacing: 0.16em;
     }
 
     .contact__channel-label {
         font-size: clamp(32px, calc(21.33px + 3.33vw), 64px);
+        letter-spacing: 0.01em;
         line-height: 0.95;
         transition:
             color var(--duration-fast) ease,
@@ -95,17 +96,6 @@ const CHANNELS = [
 
     .contact__channel-link:active::after {
         opacity: 1;
-    }
-
-    .contact__channel-link::after {
-        background: linear-gradient(90deg, transparent, var(--color-coral-10), transparent);
-        content: '';
-        inset: 0;
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        transition: opacity var(--duration-fast) ease;
-        z-index: -1;
     }
 
     .contact__channel-value {

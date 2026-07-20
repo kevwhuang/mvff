@@ -59,7 +59,7 @@ import { LINKS } from '@lib/constants';
         </p>
         <div class="hero__actions hero__reveal flex flex-wrap items-center gap-4">
             <a
-                class="button button--disabled button--primary"
+                class="button button--primary"
                 aria-disabled="true"
                 href={LINKS.posh}
                 rel="noopener"
@@ -69,7 +69,7 @@ import { LINKS } from '@lib/constants';
                 Buy Tickets
             </a>
             <a
-                class="button button--disabled"
+                class="button"
                 aria-disabled="true"
                 href={LINKS.sponsor}
                 rel="noopener"
@@ -78,9 +78,6 @@ import { LINKS } from '@lib/constants';
             >
                 Sponsor Us
             </a>
-        </div>
-        <div class="hero__clock hero__reveal hidden px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none">
-            <span>That's a wrap.</span>
         </div>
     </div>
 </section>
@@ -103,10 +100,6 @@ import { LINKS } from '@lib/constants';
         content: '';
         inset: 0;
         position: absolute;
-    }
-
-    .hero__clock {
-        font-size: 14px;
     }
 
     .hero__content {
@@ -224,10 +217,6 @@ import { LINKS } from '@lib/constants';
             margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
         }
 
-        .hero__clock {
-            display: inline-flex;
-        }
-
         .hero__countdown {
             display: none;
         }
@@ -257,7 +246,7 @@ import { LINKS } from '@lib/constants';
     import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
     function initHero(signal: AbortSignal) {
-        initDisabledLinks('.button--disabled', signal);
+        initDisabledLinks('.button[aria-disabled="true"]', signal);
 
         const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 

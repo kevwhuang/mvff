@@ -6,8 +6,6 @@ const PAGES = [
     { name: 'home', path: '/' },
     { name: 'info', path: '/info' },
     { name: 'team', path: '/team' },
-    { name: 'gallery', path: '/gallery' },
-    { name: 'contact', path: '/contact' },
     { name: 'not found', path: '/this-page-does-not-exist' },
 ] as const;
 

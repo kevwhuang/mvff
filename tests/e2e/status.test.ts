@@ -8,8 +8,9 @@ const ASSETS = [
     { path: '/favicon.png', type: 'image/png' },
 ] as const;
 
+const DELETED_PATHS = ['/contact', '/gallery'] as const;
 const DIST = join(process.cwd(), 'dist');
-const PAGE_PATHS = ['/', '/info', '/team', '/gallery', '/contact'] as const;
+const PAGE_PATHS = ['/', '/info', '/team'] as const;
 const SECURITY_HEADERS = {
     'content-security-policy': 'default-src \'self\'',
     'referrer-policy': 'strict-origin-when-cross-origin',
@@ -31,6 +32,15 @@ test.describe('pages', () => {
 
         expect(response.status()).toBe(404);
         expect(response.headers()['content-type']).toContain('text/html');
+    });
+
+    test('returns 404 for the retired contact and gallery routes', async ({ request }) => {
+        for (const path of DELETED_PATHS) {
+            const response = await request.get(path, { maxRedirects: 0 });
+
+            expect(response.status(), path).toBe(404);
+            expect(response.headers()['content-type'], path).toContain('text/html');
+        }
     });
 
     test('serves a trailing-slash path directly', async ({ request }) => {

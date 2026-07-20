@@ -12,8 +12,8 @@ describe('Loader', () => {
         html = await container.renderToString(Loader);
     });
 
-    test('renders the loader section hidden from assistive tech', () => {
-        expect(html).toMatch(/<section class="loader[^"]*" aria-hidden="true"/);
+    test('renders the loader overlay hidden from assistive tech', () => {
+        expect(html).toMatch(/<div class="loader[^"]*" aria-hidden="true"/);
     });
 
     test('renders the pulsing logo mark eagerly with an empty alt', () => {
@@ -22,7 +22,7 @@ describe('Loader', () => {
     });
 
     test('renders the loading caption and progress bar', () => {
-        expect(html).toMatch(/<div class="loader__text[^"]*"[^>]*>Loading reel &middot; 2026<\/div>/);
+        expect(html).toMatch(/<p class="loader__text[^"]*"[^>]*>Loading reel<\/p>/);
         expect(html).toMatch(/class="loader__progress[^"]*"/);
     });
 });

@@ -13,8 +13,8 @@ describe('Tagline', () => {
     });
 
     test('labels the section by its heading for assistive tech', () => {
-        expect(html).toMatch(/<section class="tagline[^"]*" aria-labelledby="tagline-title"/);
-        expect(html).toMatch(/<h2 id="tagline-title"[^>]*class="tagline__main[^"]*"[^>]*data-typewriter/);
+        expect(html).toMatch(/<section class="section tagline[^"]*" aria-labelledby="tagline-title"/);
+        expect(html).toMatch(/<h2 id="tagline-title" class="tagline__title[^"]*"[^>]*data-typewriter/);
     });
 
     test('renders the screens word as a typewriter target', () => {
@@ -22,10 +22,10 @@ describe('Tagline', () => {
     });
 
     test('renders the stage word as a typewriter target', () => {
-        expect(html).toMatch(/<span class="tagline__stage" data-typewriter-word[^>]*>\s*Stage\s*<\/span>/);
+        expect(html).toMatch(/<span class="tagline__stage[^"]*" data-typewriter-word[^>]*>\s*Stage\s*<\/span>/);
     });
 
     test('separates the words with a decorative arrow', () => {
-        expect(html).toMatch(/<span class="tagline__arrow"[^>]*>&rarr;<\/span>/);
+        expect(html).toMatch(/<span class="tagline__arrow[^"]*"[^>]*>&rarr;<\/span>/);
     });
 });

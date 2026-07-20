@@ -1,5 +1,3 @@
-export const EVENT_START = '2026-07-18T19:00:00-05:00';
-
 export const LINKS = {
     calendly: 'https://calendly.com/madewellanna99/30min',
     email: 'mailto:contact@atxmusicvideofilmfestival.com',
@@ -11,6 +9,8 @@ export const LINKS = {
     sponsor: 'https://form.jotform.com/261316235757055',
 } as const;
 
+export const LOADER_SHOWN_KEY = 'mvff-loader-shown';
+
 export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 export const ROUTES = [
@@ -19,7 +19,3 @@ export const ROUTES = [
     { href: '/team', label: 'Team' },
     { href: 'https://shop.atxmusicvideofilmfestival.com', label: 'Store' },
 ] as const;
-
-export const STYLES = {
-    night: '#0a0a0f',
-} as const;
