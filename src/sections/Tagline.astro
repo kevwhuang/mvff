@@ -6,6 +6,7 @@
         <h2
             id="tagline-title"
             class="tagline__title uppercase select-none"
+            aria-label="Screens to Stage"
             data-typewriter
         >
             <span
@@ -81,6 +82,8 @@
 </style>
 
 <script>
+    import { REDUCED_MOTION_QUERY } from '@lib/constants';
+
     interface TypewriterState {
         characterIndex: number;
         container: HTMLElement;
@@ -102,6 +105,12 @@
         typewriterTimeouts = [];
     }
 
+    function handleBeforeSwap() {
+        clearTypewriterTimeouts();
+        typewriterObserver?.disconnect();
+        controller?.abort();
+    }
+
     function initTypewriter() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
@@ -115,7 +124,7 @@
         const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
 
         const originalTexts = Array.from(words, element => element.textContent || '');
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion = window.matchMedia(REDUCED_MOTION_QUERY).matches;
 
         if (container.hasAttribute('data-typed') || prefersReducedMotion) {
             container.setAttribute('data-typed', '');
@@ -185,11 +194,7 @@
         typeCharacter(state);
     }
 
-    document.addEventListener('astro:before-swap', () => {
-        clearTypewriterTimeouts();
-        typewriterObserver?.disconnect();
-        controller?.abort();
-    });
+    document.addEventListener('astro:before-swap', handleBeforeSwap);
 
     document.addEventListener('astro:page-load', initTypewriter);
 </script>

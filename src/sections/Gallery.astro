@@ -10,18 +10,16 @@ const FIGURES = [
         alt: 'The 2026 Austin Music Video Film Festival team posed together in a studio, standing shoulder to shoulder in mostly black outfits against a soft gray backdrop.',
         image: teamStanding,
         label: 'The Team, Standing',
-        year: '2026',
     },
     {
         alt: 'Members of the 2026 Austin Music Video Film Festival team gathered close to the studio floor, seated and leaning together for a relaxed group portrait.',
         image: teamSeated,
         label: 'The Team, Seated',
-        year: '2026',
     },
 ] as const;
 
 const GRID_WIDTH = 920;
-const LIGHTBOX_WIDTH = 1_600;
+const LIGHTBOX_WIDTH = 2_048;
 
 const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
     const renderedImage = await getImage({ src: figure.image, width: LIGHTBOX_WIDTH });
@@ -31,11 +29,15 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
 ---
 
 <section
+    id="gallery"
     class="gallery section"
     aria-labelledby="gallery-title"
 >
     <div class="shell">
-        <SectionHeader headingId="gallery-title">
+        <SectionHeader
+            headingId="gallery-title"
+            level="h2"
+        >
             Gallery
         </SectionHeader>
         <ul
@@ -47,12 +49,11 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
                 <li class="gallery__figure self-center">
                     <figure class="flex flex-col gap-3">
                         <button
-                            class="gallery__frame aspect-3/2 bg-navy block border border-cream-15 overflow-hidden p-0 relative w-full"
+                            class="gallery__frame aspect-3/2 block overflow-hidden relative w-full p-0 border border-cream-15 bg-navy"
                             aria-label={`View ${figure.label}`}
                             data-gallery-alt={figure.alt}
                             data-gallery-label={figure.label}
                             data-gallery-source={figure.source}
-                            data-gallery-year={figure.year}
                             type="button"
                         >
                             <Image
@@ -64,9 +65,8 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
                                 width={GRID_WIDTH}
                             />
                         </button>
-                        <figcaption class="gallery__meta flex font-mono justify-between text-cream-60 uppercase">
+                        <figcaption class="gallery__meta flex font-mono uppercase text-cream-60">
                             <span>{figure.label}</span>
-                            <time class="gallery__year text-coral" datetime={figure.year}>{figure.year}</time>
                         </figcaption>
                     </figure>
                 </li>
@@ -74,15 +74,15 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         </ul>
     </div>
     <div
-        class="gallery__lightbox backdrop-blur-sm bg-black-95 cursor-zoom-out fixed grid inset-0 place-items-center z-200"
+        class="gallery__lightbox fixed grid inset-0 place-items-center z-200 bg-black-95 backdrop-blur-sm cursor-zoom-out"
         aria-hidden="true"
         aria-labelledby="lightbox-title"
         aria-modal="true"
         role="dialog"
     >
-        <div class="gallery__lightbox-inner flex flex-col gap-3 relative cursor-default">
+        <div class="gallery__lightbox-inner flex flex-col relative gap-3 cursor-default">
             <button
-                class="gallery__lightbox-close absolute bg-navy border border-cream-15 flex font-mono items-center justify-center leading-none right-3 size-9 text-cream text-xl top-3"
+                class="gallery__lightbox-close absolute flex items-center justify-center right-3 top-3 size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream"
                 aria-label="Close image"
                 type="button"
             >
@@ -94,10 +94,9 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
             >
                 &nbsp;
             </h2>
-            <img class="gallery__lightbox-image aspect-3/2 block border border-cream-15 object-cover w-full" alt="" />
-            <div class="gallery__lightbox-meta flex font-mono justify-between text-cream-60 uppercase">
+            <img class="gallery__lightbox-image aspect-3/2 block object-cover w-full border border-cream-15" alt="" />
+            <div class="gallery__lightbox-meta flex justify-between font-mono uppercase text-cream-60">
                 <span class="gallery__lightbox-label" />
-                <span class="gallery__lightbox-year text-coral" />
             </div>
         </div>
     </div>
@@ -113,24 +112,8 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         transition: transform var(--duration-base) ease;
     }
 
-    .gallery__frame:focus-visible,
-    .gallery__frame:hover {
-        transform: scale(1.01);
-    }
-
     .gallery__frame:active {
         transform: scale(0.99);
-    }
-
-    .gallery__frame:focus-visible .gallery__image,
-    .gallery__frame:hover .gallery__image {
-        filter: grayscale(0) contrast(1.08);
-        transform: scale(1.03);
-    }
-
-    .gallery__frame:focus-visible::after,
-    .gallery__frame:hover::after {
-        border-color: var(--color-coral);
     }
 
     .gallery__frame::after {
@@ -180,8 +163,7 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
             color var(--duration-fast) ease;
     }
 
-    .gallery__lightbox-close:active,
-    .gallery__lightbox-close:hover {
+    .gallery__lightbox-close:active {
         border-color: var(--color-coral);
         color: var(--color-coral);
     }
@@ -209,6 +191,29 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         letter-spacing: 0.16em;
     }
 
+    @media (hover: hover) {
+        .gallery__frame:focus-visible,
+        .gallery__frame:hover {
+            transform: scale(1.01);
+        }
+
+        .gallery__frame:focus-visible .gallery__image,
+        .gallery__frame:hover .gallery__image {
+            filter: grayscale(0) contrast(1.08);
+            transform: scale(1.03);
+        }
+
+        .gallery__frame:focus-visible::after,
+        .gallery__frame:hover::after {
+            border-color: var(--color-coral);
+        }
+
+        .gallery__lightbox-close:hover {
+            border-color: var(--color-coral);
+            color: var(--color-coral);
+        }
+    }
+
     @media (max-width: 768px) {
         .gallery__figure {
             width: 92%;
@@ -229,7 +234,8 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
 </style>
 
 <script>
-    let controller: AbortController | undefined;
+    import { registerPageScript } from '@lib/utils';
+
     let lastTrigger: HTMLElement | undefined;
     let lightbox: HTMLElement | null = null;
 
@@ -254,17 +260,19 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         }
     }
 
-    function initGallery() {
-        controller?.abort();
+    function handleTeardown() {
         document.documentElement.style.overflow = '';
-        controller = new AbortController();
+    }
+
+    function initGallery(signal: AbortSignal) {
+        lastTrigger = undefined;
         lightbox = document.querySelector<HTMLElement>('.gallery__lightbox');
+        signal.addEventListener('abort', handleTeardown);
 
         if (!lightbox) return;
 
         const closeButton = lightbox.querySelector('.gallery__lightbox-close');
         const inner = lightbox.querySelector('.gallery__lightbox-inner');
-        const { signal } = controller;
 
         document.querySelectorAll<HTMLElement>('.gallery__frame').forEach((frame) => {
             frame.addEventListener('click', () => openLightbox(frame), { signal });
@@ -282,15 +290,13 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         const image = lightbox.querySelector<HTMLImageElement>('.gallery__lightbox-image');
         const label = lightbox.querySelector<HTMLElement>('.gallery__lightbox-label');
         const title = lightbox.querySelector<HTMLElement>('#lightbox-title');
-        const year = lightbox.querySelector<HTMLElement>('.gallery__lightbox-year');
 
-        if (!image || !label || !title || !year) return;
+        if (!image || !label || !title) return;
 
         image.src = frame.dataset.gallerySource ?? '';
         image.alt = frame.dataset.galleryAlt ?? '';
         label.textContent = frame.dataset.galleryLabel || '';
-        title.textContent = frame.dataset.galleryAlt || '';
-        year.textContent = frame.dataset.galleryYear || '';
+        title.textContent = frame.dataset.galleryLabel || '';
         document.documentElement.style.overflow = 'hidden';
         lastTrigger = frame;
         lightbox.setAttribute('data-open', '');
@@ -298,10 +304,5 @@ const resolvedFigures = await Promise.all(FIGURES.map(async (figure) => {
         lightbox.querySelector<HTMLElement>('.gallery__lightbox-close')?.focus();
     }
 
-    document.addEventListener('astro:before-swap', () => {
-        document.documentElement.style.overflow = '';
-        controller?.abort();
-    });
-
-    document.addEventListener('astro:page-load', initGallery);
+    registerPageScript(initGallery);
 </script>

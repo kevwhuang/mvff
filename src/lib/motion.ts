@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { REDUCED_MOTION_QUERY } from '@lib/constants';
 
 const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-const SCROLL_DURATION = 0.6;
+const SCROLL_DURATION = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 const SCROLL_START = 'top 85%';
@@ -59,26 +59,31 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
     }
 
     elements.forEach((element) => {
-        const from = { opacity: 0, y: SCROLL_OFFSET };
+        const fromState = { opacity: 0, y: SCROLL_OFFSET };
         const stagger = Number.parseFloat(element.dataset.scrollStagger || '0');
 
-        const to: gsap.TweenVars = {
+        const toState: gsap.TweenVars = {
             duration: SCROLL_DURATION,
             ease: SCROLL_EASE,
             opacity: 1,
-            scrollTrigger: {
-                start: SCROLL_START,
-                trigger: element,
-            },
             y: 0,
         };
 
         if (stagger > 0) {
             gsap.set(element, { opacity: 1 });
-            to.stagger = stagger;
-            gsap.fromTo(element.children, from, to);
+            gsap.set(element.children, fromState);
+            ScrollTrigger.batch(Array.from(element.children), {
+                onEnter: batch => gsap.fromTo(batch, fromState, { ...toState, stagger }),
+                start: SCROLL_START,
+            });
         } else {
-            gsap.fromTo(element, from, to);
+            gsap.fromTo(element, fromState, {
+                ...toState,
+                scrollTrigger: {
+                    start: SCROLL_START,
+                    trigger: element,
+                },
+            });
         }
     });
 }
@@ -96,4 +101,3 @@ function updateParallax() {
 gsap.registerPlugin(ScrollTrigger);
 window.addEventListener('scroll', handleScroll, { passive: true });
 reducedMotionQuery.addEventListener('change', initMotion);
-document.addEventListener('astro:after-swap', () => initParallax(reducedMotionQuery.matches));

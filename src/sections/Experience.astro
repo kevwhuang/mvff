@@ -7,7 +7,7 @@ const HIGHLIGHTS = [
     { description: 'Ten jury awards and the Spotlight Partner Award, called at 11:45 PM \u2014 the directors behind the year\'s best videos, up on the stage.', title: 'Awards' },
     { description: 'A raffle and a filmmaker Q&A after every block \u2014 directors and artists in conversation with hosts Kay Cote, Lauren, and Carmela.', title: 'Q&A Panel' },
     { description: 'Live sets from nominee artists all night \u2014 flash mobs and a fire performer lighting up the floor.', title: 'Live Music' },
-    { description: 'Glamour, then chlorine. When the awards wrap, the winners take the plunge off the open-air deck \u2014 the last shot of the night, dressed to be seen.', title: 'Pool Party' },
+    { description: 'Glamour, then chlorine. When the awards wrap, the winners take the plunge off the pool deck \u2014 the last shot of the night, dressed to be seen.', title: 'Pool Party' },
 ] as const;
 ---
 
@@ -29,8 +29,13 @@ const HIGHLIGHTS = [
             data-scroll-stagger="0.08"
         >
             {HIGHLIGHTS.map((highlight, index) => (
-                <li class="experience__highlight grid items-start relative isolate border-b border-cream-15">
-                    <span class="experience__highlight-number font-mono text-cream-60 select-none">/ {pad(index + 1)}</span>
+                <li class="experience__highlight grid items-center relative isolate border-b border-cream-15">
+                    <span
+                        class="experience__highlight-number font-mono text-cream-60 select-none"
+                        aria-hidden="true"
+                    >
+                        / {pad(index + 1)}
+                    </span>
                     <h3 class="experience__highlight-title uppercase">{highlight.title}</h3>
                     <p class="experience__highlight-description font-serif text-cream-60">{highlight.description}</p>
                 </li>
@@ -46,17 +51,8 @@ const HIGHLIGHTS = [
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px) 0;
     }
 
-    .experience__highlight:first-child {
-        border-top: 1px solid var(--color-cream-15);
-    }
-
-    .experience__highlight:hover::after {
-        opacity: 1;
-    }
-
-    .experience__highlight:hover .experience__highlight-title {
-        color: var(--color-coral);
-        transform: translateX(8px);
+    .experience__highlight:last-child {
+        border-bottom: none;
     }
 
     .experience__highlight::after {
@@ -86,6 +82,17 @@ const HIGHLIGHTS = [
         transition:
             color var(--duration-fast) ease,
             transform var(--duration-fast) ease;
+    }
+
+    @media (hover: hover) {
+        .experience__highlight:hover .experience__highlight-title {
+            color: var(--color-coral);
+            transform: translateX(8px);
+        }
+
+        .experience__highlight:hover::after {
+            opacity: 1;
+        }
     }
 
     @media (max-width: 768px) {

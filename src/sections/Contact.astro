@@ -4,20 +4,23 @@ import { LINKS } from '@lib/constants';
 import { pad } from '@lib/utils';
 
 const CHANNELS = [
-    { href: LINKS.instagram, isExternal: true, isPrimary: false, label: 'Instagram', value: '@atxmvff' },
-    { href: LINKS.email, isExternal: false, isPrimary: true, label: 'Email', value: 'contact@atxmusicvideofilmfestival.com' },
-    { href: LINKS.phone, isExternal: false, isPrimary: false, label: 'Phone', value: '(281) 466-9387' },
-    { href: LINKS.calendly, isExternal: true, isPrimary: false, label: 'Call', value: 'Calendly' },
+    { href: LINKS.instagram, isExternal: true, label: 'Instagram', value: '@atxmvff' },
+    { href: LINKS.email, isExternal: false, label: 'Email', value: 'contact@atxmusicvideofilmfestival.com' },
+    { href: LINKS.phone, isExternal: false, label: 'Phone', value: '(281) 466-9387' },
 ] as const;
 ---
 
 <section
+    id="contact"
     class="contact section"
     aria-labelledby="contact-title"
 >
     <div class="shell">
-        <SectionHeader headingId="contact-title">
-            Contact
+        <SectionHeader
+            headingId="contact-title"
+            level="h2"
+        >
+            Contact Us
         </SectionHeader>
         <ol
             class="contact__channels list-none"
@@ -25,18 +28,30 @@ const CHANNELS = [
             data-scroll-stagger="0.08"
         >
             {CHANNELS.map((channel, index) => (
-                <li class:list={['contact__channel border-b border-cream-15', { 'contact__channel--primary': channel.isPrimary }]}>
+                <li class="contact__channel border-b border-cream-15">
                     <a
-                        class="contact__channel-link grid isolate items-baseline relative no-underline text-cream"
+                        class="contact__channel-link grid items-center relative isolate no-underline text-cream"
                         href={channel.href}
                         rel={channel.isExternal ? 'noopener' : undefined}
                         target={channel.isExternal ? '_blank' : undefined}
                     >
-                        <span class="contact__channel-index font-mono text-cream-60 select-none">/ {pad(index + 1)}</span>
+                        <span
+                            class="contact__channel-index font-mono text-cream-60 select-none"
+                            aria-hidden="true"
+                        >
+                            / {pad(index + 1)}
+                        </span>
                         <span class="contact__channel-label font-display uppercase">{channel.label}</span>
                         <span class="contact__channel-value flex items-baseline min-w-0 gap-2 font-serif italic wrap-anywhere text-cream-60">
                             <span class="min-w-0">{channel.value.split('@').flatMap((part, index) => (index === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
-                            {channel.isExternal && <span class="contact__channel-cue not-italic" aria-hidden="true">&rarr;</span>}
+                            {channel.isExternal && (
+                                <span
+                                    class="contact__channel-cue not-italic"
+                                    aria-hidden="true"
+                                >
+                                    &rarr;
+                                </span>
+                            )}
                         </span>
                     </a>
                 </li>
@@ -48,14 +63,6 @@ const CHANNELS = [
 <style>
     .contact__channel:last-child {
         border-bottom: none;
-    }
-
-    .contact__channel--primary .contact__channel-index {
-        color: var(--color-coral);
-    }
-
-    .contact__channel--primary .contact__channel-label {
-        color: var(--color-coral);
     }
 
     .contact__channel-index {
@@ -77,19 +84,16 @@ const CHANNELS = [
         padding: clamp(24px, calc(20px + 1.25vw), 36px) 0;
     }
 
-    .contact__channel-link:active .contact__channel-label,
-    .contact__channel-link:hover .contact__channel-label {
+    .contact__channel-link:active .contact__channel-label {
         color: var(--color-coral);
         transform: translateX(8px);
     }
 
-    .contact__channel-link:active .contact__channel-value,
-    .contact__channel-link:hover .contact__channel-value {
+    .contact__channel-link:active .contact__channel-value {
         color: var(--color-cream);
     }
 
-    .contact__channel-link:active::after,
-    .contact__channel-link:hover::after {
+    .contact__channel-link:active::after {
         opacity: 1;
     }
 
@@ -110,6 +114,21 @@ const CHANNELS = [
         line-height: 1.4;
         text-align: right;
         transition: color var(--duration-fast) ease;
+    }
+
+    @media (hover: hover) {
+        .contact__channel-link:hover .contact__channel-label {
+            color: var(--color-coral);
+            transform: translateX(8px);
+        }
+
+        .contact__channel-link:hover .contact__channel-value {
+            color: var(--color-cream);
+        }
+
+        .contact__channel-link:hover::after {
+            opacity: 1;
+        }
     }
 
     @media (max-width: 768px) {

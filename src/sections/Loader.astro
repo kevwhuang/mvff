@@ -20,7 +20,7 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
                 width={160}
             />
         </div>
-        <p class="loader__text font-mono uppercase text-cream-60 select-none">Loading reel &middot; 2026</p>
+        <p class="loader__text font-mono uppercase text-cream-60 select-none">Loading reel</p>
         <div class="loader__bar overflow-hidden relative h-0.5 w-full bg-cream-15"><div class="loader__progress absolute inset-0 bg-coral" /></div>
     </div>
 </div>
@@ -104,6 +104,12 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
 
         if (!loader) return;
 
+        function handleLoaderKeydown(event) {
+            if (event.key === 'Tab') event.preventDefault();
+        }
+
+        document.addEventListener('keydown', handleLoaderKeydown);
+
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         let hasShownLoader;
@@ -116,6 +122,8 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
 
         if (hasShownLoader || prefersReducedMotion) {
             loader.setAttribute('data-hidden', '');
+
+            document.removeEventListener('keydown', handleLoaderKeydown);
 
             return;
         }
@@ -135,6 +143,8 @@ import logo from '@images/logos/austin_music_video_film_festival.webp';
 
             setTimeout(() => {
                 loader.setAttribute('data-hidden', '');
+
+                document.removeEventListener('keydown', handleLoaderKeydown);
 
                 try {
                     sessionStorage.setItem(LOADER_SHOWN_KEY, '1');

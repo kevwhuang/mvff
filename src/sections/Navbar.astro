@@ -3,10 +3,10 @@ import { Image } from 'astro:assets';
 
 import IconMenu from '@components/IconMenu.astro';
 import logo from '@images/logos/austin_music_video_film_festival.webp';
-import { LINKS, ROUTES } from '@lib/constants';
-import { externalLinkProps } from '@lib/utils';
+import { ROUTES } from '@lib/constants';
+import { externalLinkProps, normalizePath } from '@lib/utils';
 
-const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
+const isHome = normalizePath(Astro.url.pathname) === '/';
 ---
 
 <header class="navbar sticky top-0 z-50 border-b border-cream-15">
@@ -29,13 +29,15 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
             aria-label="Primary"
         >
             <button
-                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 bg-navy text-cream font-mono text-xl leading-none"
+                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream"
                 aria-label="Close navigation"
                 type="button"
             >
                 &times;
             </button>
-            <ul class="navbar__menu-list flex items-center justify-center list-none gap-1">
+            <ul
+                class="navbar__menu-list flex items-center justify-center gap-1 list-none"
+            >
                 {ROUTES.map((route) => {
                     const isDisabled = route.label === 'Store';
 
@@ -54,14 +56,6 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
                     );
                 })}
             </ul>
-            <a
-                class="button button--primary navbar__menu-tickets no-underline select-none"
-                href={LINKS.posh}
-                rel="noopener"
-                target="_blank"
-            >
-                Buy Tickets
-            </a>
         </nav>
         <div class="flex items-center justify-self-end gap-3">
             <div
@@ -69,13 +63,13 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
                 aria-hidden="true"
                 data-visible={isHome ? 'false' : 'true'}
             >
-                <span class="navbar__pulse inline-block size-1.5 rounded-full bg-red" aria-hidden="true" />
+                <span class="navbar__pulse inline-block size-1.5 rounded-full bg-red" />
                 <span>00:00:00:00</span>
             </div>
             <button
                 class="navbar__icon-button navbar__toggle hidden place-items-center relative size-9 border border-cream-15 bg-navy text-cream"
                 aria-expanded="false"
-                aria-label="Toggle navigation"
+                aria-label="Open navigation"
                 type="button"
             >
                 <IconMenu />
@@ -127,8 +121,7 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
             color var(--duration-fast) ease;
     }
 
-    .navbar__icon-button:active,
-    .navbar__icon-button:hover {
+    .navbar__icon-button:active {
         border-color: var(--color-coral);
         color: var(--color-coral);
     }
@@ -172,10 +165,6 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
         color: var(--color-cream);
     }
 
-    .navbar__menu-link[aria-current='page']:hover {
-        color: var(--color-coral);
-    }
-
     .navbar__menu-link[aria-current='page']::before {
         opacity: 1;
     }
@@ -186,12 +175,30 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
         opacity: 0.4;
     }
 
-    .navbar__menu-tickets {
-        display: none;
+    .navbar__menu-link[aria-disabled='true']:active,
+    .navbar__menu-link[aria-disabled='true']:hover {
+        color: var(--color-cream-60);
     }
 
     .navbar__pulse {
-        animation: live-dot__pulse var(--duration-pulse) ease-in-out infinite;
+        animation: navbar__pulse var(--duration-pulse) ease-in-out infinite;
+    }
+
+    @media (hover: hover) {
+        .navbar__icon-button:hover {
+            border-color: var(--color-coral);
+            color: var(--color-coral);
+        }
+
+        .navbar__menu-link[aria-current='page']:hover {
+            color: var(--color-coral);
+        }
+    }
+
+    @media (hover: hover) and (max-width: 1024px) {
+        .navbar__menu-link:hover {
+            color: var(--color-coral);
+        }
     }
 
     @media (max-width: 1024px) {
@@ -244,8 +251,7 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
             text-transform: none;
         }
 
-        .navbar__menu-link:active,
-        .navbar__menu-link:hover {
+        .navbar__menu-link:active {
             color: var(--color-coral);
         }
 
@@ -272,12 +278,6 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
             overscroll-behavior: contain;
         }
 
-        .navbar__menu-tickets {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
-
         .navbar__toggle {
             display: grid;
         }
@@ -285,7 +285,7 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
 </style>
 
 <script>
-    let controller: AbortController | undefined;
+    import { initDisabledLinks, normalizePath, registerPageScript } from '@lib/utils';
 
     function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
         document.documentElement.style.overflow = '';
@@ -306,6 +306,10 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
         }
     }
 
+    function handleTeardown() {
+        document.documentElement.style.overflow = '';
+    }
+
     function handleToggleClick(menu: HTMLElement, toggle: HTMLElement) {
         if (menu.hasAttribute('data-open')) {
             closeMenu(menu, toggle);
@@ -314,18 +318,21 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
         }
     }
 
-    function initNavbar() {
-        controller?.abort();
-        controller = new AbortController();
+    function initNavbar(signal: AbortSignal) {
+        signal.addEventListener('abort', handleTeardown);
 
-        const { signal } = controller;
         const menu = document.querySelector<HTMLElement>('.navbar__menu');
         const toggle = document.querySelector<HTMLElement>('.navbar__toggle');
 
         if (menu && toggle) {
             const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close');
 
+            const desktopQuery = window.matchMedia('(min-width: 1025px)');
+
             closeButton?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+            desktopQuery.addEventListener('change', (event) => {
+                if (event.matches && menu.hasAttribute('data-open')) closeMenu(menu, toggle);
+            }, { signal });
             document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
             toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
         }
@@ -345,9 +352,7 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
             requestAnimationFrame(() => countdownChip.setAttribute('data-observing', ''));
         }
 
-        document.querySelectorAll('.navbar__menu-link[aria-disabled="true"]').forEach((link) => {
-            link.addEventListener('click', event => event.preventDefault(), { signal });
-        });
+        initDisabledLinks('.navbar__menu-link[aria-disabled="true"]', signal);
 
         const currentPath = normalizePath(window.location.pathname);
 
@@ -360,10 +365,6 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
                 link.removeAttribute('aria-current');
             }
         });
-    }
-
-    function normalizePath(path: string) {
-        return path.replace(/\/$/, '') || '/';
     }
 
     function openMenu(menu: HTMLElement, toggle: HTMLElement) {
@@ -379,7 +380,7 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
     }
 
     function trapFocus(event: KeyboardEvent, menu: HTMLElement) {
-        const focusables = menu.querySelectorAll<HTMLElement>('a, button');
+        const focusables = menu.querySelectorAll<HTMLElement>('a:not([tabindex="-1"]), button');
 
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
@@ -387,16 +388,11 @@ const isHome = (Astro.url.pathname.replace(/\/$/, '') || '/') === '/';
         if (document.activeElement === first && event.shiftKey) {
             event.preventDefault();
             last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
+        } else if (document.activeElement === last && !event.shiftKey) {
             event.preventDefault();
             first.focus();
         }
     }
 
-    document.addEventListener('astro:before-swap', () => {
-        document.documentElement.style.overflow = '';
-        controller?.abort();
-    });
-
-    document.addEventListener('astro:page-load', initNavbar);
+    registerPageScript(initNavbar);
 </script>

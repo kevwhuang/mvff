@@ -14,9 +14,9 @@ const TEAM = [
     { image: anna, name: 'Anna', role: 'Founder & Executive Producer' },
     { name: 'Ashleigh', role: 'Social Media Marketing Director' },
     { image: jyme, name: 'Jyme', role: 'Film Programming Director' },
-    { image: dan, name: 'Dan', role: 'Operations Production Manager' },
+    { image: dan, name: 'Dan', role: 'Operations & Production Manager' },
     { image: amiiri, name: 'Amiiri', role: 'PR & Outreach Director' },
-    { image: rocky, name: 'Rocky', role: 'Sponsorship Admin' },
+    { image: rocky, name: 'Rocky', role: 'Sponsorship Administrator' },
     { image: greta, name: 'Greta', role: 'Content Strategist' },
     { name: 'Marissa', role: 'Graphics Manager' },
     { name: 'Jasmine', role: 'Executive Coordinator' },
@@ -30,7 +30,7 @@ const TEAM = [
 >
     <div class="shell">
         <SectionHeader headingId="team-title">
-            2026 Team
+            Meet the Team
         </SectionHeader>
         <ul
             class="team__grid grid grid-cols-5 list-none"
@@ -45,7 +45,7 @@ const TEAM = [
                                 ? (
                                         <Image
                                             class="team__image block object-cover h-full w-full"
-                                            alt={`${member.name}, ${member.role}`}
+                                            alt=""
                                             densities={[1, 2]}
                                             loading="lazy"
                                             src={member.image}
@@ -82,26 +82,6 @@ const TEAM = [
             border-color var(--duration-base) ease,
             box-shadow var(--duration-base) ease,
             transform var(--duration-base) ease;
-    }
-
-    .team__card:hover {
-        border-color: var(--color-coral);
-        box-shadow: 0 24px 48px -16px var(--color-coral-35);
-        transform: translateY(-4px);
-    }
-
-    .team__card:hover .team__image {
-        filter: grayscale(0) brightness(1) contrast(1.05);
-        transform: scale(1.05);
-    }
-
-    .team__card:hover .team__monogram {
-        color: color-mix(in oklab, var(--color-coral) 70%, var(--color-navy));
-        transform: scale(1.05);
-    }
-
-    .team__card:hover .team__role {
-        color: var(--color-coral);
     }
 
     .team__frame::after {
@@ -141,6 +121,28 @@ const TEAM = [
         transition: color var(--duration-fast) ease;
     }
 
+    @media (hover: hover) {
+        .team__card:hover {
+            border-color: var(--color-coral);
+            box-shadow: 0 24px 48px -16px var(--color-coral-35);
+            transform: translateY(-4px);
+        }
+
+        .team__card:hover .team__image {
+            filter: grayscale(0) brightness(1) contrast(1.05);
+            transform: scale(1.05);
+        }
+
+        .team__card:hover .team__monogram {
+            color: color-mix(in oklab, var(--color-coral) 70%, var(--color-navy));
+            transform: scale(1.05);
+        }
+
+        .team__card:hover .team__role {
+            color: var(--color-coral);
+        }
+    }
+
     @media (max-width: 1024px) {
         .team__grid {
             grid-template-columns: repeat(3, 1fr);
@@ -153,7 +155,7 @@ const TEAM = [
         }
 
         .team__monogram {
-            font-size: clamp(128px, calc(48px + 24vw), 240px);
+            font-size: clamp(128px, calc(48px + 25vw), 240px);
         }
     }
 </style>

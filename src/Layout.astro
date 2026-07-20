@@ -112,5 +112,11 @@ const { description, title } = Astro.props;
 <script>
     import { initMotion } from '@lib/motion';
 
-    document.addEventListener('astro:page-load', initMotion);
+    function handlePageLoad() {
+        sessionStorage.setItem('mvff-loader-shown', '1');
+
+        initMotion();
+    }
+
+    document.addEventListener('astro:page-load', handlePageLoad);
 </script>

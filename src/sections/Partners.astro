@@ -8,7 +8,7 @@ const MARQUEE_COPIES = 2;
 ---
 
 <section
-    class="partners section border-y border-cream-15 bg-navy select-none"
+    class="partners section border-cream-15 border-y bg-navy select-none"
     aria-label="Partners"
     data-scroll
 >
@@ -33,7 +33,7 @@ const MARQUEE_COPIES = 2;
                     class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
                     aria-hidden="true"
                 >
-                    <span class="partners__diamond inline-block shrink-0 aspect-square w-3.5 bg-coral rotate-45" />
+                    <span class="partners__diamond aspect-square inline-block shrink-0 w-3.5 bg-coral rotate-45" />
                 </li>,
                 <li
                     class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream-80"
@@ -51,7 +51,7 @@ const MARQUEE_COPIES = 2;
                     class="partners__item flex items-center font-display leading-none uppercase text-cream-80"
                     aria-hidden="true"
                 >
-                    <span class="partners__diamond inline-block shrink-0 aspect-square w-3.5 bg-coral rotate-45" />
+                    <span class="partners__diamond aspect-square inline-block shrink-0 w-3.5 bg-coral rotate-45" />
                 </li>,
             ])}
         </ul>
@@ -90,6 +90,10 @@ const MARQUEE_COPIES = 2;
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .partners__item {
+            white-space: normal;
+        }
+
         .partners__track {
             animation: none;
             flex-wrap: wrap;

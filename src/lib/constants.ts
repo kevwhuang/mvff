@@ -17,8 +17,6 @@ export const ROUTES = [
     { href: '/', label: 'Home' },
     { href: '/info', label: 'Info' },
     { href: '/team', label: 'Team' },
-    { href: '/gallery', label: 'Gallery' },
-    { href: '/contact', label: 'Contact' },
     { href: 'https://shop.atxmusicvideofilmfestival.com', label: 'Store' },
 ] as const;
 

@@ -11,11 +11,11 @@
     --color-cream-10: #f4f1ea1a;
     --color-cream-15: #f4f1ea26;
     --color-cream-35: #f4f1ea59;
+    --color-cream-40: #f4f1ea66;
     --color-cream-60: #f4f1ea99;
     --color-cream-70: #f4f1eab3;
     --color-cream-80: #f4f1eacc;
     --color-cream-85: #f4f1ead9;
-    --color-green: #22c55e;
     --color-navy: #11111a;
     --color-night: #0a0a0f;
     --color-night-40: #0a0a0f66;
@@ -54,16 +54,11 @@
     --duration-twinkle-slower: 10s;
     --header-height: 80px;
     --measure-prose: 560px;
-    --section-padding: clamp(64px, calc(32px + 10vw), 160px);
+    --section-padding: clamp(96px, calc(53.33px + 13.33vw), 224px);
     --section-padding-sm: clamp(48px, calc(37.33px + 3.33vw), 80px);
     --shell-max: 1280px;
     --shell-pad: clamp(20px, calc(8px + 3.75vw), 56px);
     --z-drawer: 60;
-    --z-grain: -10;
-    --z-header: 50;
-    --z-lightbox: 200;
-    --z-loader: 300;
-    --z-vignette: -20;
 }
 
 a,
@@ -84,7 +79,7 @@ h4 {
 html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-height) + 24px);
-    scrollbar-color: var(--color-cream-15) var(--color-night);
+    scrollbar-color: var(--color-cream-40) var(--color-night);
     scrollbar-width: thin;
 }
 
@@ -103,7 +98,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-cream-15);
+    background: var(--color-cream-40);
     border: 2px solid var(--color-night);
 }
 
@@ -129,6 +124,12 @@ html {
 
 [data-scroll] {
     opacity: 0;
+}
+
+[data-scroll]:focus-within,
+[data-scroll] :focus-within {
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,4 +2,4 @@
 
 declare module 'eslint-plugin-jsx-a11y';
 
-type Timer = ReturnType<typeof setInterval>;
+type Timer = ReturnType<typeof setTimeout>;

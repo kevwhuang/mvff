@@ -50,16 +50,16 @@ import { LINKS } from '@lib/constants';
                 densities={[1, 2]}
                 loading="eager"
                 src={logo}
-                width={560}
+                width={640}
             />
         </h1>
         <p class="hero__reveal hero__subtitle font-serif italic text-cream-80">
-            <span class="block">A red carpet premiere for the music video.</span>
-            <span class="block">Bold artists, screens to stage.</span>
+            <span class="block">A red-carpet premiere for the music video.</span>
+            <span class="block">Bold artists, from screen to stage.</span>
         </p>
         <div class="hero__actions hero__reveal flex flex-wrap items-center gap-4">
             <a
-                class="button button--primary button--disabled"
+                class="button button--disabled button--primary"
                 aria-disabled="true"
                 href={LINKS.posh}
                 rel="noopener"
@@ -79,8 +79,8 @@ import { LINKS } from '@lib/constants';
                 Sponsor Us
             </a>
         </div>
-        <div class="hero__clock hero__reveal hidden border border-cream-15 px-4 py-3 font-mono tracking-widest bg-navy text-cream select-none">
-            <span class="hero__clock-over">That's a wrap.</span>
+        <div class="hero__clock hero__reveal hidden px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none">
+            <span>That's a wrap.</span>
         </div>
     </div>
 </section>
@@ -89,7 +89,7 @@ import { LINKS } from '@lib/constants';
     .hero {
         --hero-corner-inset: clamp(12px, calc(5.33px + 2.08vw), 32px);
         --hero-corner-size: clamp(14px, calc(11.33px + 0.83vw), 22px);
-        --hero-stagger: 0.2s;
+        --hero-stagger: var(--duration-fast);
         min-height: calc(100svh - var(--header-height));
     }
 
@@ -160,7 +160,7 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__logo {
-        max-width: clamp(280px, calc(186.67px + 29.17vw), 560px);
+        max-width: clamp(320px, calc(213.33px + 33.33vw), 640px);
     }
 
     .hero__meta {
@@ -254,12 +254,10 @@ import { LINKS } from '@lib/constants';
 
 <script>
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
-    import { registerPageScript } from '@lib/utils';
+    import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
     function initHero(signal: AbortSignal) {
-        document.querySelectorAll('.button--disabled').forEach((button) => {
-            button.addEventListener('click', event => event.preventDefault(), { signal });
-        });
+        initDisabledLinks('.button--disabled', signal);
 
         const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
