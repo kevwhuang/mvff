@@ -5,6 +5,7 @@ import { join } from 'node:path';
 const ASSETS = [
     { path: '/assets/austin_music_video_film_festival_pitch_deck.pdf', type: 'application/pdf' },
     { path: '/og.png', type: 'image/png' },
+    { path: '/favicon.ico', type: 'image/x-icon' },
     { path: '/favicon.png', type: 'image/png' },
 ] as const;
 

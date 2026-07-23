@@ -4,7 +4,7 @@ import { externalLinkProps, normalizePath, pad } from '../../src/lib/utils';
 
 describe('externalLinkProps', () => {
     test('opens https urls in a new tab with a safe rel', () => {
-        expect(externalLinkProps('https://posh.vip/e/austin-texas-music-video-film-festival')).toEqual({ rel: 'noopener', target: '_blank' });
+        expect(externalLinkProps('https://example.com/entry-form')).toEqual({ rel: 'noopener', target: '_blank' });
     });
 
     test('treats plain http urls as external too', () => {

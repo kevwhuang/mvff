@@ -14,12 +14,13 @@ import Starfield from '@components/Starfield.astro';
 
 interface Props {
     description: string;
+    noindex?: boolean;
     title: string;
 }
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const ogImage = `${Astro.site}og.png`;
-const { description, title } = Astro.props;
+const { description, noindex, title } = Astro.props;
+const ogImageUrl = `${Astro.site}og.png`;
 ---
 
 <!doctype html>
@@ -31,20 +32,20 @@ const { description, title } = Astro.props;
         <meta content={description} name="description" />
         <meta content="Kevin Huang" name="author" />
         <meta content="#0a0a0f" name="theme-color" />
-        <meta content="index, follow" name="robots" />
+        <meta content={noindex ? 'noindex, nofollow' : 'index, follow'} name="robots" />
         <link href={canonicalUrl} rel="canonical" />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
         <link href="/favicon.png" rel="icon" type="image/png" />
         <meta content={title} property="og:title" />
         <meta content={description} property="og:description" />
-        <meta content={ogImage} property="og:image" />
+        <meta content={ogImageUrl} property="og:image" />
         <meta content={canonicalUrl} property="og:url" />
         <meta content="Austin Music Video Film Festival" property="og:site_name" />
         <meta content="website" property="og:type" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta content={title} name="twitter:title" />
         <meta content={description} name="twitter:description" />
-        <meta content={ogImage} name="twitter:image" />
+        <meta content={ogImageUrl} name="twitter:image" />
         <script
             is:inline
             set:html={JSON.stringify({

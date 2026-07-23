@@ -9,7 +9,10 @@ import { externalLinkProps, normalizePath } from '@lib/utils';
 const isHome = normalizePath(Astro.url.pathname) === '/';
 ---
 
-<header class="navbar sticky top-0 z-50 border-b border-cream-15">
+<header
+    class="navbar sticky top-0 z-50 border-b border-cream-15"
+    transition:persist="navbar"
+>
     <div class="navbar__inner shell grid items-center h-full">
         <a
             class="navbar__brand active:opacity-80 hover:opacity-80 relative no-underline select-none"
@@ -306,10 +309,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
 
     function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
         document.documentElement.style.overflow = '';
-        menu.removeAttribute('aria-modal');
-        menu.removeAttribute('data-open');
-        menu.removeAttribute('role');
-        toggle.setAttribute('aria-expanded', 'false');
+        resetMenu(menu, toggle);
         toggle.focus();
     }
 
@@ -336,21 +336,28 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
     }
 
     function initNavbar(signal: AbortSignal) {
-        signal.addEventListener('abort', handleTeardown);
-
         const menu = document.querySelector<HTMLElement>('.navbar__menu');
         const toggle = document.querySelector<HTMLElement>('.navbar__toggle');
 
+        signal.addEventListener('abort', handleTeardown);
+
         if (menu && toggle) {
             const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close');
-
             const desktopQuery = window.matchMedia('(min-width: 1025px)');
 
             closeButton?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+
             desktopQuery.addEventListener('change', (event) => {
                 if (event.matches && menu.hasAttribute('data-open')) closeMenu(menu, toggle);
             }, { signal });
+
             document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
+
+            signal.addEventListener('abort', () => {
+                if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
+                else resetMenu(menu, toggle);
+            }, { once: true });
+
             toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
         }
 
@@ -358,7 +365,9 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
         const heroCountdown = document.querySelector('.hero__countdown');
 
         if (countdownChip && heroCountdown) {
-            countdownChip.dataset.visible = 'false';
+            const heroRect = heroCountdown.getBoundingClientRect();
+
+            countdownChip.dataset.visible = heroRect.bottom > 0 && heroRect.top < window.innerHeight ? 'false' : 'true';
 
             const observer = new IntersectionObserver(([entry]) => {
                 countdownChip.dataset.visible = entry.isIntersecting ? 'false' : 'true';
@@ -367,6 +376,8 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
             observer.observe(heroCountdown);
             signal.addEventListener('abort', () => observer.disconnect(), { once: true });
             requestAnimationFrame(() => countdownChip.setAttribute('data-observing', ''));
+        } else if (countdownChip) {
+            countdownChip.dataset.visible = 'true';
         }
 
         initDisabledLinks('.navbar__menu-link[aria-disabled="true"]', signal);
@@ -394,6 +405,13 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
         requestAnimationFrame(() => {
             requestAnimationFrame(() => menu.querySelector<HTMLElement>('.navbar__menu-close')?.focus());
         });
+    }
+
+    function resetMenu(menu: HTMLElement, toggle: HTMLElement) {
+        menu.removeAttribute('aria-modal');
+        menu.removeAttribute('data-open');
+        menu.removeAttribute('role');
+        toggle.setAttribute('aria-expanded', 'false');
     }
 
     function trapFocus(event: KeyboardEvent, menu: HTMLElement) {

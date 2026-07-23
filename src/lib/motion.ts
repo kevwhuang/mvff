@@ -8,19 +8,17 @@ const SCROLL_DURATION = Number.parseFloat(getComputedStyle(document.documentElem
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 const SCROLL_START = 'top 85%';
+const SCROLL_START_RATIO = 0.85;
 const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
 let batchFlushCalls: gsap.core.Animation[] = [];
+let hasRevealed = false;
 
 function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
     if (prefersReducedMotion) {
-        elements.forEach((element) => {
-            element.style.opacity = '1';
-            gsap.set(element, { clearProps: 'transform' });
-            gsap.set(element.children, { clearProps: 'transform', opacity: 1 });
-        });
+        elements.forEach(revealInstantly);
 
         return;
     }
@@ -37,18 +35,30 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
         };
 
         if (stagger > 0) {
+            const children = Array.from(element.children);
+
+            const hidden = hasRevealed ? children.filter(child => !isPastScrollStart(child)) : children;
+            const revealed = hasRevealed ? children.filter(child => isPastScrollStart(child)) : [];
+
             gsap.set(element, { opacity: 1 });
-            gsap.set(element.children, fromState);
+
+            if (revealed.length > 0) gsap.set(revealed, { clearProps: 'transform', opacity: 1 });
+
+            if (hidden.length === 0) return;
+
+            gsap.set(hidden, fromState);
 
             const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
 
-            ScrollTrigger.batch(Array.from(element.children), {
+            ScrollTrigger.batch(hidden, {
                 onEnter: batch => gsap.fromTo(batch, fromState, { ...toState, stagger }),
                 once: true,
                 start: SCROLL_START,
             });
 
             batchFlushCalls.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !timelineBefore.has(tween)));
+        } else if (hasRevealed && isPastScrollStart(element)) {
+            revealInstantly(element);
         } else {
             gsap.fromTo(element, fromState, {
                 ...toState,
@@ -60,6 +70,14 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
             });
         }
     });
+}
+
+function isPastScrollStart(element: Element) {
+    return element.getBoundingClientRect().top < window.innerHeight * SCROLL_START_RATIO;
+}
+
+function revealInstantly(element: HTMLElement) {
+    gsap.set([element, ...element.children], { clearProps: 'transform', opacity: 1 });
 }
 
 gsap.registerPlugin(ScrollTrigger);
@@ -74,4 +92,6 @@ export function initMotion(): void {
 
     initScrollAnimations(prefersReducedMotion);
     initParallax(prefersReducedMotion);
+
+    hasRevealed = true;
 }

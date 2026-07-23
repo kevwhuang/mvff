@@ -59,7 +59,9 @@
 }
 
 a,
-button {
+button,
+label,
+select {
     cursor: pointer;
 }
 
@@ -78,41 +80,52 @@ html {
     scroll-padding-top: calc(var(--header-height) + 24px);
 }
 
+html[data-astro-transition] {
+    scroll-behavior: auto;
+}
+
+:disabled {
+    cursor: not-allowed;
+}
+
 :focus {
     outline: none;
 }
 
-:focus-visible {
+:focus-visible:not(input, select, textarea) {
+    border-radius: 2px;
     outline: 2px solid var(--color-coral);
-    outline-offset: 3px;
+    outline-offset: 2px;
+}
+
+::placeholder {
+    user-select: none;
 }
 
 ::selection {
     background: var(--color-cream-15);
 }
 
-::view-transition-new(root) {
-    animation: page__fade var(--duration-base) ease-out var(--duration-base) both;
-}
-
+::view-transition-group(root),
+::view-transition-new(root),
 ::view-transition-old(root) {
-    animation: page__fade var(--duration-base) ease-out reverse both;
+    animation-duration: var(--duration-base);
 }
 
 [data-scroll] {
     opacity: 0;
 }
 
-[data-scroll]:focus-within,
-[data-scroll] > :focus-within {
+[data-scroll] > :focus-within,
+[data-scroll]:focus-within {
     opacity: 1 !important;
     transform: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
     *,
-    *::before,
-    *::after {
+    *::after,
+    *::before {
         animation-delay: 0s !important;
         animation-duration: 0.01s !important;
         animation-iteration-count: 1 !important;
@@ -121,6 +134,7 @@ html {
         transition-duration: 0.01s !important;
     }
 
+    ::view-transition-group(root),
     ::view-transition-new(root),
     ::view-transition-old(root) {
         animation: none !important;
@@ -128,15 +142,5 @@ html {
 
     [data-scroll] {
         opacity: 1 !important;
-    }
-}
-
-@keyframes page__fade {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
     }
 }

@@ -26,8 +26,9 @@ describe('LINKS', () => {
         for (const value of external) expect(value.endsWith('/')).toBe(false);
     });
 
-    test('points the posh link at the festival event page', () => {
-        expect(LINKS.posh).toBe('https://posh.vip/e/austin-texas-music-video-film-festival');
+    test('keeps the partner and review links as internal placeholders until destinations land', () => {
+        expect(LINKS.partner.startsWith('/')).toBe(true);
+        expect(LINKS.review.startsWith('/')).toBe(true);
     });
 
     test('sends the email link to a festival mailbox', () => {

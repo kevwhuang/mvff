@@ -15,9 +15,13 @@ describe('Starfield', () => {
     });
 
     test('renders a fixed starfield hidden from assistive tech', () => {
-        expect(html).toMatch(/<div class="[^"]*"[^>]*aria-hidden="true"[^>]*>\s*<div class="starfield__layer/);
+        expect(html).toMatch(/<div [^>]*aria-hidden="true"[^>]*>\s*<div class="starfield__layer/);
         expect(html).toContain('inset-0');
         expect(html).toContain('pointer-events-none');
+    });
+
+    test('persists across view transitions', () => {
+        expect(html).toContain('data-astro-transition-persist="starfield"');
     });
 
     test('renders three parallax layers', () => {

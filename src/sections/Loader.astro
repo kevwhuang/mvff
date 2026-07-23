@@ -8,6 +8,7 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
 <div
     class="loader fixed flex inset-0 items-center justify-center z-300 bg-night"
     aria-hidden="true"
+    data-hidden
 >
     <div class="loader__inner flex flex-col items-center">
         <div class="loader__logo grid place-items-center">
@@ -105,12 +106,7 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
         const loader = document.querySelector('.loader');
 
         if (!loader) return;
-
-        function handleLoaderKeydown(event) {
-            if (event.key === 'Tab') event.preventDefault();
-        }
-
-        document.addEventListener('keydown', handleLoaderKeydown);
+        if (document.readyState !== 'loading') return;
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -122,17 +118,27 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
             hasShownLoader = false;
         }
 
-        if (hasShownLoader || prefersReducedMotion) {
-            loader.setAttribute('data-hidden', '');
-
-            document.removeEventListener('keydown', handleLoaderKeydown);
-
-            return;
-        }
+        if (hasShownLoader || prefersReducedMotion) return;
 
         const startTime = performance.now();
 
         let isHidden = false;
+
+        function completeHide() {
+            loader.setAttribute('data-hidden', '');
+
+            document.removeEventListener('keydown', handleLoaderKeydown);
+
+            try {
+                sessionStorage.setItem(loaderShownKey, '1');
+            } catch {
+                return;
+            }
+        }
+
+        function handleLoaderKeydown(event) {
+            if (event.key === 'Tab') event.preventDefault();
+        }
 
         function hide() {
             if (isHidden) return;
@@ -143,33 +149,18 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
 
             const remaining = Math.max(0, MIN_DISPLAY_DURATION - elapsed);
 
-            setTimeout(() => {
-                loader.setAttribute('data-hidden', '');
-
-                document.removeEventListener('keydown', handleLoaderKeydown);
-
-                try {
-                    sessionStorage.setItem(loaderShownKey, '1');
-                } catch {
-                    return;
-                }
-            }, remaining);
+            setTimeout(completeHide, remaining);
         }
 
-        if (document.readyState === 'complete') {
-            hide();
-        } else {
-            window.addEventListener('load', hide, { once: true });
-        }
+        document.addEventListener('astro:before-swap', () => document.removeEventListener('keydown', handleLoaderKeydown), { once: true });
+        document.addEventListener('keydown', handleLoaderKeydown);
+        loader.removeAttribute('data-hidden');
+        window.addEventListener('load', hide, { once: true });
 
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) hide();
         });
     }
-
-    document.addEventListener('astro:after-swap', () => {
-        document.querySelector('.loader')?.setAttribute('data-hidden', '');
-    });
 
     initLoader();
 </script>

@@ -2,9 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
-const POSH_URL = 'https://posh.vip/e/austin-texas-music-video-film-festival';
 const SECTIONS = ['.hero', '.tagline', '.details', '.experience', '.partners'] as const;
-const SPONSOR_URL = 'https://form.jotform.com/261316235757055';
 
 test.describe('index page', () => {
     test.beforeEach(async ({ page }) => {
@@ -20,19 +18,18 @@ test.describe('index page', () => {
         await expect(page.locator('.hero__logo')).toHaveAttribute('alt', 'Austin Music Video Film Festival');
     });
 
-    test('links Buy Tickets to the external ticketing page in a new tab', async ({ page }) => {
-        const tickets = page.locator('.hero__content').getByRole('link', { name: 'Buy Tickets' });
+    test('presents a dimmed Leave a Review call to action', async ({ page }) => {
+        const review = page.locator('.hero__content').getByRole('link', { name: 'Leave a Review' });
 
-        await expect(tickets).toHaveAttribute('href', POSH_URL);
-        await expect(tickets).toHaveAttribute('target', '_blank');
+        await expect(review).toBeVisible();
+        await expect(review).toHaveAttribute('aria-disabled', 'true');
     });
 
-    test('offers a Sponsor Us call to action', async ({ page }) => {
-        const sponsor = page.locator('.hero__content').getByRole('link', { name: 'Sponsor Us' });
+    test('presents a dimmed Future Partnerships call to action', async ({ page }) => {
+        const partner = page.locator('.hero__content').getByRole('link', { name: 'Future Partnerships' });
 
-        await expect(sponsor).toBeVisible();
-        await expect(sponsor).toHaveAttribute('href', SPONSOR_URL);
-        await expect(sponsor).toHaveAttribute('target', '_blank');
+        await expect(partner).toBeVisible();
+        await expect(partner).toHaveAttribute('aria-disabled', 'true');
     });
 
     test('exposes a meta description of the expected length', async ({ page }) => {

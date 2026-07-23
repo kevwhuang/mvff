@@ -47,8 +47,8 @@ describe('Hero', () => {
     });
 
     test('dims the primary and secondary calls to action as unclickable', () => {
-        expect(html).toMatch(new RegExp(`<a class="button button--primary" aria-disabled="true" href="${LINKS.posh}" rel="noopener" tabindex="-1" target="_blank"[^>]*>\\s*Buy Tickets\\s*</a>`));
-        expect(html).toMatch(new RegExp(`<a class="button" aria-disabled="true" href="${LINKS.sponsor}" rel="noopener" tabindex="-1" target="_blank"[^>]*>\\s*Sponsor Us\\s*</a>`));
+        expect(html).toMatch(new RegExp(`<a class="button button--primary" aria-disabled="true" href="${LINKS.review}" tabindex="-1"[^>]*>\\s*Leave a Review\\s*</a>`));
+        expect(html).toMatch(new RegExp(`<a class="button" aria-disabled="true" href="${LINKS.partner}" tabindex="-1"[^>]*>\\s*Future Partnerships\\s*</a>`));
         expect(html).not.toContain('button--disabled');
     });
 });
