@@ -6,7 +6,7 @@ export const LINKS = {
     partner: '/',
     phone: 'tel:+12814669387',
     pitchDeck: '/assets/austin_music_video_film_festival_pitch_deck.pdf',
-    review: '/',
+    review: 'https://g.page/r/CdaZb_RsbGsEEBM/review',
 } as const;
 
 export const LOADER_SHOWN_KEY = 'mvff-loader-shown';
@@ -16,6 +16,6 @@ export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 export const ROUTES = [
     { href: '/', label: 'Home' },
     { href: '/info', label: 'Info' },
-    { href: '/team', label: 'Team' },
+    { href: '/photos', label: 'Photos' },
     { href: 'https://shop.atxmusicvideofilmfestival.com', label: 'Store' },
 ] as const;

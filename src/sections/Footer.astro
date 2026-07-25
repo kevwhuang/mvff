@@ -155,8 +155,7 @@ import { externalLinkProps } from '@lib/utils';
         opacity: 0.4;
     }
 
-    .footer__link[aria-disabled='true']:active,
-    .footer__link[aria-disabled='true']:hover {
+    .footer__link[aria-disabled='true']:active {
         color: var(--color-cream-60);
     }
 
@@ -170,6 +169,10 @@ import { externalLinkProps } from '@lib/utils';
     @media (hover: hover) {
         .footer__link:hover {
             color: var(--color-coral);
+        }
+
+        .footer__link[aria-disabled='true']:hover {
+            color: var(--color-cream-60);
         }
     }
 

@@ -10,6 +10,8 @@ import jyme from '@images/team/jyme.webp';
 import may from '@images/team/may.webp';
 import rocky from '@images/team/rocky.webp';
 
+const EAGER_CARD_COUNT = 5;
+
 const TEAM = [
     { image: anna, name: 'Anna', role: 'Founder & Executive Producer' },
     { name: 'Ashleigh', role: 'Social Media Marketing Director' },
@@ -37,7 +39,7 @@ const TEAM = [
             data-scroll
             data-scroll-stagger="0.04"
         >
-            {TEAM.map(member => (
+            {TEAM.map((member, index) => (
                 <li>
                     <article class="team__card flex flex-col h-full border border-cream-15 bg-navy">
                         <div class="team__frame aspect-square overflow-hidden relative bg-slate">
@@ -47,7 +49,7 @@ const TEAM = [
                                             class="team__image block object-cover h-full w-full"
                                             alt=""
                                             densities={[1, 2]}
-                                            loading="lazy"
+                                            loading={index < EAGER_CARD_COUNT ? 'eager' : 'lazy'}
                                             src={member.image}
                                             width={400}
                                         />
@@ -97,7 +99,7 @@ const TEAM = [
     }
 
     .team__image {
-        filter: grayscale(0.6) brightness(0.95) contrast(1.05);
+        filter: grayscale(0.3) brightness(0.95) contrast(1.05);
         transition:
             filter var(--duration-slow) ease,
             transform var(--duration-slower) ease;

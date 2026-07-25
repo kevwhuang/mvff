@@ -60,9 +60,9 @@ import { LINKS } from '@lib/constants';
         <div class="hero__actions hero__reveal flex flex-wrap items-center gap-4">
             <a
                 class="button button--primary"
-                aria-disabled="true"
                 href={LINKS.review}
-                tabindex="-1"
+                rel="noopener"
+                target="_blank"
             >
                 Leave a Review
             </a>
@@ -136,7 +136,7 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__countdown {
-        right: max(var(--shell-pad), calc((100% - var(--shell-max)) / 2 + var(--shell-pad)));
+        left: max(var(--shell-pad), calc((100% - var(--shell-max)) / 2 + var(--shell-pad)));
     }
 
     .hero__countdown.hero__reveal {

@@ -88,8 +88,6 @@
 <script>
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
 
-    type Timer = ReturnType<typeof setTimeout>;
-
     interface TypewriterState {
         characterIndex: number;
         container: HTMLElement;
@@ -99,12 +97,12 @@
     }
 
     const ARROW_PAUSE = 350;
-    const CHARACTER_DELAY = 65;
+    const CHARACTER_DELAY = 75;
     const TYPEWRITER_ROOT_MARGIN = '0px 0px -15% 0px';
 
     let controller: AbortController | undefined;
     let typewriterObserver: IntersectionObserver | undefined;
-    let typewriterTimeouts: Timer[] = [];
+    let typewriterTimeouts: ReturnType<typeof setTimeout>[] = [];
 
     function clearTypewriterTimeouts() {
         typewriterTimeouts.forEach(clearTimeout);
