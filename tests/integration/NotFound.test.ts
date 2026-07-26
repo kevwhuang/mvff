@@ -18,6 +18,6 @@ describe('ErrorNotFound', () => {
 
     test('renders return link to home', () => {
         expect(html).toContain('href="/"');
-        expect(html).toContain('Back to Home');
+        expect(html).toContain('Return Home');
     });
 });

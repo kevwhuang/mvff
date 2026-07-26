@@ -18,6 +18,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
     if (!asset) throw new Error(`Missing gallery asset: ${figure.id}.webp`);
 
     const metadata = asset.default;
+
     const isPortrait = metadata.height > metadata.width;
     const lightboxImage = await getImage({ src: metadata, width: metadata.width });
 
@@ -95,7 +96,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
             tabindex="-1"
         >
             <button
-                class="gallery__lightbox-close absolute right-3 top-3 z-1 size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream select-none"
+                class="gallery__lightbox-close absolute grid place-items-center right-4 top-4 z-1 size-12 border border-cream-15 font-mono leading-none text-2xl bg-navy text-cream select-none"
                 aria-label="Close"
                 type="button"
             >
@@ -108,7 +109,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
                 &nbsp;
             </h2>
             <img class="gallery__lightbox-image block object-contain h-auto w-full mx-auto border border-cream-15 select-none" alt="" draggable="false" />
-            <div class="gallery__lightbox-meta flex justify-between font-mono uppercase whitespace-nowrap text-cream-60">
+            <div class="gallery__lightbox-meta flex justify-between font-mono uppercase text-cream-60">
                 <span class="gallery__lightbox-label" />
             </div>
         </div>
@@ -175,11 +176,11 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
     }
 
     .gallery__lightbox {
-        --lightbox-frame: calc(100dvh - 2 * var(--lightbox-gutter) - var(--lightbox-meta));
+        --lightbox-frame: calc(100dvh - 2 * var(--lightbox-gutter-block) - 30px);
         --lightbox-gutter: clamp(40px, calc(13.33px + 8.33vw), 120px);
-        --lightbox-meta: 30px;
+        --lightbox-gutter-block: min(var(--lightbox-gutter), 15dvh);
         opacity: 0;
-        padding: var(--lightbox-gutter);
+        padding: var(--lightbox-gutter-block) var(--lightbox-gutter);
         transition:
             opacity var(--duration-fast) ease,
             visibility 0s var(--duration-fast);
@@ -187,11 +188,11 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
     }
 
     .gallery__lightbox[data-gallery-orientation='landscape'] .gallery__lightbox-inner {
-        max-width: calc(var(--lightbox-frame) * 3 / 2);
+        max-width: min(calc(100dvw - 2 * var(--lightbox-gutter)), calc(var(--lightbox-frame) * 3 / 2));
     }
 
     .gallery__lightbox[data-gallery-orientation='portrait'] .gallery__lightbox-inner {
-        max-width: calc(var(--lightbox-frame) * 2 / 3);
+        max-width: min(calc(100dvw - 2 * var(--lightbox-gutter)), calc(var(--lightbox-frame) * 2 / 3));
     }
 
     .gallery__lightbox[data-open] {
@@ -225,23 +226,20 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         color: var(--color-coral);
     }
 
-    .gallery__lightbox-close::after {
-        content: '';
-        inset: -8px;
-        position: absolute;
-    }
-
     .gallery__lightbox-image {
         max-height: var(--lightbox-frame);
+        min-height: 0;
     }
 
     .gallery__lightbox-inner {
+        max-height: calc(100dvh - 2 * var(--lightbox-gutter-block));
         max-width: calc(100dvw - 2 * var(--lightbox-gutter));
         transform: scale(0.97);
         transition: transform var(--duration-fast) ease;
     }
 
     .gallery__lightbox-meta {
+        flex-shrink: 0;
         font-size: 12px;
         letter-spacing: 0.16em;
     }
@@ -255,6 +253,12 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         .gallery__figure--portrait {
             width: 64%;
         }
+
+        .gallery__lightbox-close:not(:focus-visible) {
+            clip-path: inset(50%);
+            height: 1px;
+            width: 1px;
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -267,6 +271,8 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
 
 <script>
     import { registerPageScript } from '@lib/utils';
+
+    const DOUBLE_CLICK_DETAIL = 2;
 
     let lastTrigger: HTMLElement | undefined;
     let lightbox: HTMLElement | null = null;
@@ -295,10 +301,6 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         }
     }
 
-    function handleTeardown() {
-        document.documentElement.style.overflow = '';
-    }
-
     function initGallery(signal: AbortSignal) {
         lastTrigger = undefined;
         lightbox = document.querySelector<HTMLElement>('.gallery__lightbox');
@@ -306,7 +308,9 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         lightboxImage = null;
         lightboxInner = null;
 
-        signal.addEventListener('abort', handleTeardown);
+        signal.addEventListener('abort', () => {
+            document.documentElement.style.overflow = '';
+        });
 
         if (!lightbox) return;
 
@@ -320,12 +324,16 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
             frame.addEventListener('click', () => openLightbox(frame), { signal });
         });
 
+        document.addEventListener('keydown', handleLightboxKeydown, { signal });
+
+        lightbox.addEventListener('click', (event) => {
+            if (event.detail < DOUBLE_CLICK_DETAIL) closeLightbox();
+        }, { signal });
+
         lightboxClose.addEventListener('click', closeLightbox, { signal });
         lightboxImage.addEventListener('error', showLightboxImage, { signal });
         lightboxImage.addEventListener('load', showLightboxImage, { signal });
         lightboxInner.addEventListener('click', event => event.stopPropagation(), { signal });
-        lightbox.addEventListener('click', closeLightbox, { signal });
-        document.addEventListener('keydown', handleLightboxKeydown, { signal });
     }
 
     function openLightbox(frame: HTMLElement) {
@@ -340,16 +348,21 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
 
         if (lightboxImage.getAttribute('src') !== gallerySource) lightboxImage.style.visibility = 'hidden';
 
-        lightboxImage.src = gallerySource;
-        lightboxImage.alt = galleryAlt;
-        label.textContent = galleryLabel;
-        title.textContent = galleryLabel;
-        lightbox.dataset.galleryOrientation = galleryOrientation;
         document.documentElement.style.overflow = 'hidden';
+        label.textContent = galleryLabel;
         lastTrigger = frame;
-        lightbox.setAttribute('data-open', '');
+        lightbox.dataset.galleryOrientation = galleryOrientation;
+        lightboxImage.alt = galleryAlt;
+        lightboxImage.src = gallerySource;
+        title.textContent = galleryLabel;
         lightbox.removeAttribute('aria-hidden');
-        lightboxClose.focus();
+        lightbox.setAttribute('data-open', '');
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                if (lightbox?.hasAttribute('data-open')) lightboxClose?.focus();
+            });
+        });
     }
 
     function showLightboxImage() {

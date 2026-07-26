@@ -1,5 +1,5 @@
 let isParallaxQueued = false;
-let parallaxLayers: { element: HTMLElement; factor: number }[] = [];
+let parallaxLayers: { element: HTMLElement; factor: number; wrap: number }[] = [];
 
 function handleScroll() {
     if (isParallaxQueued || !parallaxLayers.length) return;
@@ -13,8 +13,10 @@ function updateParallax() {
 
     const scrollY = window.scrollY;
 
-    parallaxLayers.forEach(({ element, factor }) => {
-        element.style.transform = `translateY(${scrollY * factor}px)`;
+    parallaxLayers.forEach(({ element, factor, wrap }) => {
+        const offset = scrollY * factor;
+
+        element.style.transform = `translateY(${wrap > 0 ? offset % wrap : offset}px)`;
     });
 }
 
@@ -34,6 +36,7 @@ export function initParallax(prefersReducedMotion: boolean): void {
     parallaxLayers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'), element => ({
         element,
         factor: Number.parseFloat(element.dataset.parallax || '0'),
+        wrap: Number.parseFloat(element.dataset.parallaxWrap || '0'),
     }));
 
     updateParallax();

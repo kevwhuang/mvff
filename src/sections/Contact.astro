@@ -45,7 +45,7 @@ const CHANNELS = [
                             <span class="min-w-0">{channel.value.split('@').flatMap((part, partIndex) => (partIndex === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
                             {channel.isExternal && (
                                 <span
-                                    class="contact__channel-cue select-none"
+                                    class="contact__channel-cue self-center select-none"
                                     aria-hidden="true"
                                 >
                                     &rarr;

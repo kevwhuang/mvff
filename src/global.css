@@ -19,7 +19,6 @@
     --color-night-40: #0a0a0f66;
     --color-night-70: #0a0a0fb3;
     --color-night-90: #0a0a0fe6;
-    --color-red: #ef4444;
     --color-slate: #1a1a25;
     --color-teal: #00d1ef;
     --font-display:
@@ -52,6 +51,7 @@
     --duration-twinkle-slower: 10s;
     --header-height: 80px;
     --measure-prose: 560px;
+    --measure-wide: 700px;
     --section-padding: clamp(96px, calc(53.33px + 13.33vw), 224px);
     --section-padding-sm: clamp(48px, calc(37.33px + 3.33vw), 80px);
     --shell-max: 1280px;
@@ -78,6 +78,7 @@ h4 {
 html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-height) + 24px);
+    scrollbar-gutter: stable;
 }
 
 html[data-astro-transition] {
@@ -118,12 +119,6 @@ img {
 
 [data-scroll] {
     opacity: 0;
-}
-
-[data-scroll] > :focus-within,
-[data-scroll]:focus-within {
-    opacity: 1 !important;
-    transform: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

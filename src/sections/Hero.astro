@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import logo from '@images/logos/austin_music_video_film_festival.webp';
 import poster from '@images/poster.webp';
 import { LINKS } from '@lib/constants';
+import { getExternalLinkProps } from '@lib/utils';
 ---
 
 <section
@@ -31,7 +32,7 @@ import { LINKS } from '@lib/constants';
     <div class="hero__corner hero__corner--bottom-left absolute border border-cream" aria-hidden="true" />
     <div class="hero__corner hero__corner--bottom-right absolute border border-cream" aria-hidden="true" />
     <div class="hero__content shell relative">
-        <dl class="hero__countdown hero__reveal select-none">
+        <dl class="hero__countdown hero__reveal">
             <dt class="sr-only">Status</dt>
             <dd class="hero__countdown-over font-display whitespace-nowrap text-coral">That's a wrap.</dd>
         </dl>
@@ -61,8 +62,7 @@ import { LINKS } from '@lib/constants';
             <a
                 class="button button--primary"
                 href={LINKS.review}
-                rel="noopener"
-                target="_blank"
+                {...getExternalLinkProps(LINKS.review)}
             >
                 Leave a Review
             </a>
@@ -82,12 +82,9 @@ import { LINKS } from '@lib/constants';
     .hero {
         --hero-corner-inset: clamp(12px, calc(5.33px + 2.08vw), 32px);
         --hero-corner-size: clamp(14px, calc(11.33px + 0.83vw), 22px);
+        --hero-rhythm: clamp(20px, calc(16px + 1.25vw), 32px);
         --hero-stagger: var(--duration-fast);
         min-height: calc(100svh - var(--header-height));
-    }
-
-    .hero__actions {
-        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
     }
 
     .hero__background::after {
@@ -140,7 +137,7 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__countdown {
-        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+        margin-bottom: clamp(26px, calc(22px + 1.25vw), 38px);
     }
 
     .hero__countdown-over {
@@ -153,7 +150,7 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__meta {
-        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+        margin-bottom: calc(var(--hero-rhythm) - clamp(5.5px, calc(3.7px + 0.58vw), 11px));
     }
 
     .hero__meta-item {
@@ -194,14 +191,30 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__title {
-        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
+        margin-bottom: calc(var(--hero-rhythm) - clamp(10.5px, calc(7px + 1.09vw), 21px));
     }
 
     .hero__video {
         filter: brightness(0.62) contrast(1.08) saturate(1.2);
+        opacity: 1;
+        transition: opacity var(--duration-slower) ease;
+    }
+
+    .hero__video[data-fading] {
+        opacity: 0;
     }
 
     @media (max-width: 768px) {
+        .hero__meta {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hero__meta-item {
+            line-height: 1;
+        }
+
         .hero__meta-item::before {
             display: none;
         }
@@ -224,11 +237,16 @@ import { LINKS } from '@lib/constants';
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
     import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
+    const FADE_WINDOW = 0.7;
+
     const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
     function initHero(signal: AbortSignal) {
-        initDisabledLinks('.hero__actions .button[aria-disabled="true"]', signal);
+        const video = document.querySelector<HTMLVideoElement>('.hero__video');
 
+        if (video) video.addEventListener('timeupdate', () => syncVideoFade(video), { signal });
+
+        initDisabledLinks('.hero__actions .button[aria-disabled="true"]', signal);
         syncHeroVideo(reducedMotionQuery.matches);
         reducedMotionQuery.addEventListener('change', event => syncHeroVideo(event.matches), { signal });
     }
@@ -240,12 +258,20 @@ import { LINKS } from '@lib/constants';
 
         if (prefersReducedMotion) {
             video.pause();
+            video.removeAttribute('data-fading');
         } else {
             video.play().catch(() => {});
         }
     }
 
-    registerPageScript(initHero);
+    function syncVideoFade(video: HTMLVideoElement) {
+        const { currentTime, duration, paused } = video;
 
+        if (!Number.isFinite(duration)) return;
+
+        video.toggleAttribute('data-fading', duration - currentTime <= FADE_WINDOW && !paused);
+    }
+
+    registerPageScript(initHero);
     syncHeroVideo(reducedMotionQuery.matches);
 </script>

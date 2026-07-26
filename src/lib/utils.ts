@@ -6,6 +6,7 @@ export function getExternalLinkProps(href: string): { rel?: 'noopener'; target?:
 
 export function initDisabledLinks(selector: string, signal: AbortSignal): void {
     document.querySelectorAll(selector).forEach((link) => {
+        link.addEventListener('auxclick', event => event.preventDefault(), { signal });
         link.addEventListener('click', event => event.preventDefault(), { signal });
     });
 }

@@ -10,13 +10,13 @@ test.describe('404 page', () => {
     });
 
     test('has return link to home', async ({ page }) => {
-        const link = page.getByRole('link', { name: 'Back to Home' });
+        const link = page.getByRole('link', { name: 'Return Home' });
 
         await expect(link).toHaveAttribute('href', '/');
     });
 
     test('return link navigates home', async ({ page }) => {
-        const link = page.getByRole('link', { name: 'Back to Home' });
+        const link = page.getByRole('link', { name: 'Return Home' });
 
         await link.focus();
         await link.click();

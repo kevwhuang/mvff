@@ -15,6 +15,30 @@ const SCROLL_START = `top ${SCROLL_START_RATIO * 100}%`;
 let batchFlushCalls: gsap.core.Animation[] = [];
 let hasRevealed = false;
 
+function handleFocusIn(event: FocusEvent) {
+    const { target } = event;
+
+    if (!(target instanceof Element)) return;
+
+    const container = target.closest<HTMLElement>('[data-scroll]');
+
+    if (!container) return;
+
+    const children = Array.from(container.children);
+
+    const focusedChild = children.find(child => child.contains(target));
+
+    const candidates = focusedChild ? [container, focusedChild] : [container, ...children];
+
+    if (!candidates.some(element => Number.parseFloat(getComputedStyle(element).opacity) === 0)) return;
+
+    ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger && container.contains(trigger.trigger)) trigger.kill();
+    });
+
+    revealInstantly(container);
+}
+
 function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
@@ -52,7 +76,7 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
             const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
 
             ScrollTrigger.batch(hiddenChildren, {
-                onEnter: batch => gsap.fromTo(batch, fromState, { ...toState, stagger }),
+                onEnter: batch => batchFlushCalls.push(gsap.fromTo(batch, fromState, { ...toState, stagger })),
                 once: true,
                 start: SCROLL_START,
             });
@@ -78,11 +102,15 @@ function isPastScrollStart(element: Element) {
 }
 
 function revealInstantly(element: HTMLElement) {
-    gsap.set([element, ...element.children], { clearProps: 'transform', opacity: 1 });
+    const targets = [element, ...element.children];
+
+    gsap.getTweensOf(targets).forEach(tween => tween.kill());
+    gsap.set(targets, { clearProps: 'transform', opacity: 1 });
 }
 
-gsap.registerPlugin(ScrollTrigger);
+document.addEventListener('focusin', handleFocusIn);
 reducedMotionQuery.addEventListener('change', initMotion);
+gsap.registerPlugin(ScrollTrigger);
 
 export function initMotion(): void {
     const prefersReducedMotion = reducedMotionQuery.matches;
@@ -90,9 +118,7 @@ export function initMotion(): void {
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     batchFlushCalls.forEach(tween => tween.kill());
     batchFlushCalls = [];
-
-    initScrollAnimations(prefersReducedMotion);
     initParallax(prefersReducedMotion);
-
+    initScrollAnimations(prefersReducedMotion);
     hasRevealed = true;
 }

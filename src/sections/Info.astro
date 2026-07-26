@@ -2,27 +2,27 @@
 import SectionHeader from '@components/SectionHeader.astro';
 
 const FAQ = [
-    { answer: 'One night in Austin where the music video takes center stage: three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit, built to pull Austin\'s music and film worlds into one room.', question: 'What is the Austin Music Video Film Festival?' },
-    { answer: 'Yes, the night ran 21+ with valid ID, no exceptions.', question: 'Was there an age requirement?' },
-    { answer: 'Red-carpet attire: silk, tuxedos, and a swimsuit if you were feeling bold. Guests dressed to be photographed; the pool deck stayed open under the stars.', question: 'What did people wear?' },
-    { answer: 'With a 2 AM close, rideshare was the move, and street parking around the venue covered the rest.', question: 'How did guests get there?' },
-    { answer: 'Cabana Club\'s full bar poured all night. Outside food and drinks weren\'t permitted.', question: 'Was there food and drink?' },
-    { answer: 'Phones and small personal cameras, absolutely. Accredited press and media cleared through email ahead of the night.', question: 'Were cameras allowed?' },
-    { answer: 'Submissions for 2026 are closed. The 22 official selections screened in the July 18 program. Follow us on Instagram for the next open call.', question: 'How do I submit a music video?' },
-    { answer: 'Sponsorships and partner placements are open for next year. Hit Future Partnerships on the home page, start with the pitch deck linked in the footer, then reach out by email.', question: 'How do brands get involved?' },
+    { answer: 'A one-night music video festival at Cabana Club in East Austin: live sets, three screening blocks, filmmaker Q&A panels, an awards ceremony, and an after party.', question: 'What is the Austin Music Video Film Festival?' },
+    { answer: 'Yes. 21+, doors to close.', question: 'Was there an age requirement?' },
+    { answer: 'Silk, tuxedos, and the occasional swimsuit. Red-carpet attire was optional, and guests dressed to be photographed.', question: 'What did people wear?' },
+    { answer: 'Onsite parking at Cabana Club, plus street parking around the venue for overflow. Rideshare covered the rest.', question: 'How did guests get there?' },
+    { answer: 'Yes. Food vendors served, and the full bar poured all night.', question: 'Was there food and drink?' },
+    { answer: 'Cameras were everywhere. Guests shot the night from the floor, and several media members worked alongside them.', question: 'Were cameras allowed?' },
+    { answer: 'Submissions for 2026 are closed. The official selections screened across the three blocks on July 18. Follow @atxmvff on Instagram for the next open call.', question: 'How do I submit a music video?' },
+    { answer: 'Sponsorships and partnerships are open for next year. Start with the pitch deck in the footer, then apply through Future Partnerships.', question: 'How do brands get involved?' },
 ] as const;
 
 const SCHEDULE = [
-    { datetime: '2026-07-18T19:00-05:00', event: 'Doors \u00B7\u00A0Ryley\u00A0Hall', tag: 'Live', time: '7:00 PM' },
+    { datetime: '2026-07-18T19:00-05:00', event: 'Ryley Hall', tag: 'Live', time: '7:00 PM' },
     { datetime: '2026-07-18T19:25-05:00', event: 'Dasmayan Daydreamers', tag: 'Live', time: '7:25 PM' },
     { datetime: '2026-07-18T20:00-05:00', event: 'Tipping Culture', tag: 'Live', time: '8:00 PM' },
     { datetime: '2026-07-18T20:35-05:00', event: 'Anna Madewell', tag: 'Live', time: '8:35 PM' },
     { datetime: '2026-07-18T21:30-05:00', event: 'Music Video Block\u00A0One', tag: 'Screening', time: '9:30 PM' },
-    { datetime: '2026-07-18T22:00-05:00', event: 'Raffle & Q&A \u00B7\u00A0Kay\u00A0Cote', tag: 'Panel', time: '10:00 PM' },
+    { datetime: '2026-07-18T22:00-05:00', event: 'Raffle & Q&A', tag: 'Panel', time: '10:00 PM' },
     { datetime: '2026-07-18T22:15-05:00', event: 'Music Video Block\u00A0Two', tag: 'Screening', time: '10:15 PM' },
-    { datetime: '2026-07-18T22:45-05:00', event: 'Raffle & Q&A \u00B7\u00A0Lauren', tag: 'Panel', time: '10:45 PM' },
+    { datetime: '2026-07-18T22:45-05:00', event: 'Raffle & Q&A', tag: 'Panel', time: '10:45 PM' },
     { datetime: '2026-07-18T23:00-05:00', event: 'Music Video Block\u00A0Three', tag: 'Screening', time: '11:00 PM' },
-    { datetime: '2026-07-18T23:30-05:00', event: 'Raffle & Q&A \u00B7\u00A0Carmela', tag: 'Panel', time: '11:30 PM' },
+    { datetime: '2026-07-18T23:30-05:00', event: 'Raffle & Q&A', tag: 'Panel', time: '11:30 PM' },
     { datetime: '2026-07-18T23:45-05:00', event: 'Awards Ceremony', tag: 'Awards', time: '11:45 PM' },
     { datetime: '2026-07-19T00:05-05:00', event: 'Jyme', tag: 'After Party', time: '12:05 AM' },
     { datetime: '2026-07-19T00:35-05:00', event: 'Natia', tag: 'After Party', time: '12:35 AM' },
@@ -50,9 +50,9 @@ const SCHEDULE = [
                 <div class="info__venue sweep relative isolate border border-cream-15 bg-navy">
                     <h3 class="info__venue-name mb-2">Cabana Club</h3>
                     <p class="info__venue-address mb-4 font-mono uppercase text-cream-60">5012 E 7th St &middot; Austin, TX</p>
-                    <p class="info__venue-description mb-4 font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lights the pool deck and a live stage carries the music. A red carpet led in from the street, and the night was capped at 300&nbsp;tickets.</p>
-                    <ul class="info__venue-features grid grid-cols-2 gap-2 list-none">
-                        <li>Outdoor screen</li>
+                    <p class="info__venue-description font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lit the pool deck, a live stage carried the music, and high tables sat under the patio roof. A small red carpet section set the tone, and the night ran 7 PM straight to the 2 AM close.</p>
+                    <ul class="info__venue-features grid gap-x-6 gap-y-3 list-none">
+                        <li>Big screen</li>
                         <li>Live stage</li>
                         <li>Outdoor pool</li>
                         <li>Full bar</li>
@@ -115,6 +115,10 @@ const SCHEDULE = [
         interpolate-size: allow-keywords;
     }
 
+    .info__faq-answer {
+        max-width: var(--measure-wide);
+    }
+
     .info__faq-icon {
         font-size: 20px;
         transition: transform var(--duration-fast) ease;
@@ -162,21 +166,23 @@ const SCHEDULE = [
     .info__schedule-event {
         font-size: 20px;
         letter-spacing: 0.02em;
-        transition: transform var(--duration-fast) ease;
+        transition:
+            color var(--duration-fast) ease,
+            transform var(--duration-fast) ease;
     }
 
     .info__schedule-row {
         gap: clamp(8px, calc(5.33px + 0.83vw), 16px);
-        grid-template-columns: clamp(80px, calc(73.33px + 2.08vw), 100px) 1fr auto;
+        grid-template-columns: clamp(80px, calc(73.33px + 2.08vw), 100px) minmax(0, 1fr) minmax(min-content, max-content);
+    }
+
+    .info__schedule-row:hover .info__schedule-event {
+        color: var(--color-coral);
     }
 
     .info__schedule-row:hover .info__schedule-event,
     .info__schedule-row:hover .info__schedule-time {
         transform: translateX(8px);
-    }
-
-    .info__schedule-row:hover .info__schedule-time {
-        color: var(--color-coral);
     }
 
     .info__schedule-tag {
@@ -186,9 +192,7 @@ const SCHEDULE = [
 
     .info__schedule-time {
         font-size: 14px;
-        transition:
-            color var(--duration-fast) ease,
-            transform var(--duration-fast) ease;
+        transition: transform var(--duration-fast) ease;
     }
 
     .info__stack {
@@ -222,6 +226,15 @@ const SCHEDULE = [
         letter-spacing: 0.16em;
     }
 
+    .info__venue-description {
+        margin-bottom: clamp(24px, calc(21.33px + 0.83vw), 32px);
+        max-width: var(--measure-wide);
+    }
+
+    .info__venue-features {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .info__venue-features li {
         align-items: baseline;
         color: var(--color-cream);
@@ -245,8 +258,42 @@ const SCHEDULE = [
     }
 
     @media (max-width: 768px) {
+        .info__schedule-event {
+            grid-area: event;
+            line-height: 1;
+        }
+
+        .info__schedule-row {
+            grid-template-areas:
+                'time tag'
+                'event event';
+            grid-template-columns: minmax(0, 1fr) max-content;
+            row-gap: 8px;
+        }
+
+        .info__schedule-tag {
+            align-self: center;
+            grid-area: tag;
+            line-height: 1;
+        }
+
+        .info__schedule-time {
+            grid-area: time;
+            line-height: 1;
+        }
+
+        .info__subheading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .info__subheading-badge {
+            margin-top: 8px;
+        }
+
         .info__venue-features {
             grid-template-columns: 1fr;
+            row-gap: 8px;
         }
     }
 

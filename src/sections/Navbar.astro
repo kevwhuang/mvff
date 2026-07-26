@@ -31,7 +31,7 @@ import { getExternalLinkProps } from '@lib/utils';
             aria-label="Primary"
         >
             <button
-                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream select-none"
+                class="navbar__icon-button navbar__menu-close hidden place-items-center size-12 border border-cream-15 font-mono leading-none text-2xl bg-navy text-cream select-none"
                 aria-label="Close navigation"
                 type="button"
             >
@@ -58,11 +58,11 @@ import { getExternalLinkProps } from '@lib/utils';
                 class="navbar__countdown flex items-center gap-2 px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none"
                 aria-hidden="true"
             >
-                <span class="navbar__pulse inline-block size-1.5 rounded-full bg-red" />
+                <span class="navbar__pulse inline-block size-1.5 rounded-full bg-coral" />
                 <span>00:00:00:00</span>
             </div>
             <button
-                class="navbar__icon-button navbar__toggle hidden place-items-center relative size-9 border border-cream-15 bg-navy text-cream select-none"
+                class="navbar__icon-button navbar__toggle hidden place-items-center size-12 border border-cream-15 bg-navy text-cream select-none"
                 aria-expanded="false"
                 aria-label="Open navigation"
                 type="button"
@@ -120,15 +120,15 @@ import { getExternalLinkProps } from '@lib/utils';
         color: var(--color-coral);
     }
 
-    .navbar__icon-button:hover {
+    .navbar__icon-button:focus-visible {
         border-color: var(--color-coral);
         color: var(--color-coral);
     }
 
-    .navbar__icon-button::after {
-        content: '';
-        inset: -8px;
-        position: absolute;
+    .navbar__icon-button:hover,
+    .navbar__icon-button[data-hover] {
+        border-color: var(--color-coral);
+        color: var(--color-coral);
     }
 
     .navbar__inner {
@@ -137,6 +137,7 @@ import { getExternalLinkProps } from '@lib/utils';
     }
 
     .navbar__menu-link {
+        display: block;
         font-size: 12px;
         letter-spacing: 0.16em;
         transition: color var(--duration-fast) ease;
@@ -218,7 +219,7 @@ import { getExternalLinkProps } from '@lib/utils';
                 transform var(--duration-base) ease,
                 visibility 0s var(--duration-base);
             visibility: hidden;
-            z-index: 60;
+            z-index: 1;
         }
 
         .navbar__menu[data-open] {
@@ -234,16 +235,15 @@ import { getExternalLinkProps } from '@lib/utils';
         }
 
         .navbar__menu-close {
-            display: block;
+            display: grid;
             position: absolute;
-            right: 16px;
-            top: 16px;
+            right: var(--shell-pad);
+            top: calc((var(--header-height) - 1px - 48px) / 2);
         }
 
         .navbar__menu-link {
             border-bottom: 1px solid var(--color-cream-15);
             color: var(--color-cream);
-            display: block;
             font-family: var(--font-display);
             font-size: 28px;
             letter-spacing: 0.04em;
@@ -280,9 +280,15 @@ import { getExternalLinkProps } from '@lib/utils';
             flex-direction: column;
             gap: 8px;
             justify-content: flex-start;
+            margin: -4px;
             min-height: 0;
             overflow-y: auto;
             overscroll-behavior: contain;
+            padding: 4px;
+        }
+
+        .navbar__menu-list li:last-child .navbar__menu-link {
+            border-bottom: none;
         }
 
         .navbar__toggle {
@@ -313,25 +319,32 @@ import { getExternalLinkProps } from '@lib/utils';
 <script>
     import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
+    const HOVER_QUERY = '(hover: hover)';
     const MOBILE_QUERY = '(max-width: 1024px)';
     const RESIZE_SETTLE_DELAY = 150;
 
+    let pointerX = -1;
+    let pointerY = -1;
     let resizeSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
     function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
         document.documentElement.style.overflow = '';
         resetMenu(menu, toggle);
         toggle.focus();
+        syncSwapHover(toggle);
     }
 
     function handleMenuKeydown(event: KeyboardEvent, menu: HTMLElement, toggle: HTMLElement) {
         if (!menu.hasAttribute('data-open')) return;
 
-        if (event.key === 'Escape') {
-            closeMenu(menu, toggle);
-        } else if (event.key === 'Tab') {
-            trapFocus(event, menu);
-        }
+        if (event.key === 'Escape') closeMenu(menu, toggle);
+        else if (event.key === 'Tab') trapFocus(event, menu);
+    }
+
+    function handleMenuTransitionEnd(event: TransitionEvent, closeButton: HTMLElement, menu: HTMLElement, toggle: HTMLElement) {
+        if (event.propertyName !== 'transform' || event.target !== menu) return;
+
+        syncSwapHover(menu.hasAttribute('data-open') ? closeButton : toggle);
     }
 
     function handleMobileChange(event: MediaQueryListEvent, menu: HTMLElement, toggle: HTMLElement) {
@@ -349,12 +362,9 @@ import { getExternalLinkProps } from '@lib/utils';
         (currentLink ?? brandLink)?.focus();
     }
 
-    function handleToggleClick(closeButton: HTMLElement, menu: HTMLElement, toggle: HTMLElement) {
-        if (menu.hasAttribute('data-open')) {
-            closeMenu(menu, toggle);
-        } else {
-            openMenu(closeButton, menu, toggle);
-        }
+    function handlePointerMove(event: PointerEvent) {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
     }
 
     function initNavbar(signal: AbortSignal) {
@@ -370,11 +380,8 @@ import { getExternalLinkProps } from '@lib/utils';
         document.querySelectorAll('.navbar__menu-link').forEach((link) => {
             const href = link.getAttribute('href');
 
-            if (href && normalizePath(href) === currentPath) {
-                link.setAttribute('aria-current', 'page');
-            } else {
-                link.removeAttribute('aria-current');
-            }
+            if (href && normalizePath(href) === currentPath) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
         });
 
         const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close');
@@ -384,9 +391,8 @@ import { getExternalLinkProps } from '@lib/utils';
         const mobileQuery = window.matchMedia(MOBILE_QUERY);
 
         closeButton.addEventListener('click', () => closeMenu(menu, toggle), { signal });
-
         document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
-
+        menu.addEventListener('transitionend', event => handleMenuTransitionEnd(event, closeButton, menu, toggle), { signal });
         mobileQuery.addEventListener('change', event => handleMobileChange(event, menu, toggle), { signal });
 
         signal.addEventListener('abort', () => {
@@ -394,7 +400,10 @@ import { getExternalLinkProps } from '@lib/utils';
             else resetMenu(menu, toggle);
         });
 
-        toggle.addEventListener('click', () => handleToggleClick(closeButton, menu, toggle), { signal });
+        toggle.addEventListener('click', () => {
+            if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
+            else openMenu(closeButton, menu, toggle);
+        }, { signal });
     }
 
     function normalizePath(pathname: string) {
@@ -410,23 +419,44 @@ import { getExternalLinkProps } from '@lib/utils';
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                if (menu.hasAttribute('data-open')) closeButton.focus();
+                if (!menu.hasAttribute('data-open')) return;
+
+                closeButton.focus();
+                syncSwapHover(closeButton);
             });
         });
     }
 
     function resetMenu(menu: HTMLElement, toggle: HTMLElement) {
+        menu.querySelector('.navbar__menu-close')?.removeAttribute('data-hover');
         menu.removeAttribute('aria-modal');
         menu.removeAttribute('data-open');
         menu.removeAttribute('role');
+        toggle.removeAttribute('data-hover');
         toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function syncSwapHover(button: HTMLElement) {
+        if (button.hasAttribute('data-hover') || pointerX < 0 || pointerY < 0 || !window.matchMedia(HOVER_QUERY).matches) return;
+        if (!button.contains(document.elementFromPoint(pointerX, pointerY))) return;
+
+        button.setAttribute('data-hover', '');
+        document.addEventListener('pointermove', () => button.removeAttribute('data-hover'), { once: true });
     }
 
     function trapFocus(event: KeyboardEvent, menu: HTMLElement) {
         const focusables = menu.querySelectorAll<HTMLElement>('a:not([tabindex="-1"]), button');
 
         const first = focusables[0];
+        const isInCycle = Array.from(focusables).some(element => element === document.activeElement);
         const last = focusables[focusables.length - 1];
+
+        if (!isInCycle) {
+            event.preventDefault();
+            (event.shiftKey ? last : first).focus();
+
+            return;
+        }
 
         if (document.activeElement === first && event.shiftKey) {
             event.preventDefault();
@@ -437,5 +467,6 @@ import { getExternalLinkProps } from '@lib/utils';
         }
     }
 
+    document.addEventListener('pointermove', handlePointerMove, { passive: true });
     registerPageScript(initNavbar);
 </script>

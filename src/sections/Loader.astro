@@ -8,37 +8,28 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
 <div
     class="loader fixed flex inset-0 items-center justify-center z-300 bg-night"
     aria-hidden="true"
-    data-hidden
     role="status"
 >
     <div class="loader__inner flex flex-col items-center">
-        <div class="loader__logo grid place-items-center">
-            <Image
-                class="h-auto w-full"
-                alt=""
-                densities={[1, 2]}
-                draggable="false"
-                fetchpriority="high"
-                loading="eager"
-                src={logo}
-                width={160}
-            />
-        </div>
-        <p class="loader__text font-mono uppercase text-cream-60 select-none">Loading reel</p>
-        <div class="loader__bar overflow-hidden relative h-0.5 w-full bg-cream-15"><div class="loader__progress absolute inset-0 bg-coral" /></div>
+        <Image
+            class="loader__logo block h-auto"
+            alt=""
+            decoding="sync"
+            densities={[1, 2]}
+            draggable="false"
+            fetchpriority="high"
+            loading="eager"
+            src={logo}
+            width={480}
+        />
+        <div class="loader__bar overflow-hidden relative h-1 w-full bg-cream-15"><div class="loader__progress absolute inset-0 bg-coral" /></div>
     </div>
 </div>
 
 <style>
     .loader {
-        padding: var(--shell-pad);
-        transition:
-            opacity var(--duration-slower) ease,
-            visibility 0s;
-    }
-
-    .loader[data-hidden] {
         opacity: 0;
+        padding: var(--shell-pad);
         pointer-events: none;
         transition:
             opacity var(--duration-slower) ease,
@@ -46,9 +37,18 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
         visibility: hidden;
     }
 
-    .loader[data-hidden] .loader__logo,
-    .loader[data-hidden] .loader__progress {
-        animation-play-state: paused;
+    .loader[data-open] {
+        opacity: 1;
+        pointer-events: auto;
+        transition:
+            opacity var(--duration-slower) ease,
+            visibility 0s;
+        visibility: visible;
+    }
+
+    .loader[data-open] .loader__logo,
+    .loader[data-open] .loader__progress {
+        animation-play-state: running;
     }
 
     .loader__inner {
@@ -57,20 +57,14 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
 
     .loader__logo {
         animation: loader__pulse var(--duration-pulse) ease-in-out infinite;
-        height: clamp(120px, calc(106.67px + 4.17vw), 160px);
-        width: clamp(120px, calc(106.67px + 4.17vw), 160px);
+        animation-play-state: paused;
+        width: clamp(240px, calc(160px + 25vw), 480px);
     }
 
     .loader__progress {
-        --loader-sweep-travel: 333%;
-        --loader-sweep-width: 30%;
         animation: loader__sweep var(--duration-sweep) ease-in-out infinite;
-        width: var(--loader-sweep-width);
-    }
-
-    .loader__text {
-        font-size: 12px;
-        letter-spacing: 0.16em;
+        animation-play-state: paused;
+        width: 30%;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -98,7 +92,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
         }
 
         100% {
-            transform: translateX(var(--loader-sweep-travel));
+            transform: translateX(333%);
         }
     }
 </style>
@@ -108,16 +102,55 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     is:inline
 >
     const FAILSAFE_DELAY = 8_000;
-    const MIN_DISPLAY_DURATION = 300;
+    const MIN_DISPLAY_DURATION = 1_000;
+
+    let isHidden = false;
+    let loader;
+    let motionQuery;
+    let startTime;
+
+    function completeHide() {
+        loader.removeAttribute('data-open');
+        loader.setAttribute('aria-hidden', 'true');
+        motionQuery.removeEventListener('change', handleReducedMotionChange);
+        window.removeEventListener('pageshow', handlePageShow);
+        setSiblingsInert(false);
+    }
+
+    function handleContentLoaded() {
+        if (isHidden) return;
+
+        setSiblingsInert(true);
+    }
+
+    function handlePageShow(event) {
+        if (event.persisted) hide();
+    }
+
+    function handleReducedMotionChange(event) {
+        if (event.matches) hide();
+    }
+
+    function hide() {
+        if (isHidden) return;
+
+        isHidden = true;
+
+        const elapsed = performance.now() - startTime;
+
+        const remaining = Math.max(0, MIN_DISPLAY_DURATION - elapsed);
+
+        setTimeout(completeHide, remaining);
+    }
 
     function initLoader() {
         if (document.readyState !== 'loading') return;
 
-        const loader = document.querySelector('.loader');
+        loader = document.querySelector('.loader');
 
         if (!loader) return;
 
-        const motionQuery = window.matchMedia(reducedMotionQuery);
+        motionQuery = window.matchMedia(reducedMotionQuery);
 
         let hasShownLoader;
 
@@ -129,55 +162,16 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
 
         if (hasShownLoader || motionQuery.matches) return;
 
-        const startTime = performance.now();
-
-        let isHidden = false;
-
-        function completeHide() {
-            loader.setAttribute('aria-hidden', 'true');
-            loader.setAttribute('data-hidden', '');
-
-            setSiblingsInert(false);
-
-            motionQuery.removeEventListener('change', handleReducedMotionChange);
-            window.removeEventListener('pageshow', handlePageShow);
-        }
-
-        function handleContentLoaded() {
-            if (isHidden) return;
-
-            setSiblingsInert(true);
-        }
-
-        function handlePageShow(event) {
-            if (event.persisted) hide();
-        }
-
-        function handleReducedMotionChange(event) {
-            if (event.matches) hide();
-        }
-
-        function hide() {
-            if (isHidden) return;
-
-            isHidden = true;
-
-            const elapsed = performance.now() - startTime;
-
-            const remaining = Math.max(0, MIN_DISPLAY_DURATION - elapsed);
-
-            setTimeout(completeHide, remaining);
-        }
-
         document.addEventListener('DOMContentLoaded', handleContentLoaded, { once: true });
         document.addEventListener('astro:before-swap', () => setSiblingsInert(false), { once: true });
-        loader.removeAttribute('aria-hidden');
-        loader.removeAttribute('data-hidden');
         motionQuery.addEventListener('change', handleReducedMotionChange);
-        setSiblingsInert(true);
-        setTimeout(hide, FAILSAFE_DELAY);
         window.addEventListener('load', hide, { once: true });
         window.addEventListener('pageshow', handlePageShow);
+        loader.removeAttribute('aria-hidden');
+        loader.setAttribute('data-open', '');
+        setSiblingsInert(true);
+        setTimeout(hide, FAILSAFE_DELAY);
+        startTime = performance.now();
     }
 
     function setSiblingsInert(isInert) {

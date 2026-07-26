@@ -10,14 +10,14 @@
         <h2
             id="tagline-title"
             class="tagline__title uppercase select-none"
-            aria-label="Screens to Stage"
+            aria-label="Screen to Stage"
             data-typewriter
         >
             <span
                 class="tagline__screens"
                 data-typewriter-word
             >
-                Screens
+                Screen
             </span>
             <span class="tagline__arrow font-serif italic text-cream-60">&rarr;</span>
             <span
@@ -34,7 +34,7 @@
     .tagline__arrow {
         font-size: 0.7em;
         opacity: 0;
-        padding: 0 0.15em;
+        padding-right: 0.28em;
         transition: opacity var(--duration-slow) ease-out;
         vertical-align: 0.14em;
     }
@@ -81,6 +81,16 @@
 
     [data-typewriter-word] {
         border-right: 0.04em solid transparent;
+    }
+
+    @media (max-width: 768px) {
+        .tagline__screens[data-typing] {
+            border-right-color: transparent;
+        }
+
+        .tagline__stage::after {
+            display: none;
+        }
     }
 
     @keyframes tagline__blink {
@@ -138,9 +148,8 @@
             element.textContent = originalTexts[index];
         });
 
-        container.setAttribute('data-typed', '');
         container.setAttribute('data-arrow-visible', '');
-
+        container.setAttribute('data-typed', '');
         typewriterState = undefined;
     }
 
@@ -159,8 +168,8 @@
         const prefersReducedMotion = reducedMotionQuery.matches;
 
         if (prefersReducedMotion) {
-            container.setAttribute('data-typed', '');
             container.setAttribute('data-arrow-visible', '');
+            container.setAttribute('data-typed', '');
 
             return;
         }

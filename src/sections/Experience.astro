@@ -3,11 +3,11 @@ import SectionHeader from '@components/SectionHeader.astro';
 import { pad } from '@lib/utils';
 
 const HIGHLIGHTS = [
-    { description: 'Three screening blocks, 22 official selections \u2014 the year\'s boldest music videos, from first-timers to veterans, back to back on the big screen.', title: 'Screenings' },
-    { description: 'Ten jury awards and the Spotlight Partner Award, called at 11:45 PM \u2014 the directors behind the year\'s best videos, up on the stage.', title: 'Awards' },
-    { description: 'A raffle and a filmmaker Q&A after every block \u2014 directors and artists in conversation with hosts Kay Cote, Lauren, and Carmela.', title: 'Q&A Panel' },
-    { description: 'Live sets from nominee artists all night \u2014 flash mobs and a fire performer lighting up the floor.', title: 'Live Music' },
-    { description: 'Glamour, then chlorine. When the awards wrapped, the winners took the plunge off the pool deck \u2014 the last shot of the night, dressed to be seen.', title: 'Pool Party' },
+    { description: 'Live sets ran all night \u2014 flash mobs and a fire performer lighting up the floor.', title: 'Live Music' },
+    { description: 'Three screening blocks of official selections \u2014 music videos back to back on the open-air screen.', title: 'Screenings' },
+    { description: 'A raffle and a filmmaker Q&A after every block \u2014 directors and artists in conversation with the night\'s hosts.', title: 'Q&A Panel' },
+    { description: 'Awards from the jury and the festival\'s partners \u2014 winners called to the stage at 11:45 PM.', title: 'Awards' },
+    { description: 'The awards gave way to the pool deck \u2014 four late sets running straight to the 2 AM close.', title: 'After Party' },
 ] as const;
 ---
 
@@ -69,6 +69,7 @@ const HIGHLIGHTS = [
     }
 
     .experience__highlight-description {
+        max-width: var(--measure-prose);
         transition: color var(--duration-fast) ease;
     }
 

@@ -75,8 +75,12 @@ const TEAM = [
 </section>
 
 <style>
+    .team {
+        --team-gap: clamp(16px, calc(13.33px + 0.83vw), 24px);
+    }
+
     .team__body {
-        padding: clamp(16px, calc(13.33px + 0.83vw), 24px);
+        padding: var(--team-gap);
     }
 
     .team__card {
@@ -115,10 +119,10 @@ const TEAM = [
     }
 
     .team__grid {
-        gap: clamp(16px, calc(13.33px + 0.83vw), 24px);
+        gap: var(--team-gap);
     }
 
-    .team__grid > li:nth-child(-n+2) {
+    .team__grid > li:nth-child(-n + 2) {
         grid-column: span 2;
     }
 
@@ -149,16 +153,17 @@ const TEAM = [
 
     @media (max-width: 1024px) {
         .team__grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .team__grid > li:nth-child(-n+2) {
+        .team__grid > li:nth-child(-n + 2) {
             grid-column: auto;
         }
     }
 
     @media (max-width: 768px) {
         .team__grid {
+            gap: var(--section-padding-sm);
             grid-template-columns: 1fr;
         }
 
