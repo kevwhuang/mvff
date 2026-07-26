@@ -9,6 +9,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     class="loader fixed flex inset-0 items-center justify-center z-300 bg-night"
     aria-hidden="true"
     data-hidden
+    role="status"
 >
     <div class="loader__inner flex flex-col items-center">
         <div class="loader__logo grid place-items-center">
@@ -43,6 +44,11 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
             opacity var(--duration-slower) ease,
             visibility 0s var(--duration-slower);
         visibility: hidden;
+    }
+
+    .loader[data-hidden] .loader__logo,
+    .loader[data-hidden] .loader__progress {
+        animation-play-state: paused;
     }
 
     .loader__inner {
@@ -101,6 +107,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     define:vars={{ loaderShownKey: LOADER_SHOWN_KEY, reducedMotionQuery: REDUCED_MOTION_QUERY }}
     is:inline
 >
+    const FAILSAFE_DELAY = 8_000;
     const MIN_DISPLAY_DURATION = 300;
 
     function initLoader() {
@@ -110,7 +117,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
 
         if (!loader) return;
 
-        const prefersReducedMotion = window.matchMedia(reducedMotionQuery).matches;
+        const motionQuery = window.matchMedia(reducedMotionQuery);
 
         let hasShownLoader;
 
@@ -120,26 +127,34 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
             hasShownLoader = false;
         }
 
-        if (hasShownLoader || prefersReducedMotion) return;
+        if (hasShownLoader || motionQuery.matches) return;
 
         const startTime = performance.now();
 
         let isHidden = false;
 
         function completeHide() {
+            loader.setAttribute('aria-hidden', 'true');
             loader.setAttribute('data-hidden', '');
 
-            document.removeEventListener('keydown', handleLoaderKeydown);
+            setSiblingsInert(false);
 
-            try {
-                sessionStorage.setItem(loaderShownKey, '1');
-            } catch {
-                return;
-            }
+            motionQuery.removeEventListener('change', handleReducedMotionChange);
+            window.removeEventListener('pageshow', handlePageShow);
         }
 
-        function handleLoaderKeydown(event) {
-            if (event.key === 'Tab') event.preventDefault();
+        function handleContentLoaded() {
+            if (isHidden) return;
+
+            setSiblingsInert(true);
+        }
+
+        function handlePageShow(event) {
+            if (event.persisted) hide();
+        }
+
+        function handleReducedMotionChange(event) {
+            if (event.matches) hide();
         }
 
         function hide() {
@@ -154,13 +169,20 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
             setTimeout(completeHide, remaining);
         }
 
-        document.addEventListener('astro:before-swap', () => document.removeEventListener('keydown', handleLoaderKeydown), { once: true });
-        document.addEventListener('keydown', handleLoaderKeydown);
+        document.addEventListener('DOMContentLoaded', handleContentLoaded, { once: true });
+        document.addEventListener('astro:before-swap', () => setSiblingsInert(false), { once: true });
+        loader.removeAttribute('aria-hidden');
         loader.removeAttribute('data-hidden');
+        motionQuery.addEventListener('change', handleReducedMotionChange);
+        setSiblingsInert(true);
+        setTimeout(hide, FAILSAFE_DELAY);
         window.addEventListener('load', hide, { once: true });
+        window.addEventListener('pageshow', handlePageShow);
+    }
 
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) hide();
+    function setSiblingsInert(isInert) {
+        document.body.querySelectorAll(':scope > header, :scope > main, :scope > footer').forEach((sibling) => {
+            sibling.inert = isInert;
         });
     }
 

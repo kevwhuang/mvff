@@ -37,7 +37,7 @@ const HIGHLIGHTS = [
                         / {pad(index + 1)}
                     </span>
                     <h3 class="experience__highlight-title uppercase">{highlight.title}</h3>
-                    <p class="experience__highlight-description font-serif text-cream-60">{highlight.description}</p>
+                    <p class="experience__highlight-description font-serif text-xl text-cream-60">{highlight.description}</p>
                 </li>
             ))}
         </ol>
@@ -51,13 +51,24 @@ const HIGHLIGHTS = [
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px) 0;
     }
 
+    .experience__highlight:hover .experience__highlight-description {
+        color: var(--color-cream);
+    }
+
+    .experience__highlight:hover .experience__highlight-title {
+        color: var(--color-coral);
+        transform: translateX(8px);
+    }
+
+    .experience__highlight:hover::after {
+        opacity: 1;
+    }
+
     .experience__highlight:last-child {
         border-bottom: none;
     }
 
     .experience__highlight-description {
-        font-size: 20px;
-        line-height: 1.4;
         transition: color var(--duration-fast) ease;
     }
 
@@ -74,28 +85,9 @@ const HIGHLIGHTS = [
             transform var(--duration-fast) ease;
     }
 
-    @media (hover: hover) {
-        .experience__highlight:hover .experience__highlight-description {
-            color: var(--color-cream);
-        }
-
-        .experience__highlight:hover .experience__highlight-title {
-            color: var(--color-coral);
-            transform: translateX(8px);
-        }
-
-        .experience__highlight:hover::after {
-            opacity: 1;
-        }
-    }
-
     @media (max-width: 768px) {
         .experience__highlight {
             grid-template-columns: 1fr;
-        }
-
-        .experience__highlight-description {
-            grid-column: 1 / -1;
         }
 
         .experience__highlight-number {

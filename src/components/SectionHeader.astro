@@ -9,7 +9,7 @@ const { headingId, level: Heading = 'h1', marker } = Astro.props;
 ---
 
 <header
-    class:list={['section-header grid items-baseline gap-x-6 gap-y-3 pb-4 border-b border-cream-15', { 'section-header--bare': !marker }]}
+    class:list={['section-header', { 'section-header--bare': !marker }, 'grid items-baseline gap-x-6 gap-y-3 pb-4 border-b border-cream-15']}
     data-scroll
 >
     {marker && <span class="section-header__marker font-mono text-coral select-none">{marker}</span>}

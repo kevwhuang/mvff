@@ -53,7 +53,7 @@ import { LINKS } from '@lib/constants';
                 width={640}
             />
         </h1>
-        <p class="hero__reveal hero__subtitle font-serif italic text-cream-80">
+        <p class="hero__reveal subtitle font-serif italic text-cream-80">
             <span class="block">A red-carpet premiere for the music video.</span>
             <span class="block">Bold artists, from screen to stage.</span>
         </p>
@@ -84,6 +84,10 @@ import { LINKS } from '@lib/constants';
         --hero-corner-size: clamp(14px, calc(11.33px + 0.83vw), 22px);
         --hero-stagger: var(--duration-fast);
         min-height: calc(100svh - var(--header-height));
+    }
+
+    .hero__actions {
+        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
     }
 
     .hero__background::after {
@@ -189,29 +193,12 @@ import { LINKS } from '@lib/constants';
         animation-delay: calc(var(--hero-stagger) * 5);
     }
 
-    .hero__subtitle {
-        font-size: clamp(20px, calc(16px + 1.25vw), 32px);
-        line-height: 1.3;
-        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
-        max-width: var(--measure-prose);
-    }
-
     .hero__title {
         margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
     }
 
     .hero__video {
         filter: brightness(0.62) contrast(1.08) saturate(1.2);
-    }
-
-    @media (max-width: 1024px) {
-        .hero__actions {
-            margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
-        }
-
-        .hero__countdown {
-            display: none;
-        }
     }
 
     @media (max-width: 768px) {
@@ -237,10 +224,10 @@ import { LINKS } from '@lib/constants';
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
     import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
-    function initHero(signal: AbortSignal) {
-        initDisabledLinks('.button[aria-disabled="true"]', signal);
+    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
-        const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+    function initHero(signal: AbortSignal) {
+        initDisabledLinks('.hero__actions .button[aria-disabled="true"]', signal);
 
         syncHeroVideo(reducedMotionQuery.matches);
         reducedMotionQuery.addEventListener('change', event => syncHeroVideo(event.matches), { signal });
@@ -259,4 +246,6 @@ import { LINKS } from '@lib/constants';
     }
 
     registerPageScript(initHero);
+
+    syncHeroVideo(reducedMotionQuery.matches);
 </script>

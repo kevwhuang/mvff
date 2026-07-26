@@ -21,7 +21,7 @@
             </span>
             <span class="tagline__arrow font-serif italic text-cream-60">&rarr;</span>
             <span
-                class="tagline__stage font-serif italic text-coral"
+                class="tagline__stage relative font-serif italic text-coral"
                 data-typewriter-word
             >
                 Stage
@@ -46,7 +46,6 @@
     .tagline__stage {
         font-size: 0.92em;
         padding-right: 0.12em;
-        position: relative;
     }
 
     .tagline__stage::after {
@@ -110,8 +109,10 @@
     const ARROW_PAUSE = 350;
     const CHARACTER_DELAY = 75;
     const TYPEWRITER_ROOT_MARGIN = '0px 0px -15% 0px';
+    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
     let typewriterObserver: IntersectionObserver | undefined;
+    let typewriterState: TypewriterState | undefined;
     let typewriterTimeouts: ReturnType<typeof setTimeout>[] = [];
 
     function clearTypewriterTimeouts() {
@@ -124,9 +125,29 @@
         typewriterObserver?.disconnect();
     }
 
+    function handleReducedMotionChange(event: MediaQueryListEvent) {
+        if (!event.matches || !typewriterState) return;
+
+        const { container, originalTexts, words } = typewriterState;
+
+        clearTypewriterTimeouts();
+        typewriterObserver?.disconnect();
+
+        words.forEach((element, index) => {
+            element.removeAttribute('data-typing');
+            element.textContent = originalTexts[index];
+        });
+
+        container.setAttribute('data-typed', '');
+        container.setAttribute('data-arrow-visible', '');
+
+        typewriterState = undefined;
+    }
+
     function initTypewriter() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
+        typewriterState = undefined;
 
         const container = document.querySelector<HTMLElement>('[data-typewriter]');
 
@@ -135,9 +156,9 @@
         const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
 
         const originalTexts = Array.from(words, element => element.textContent);
-        const prefersReducedMotion = window.matchMedia(REDUCED_MOTION_QUERY).matches;
+        const prefersReducedMotion = reducedMotionQuery.matches;
 
-        if (container.hasAttribute('data-typed') || prefersReducedMotion) {
+        if (prefersReducedMotion) {
             container.setAttribute('data-typed', '');
             container.setAttribute('data-arrow-visible', '');
 
@@ -148,11 +169,15 @@
             element.textContent = '';
         });
 
-        typewriterObserver = new IntersectionObserver(([entry], observer) => {
-            if (!entry.isIntersecting) return;
+        const state = { characterIndex: 0, container, originalTexts, wordIndex: 0, words };
+
+        typewriterState = state;
+
+        typewriterObserver = new IntersectionObserver((entries, observer) => {
+            if (!entries.some(entry => entry.isIntersecting)) return;
 
             observer.disconnect();
-            typeNextWord({ characterIndex: 0, container, originalTexts, wordIndex: 0, words });
+            typeNextWord(state);
         }, { rootMargin: TYPEWRITER_ROOT_MARGIN });
 
         typewriterObserver.observe(container);
@@ -202,6 +227,6 @@
     }
 
     document.addEventListener('astro:before-swap', handleBeforeSwap);
-
     document.addEventListener('astro:page-load', initTypewriter);
+    reducedMotionQuery.addEventListener('change', handleReducedMotionChange);
 </script>

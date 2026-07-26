@@ -1,13 +1,13 @@
 ---
 import { LINKS, ROUTES } from '@lib/constants';
-import { externalLinkProps } from '@lib/utils';
+import { getExternalLinkProps } from '@lib/utils';
 ---
 
 <footer class="footer border-cream-15 border-t bg-navy">
     <div class="footer__inner shell grid items-start">
         <div class="flex flex-col gap-4">
             <a
-                class="footer__title active:text-coral hover:text-coral py-1 font-display no-underline text-cream"
+                class="footer__title py-1 font-display no-underline text-cream"
                 href="/"
             >
                 Austin Music Video Film Festival
@@ -21,23 +21,19 @@ import { externalLinkProps } from '@lib/utils';
             <div class="footer__column">
                 <h2 class="footer__heading mb-4 uppercase text-cream-60">Site</h2>
                 <ul class="list-none">
-                    {ROUTES.map((route) => {
-                        const isDisabled = route.label === 'Store';
-
-                        return (
-                            <li>
-                                <a
-                                    class="footer__link block py-3 font-display no-underline text-cream select-none"
-                                    aria-disabled={isDisabled ? 'true' : undefined}
-                                    href={route.href}
-                                    tabindex={isDisabled ? -1 : undefined}
-                                    {...(isDisabled ? {} : externalLinkProps(route.href))}
-                                >
-                                    {route.label}
-                                </a>
-                            </li>
-                        );
-                    })}
+                    {ROUTES.map(route => (
+                        <li>
+                            <a
+                                class="footer__link block py-3 font-display no-underline text-cream select-none"
+                                aria-disabled={route.isDisabled ? 'true' : undefined}
+                                href={route.href}
+                                tabindex={route.isDisabled ? '-1' : undefined}
+                                {...(route.isDisabled ? {} : getExternalLinkProps(route.href))}
+                            >
+                                {route.label}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div class="footer__column">
@@ -99,7 +95,7 @@ import { externalLinkProps } from '@lib/utils';
                             class="footer__link block py-3 font-display no-underline text-cream select-none"
                             aria-disabled="true"
                             href={LINKS.filmfreeway}
-                            tabindex={-1}
+                            tabindex="-1"
                         >
                             FilmFreeway
                         </a>
@@ -130,7 +126,7 @@ import { externalLinkProps } from '@lib/utils';
         font-size: 10px;
         letter-spacing: 0.2em;
         line-height: 1.5;
-        padding-top: 7px;
+        padding-top: 8px;
     }
 
     .footer__inner {
@@ -149,6 +145,10 @@ import { externalLinkProps } from '@lib/utils';
         color: var(--color-coral);
     }
 
+    .footer__link:hover {
+        color: var(--color-coral);
+    }
+
     .footer__link[aria-disabled='true'] {
         color: var(--color-cream-60);
         cursor: not-allowed;
@@ -159,6 +159,10 @@ import { externalLinkProps } from '@lib/utils';
         color: var(--color-cream-60);
     }
 
+    .footer__link[aria-disabled='true']:hover {
+        color: var(--color-cream-60);
+    }
+
     .footer__title {
         font-size: clamp(32px, calc(26.67px + 1.67vw), 48px);
         letter-spacing: 0.04em;
@@ -166,14 +170,12 @@ import { externalLinkProps } from '@lib/utils';
         transition: color var(--duration-fast) ease;
     }
 
-    @media (hover: hover) {
-        .footer__link:hover {
-            color: var(--color-coral);
-        }
+    .footer__title:active {
+        color: var(--color-coral);
+    }
 
-        .footer__link[aria-disabled='true']:hover {
-            color: var(--color-cream-60);
-        }
+    .footer__title:hover {
+        color: var(--color-coral);
     }
 
     @media (max-width: 1024px) {

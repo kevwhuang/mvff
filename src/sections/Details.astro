@@ -40,6 +40,14 @@ import SectionHeader from '@components/SectionHeader.astro';
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
     }
 
+    .details__cell:hover .details__value {
+        color: var(--color-coral);
+    }
+
+    .details__cell:hover::after {
+        opacity: 0.5;
+    }
+
     .details__cell:last-child {
         border-right: none;
     }
@@ -52,16 +60,6 @@ import SectionHeader from '@components/SectionHeader.astro';
     .details__value {
         font-size: clamp(28px, calc(21.33px + 2.08vw), 48px);
         transition: color var(--duration-fast) ease;
-    }
-
-    @media (hover: hover) {
-        .details__cell:hover .details__value {
-            color: var(--color-coral);
-        }
-
-        .details__cell:hover::after {
-            opacity: 0.5;
-        }
     }
 
     @media (max-width: 1024px) {

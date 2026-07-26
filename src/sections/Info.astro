@@ -4,7 +4,7 @@ import SectionHeader from '@components/SectionHeader.astro';
 const FAQ = [
     { answer: 'One night in Austin where the music video takes center stage: three screening blocks, live sets from nominee artists, filmmaker Q&A panels, an awards ceremony, and a pool party to close. One venue, every screen and stage lit, built to pull Austin\'s music and film worlds into one room.', question: 'What is the Austin Music Video Film Festival?' },
     { answer: 'Yes, the night ran 21+ with valid ID, no exceptions.', question: 'Was there an age requirement?' },
-    { answer: 'Red carpet attire: silk, tuxedos, and a swimsuit if you were feeling bold. Guests dressed to be photographed; the pool deck stayed open under the stars.', question: 'What did people wear?' },
+    { answer: 'Red-carpet attire: silk, tuxedos, and a swimsuit if you were feeling bold. Guests dressed to be photographed; the pool deck stayed open under the stars.', question: 'What did people wear?' },
     { answer: 'With a 2 AM close, rideshare was the move, and street parking around the venue covered the rest.', question: 'How did guests get there?' },
     { answer: 'Cabana Club\'s full bar poured all night. Outside food and drinks weren\'t permitted.', question: 'Was there food and drink?' },
     { answer: 'Phones and small personal cameras, absolutely. Accredited press and media cleared through email ahead of the night.', question: 'Were cameras allowed?' },
@@ -13,22 +13,22 @@ const FAQ = [
 ] as const;
 
 const SCHEDULE = [
-    ['7:00 PM', 'Doors \u00B7 Ryley Hall', 'Live', '2026-07-18T19:00-05:00'],
-    ['7:25 PM', 'Dasmayan Daydreamers', 'Live', '2026-07-18T19:25-05:00'],
-    ['8:00 PM', 'Tipping Culture', 'Live', '2026-07-18T20:00-05:00'],
-    ['8:35 PM', 'Anna Madewell', 'Live', '2026-07-18T20:35-05:00'],
-    ['9:30 PM', 'Music Video Block One', 'Screening', '2026-07-18T21:30-05:00'],
-    ['10:00 PM', 'Raffle & Q&A \u00B7 Kay Cote', 'Panel', '2026-07-18T22:00-05:00'],
-    ['10:15 PM', 'Music Video Block Two', 'Screening', '2026-07-18T22:15-05:00'],
-    ['10:45 PM', 'Raffle & Q&A \u00B7 Lauren', 'Panel', '2026-07-18T22:45-05:00'],
-    ['11:00 PM', 'Music Video Block Three', 'Screening', '2026-07-18T23:00-05:00'],
-    ['11:30 PM', 'Raffle & Q&A \u00B7 Carmela', 'Panel', '2026-07-18T23:30-05:00'],
-    ['11:45 PM', 'Awards Ceremony', 'Awards', '2026-07-18T23:45-05:00'],
-    ['12:05 AM', 'Jyme', 'After Party', '2026-07-19T00:05-05:00'],
-    ['12:35 AM', 'Natia', 'After Party', '2026-07-19T00:35-05:00'],
-    ['1:05 AM', 'Amiri Tafari', 'After Party', '2026-07-19T01:05-05:00'],
-    ['1:35 AM', 'Surprise Set', 'After Party', '2026-07-19T01:35-05:00'],
-    ['2:00 AM', 'Lights Up', 'Close', '2026-07-19T02:00-05:00'],
+    { datetime: '2026-07-18T19:00-05:00', event: 'Doors \u00B7\u00A0Ryley\u00A0Hall', tag: 'Live', time: '7:00 PM' },
+    { datetime: '2026-07-18T19:25-05:00', event: 'Dasmayan Daydreamers', tag: 'Live', time: '7:25 PM' },
+    { datetime: '2026-07-18T20:00-05:00', event: 'Tipping Culture', tag: 'Live', time: '8:00 PM' },
+    { datetime: '2026-07-18T20:35-05:00', event: 'Anna Madewell', tag: 'Live', time: '8:35 PM' },
+    { datetime: '2026-07-18T21:30-05:00', event: 'Music Video Block\u00A0One', tag: 'Screening', time: '9:30 PM' },
+    { datetime: '2026-07-18T22:00-05:00', event: 'Raffle & Q&A \u00B7\u00A0Kay\u00A0Cote', tag: 'Panel', time: '10:00 PM' },
+    { datetime: '2026-07-18T22:15-05:00', event: 'Music Video Block\u00A0Two', tag: 'Screening', time: '10:15 PM' },
+    { datetime: '2026-07-18T22:45-05:00', event: 'Raffle & Q&A \u00B7\u00A0Lauren', tag: 'Panel', time: '10:45 PM' },
+    { datetime: '2026-07-18T23:00-05:00', event: 'Music Video Block\u00A0Three', tag: 'Screening', time: '11:00 PM' },
+    { datetime: '2026-07-18T23:30-05:00', event: 'Raffle & Q&A \u00B7\u00A0Carmela', tag: 'Panel', time: '11:30 PM' },
+    { datetime: '2026-07-18T23:45-05:00', event: 'Awards Ceremony', tag: 'Awards', time: '11:45 PM' },
+    { datetime: '2026-07-19T00:05-05:00', event: 'Jyme', tag: 'After Party', time: '12:05 AM' },
+    { datetime: '2026-07-19T00:35-05:00', event: 'Natia', tag: 'After Party', time: '12:35 AM' },
+    { datetime: '2026-07-19T01:05-05:00', event: 'Amiri Tafari', tag: 'After Party', time: '1:05 AM' },
+    { datetime: '2026-07-19T01:35-05:00', event: 'Surprise Set', tag: 'After Party', time: '1:35 AM' },
+    { datetime: '2026-07-19T02:00-05:00', event: 'Lights Up', tag: 'Close', time: '2:00 AM' },
 ] as const;
 ---
 
@@ -46,7 +46,7 @@ const SCHEDULE = [
             data-scroll-stagger="0.12"
         >
             <div>
-                <h2 class="subheading">Venue</h2>
+                <h2 class="info__subheading mb-6 pb-3 border-b border-cream-15 uppercase">Venue</h2>
                 <div class="info__venue sweep relative isolate border border-cream-15 bg-navy">
                     <h3 class="info__venue-name mb-2">Cabana Club</h3>
                     <p class="info__venue-address mb-4 font-mono uppercase text-cream-60">5012 E 7th St &middot; Austin, TX</p>
@@ -62,12 +62,12 @@ const SCHEDULE = [
                 </div>
             </div>
             <div>
-                <h2 class="subheading">Program</h2>
+                <h2 class="info__subheading mb-6 pb-3 border-b border-cream-15 uppercase">Program</h2>
                 <ol class="info__schedule flex flex-col list-none">
-                    {SCHEDULE.map(([time, event, tag, datetime]) => (
+                    {SCHEDULE.map(({ datetime, event, tag, time }) => (
                         <li class="info__schedule-row grid items-baseline relative py-4 border-b border-cream-15">
                             <time
-                                class="info__schedule-time"
+                                class="info__schedule-time font-mono tracking-widest whitespace-nowrap"
                                 datetime={datetime}
                             >
                                 {time}
@@ -84,14 +84,14 @@ const SCHEDULE = [
             class="relative"
             data-scroll
         >
-            <h2 class="subheading flex items-baseline justify-between">Frequently Asked Questions <span class="subheading__badge">{FAQ.length} Entries</span></h2>
+            <h2 class="info__subheading flex items-baseline justify-between mb-6 pb-3 border-b border-cream-15 uppercase">Frequently Asked Questions <span class="info__subheading-badge font-mono whitespace-nowrap text-coral">{FAQ.length} Entries</span></h2>
             <div class="info__faq flex flex-col">
                 {FAQ.map(entry => (
                     <details
                         class="info__faq-item border-b border-cream-15"
                         name="faq"
                     >
-                        <summary class="info__faq-question active:text-coral hover:text-coral flex items-center justify-between gap-4 py-4 font-display list-none text-cream cursor-pointer select-none">
+                        <summary class="info__faq-question flex items-center justify-between gap-4 py-4 font-display list-none text-cream cursor-pointer select-none">
                             <span>{entry.question}</span>
                             <span
                                 class="info__faq-icon font-mono text-coral"
@@ -100,7 +100,7 @@ const SCHEDULE = [
                                 +
                             </span>
                         </summary>
-                        <p class="info__faq-answer pb-6 font-serif text-cream-60">
+                        <p class="info__faq-answer pb-6 font-serif text-xl text-cream-60">
                             {entry.answer}
                         </p>
                     </details>
@@ -113,11 +113,6 @@ const SCHEDULE = [
 <style>
     .info__faq {
         interpolate-size: allow-keywords;
-    }
-
-    .info__faq-answer {
-        font-size: 20px;
-        line-height: 1.4;
     }
 
     .info__faq-icon {
@@ -156,8 +151,12 @@ const SCHEDULE = [
         transition: color var(--duration-fast) ease;
     }
 
-    .info__faq-question::-webkit-details-marker {
-        display: none;
+    .info__faq-question:active {
+        color: var(--color-coral);
+    }
+
+    .info__faq-question:hover {
+        color: var(--color-coral);
     }
 
     .info__schedule-event {
@@ -168,7 +167,16 @@ const SCHEDULE = [
 
     .info__schedule-row {
         gap: clamp(8px, calc(5.33px + 0.83vw), 16px);
-        grid-template-columns: clamp(78px, calc(70.67px + 2.29vw), 100px) 1fr auto;
+        grid-template-columns: clamp(80px, calc(73.33px + 2.08vw), 100px) 1fr auto;
+    }
+
+    .info__schedule-row:hover .info__schedule-event,
+    .info__schedule-row:hover .info__schedule-time {
+        transform: translateX(8px);
+    }
+
+    .info__schedule-row:hover .info__schedule-time {
+        color: var(--color-coral);
     }
 
     .info__schedule-tag {
@@ -177,14 +185,10 @@ const SCHEDULE = [
     }
 
     .info__schedule-time {
-        color: var(--color-cream);
-        font-family: var(--font-mono);
         font-size: 14px;
-        letter-spacing: 0.1em;
         transition:
             color var(--duration-fast) ease,
             transform var(--duration-fast) ease;
-        white-space: nowrap;
     }
 
     .info__stack {
@@ -192,8 +196,25 @@ const SCHEDULE = [
         margin-bottom: var(--section-padding-sm);
     }
 
+    .info__subheading {
+        font-size: clamp(28px, calc(22.67px + 1.67vw), 44px);
+    }
+
+    .info__subheading-badge {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+    }
+
     .info__venue {
         padding: clamp(32px, calc(26.67px + 1.67vw), 48px);
+    }
+
+    .info__venue:hover .info__venue-name {
+        color: var(--color-coral);
+    }
+
+    .info__venue:hover::after {
+        opacity: 0.5;
     }
 
     .info__venue-address {
@@ -221,41 +242,6 @@ const SCHEDULE = [
         font-size: clamp(24px, calc(20px + 1.25vw), 36px);
         line-height: 1;
         transition: color var(--duration-fast) ease;
-    }
-
-    .subheading {
-        border-bottom: 1px solid var(--color-cream-15);
-        font-size: clamp(28px, calc(22.67px + 1.67vw), 44px);
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .subheading__badge {
-        color: var(--color-coral);
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.2em;
-        white-space: nowrap;
-    }
-
-    @media (hover: hover) {
-        .info__schedule-row:hover .info__schedule-event,
-        .info__schedule-row:hover .info__schedule-time {
-            transform: translateX(8px);
-        }
-
-        .info__schedule-row:hover .info__schedule-time {
-            color: var(--color-coral);
-        }
-
-        .info__venue:hover .info__venue-name {
-            color: var(--color-coral);
-        }
-
-        .info__venue:hover::after {
-            opacity: 0.5;
-        }
     }
 
     @media (max-width: 768px) {

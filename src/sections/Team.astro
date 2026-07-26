@@ -86,6 +86,26 @@ const TEAM = [
             transform var(--duration-base) ease;
     }
 
+    .team__card:hover {
+        border-color: var(--color-coral);
+        box-shadow: 0 24px 48px -16px var(--color-coral-35);
+        transform: translateY(-4px);
+    }
+
+    .team__card:hover .team__image {
+        filter: grayscale(0) brightness(1) contrast(1.05);
+        transform: scale(1.05);
+    }
+
+    .team__card:hover .team__monogram {
+        color: color-mix(in oklab, var(--color-coral) 70%, var(--color-navy));
+        transform: scale(1.05);
+    }
+
+    .team__card:hover .team__role {
+        color: var(--color-coral);
+    }
+
     .team__frame::after {
         background: linear-gradient(180deg, transparent 55%, var(--color-black-55) 100%);
         content: '';
@@ -125,28 +145,6 @@ const TEAM = [
         font-size: 10px;
         letter-spacing: 0.2em;
         transition: color var(--duration-fast) ease;
-    }
-
-    @media (hover: hover) {
-        .team__card:hover {
-            border-color: var(--color-coral);
-            box-shadow: 0 24px 48px -16px var(--color-coral-35);
-            transform: translateY(-4px);
-        }
-
-        .team__card:hover .team__image {
-            filter: grayscale(0) brightness(1) contrast(1.05);
-            transform: scale(1.05);
-        }
-
-        .team__card:hover .team__monogram {
-            color: color-mix(in oklab, var(--color-coral) 70%, var(--color-navy));
-            transform: scale(1.05);
-        }
-
-        .team__card:hover .team__role {
-            color: var(--color-coral);
-        }
     }
 
     @media (max-width: 1024px) {

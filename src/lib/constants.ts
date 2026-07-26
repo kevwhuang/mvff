@@ -14,8 +14,8 @@ export const LOADER_SHOWN_KEY = 'mvff-loader-shown';
 export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 export const ROUTES = [
-    { href: '/', label: 'Home' },
-    { href: '/info', label: 'Info' },
-    { href: '/photos', label: 'Photos' },
-    { href: 'https://shop.atxmusicvideofilmfestival.com', label: 'Store' },
+    { href: '/', isDisabled: false, label: 'Home' },
+    { href: '/info', isDisabled: false, label: 'Info' },
+    { href: '/photos', isDisabled: false, label: 'Photos' },
+    { href: 'https://shop.atxmusicvideofilmfestival.com', isDisabled: true, label: 'Store' },
 ] as const;

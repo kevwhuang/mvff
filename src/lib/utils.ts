@@ -1,6 +1,6 @@
 const PAD_LENGTH = 2;
 
-export function externalLinkProps(href: string): { rel?: 'noopener'; target?: '_blank' } {
+export function getExternalLinkProps(href: string): { rel?: 'noopener'; target?: '_blank' } {
     return href.startsWith('http') ? { rel: 'noopener', target: '_blank' } : {};
 }
 
@@ -10,12 +10,8 @@ export function initDisabledLinks(selector: string, signal: AbortSignal): void {
     });
 }
 
-export function normalizePath(pathname: string): string {
-    return pathname.replace(/\/$/, '') || '/';
-}
-
-export function pad(value: number, length = PAD_LENGTH): string {
-    return String(value).padStart(length, '0');
+export function pad(value: number): string {
+    return String(value).padStart(PAD_LENGTH, '0');
 }
 
 export function registerPageScript(init: (signal: AbortSignal) => void): void {

@@ -1,7 +1,7 @@
 ---
 import SectionHeader from '@components/SectionHeader.astro';
 import { LINKS } from '@lib/constants';
-import { pad } from '@lib/utils';
+import { getExternalLinkProps, pad } from '@lib/utils';
 
 const CHANNELS = [
     { href: LINKS.instagram, isExternal: true, label: 'Instagram', value: '@atxmvff' },
@@ -12,7 +12,6 @@ const CHANNELS = [
 ---
 
 <section
-    id="contact"
     class="contact section"
     aria-labelledby="contact-title"
 >
@@ -33,8 +32,7 @@ const CHANNELS = [
                     <a
                         class="contact__channel-link sweep grid items-center relative isolate no-underline text-cream"
                         href={channel.href}
-                        rel={channel.isExternal ? 'noopener' : undefined}
-                        target={channel.isExternal ? '_blank' : undefined}
+                        {...getExternalLinkProps(channel.href)}
                     >
                         <span
                             class="contact__channel-index font-mono text-cream-60 select-none"
@@ -43,8 +41,8 @@ const CHANNELS = [
                             / {pad(index + 1)}
                         </span>
                         <span class="contact__channel-label font-display uppercase">{channel.label}</span>
-                        <span class="contact__channel-value flex items-baseline min-w-0 gap-2 font-serif italic wrap-anywhere text-cream-60">
-                            <span class="min-w-0">{channel.value.split('@').flatMap((part, index) => (index === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
+                        <span class="contact__channel-value flex items-baseline justify-end min-w-0 gap-2 font-serif italic text-right wrap-anywhere text-cream-60">
+                            <span class="min-w-0">{channel.value.split('@').flatMap((part, partIndex) => (partIndex === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
                             {channel.isExternal && (
                                 <span
                                     class="contact__channel-cue select-none"
@@ -99,27 +97,23 @@ const CHANNELS = [
         opacity: 1;
     }
 
-    .contact__channel-value {
-        font-size: clamp(20px, calc(18.67px + 0.42vw), 24px);
-        justify-content: flex-end;
-        line-height: 1.4;
-        text-align: right;
-        transition: color var(--duration-fast) ease;
+    .contact__channel-link:hover .contact__channel-label {
+        color: var(--color-coral);
+        transform: translateX(8px);
     }
 
-    @media (hover: hover) {
-        .contact__channel-link:hover .contact__channel-label {
-            color: var(--color-coral);
-            transform: translateX(8px);
-        }
+    .contact__channel-link:hover .contact__channel-value {
+        color: var(--color-cream);
+    }
 
-        .contact__channel-link:hover .contact__channel-value {
-            color: var(--color-cream);
-        }
+    .contact__channel-link:hover::after {
+        opacity: 1;
+    }
 
-        .contact__channel-link:hover::after {
-            opacity: 1;
-        }
+    .contact__channel-value {
+        font-size: clamp(20px, calc(18.67px + 0.42vw), 24px);
+        line-height: 1.4;
+        transition: color var(--duration-fast) ease;
     }
 
     @media (max-width: 768px) {

@@ -17,10 +17,10 @@ const MARQUEE_COPIES = 6;
             class="partners__track flex items-center w-max list-none"
             style={`--partners-copies: ${MARQUEE_COPIES}`}
         >
-            {Array.from({ length: MARQUEE_COPIES }).flatMap((_, copy) => [
+            {Array.from({ length: MARQUEE_COPIES }).flatMap((_, copyIndex) => [
                 <li
                     class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream"
-                    aria-hidden={copy > 0 ? 'true' : undefined}
+                    aria-hidden={copyIndex > 0 ? 'true' : undefined}
                 >
                     <Image
                         class="partners__logo partners__logo--madewell object-contain w-auto align-middle"
@@ -40,7 +40,7 @@ const MARQUEE_COPIES = 6;
                 </li>,
                 <li
                     class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream"
-                    aria-hidden={copy > 0 ? 'true' : undefined}
+                    aria-hidden={copyIndex > 0 ? 'true' : undefined}
                 >
                     <Image
                         class="partners__logo object-contain w-auto align-middle"

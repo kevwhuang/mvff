@@ -7,9 +7,10 @@ import { initParallax } from '@lib/parallax';
 const SCROLL_DURATION = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
-const SCROLL_START = 'top 85%';
 const SCROLL_START_RATIO = 0.85;
 const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+
+const SCROLL_START = `top ${SCROLL_START_RATIO * 100}%`;
 
 let batchFlushCalls: gsap.core.Animation[] = [];
 let hasRevealed = false;
@@ -37,20 +38,20 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
         if (stagger > 0) {
             const children = Array.from(element.children);
 
-            const hidden = hasRevealed ? children.filter(child => !isPastScrollStart(child)) : children;
-            const revealed = hasRevealed ? children.filter(child => isPastScrollStart(child)) : [];
+            const hiddenChildren = hasRevealed ? children.filter(child => !isPastScrollStart(child)) : children;
+            const revealedChildren = hasRevealed ? children.filter(child => isPastScrollStart(child)) : [];
 
             gsap.set(element, { opacity: 1 });
 
-            if (revealed.length > 0) gsap.set(revealed, { clearProps: 'transform', opacity: 1 });
+            if (revealedChildren.length > 0) gsap.set(revealedChildren, { clearProps: 'transform', opacity: 1 });
 
-            if (hidden.length === 0) return;
+            if (hiddenChildren.length === 0) return;
 
-            gsap.set(hidden, fromState);
+            gsap.set(hiddenChildren, fromState);
 
             const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
 
-            ScrollTrigger.batch(hidden, {
+            ScrollTrigger.batch(hiddenChildren, {
                 onEnter: batch => gsap.fromTo(batch, fromState, { ...toState, stagger }),
                 once: true,
                 start: SCROLL_START,

@@ -2,7 +2,7 @@ let isParallaxQueued = false;
 let parallaxLayers: { element: HTMLElement; factor: number }[] = [];
 
 function handleScroll() {
-    if (!parallaxLayers.length || isParallaxQueued) return;
+    if (isParallaxQueued || !parallaxLayers.length) return;
 
     isParallaxQueued = true;
     requestAnimationFrame(updateParallax);
@@ -33,7 +33,7 @@ export function initParallax(prefersReducedMotion: boolean): void {
 
     parallaxLayers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'), element => ({
         element,
-        factor: Number.parseFloat(element.dataset.parallax!),
+        factor: Number.parseFloat(element.dataset.parallax || '0'),
     }));
 
     updateParallax();
