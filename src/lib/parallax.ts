@@ -33,7 +33,7 @@ export function initParallax(prefersReducedMotion: boolean): void {
 
     parallaxLayers = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'), element => ({
         element,
-        factor: Number.parseFloat(element.dataset.parallax || '0'),
+        factor: Number.parseFloat(element.dataset.parallax!),
     }));
 
     updateParallax();

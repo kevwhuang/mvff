@@ -12,7 +12,7 @@ import { externalLinkProps } from '@lib/utils';
             >
                 Austin Music Video Film Festival
             </a>
-            <p class="footer__tag max-w-90 font-serif italic text-xl text-cream-60">Austin's music video scene, staged like a premiere: screening blocks, live nominee sets, awards, and a pool party that runs to 2 AM. One night at Cabana Club.</p>
+            <p class="footer__tag max-w-90 font-serif italic text-xl text-cream-60">Austin's music video scene, staged like a premiere: screening blocks, live nominee sets, awards, and a pool party that ran to 2 AM. One night at Cabana Club.</p>
         </div>
         <nav
             class="contents"
@@ -27,7 +27,7 @@ import { externalLinkProps } from '@lib/utils';
                         return (
                             <li>
                                 <a
-                                    class="footer__link block py-3 font-display no-underline text-cream"
+                                    class="footer__link block py-3 font-display no-underline text-cream select-none"
                                     aria-disabled={isDisabled ? 'true' : undefined}
                                     href={route.href}
                                     tabindex={isDisabled ? -1 : undefined}
@@ -45,7 +45,7 @@ import { externalLinkProps } from '@lib/utils';
                 <ul class="list-none">
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             href={LINKS.instagram}
                             rel="noopener"
                             target="_blank"
@@ -55,7 +55,7 @@ import { externalLinkProps } from '@lib/utils';
                     </li>
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             href={LINKS.email}
                         >
                             Email
@@ -63,7 +63,7 @@ import { externalLinkProps } from '@lib/utils';
                     </li>
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             href={LINKS.phone}
                         >
                             Phone
@@ -71,10 +71,10 @@ import { externalLinkProps } from '@lib/utils';
                     </li>
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
-                            aria-disabled="true"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             href={LINKS.calendly}
-                            tabindex={-1}
+                            rel="noopener"
+                            target="_blank"
                         >
                             Schedule Call
                         </a>
@@ -86,7 +86,7 @@ import { externalLinkProps } from '@lib/utils';
                 <ul class="list-none">
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             href={LINKS.pitchDeck}
                             rel="noopener"
                             target="_blank"
@@ -96,7 +96,7 @@ import { externalLinkProps } from '@lib/utils';
                     </li>
                     <li>
                         <a
-                            class="footer__link block py-3 font-display no-underline text-cream"
+                            class="footer__link block py-3 font-display no-underline text-cream select-none"
                             aria-disabled="true"
                             href={LINKS.filmfreeway}
                             tabindex={-1}

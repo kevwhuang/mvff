@@ -17,6 +17,7 @@
         color var(--duration-fast) ease,
         opacity var(--duration-fast) ease,
         transform var(--duration-fast) ease;
+    user-select: none;
 }
 
 .button:active {

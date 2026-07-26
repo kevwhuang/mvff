@@ -36,12 +36,33 @@
         opacity: 0;
         padding: 0 0.15em;
         transition: opacity var(--duration-slow) ease-out;
+        vertical-align: 0.14em;
+    }
+
+    .tagline__screens[data-typing] {
+        border-right-color: var(--color-coral);
     }
 
     .tagline__stage {
         font-size: 0.92em;
         padding-right: 0.12em;
         position: relative;
+    }
+
+    .tagline__stage::after {
+        background: var(--color-coral);
+        bottom: 0;
+        content: '';
+        opacity: 0;
+        position: absolute;
+        right: -0.04em;
+        top: 0;
+        transform: skewX(-13deg);
+        width: 0.04em;
+    }
+
+    .tagline__stage[data-typing]::after {
+        opacity: 1;
     }
 
     .tagline__title {
@@ -56,21 +77,11 @@
 
     .tagline__title[data-typed] .tagline__stage::after {
         animation: tagline__blink var(--duration-blink) step-end infinite;
-        background: var(--color-coral);
-        bottom: 0;
-        content: '';
-        position: absolute;
-        right: -0.04em;
-        top: 0;
-        width: 0.04em;
+        opacity: 1;
     }
 
     [data-typewriter-word] {
         border-right: 0.04em solid transparent;
-    }
-
-    [data-typewriter-word][data-typing] {
-        border-right-color: var(--color-coral);
     }
 
     @keyframes tagline__blink {
@@ -100,7 +111,6 @@
     const CHARACTER_DELAY = 75;
     const TYPEWRITER_ROOT_MARGIN = '0px 0px -15% 0px';
 
-    let controller: AbortController | undefined;
     let typewriterObserver: IntersectionObserver | undefined;
     let typewriterTimeouts: ReturnType<typeof setTimeout>[] = [];
 
@@ -112,14 +122,11 @@
     function handleBeforeSwap() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
-        controller?.abort();
     }
 
     function initTypewriter() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
-        controller?.abort();
-        controller = new AbortController();
 
         const container = document.querySelector<HTMLElement>('[data-typewriter]');
 
@@ -127,7 +134,7 @@
 
         const words = container.querySelectorAll<HTMLElement>('[data-typewriter-word]');
 
-        const originalTexts = Array.from(words, element => element.textContent || '');
+        const originalTexts = Array.from(words, element => element.textContent);
         const prefersReducedMotion = window.matchMedia(REDUCED_MOTION_QUERY).matches;
 
         if (container.hasAttribute('data-typed') || prefersReducedMotion) {
@@ -141,10 +148,10 @@
             element.textContent = '';
         });
 
-        typewriterObserver = new IntersectionObserver(([entry]) => {
+        typewriterObserver = new IntersectionObserver(([entry], observer) => {
             if (!entry.isIntersecting) return;
 
-            typewriterObserver?.disconnect();
+            observer.disconnect();
             typeNextWord({ characterIndex: 0, container, originalTexts, wordIndex: 0, words });
         }, { rootMargin: TYPEWRITER_ROOT_MARGIN });
 
@@ -156,8 +163,6 @@
     }
 
     function typeCharacter(state: TypewriterState) {
-        if (controller?.signal.aborted) return;
-
         const { container, originalTexts, words } = state;
 
         const text = originalTexts[state.wordIndex];
@@ -185,8 +190,6 @@
     }
 
     function typeNextWord(state: TypewriterState) {
-        if (controller?.signal.aborted) return;
-
         if (state.wordIndex >= state.words.length) {
             state.container.setAttribute('data-typed', '');
 

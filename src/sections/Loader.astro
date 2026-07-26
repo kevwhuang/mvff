@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 import logo from '@images/logos/austin_music_video_film_festival.webp';
-import { LOADER_SHOWN_KEY } from '@lib/constants';
+import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
 ---
 
 <div
@@ -16,6 +16,7 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
                 class="h-auto w-full"
                 alt=""
                 densities={[1, 2]}
+                draggable="false"
                 fetchpriority="high"
                 loading="eager"
                 src={logo}
@@ -97,18 +98,19 @@ import { LOADER_SHOWN_KEY } from '@lib/constants';
 </style>
 
 <script
-    define:vars={{ loaderShownKey: LOADER_SHOWN_KEY }}
+    define:vars={{ loaderShownKey: LOADER_SHOWN_KEY, reducedMotionQuery: REDUCED_MOTION_QUERY }}
     is:inline
 >
+    const MIN_DISPLAY_DURATION = 300;
+
     function initLoader() {
-        const MIN_DISPLAY_DURATION = 300;
+        if (document.readyState !== 'loading') return;
 
         const loader = document.querySelector('.loader');
 
         if (!loader) return;
-        if (document.readyState !== 'loading') return;
 
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const prefersReducedMotion = window.matchMedia(reducedMotionQuery).matches;
 
         let hasShownLoader;
 

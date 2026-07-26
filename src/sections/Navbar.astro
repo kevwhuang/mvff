@@ -33,7 +33,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
             aria-label="Primary"
         >
             <button
-                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream"
+                class="navbar__icon-button navbar__menu-close hidden size-9 border border-cream-15 font-mono leading-none text-xl bg-navy text-cream select-none"
                 aria-label="Close navigation"
                 type="button"
             >
@@ -46,7 +46,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
                     return (
                         <li>
                             <a
-                                class="navbar__menu-link relative px-2 py-3 font-mono no-underline uppercase text-cream-60"
+                                class="navbar__menu-link relative px-2 py-3 font-mono no-underline uppercase text-cream-60 select-none"
                                 aria-disabled={isDisabled ? 'true' : undefined}
                                 href={route.href}
                                 tabindex={isDisabled ? -1 : undefined}
@@ -69,7 +69,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
                 <span>00:00:00:00</span>
             </div>
             <button
-                class="navbar__icon-button navbar__toggle hidden place-items-center relative size-9 border border-cream-15 bg-navy text-cream"
+                class="navbar__icon-button navbar__toggle hidden place-items-center relative size-9 border border-cream-15 bg-navy text-cream select-none"
                 aria-expanded="false"
                 aria-label="Open navigation"
                 type="button"
@@ -362,37 +362,35 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
     }
 
     function initNavbar(signal: AbortSignal) {
-        const menu = document.querySelector<HTMLElement>('.navbar__menu');
-        const toggle = document.querySelector<HTMLElement>('.navbar__toggle');
+        const menu = document.querySelector<HTMLElement>('.navbar__menu')!;
+        const toggle = document.querySelector<HTMLElement>('.navbar__toggle')!;
 
         signal.addEventListener('abort', handleTeardown);
 
-        if (menu && toggle) {
-            const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close');
-            const desktopQuery = window.matchMedia('(min-width: 1025px)');
+        const closeButton = menu.querySelector<HTMLElement>('.navbar__menu-close')!;
+        const desktopQuery = window.matchMedia('(min-width: 1025px)');
 
-            closeButton?.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+        closeButton.addEventListener('click', () => closeMenu(menu, toggle), { signal });
 
-            desktopQuery.addEventListener('change', (event) => {
-                if (event.matches && menu.hasAttribute('data-open')) closeMenu(menu, toggle);
-            }, { signal });
+        desktopQuery.addEventListener('change', (event) => {
+            if (event.matches && menu.hasAttribute('data-open')) closeMenu(menu, toggle);
+        }, { signal });
 
-            document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
+        document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
 
-            signal.addEventListener('abort', () => {
-                if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
-                else resetMenu(menu, toggle);
-            }, { once: true });
+        signal.addEventListener('abort', () => {
+            if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
+            else resetMenu(menu, toggle);
+        }, { once: true });
 
-            toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
+        toggle.addEventListener('click', () => handleToggleClick(menu, toggle), { signal });
 
-            window.addEventListener('resize', () => handleResize(menu), { signal });
-        }
+        window.addEventListener('resize', () => handleResize(menu), { signal });
 
-        const countdownChip = document.querySelector<HTMLElement>('.navbar__countdown');
+        const countdownChip = document.querySelector<HTMLElement>('.navbar__countdown')!;
         const heroCountdown = document.querySelector('.hero__countdown');
 
-        if (countdownChip && heroCountdown) {
+        if (heroCountdown) {
             const heroRect = heroCountdown.getBoundingClientRect();
 
             countdownChip.dataset.visible = heroRect.bottom > 0 && heroRect.top < window.innerHeight ? 'false' : 'true';
@@ -404,7 +402,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
             observer.observe(heroCountdown);
             signal.addEventListener('abort', () => observer.disconnect(), { once: true });
             requestAnimationFrame(() => countdownChip.setAttribute('data-observing', ''));
-        } else if (countdownChip) {
+        } else {
             countdownChip.dataset.visible = 'true';
         }
 
@@ -413,7 +411,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
         const currentPath = normalizePath(window.location.pathname);
 
         document.querySelectorAll('.navbar__menu-link').forEach((link) => {
-            const href = normalizePath(link.getAttribute('href') || '');
+            const href = normalizePath(link.getAttribute('href')!);
 
             if (href === currentPath) {
                 link.setAttribute('aria-current', 'page');
@@ -431,7 +429,7 @@ const isHome = normalizePath(Astro.url.pathname) === '/';
         toggle.setAttribute('aria-expanded', 'true');
 
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => menu.querySelector<HTMLElement>('.navbar__menu-close')?.focus());
+            requestAnimationFrame(() => menu.querySelector<HTMLElement>('.navbar__menu-close')!.focus());
         });
     }
 

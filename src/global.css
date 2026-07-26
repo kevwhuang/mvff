@@ -84,6 +84,10 @@ html[data-astro-transition] {
     scroll-behavior: auto;
 }
 
+img {
+    user-select: none;
+}
+
 :disabled {
     cursor: not-allowed;
 }
@@ -142,5 +146,7 @@ html[data-astro-transition] {
 
     [data-scroll] {
         opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
     }
 }

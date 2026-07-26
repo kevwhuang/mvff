@@ -6,7 +6,6 @@ const gallery = defineCollection({
     loader: glob({ base: './src/content/gallery', pattern: '**/*.json' }),
     schema: z.object({
         alt: z.string(),
-        image: z.string(),
         label: z.string(),
     }),
 });

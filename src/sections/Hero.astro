@@ -30,11 +30,11 @@ import { LINKS } from '@lib/constants';
     <div class="hero__corner hero__corner--top-right absolute border border-cream" aria-hidden="true" />
     <div class="hero__corner hero__corner--bottom-left absolute border border-cream" aria-hidden="true" />
     <div class="hero__corner hero__corner--bottom-right absolute border border-cream" aria-hidden="true" />
-    <dl class="hero__countdown hero__reveal absolute top-15 select-none">
-        <dt class="sr-only">Status</dt>
-        <dd class="hero__countdown-over font-display whitespace-nowrap text-coral">That's a wrap.</dd>
-    </dl>
     <div class="hero__content shell relative">
+        <dl class="hero__countdown hero__reveal select-none">
+            <dt class="sr-only">Status</dt>
+            <dd class="hero__countdown-over font-display whitespace-nowrap text-coral">That's a wrap.</dd>
+        </dl>
         <ul class="hero__meta hero__reveal flex flex-wrap items-center gap-6 list-none">
             <li class="hero__meta-item flex items-center gap-2 font-mono uppercase text-cream-60">Vol. 01</li>
             <li class="hero__meta-item flex items-center gap-2 font-mono uppercase text-cream-60"><time datetime="2026-07-18">July 18, 2026</time></li>
@@ -136,11 +136,7 @@ import { LINKS } from '@lib/constants';
     }
 
     .hero__countdown {
-        left: max(var(--shell-pad), calc((100% - var(--shell-max)) / 2 + var(--shell-pad)));
-    }
-
-    .hero__countdown.hero__reveal {
-        animation-delay: calc(var(--hero-stagger) * 2);
+        margin-bottom: clamp(20px, calc(16px + 1.25vw), 32px);
     }
 
     .hero__countdown-over {

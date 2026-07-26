@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 import logoCabanaClub from '@images/logos/cabana_club.webp';
 import logoMadewellProductions from '@images/logos/madewell_productions.webp';
 
-const MARQUEE_COPIES = 2;
+const MARQUEE_COPIES = 6;
 ---
 
 <section
@@ -13,7 +13,10 @@ const MARQUEE_COPIES = 2;
     data-scroll
 >
     <div class="partners__viewport overflow-x-clip">
-        <ul class="partners__track flex items-center w-max list-none">
+        <ul
+            class="partners__track flex items-center w-max list-none"
+            style={`--partners-copies: ${MARQUEE_COPIES}`}
+        >
             {Array.from({ length: MARQUEE_COPIES }).flatMap((_, copy) => [
                 <li
                     class="partners__item flex items-center font-display leading-none uppercase whitespace-nowrap text-cream"
@@ -108,7 +111,7 @@ const MARQUEE_COPIES = 2;
 
     @keyframes partners__scroll {
         to {
-            transform: translateX(calc(-50% - var(--partners-gap) / 2));
+            transform: translateX(calc((-100% - var(--partners-gap)) / var(--partners-copies)));
         }
     }
 </style>

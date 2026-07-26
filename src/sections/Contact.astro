@@ -7,6 +7,7 @@ const CHANNELS = [
     { href: LINKS.instagram, isExternal: true, label: 'Instagram', value: '@atxmvff' },
     { href: LINKS.email, isExternal: false, label: 'Email', value: 'contact@atxmusicvideofilmfestival.com' },
     { href: LINKS.phone, isExternal: false, label: 'Phone', value: '(281) 466-9387' },
+    { href: LINKS.calendly, isExternal: true, label: 'Schedule Call', value: 'calendly.com/madewellanna99' },
 ] as const;
 ---
 
@@ -46,7 +47,7 @@ const CHANNELS = [
                             <span class="min-w-0">{channel.value.split('@').flatMap((part, index) => (index === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
                             {channel.isExternal && (
                                 <span
-                                    class="contact__channel-cue"
+                                    class="contact__channel-cue select-none"
                                     aria-hidden="true"
                                 >
                                     &rarr;

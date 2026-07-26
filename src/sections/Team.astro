@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 import SectionHeader from '@components/SectionHeader.astro';
-import amiiri from '@images/team/amiiri.webp';
+import amiri from '@images/team/amiri.webp';
 import anna from '@images/team/anna.webp';
 import dan from '@images/team/dan.webp';
 import greta from '@images/team/greta.webp';
@@ -14,15 +14,15 @@ const EAGER_CARD_COUNT = 5;
 
 const TEAM = [
     { image: anna, name: 'Anna', role: 'Founder & Executive Producer' },
-    { name: 'Ashleigh', role: 'Social Media Marketing Director' },
-    { image: jyme, name: 'Jyme', role: 'Film Programming Director' },
-    { image: dan, name: 'Dan', role: 'Operations & Production Manager' },
-    { image: amiiri, name: 'Amiiri', role: 'PR & Outreach Director' },
-    { image: rocky, name: 'Rocky', role: 'Sponsorship Administrator' },
-    { image: greta, name: 'Greta', role: 'Content Strategist' },
-    { name: 'Marissa', role: 'Graphics Manager' },
     { name: 'Jasmine', role: 'Executive Coordinator' },
+    { image: amiri, name: 'Amiri', role: 'PR & Outreach Director' },
+    { name: 'Ashleigh', role: 'Social Media Marketing Director' },
+    { image: dan, name: 'Dan', role: 'Operations & Production Manager' },
+    { image: greta, name: 'Greta', role: 'Content Strategist' },
+    { image: jyme, name: 'Jyme', role: 'Film Programming Director' },
+    { name: 'Marissa', role: 'Graphics Manager' },
     { image: may, name: 'May', role: 'Dance Director & Fashion Designer' },
+    { image: rocky, name: 'Rocky', role: 'Sponsorship Administrator' },
 ] as const;
 ---
 
@@ -35,7 +35,7 @@ const TEAM = [
             Meet the Team
         </SectionHeader>
         <ul
-            class="team__grid grid grid-cols-5 list-none"
+            class="team__grid grid grid-cols-4 list-none"
             data-scroll
             data-scroll-stagger="0.04"
         >
@@ -98,6 +98,10 @@ const TEAM = [
         gap: clamp(16px, calc(13.33px + 0.83vw), 24px);
     }
 
+    .team__grid > li:nth-child(-n+2) {
+        grid-column: span 2;
+    }
+
     .team__image {
         filter: grayscale(0.3) brightness(0.95) contrast(1.05);
         transition:
@@ -148,6 +152,10 @@ const TEAM = [
     @media (max-width: 1024px) {
         .team__grid {
             grid-template-columns: repeat(3, 1fr);
+        }
+
+        .team__grid > li:nth-child(-n+2) {
+            grid-column: auto;
         }
     }
 
