@@ -108,8 +108,8 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
             >
                 &nbsp;
             </h2>
-            <img class="gallery__lightbox-image block object-contain h-auto w-full mx-auto border border-cream-15 select-none" alt="" draggable="false" />
-            <div class="gallery__lightbox-meta flex justify-between font-mono uppercase text-cream-60">
+            <img class="gallery__lightbox-image block object-contain h-auto min-h-0 w-full mx-auto border border-cream-15 select-none" alt="" draggable="false" />
+            <div class="gallery__lightbox-meta flex justify-between shrink-0 font-mono uppercase text-cream-60">
                 <span class="gallery__lightbox-label" />
             </div>
         </div>
@@ -129,26 +129,26 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         transform: scale(0.99);
     }
 
-    .gallery__frame:focus-visible:not(:active) {
-        transform: scale(1.01);
-    }
-
     .gallery__frame:focus-visible .gallery__image {
         filter: grayscale(0) contrast(1.08);
         transform: scale(1.03);
+    }
+
+    .gallery__frame:focus-visible:not(:active) {
+        transform: scale(1.01);
     }
 
     .gallery__frame:focus-visible::after {
         border-color: var(--color-coral);
     }
 
-    .gallery__frame:hover:not(:active) {
-        transform: scale(1.01);
-    }
-
     .gallery__frame:hover .gallery__image {
         filter: grayscale(0) contrast(1.08);
         transform: scale(1.03);
+    }
+
+    .gallery__frame:hover:not(:active) {
+        transform: scale(1.01);
     }
 
     .gallery__frame:hover::after {
@@ -197,7 +197,9 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
 
     .gallery__lightbox[data-open] {
         opacity: 1;
-        transition: opacity var(--duration-fast) ease;
+        transition:
+            opacity var(--duration-fast) ease,
+            visibility 0s;
         visibility: visible;
     }
 
@@ -228,7 +230,6 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
 
     .gallery__lightbox-image {
         max-height: var(--lightbox-frame);
-        min-height: 0;
     }
 
     .gallery__lightbox-inner {
@@ -239,7 +240,6 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
     }
 
     .gallery__lightbox-meta {
-        flex-shrink: 0;
         font-size: 12px;
         letter-spacing: 0.16em;
     }
@@ -357,12 +357,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         title.textContent = galleryLabel;
         lightbox.removeAttribute('aria-hidden');
         lightbox.setAttribute('data-open', '');
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                if (lightbox?.hasAttribute('data-open')) lightboxClose?.focus();
-            });
-        });
+        lightboxClose.focus();
     }
 
     function showLightboxImage() {

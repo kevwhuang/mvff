@@ -41,7 +41,7 @@ import { getExternalLinkProps } from '@lib/utils';
                 {ROUTES.map(route => (
                     <li>
                         <a
-                            class="navbar__menu-link relative px-2 py-3 font-mono no-underline uppercase text-cream-60 select-none"
+                            class="navbar__menu-link block relative px-2 py-3 font-mono no-underline uppercase text-cream-60 select-none"
                             aria-disabled={route.isDisabled ? 'true' : undefined}
                             href={route.href}
                             tabindex={route.isDisabled ? '-1' : undefined}
@@ -137,7 +137,6 @@ import { getExternalLinkProps } from '@lib/utils';
     }
 
     .navbar__menu-link {
-        display: block;
         font-size: 12px;
         letter-spacing: 0.16em;
         transition: color var(--duration-fast) ease;
@@ -334,6 +333,11 @@ import { getExternalLinkProps } from '@lib/utils';
         syncSwapHover(toggle);
     }
 
+    function handleAbort(menu: HTMLElement, toggle: HTMLElement) {
+        document.documentElement.style.overflow = '';
+        resetMenu(menu, toggle);
+    }
+
     function handleMenuKeydown(event: KeyboardEvent, menu: HTMLElement, toggle: HTMLElement) {
         if (!menu.hasAttribute('data-open')) return;
 
@@ -394,11 +398,7 @@ import { getExternalLinkProps } from '@lib/utils';
         document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
         menu.addEventListener('transitionend', event => handleMenuTransitionEnd(event, closeButton, menu, toggle), { signal });
         mobileQuery.addEventListener('change', event => handleMobileChange(event, menu, toggle), { signal });
-
-        signal.addEventListener('abort', () => {
-            if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
-            else resetMenu(menu, toggle);
-        });
+        signal.addEventListener('abort', () => handleAbort(menu, toggle));
 
         toggle.addEventListener('click', () => {
             if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
@@ -416,15 +416,8 @@ import { getExternalLinkProps } from '@lib/utils';
         menu.setAttribute('data-open', '');
         menu.setAttribute('role', 'dialog');
         toggle.setAttribute('aria-expanded', 'true');
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                if (!menu.hasAttribute('data-open')) return;
-
-                closeButton.focus();
-                syncSwapHover(closeButton);
-            });
-        });
+        closeButton.focus();
+        syncSwapHover(closeButton);
     }
 
     function resetMenu(menu: HTMLElement, toggle: HTMLElement) {

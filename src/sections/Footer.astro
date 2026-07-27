@@ -7,7 +7,7 @@ import { getExternalLinkProps } from '@lib/utils';
     <div class="footer__inner shell grid items-start">
         <div class="flex flex-col gap-4">
             <a
-                class="footer__title py-1 font-display no-underline text-cream"
+                class="footer__title py-1 font-display no-underline text-cream select-none"
                 href="/"
             >
                 Austin Music Video Film Festival
@@ -19,7 +19,7 @@ import { getExternalLinkProps } from '@lib/utils';
             aria-label="Footer"
         >
             <div class="footer__column">
-                <h2 class="footer__heading mb-4 uppercase text-cream-60">Site</h2>
+                <h2 class="footer__heading mb-4 pt-2 uppercase text-cream-60">Site</h2>
                 <ul class="list-none">
                     {ROUTES.map(route => (
                         <li>
@@ -37,7 +37,7 @@ import { getExternalLinkProps } from '@lib/utils';
                 </ul>
             </div>
             <div class="footer__column">
-                <h2 class="footer__heading mb-4 uppercase text-cream-60">Connect</h2>
+                <h2 class="footer__heading mb-4 pt-2 uppercase text-cream-60">Connect</h2>
                 <ul class="list-none">
                     <li>
                         <a
@@ -76,7 +76,7 @@ import { getExternalLinkProps } from '@lib/utils';
                 </ul>
             </div>
             <div class="footer__column">
-                <h2 class="footer__heading mb-4 uppercase text-cream-60">Insider</h2>
+                <h2 class="footer__heading mb-4 pt-2 uppercase text-cream-60">Insider</h2>
                 <ul class="list-none">
                     <li>
                         <a
@@ -134,7 +134,6 @@ import { getExternalLinkProps } from '@lib/utils';
         font-size: 10px;
         letter-spacing: 0.2em;
         line-height: 1.5;
-        padding-top: 8px;
     }
 
     .footer__inner {

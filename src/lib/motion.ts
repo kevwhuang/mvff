@@ -4,16 +4,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { REDUCED_MOTION_QUERY } from '@lib/constants';
 import { initParallax } from '@lib/parallax';
 
+const PERCENT_SCALE = 100;
+const RESIZE_SETTLE_DELAY = 150;
 const SCROLL_DURATION = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 const SCROLL_START_RATIO = 0.85;
+
+const SCROLL_START = `top ${SCROLL_START_RATIO * PERCENT_SCALE}%`;
+
 const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
-const SCROLL_START = `top ${SCROLL_START_RATIO * 100}%`;
-
-let batchFlushCalls: gsap.core.Animation[] = [];
+let batchAnimations: gsap.core.Animation[] = [];
 let hasRevealed = false;
+let lastViewportWidth = window.innerWidth;
+let resizeSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
 function handleFocusIn(event: FocusEvent) {
     const { target } = event;
@@ -39,6 +44,14 @@ function handleFocusIn(event: FocusEvent) {
     revealInstantly(container);
 }
 
+function handleResize() {
+    if (window.innerWidth === lastViewportWidth) return;
+
+    lastViewportWidth = window.innerWidth;
+    clearTimeout(resizeSettleTimer);
+    resizeSettleTimer = setTimeout(initMotion, RESIZE_SETTLE_DELAY);
+}
+
 function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
@@ -62,27 +75,40 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
         if (stagger > 0) {
             const children = Array.from(element.children);
 
-            const hiddenChildren = hasRevealed ? children.filter(child => !isPastScrollStart(child)) : children;
-            const revealedChildren = hasRevealed ? children.filter(child => isPastScrollStart(child)) : [];
+            const hiddenChildren = hasRevealed ? children.filter(child => !isPastScrollStart(child) && !isRevealed(child)) : children;
+            const revealedChildren = hasRevealed ? children.filter(child => isPastScrollStart(child) || isRevealed(child)) : [];
 
-            gsap.set(element, { opacity: 1 });
+            if (hasRevealed && (isPastScrollStart(element) || isRevealed(element))) {
+                gsap.set(element, { opacity: 1 });
+            } else {
+                gsap.fromTo(element, { opacity: 0 }, {
+                    duration: SCROLL_DURATION,
+                    ease: SCROLL_EASE,
+                    opacity: 1,
+                    scrollTrigger: {
+                        once: true,
+                        start: SCROLL_START,
+                        trigger: element,
+                    },
+                });
+            }
 
             if (revealedChildren.length > 0) gsap.set(revealedChildren, { clearProps: 'transform', opacity: 1 });
 
             if (hiddenChildren.length === 0) return;
 
-            gsap.set(hiddenChildren, fromState);
+            gsap.set(hiddenChildren, { opacity: 0 });
 
             const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
 
             ScrollTrigger.batch(hiddenChildren, {
-                onEnter: batch => batchFlushCalls.push(gsap.fromTo(batch, fromState, { ...toState, stagger })),
+                onEnter: batch => batchAnimations.push(gsap.fromTo(batch, fromState, { ...toState, stagger })),
                 once: true,
                 start: SCROLL_START,
             });
 
-            batchFlushCalls.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !timelineBefore.has(tween)));
-        } else if (hasRevealed && isPastScrollStart(element)) {
+            batchAnimations.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !timelineBefore.has(tween)));
+        } else if (hasRevealed && (isPastScrollStart(element) || isRevealed(element))) {
             revealInstantly(element);
         } else {
             gsap.fromTo(element, fromState, {
@@ -101,6 +127,10 @@ function isPastScrollStart(element: Element) {
     return element.getBoundingClientRect().top < window.innerHeight * SCROLL_START_RATIO;
 }
 
+function isRevealed(element: Element) {
+    return Number.parseFloat(getComputedStyle(element).opacity) === 1;
+}
+
 function revealInstantly(element: HTMLElement) {
     const targets = [element, ...element.children];
 
@@ -109,15 +139,16 @@ function revealInstantly(element: HTMLElement) {
 }
 
 document.addEventListener('focusin', handleFocusIn);
-reducedMotionQuery.addEventListener('change', initMotion);
 gsap.registerPlugin(ScrollTrigger);
+reducedMotionQuery.addEventListener('change', initMotion);
+window.addEventListener('resize', handleResize);
 
 export function initMotion(): void {
     const prefersReducedMotion = reducedMotionQuery.matches;
 
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    batchFlushCalls.forEach(tween => tween.kill());
-    batchFlushCalls = [];
+    batchAnimations.forEach(tween => tween.kill());
+    batchAnimations = [];
     initParallax(prefersReducedMotion);
     initScrollAnimations(prefersReducedMotion);
     hasRevealed = true;

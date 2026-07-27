@@ -14,7 +14,7 @@
             data-typewriter
         >
             <span
-                class="tagline__screens"
+                class="tagline__screen"
                 data-typewriter-word
             >
                 Screen
@@ -34,12 +34,12 @@
     .tagline__arrow {
         font-size: 0.7em;
         opacity: 0;
-        padding-right: 0.28em;
-        transition: opacity var(--duration-slow) ease-out;
+        padding-right: 0.22em;
+        transition: opacity var(--duration-slow) ease;
         vertical-align: 0.14em;
     }
 
-    .tagline__screens[data-typing] {
+    .tagline__screen[data-typing] {
         border-right-color: var(--color-coral);
     }
 
@@ -84,7 +84,7 @@
     }
 
     @media (max-width: 768px) {
-        .tagline__screens[data-typing] {
+        .tagline__screen[data-typing] {
             border-right-color: transparent;
         }
 
@@ -107,6 +107,7 @@
 
 <script>
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
+    import { registerPageScript } from '@lib/utils';
 
     interface TypewriterState {
         characterIndex: number;
@@ -119,6 +120,7 @@
     const ARROW_PAUSE = 350;
     const CHARACTER_DELAY = 75;
     const TYPEWRITER_ROOT_MARGIN = '0px 0px -15% 0px';
+
     const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
     let typewriterObserver: IntersectionObserver | undefined;
@@ -130,9 +132,10 @@
         typewriterTimeouts = [];
     }
 
-    function handleBeforeSwap() {
+    function handleAbort() {
         clearTypewriterTimeouts();
         typewriterObserver?.disconnect();
+        typewriterState = undefined;
     }
 
     function handleReducedMotionChange(event: MediaQueryListEvent) {
@@ -153,10 +156,15 @@
         typewriterState = undefined;
     }
 
-    function initTypewriter() {
-        clearTypewriterTimeouts();
-        typewriterObserver?.disconnect();
-        typewriterState = undefined;
+    function handleTypewriterIntersect(entries: IntersectionObserverEntry[], observer: IntersectionObserver, state: TypewriterState) {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+
+        observer.disconnect();
+        typeNextWord(state);
+    }
+
+    function initTypewriter(signal: AbortSignal) {
+        signal.addEventListener('abort', handleAbort);
 
         const container = document.querySelector<HTMLElement>('[data-typewriter]');
 
@@ -180,16 +188,14 @@
 
         const state = { characterIndex: 0, container, originalTexts, wordIndex: 0, words };
 
+        typewriterObserver = new IntersectionObserver((entries, observer) => handleTypewriterIntersect(entries, observer, state), { rootMargin: TYPEWRITER_ROOT_MARGIN });
         typewriterState = state;
-
-        typewriterObserver = new IntersectionObserver((entries, observer) => {
-            if (!entries.some(entry => entry.isIntersecting)) return;
-
-            observer.disconnect();
-            typeNextWord(state);
-        }, { rootMargin: TYPEWRITER_ROOT_MARGIN });
-
         typewriterObserver.observe(container);
+    }
+
+    function revealArrow(state: TypewriterState) {
+        state.container.setAttribute('data-arrow-visible', '');
+        scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
     }
 
     function scheduleTimeout(callback: () => void, delay: number) {
@@ -197,7 +203,7 @@
     }
 
     function typeCharacter(state: TypewriterState) {
-        const { container, originalTexts, words } = state;
+        const { originalTexts, words } = state;
 
         const text = originalTexts[state.wordIndex];
         const word = words[state.wordIndex];
@@ -213,14 +219,8 @@
         word.removeAttribute('data-typing');
         state.wordIndex++;
 
-        if (state.wordIndex === 1) {
-            scheduleTimeout(() => {
-                container.setAttribute('data-arrow-visible', '');
-                scheduleTimeout(() => typeNextWord(state), ARROW_PAUSE);
-            }, ARROW_PAUSE);
-        } else {
-            typeNextWord(state);
-        }
+        if (state.wordIndex === 1) scheduleTimeout(() => revealArrow(state), ARROW_PAUSE);
+        else typeNextWord(state);
     }
 
     function typeNextWord(state: TypewriterState) {
@@ -235,7 +235,6 @@
         typeCharacter(state);
     }
 
-    document.addEventListener('astro:before-swap', handleBeforeSwap);
-    document.addEventListener('astro:page-load', initTypewriter);
     reducedMotionQuery.addEventListener('change', handleReducedMotionChange);
+    registerPageScript(initTypewriter);
 </script>

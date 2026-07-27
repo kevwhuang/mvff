@@ -50,8 +50,8 @@ const SCHEDULE = [
                 <div class="info__venue sweep relative isolate border border-cream-15 bg-navy">
                     <h3 class="info__venue-name mb-2">Cabana Club</h3>
                     <p class="info__venue-address mb-4 font-mono uppercase text-cream-60">5012 E 7th St &middot; Austin, TX</p>
-                    <p class="info__venue-description font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lit the pool deck, a live stage carried the music, and high tables sat under the patio roof. A small red carpet section set the tone, and the night ran 7 PM straight to the 2 AM close.</p>
-                    <ul class="info__venue-features grid gap-x-6 gap-y-3 list-none">
+                    <p class="info__venue-description font-serif text-xl text-cream-60">An indoor-outdoor club in East Austin, where an open-air screen lit the pool deck, a live stage carried the music, and high tables sat under the patio roof. A small red-carpet section set the tone, and the night ran 7 PM straight to the 2 AM close.</p>
+                    <ul class="info__venue-features grid grid-cols-3 gap-x-6 gap-y-3 list-none">
                         <li>Big screen</li>
                         <li>Live stage</li>
                         <li>Outdoor pool</li>
@@ -92,7 +92,7 @@ const SCHEDULE = [
                         name="faq"
                     >
                         <summary class="info__faq-question flex items-center justify-between gap-4 py-4 font-display list-none text-cream cursor-pointer select-none">
-                            <span>{entry.question}</span>
+                            <span class="info__faq-text">{entry.question}</span>
                             <span
                                 class="info__faq-icon font-mono text-coral"
                                 aria-hidden="true"
@@ -159,8 +159,12 @@ const SCHEDULE = [
         color: var(--color-coral);
     }
 
-    .info__faq-question:hover {
-        color: var(--color-coral);
+    .info__faq-question:hover .info__faq-text {
+        transform: translateX(8px);
+    }
+
+    .info__faq-text {
+        transition: transform var(--duration-fast) ease;
     }
 
     .info__schedule-event {
@@ -231,10 +235,6 @@ const SCHEDULE = [
         max-width: var(--measure-wide);
     }
 
-    .info__venue-features {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
     .info__venue-features li {
         align-items: baseline;
         color: var(--color-cream);
@@ -258,6 +258,10 @@ const SCHEDULE = [
     }
 
     @media (max-width: 768px) {
+        .info__faq-question:hover .info__faq-text {
+            transform: none;
+        }
+
         .info__schedule-event {
             grid-area: event;
             line-height: 1;
@@ -285,10 +289,7 @@ const SCHEDULE = [
         .info__subheading {
             align-items: flex-start;
             flex-direction: column;
-        }
-
-        .info__subheading-badge {
-            margin-top: 8px;
+            gap: 8px;
         }
 
         .info__venue-features {
