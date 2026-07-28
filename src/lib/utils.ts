@@ -1,7 +1,7 @@
 const PAD_LENGTH = 2;
 
 export function getExternalLinkProps(href: string): { rel?: 'noopener'; target?: '_blank' } {
-    return href.startsWith('http') ? { rel: 'noopener', target: '_blank' } : {};
+    return href.startsWith('https://') ? { rel: 'noopener', target: '_blank' } : {};
 }
 
 export function initDisabledLinks(selector: string, signal: AbortSignal): void {

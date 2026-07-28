@@ -52,6 +52,10 @@ function handleResize() {
     resizeSettleTimer = setTimeout(initMotion, RESIZE_SETTLE_DELAY);
 }
 
+function hasInlineReveal(element: Element) {
+    return element instanceof HTMLElement && element.style.opacity === '1';
+}
+
 function initScrollAnimations(prefersReducedMotion: boolean) {
     const elements = document.querySelectorAll<HTMLElement>('[data-scroll]');
 
@@ -75,8 +79,8 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
         if (stagger > 0) {
             const children = Array.from(element.children);
 
-            const hiddenChildren = hasRevealed ? children.filter(child => !isPastScrollStart(child) && !isRevealed(child)) : children;
-            const revealedChildren = hasRevealed ? children.filter(child => isPastScrollStart(child) || isRevealed(child)) : [];
+            const hiddenChildren = hasRevealed ? children.filter(child => !hasInlineReveal(child) && !isPastScrollStart(child)) : children;
+            const revealedChildren = hasRevealed ? children.filter(child => hasInlineReveal(child) || isPastScrollStart(child)) : [];
 
             if (hasRevealed && (isPastScrollStart(element) || isRevealed(element))) {
                 gsap.set(element, { opacity: 1 });

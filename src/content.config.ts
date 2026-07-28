@@ -5,8 +5,8 @@ import { z } from 'astro/zod';
 const gallery = defineCollection({
     loader: glob({ base: './src/content/gallery', pattern: '**/*.json' }),
     schema: z.object({
-        alt: z.string(),
-        label: z.string(),
+        alt: z.string().min(1),
+        label: z.string().min(1),
     }),
 });
 

@@ -29,6 +29,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
         isPortrait,
         label: figure.label,
         orientation: isPortrait ? 'portrait' : 'landscape',
+        ratio: `${metadata.width} / ${metadata.height}`,
         source: lightboxImage.src,
     };
 }));
@@ -63,6 +64,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
                             data-gallery-alt={figure.alt}
                             data-gallery-label={figure.label}
                             data-gallery-orientation={figure.orientation}
+                            data-gallery-ratio={figure.ratio}
                             data-gallery-source={figure.source}
                             type="button"
                         >
@@ -344,9 +346,12 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
 
         if (!label || !title) return;
 
-        const { galleryAlt = '', galleryLabel = '', galleryOrientation = '', gallerySource = '' } = frame.dataset;
+        const { galleryAlt = '', galleryLabel = '', galleryOrientation = '', galleryRatio = '', gallerySource = '' } = frame.dataset;
 
-        if (lightboxImage.getAttribute('src') !== gallerySource) lightboxImage.style.visibility = 'hidden';
+        if (lightboxImage.getAttribute('src') !== gallerySource) {
+            lightboxImage.style.aspectRatio = galleryRatio;
+            lightboxImage.style.visibility = 'hidden';
+        }
 
         document.documentElement.style.overflow = 'hidden';
         label.textContent = galleryLabel;
@@ -361,6 +366,7 @@ const resolvedFigures = await Promise.all(figures.map(async (figure) => {
     }
 
     function showLightboxImage() {
+        lightboxImage?.style.removeProperty('aspect-ratio');
         lightboxImage?.style.removeProperty('visibility');
     }
 

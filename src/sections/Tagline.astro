@@ -21,7 +21,7 @@
             </span>
             <span class="tagline__arrow font-serif italic text-cream-60">&rarr;</span>
             <span
-                class="tagline__stage relative font-serif italic text-coral"
+                class="tagline__stage font-serif italic text-coral"
                 data-typewriter-word
             >
                 Stage
@@ -39,24 +39,27 @@
         vertical-align: 0.14em;
     }
 
+    .tagline__screen {
+        border-right: 0.04em solid transparent;
+    }
+
     .tagline__screen[data-typing] {
         border-right-color: var(--color-coral);
     }
 
     .tagline__stage {
         font-size: 0.92em;
-        padding-right: 0.12em;
     }
 
     .tagline__stage::after {
         background: var(--color-coral);
-        bottom: 0;
         content: '';
+        display: inline-block;
+        height: 1.3em;
+        margin: -0.5em 0 -0.5em 0.12em;
         opacity: 0;
-        position: absolute;
-        right: -0.04em;
-        top: 0;
         transform: skewX(-13deg);
+        vertical-align: 0.2em;
         width: 0.04em;
     }
 
@@ -77,20 +80,6 @@
     .tagline__title[data-typed] .tagline__stage::after {
         animation: tagline__blink var(--duration-blink) step-end infinite;
         opacity: 1;
-    }
-
-    [data-typewriter-word] {
-        border-right: 0.04em solid transparent;
-    }
-
-    @media (max-width: 768px) {
-        .tagline__screen[data-typing] {
-            border-right-color: transparent;
-        }
-
-        .tagline__stage::after {
-            display: none;
-        }
     }
 
     @keyframes tagline__blink {

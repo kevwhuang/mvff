@@ -129,6 +129,7 @@ img {
         scroll-behavior: auto !important;
         transition-delay: 0s !important;
         transition-duration: 0.01s !important;
+        transition-property: none !important;
     }
 
     ::view-transition-group(root),

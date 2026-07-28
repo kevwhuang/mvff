@@ -42,7 +42,7 @@ const CHANNELS = [
                         </span>
                         <span class="contact__channel-label font-display uppercase">{channel.label}</span>
                         <span class="contact__channel-value flex items-baseline justify-end min-w-0 gap-2 font-serif italic text-right wrap-anywhere text-cream-60">
-                            <span class="min-w-0">{channel.value.split('@').flatMap((part, partIndex) => (partIndex === 0 ? [part] : [<wbr />, `@${part}`]))}</span>
+                            <span class="min-w-0">{channel.value.split(/(?=@)/).flatMap((part, partIndex) => (partIndex === 0 ? [part] : [<wbr />, part]))}</span>
                             {channel.isExternal && (
                                 <span
                                     class="contact__channel-cue self-center select-none"
