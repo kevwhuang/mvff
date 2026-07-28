@@ -1,5 +1,5 @@
 ---
-
+import IconArrow from '@components/IconArrow.astro';
 ---
 
 <section
@@ -19,7 +19,9 @@
             >
                 Screen
             </span>
-            <span class="tagline__arrow font-serif italic text-cream-60">&rarr;</span>
+            <span class="tagline__arrow text-cream-60">
+                <IconArrow />
+            </span>
             <span
                 class="tagline__stage font-serif italic text-coral"
                 data-typewriter-word
@@ -32,11 +34,10 @@
 
 <style>
     .tagline__arrow {
-        font-size: 0.7em;
         opacity: 0;
-        padding-right: 0.22em;
+        padding-left: 0.145em;
+        padding-right: 0.165em;
         transition: opacity var(--duration-slow) ease;
-        vertical-align: 0.14em;
     }
 
     .tagline__screen {
@@ -71,6 +72,7 @@
         font-size: clamp(44px, 13.75vw, 176px);
         letter-spacing: -0.01em;
         line-height: 0.9;
+        white-space: nowrap;
     }
 
     .tagline__title[data-arrow-visible] .tagline__arrow {

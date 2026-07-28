@@ -3,6 +3,9 @@ import { expect, test } from '@playwright/test';
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
 const EXPERIENCE_TITLES = ['Live Music', 'Screenings', 'Q&A Panel', 'Awards', 'After Party'] as const;
+const TAGLINE_LINE_HEIGHT = 0.9;
+const TAGLINE_LINE_TOLERANCE = 1.5;
+const TAGLINE_VIEWPORT_WIDTHS = [320, 1440] as const;
 
 test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -44,6 +47,34 @@ test.describe('index page', () => {
         await expect(page.locator('.partners__track')).toBeVisible();
         await expect(page.locator('.partners__item').first()).toHaveText('Madewell Productions');
         await expect(page.locator('.partners__logo').nth(1)).toHaveAttribute('alt', 'Cabana Club');
+    });
+
+    test('keeps the tagline line box tight and the arrow vertically centered', async ({ page }) => {
+        for (const width of TAGLINE_VIEWPORT_WIDTHS) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.locator('#tagline-title').scrollIntoViewIfNeeded();
+            await expect(page.locator('#tagline-title')).toHaveAttribute('data-typed', '');
+
+            const metrics = await page.evaluate(() => {
+                const title = document.querySelector('#tagline-title') as HTMLElement;
+
+                const arrow = (document.querySelector('.tagline__arrow svg') as SVGSVGElement).getBoundingClientRect();
+                const screen = (document.querySelector('.tagline__screen') as HTMLElement).getBoundingClientRect();
+
+                return {
+                    arrowCenter: arrow.top + arrow.height / 2,
+                    clientHeight: title.clientHeight,
+                    fontSize: parseFloat(getComputedStyle(title).fontSize),
+                    screenBottom: screen.bottom,
+                    screenHeight: screen.height,
+                    screenTop: screen.top,
+                };
+            });
+
+            expect(Math.abs(metrics.clientHeight - metrics.fontSize * TAGLINE_LINE_HEIGHT)).toBeLessThanOrEqual(TAGLINE_LINE_TOLERANCE);
+            expect(metrics.arrowCenter).toBeGreaterThanOrEqual(metrics.screenTop + metrics.screenHeight / 4);
+            expect(metrics.arrowCenter).toBeLessThanOrEqual(metrics.screenBottom - metrics.screenHeight / 4);
+        }
     });
 
     test('exposes a meta description of the expected length', async ({ page }) => {

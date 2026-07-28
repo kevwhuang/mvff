@@ -28,8 +28,9 @@ describe('Tagline', () => {
         expect(html.indexOf('tagline__screen')).toBeLessThan(html.indexOf('tagline__stage'));
     });
 
-    test('renders the arrow glyph between the two words', () => {
-        expect(html).toMatch(/<span class="tagline__screen"[^>]*>Screen<\/span><span class="tagline__arrow font-serif italic text-cream-60"[^>]*>&rarr;<\/span><span class="tagline__stage/);
+    test('renders the arrow icon between the two words', () => {
+        expect(html).toMatch(/<span class="tagline__screen"[^>]*>Screen<\/span><span class="tagline__arrow text-cream-60"[^>]*><svg[^>]*viewBox="0 0 97 51"[^>]*>/);
+        expect(html).toMatch(/<\/svg><\/span><span class="tagline__stage/);
     });
 
     test('ships exactly one module script', () => {

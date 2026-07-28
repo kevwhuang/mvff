@@ -45,7 +45,8 @@ describe('Contact', () => {
         const blocks = html.split('<li class="contact__channel ').slice(1);
 
         expect(blocks.map(block => block.includes('contact__channel-cue'))).toEqual(CHANNELS.map(channel => channel.isExternal));
-        expect(html).toMatch(/class="contact__channel-cue self-center select-none" aria-hidden="true"[^>]*>&rarr;</);
+        expect(html).toMatch(/<span class="contact__channel-cue flex self-center"[^>]*><svg[^>]*viewBox="0 0 97 51"[^>]*>/);
+        expect(html).toMatch(/<\/svg><\/span><\/span><\/a>/);
 
         for (const channel of externalChannels) expect(html).toContain(`href="${channel.href}" rel="noopener" target="_blank"`);
     });

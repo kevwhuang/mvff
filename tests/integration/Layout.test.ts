@@ -38,7 +38,7 @@ describe('Layout', () => {
 
     test('renders the full document skeleton', () => {
         expect(html).toContain('<!DOCTYPE html>');
-        expect(html).toContain('<html lang="en"');
+        expect(html).toContain('<html class="overflow-x-clip" lang="en"');
         expect(html).toContain('<head>');
         expect(html).toContain('</head>');
         expect(html).toContain('<body class="flex flex-col overflow-x-clip relative isolate min-h-screen antialiased font-mono bg-night text-cream"');

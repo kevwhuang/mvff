@@ -320,17 +320,23 @@ import { getExternalLinkProps } from '@lib/utils';
 
     const HOVER_QUERY = '(hover: hover)';
     const MOBILE_QUERY = '(max-width: 1024px)';
+    const POINTER_UNSET = -1;
     const RESIZE_SETTLE_DELAY = 150;
 
-    let pointerX = -1;
-    let pointerY = -1;
+    let pointerX = POINTER_UNSET;
+    let pointerY = POINTER_UNSET;
     let resizeSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
-    function closeMenu(menu: HTMLElement, toggle: HTMLElement) {
+    function closeMenu(focusVisible: boolean, menu: HTMLElement, toggle: HTMLElement) {
         document.documentElement.style.overflow = '';
         resetMenu(menu, toggle);
-        toggle.focus();
+        focusElement(toggle, focusVisible);
         syncSwapHover(toggle);
+    }
+
+    function focusElement(element: HTMLElement, focusVisible: boolean) {
+        if (focusVisible) element.focus();
+        else element.focus({ focusVisible: false });
     }
 
     function handleAbort(menu: HTMLElement, toggle: HTMLElement) {
@@ -341,7 +347,7 @@ import { getExternalLinkProps } from '@lib/utils';
     function handleMenuKeydown(event: KeyboardEvent, menu: HTMLElement, toggle: HTMLElement) {
         if (!menu.hasAttribute('data-open')) return;
 
-        if (event.key === 'Escape') closeMenu(menu, toggle);
+        if (event.key === 'Escape') closeMenu(true, menu, toggle);
         else if (event.key === 'Tab') trapFocus(event, menu);
     }
 
@@ -358,7 +364,7 @@ import { getExternalLinkProps } from '@lib/utils';
 
         if (event.matches || !menu.hasAttribute('data-open')) return;
 
-        closeMenu(menu, toggle);
+        closeMenu(true, menu, toggle);
 
         const brandLink = document.querySelector<HTMLElement>('.navbar__brand');
         const currentLink = menu.querySelector<HTMLElement>('.navbar__menu-link[aria-current="page"]');
@@ -394,15 +400,15 @@ import { getExternalLinkProps } from '@lib/utils';
 
         const mobileQuery = window.matchMedia(MOBILE_QUERY);
 
-        closeButton.addEventListener('click', () => closeMenu(menu, toggle), { signal });
+        closeButton.addEventListener('click', event => closeMenu(event.detail === 0, menu, toggle), { signal });
         document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
         menu.addEventListener('transitionend', event => handleMenuTransitionEnd(event, closeButton, menu, toggle), { signal });
         mobileQuery.addEventListener('change', event => handleMobileChange(event, menu, toggle), { signal });
         signal.addEventListener('abort', () => handleAbort(menu, toggle));
 
-        toggle.addEventListener('click', () => {
-            if (menu.hasAttribute('data-open')) closeMenu(menu, toggle);
-            else openMenu(closeButton, menu, toggle);
+        toggle.addEventListener('click', (event) => {
+            if (menu.hasAttribute('data-open')) closeMenu(event.detail === 0, menu, toggle);
+            else openMenu(closeButton, event.detail === 0, menu, toggle);
         }, { signal });
     }
 
@@ -410,13 +416,13 @@ import { getExternalLinkProps } from '@lib/utils';
         return pathname.replace(/\/$/, '') || '/';
     }
 
-    function openMenu(closeButton: HTMLElement, menu: HTMLElement, toggle: HTMLElement) {
+    function openMenu(closeButton: HTMLElement, focusVisible: boolean, menu: HTMLElement, toggle: HTMLElement) {
         document.documentElement.style.overflow = 'hidden';
         menu.setAttribute('aria-modal', 'true');
         menu.setAttribute('data-open', '');
         menu.setAttribute('role', 'dialog');
         toggle.setAttribute('aria-expanded', 'true');
-        closeButton.focus();
+        focusElement(closeButton, focusVisible);
         syncSwapHover(closeButton);
     }
 

@@ -1,4 +1,5 @@
 ---
+import IconArrow from '@components/IconArrow.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import { LINKS } from '@lib/constants';
 import { getExternalLinkProps, pad } from '@lib/utils';
@@ -44,11 +45,8 @@ const CHANNELS = [
                         <span class="contact__channel-value flex items-baseline justify-end min-w-0 gap-2 font-serif italic text-right wrap-anywhere text-cream-60">
                             <span class="min-w-0">{channel.value.split(/(?=@)/).flatMap((part, partIndex) => (partIndex === 0 ? [part] : [<wbr />, part]))}</span>
                             {channel.isExternal && (
-                                <span
-                                    class="contact__channel-cue self-center select-none"
-                                    aria-hidden="true"
-                                >
-                                    &rarr;
+                                <span class="contact__channel-cue flex self-center">
+                                    <IconArrow />
                                 </span>
                             )}
                         </span>
@@ -62,6 +60,10 @@ const CHANNELS = [
 <style>
     .contact__channel:last-child {
         border-bottom: none;
+    }
+
+    .contact__channel-cue {
+        font-size: 1.5em;
     }
 
     .contact__channel-index {
