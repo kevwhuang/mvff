@@ -15,7 +15,6 @@ const HEADINGS = ['Site', 'Connect', 'Insider'] as const;
 
 const INSIDER_LINKS = [
     { href: LINKS.pitchDeck, isDisabled: false, label: 'Pitch Deck' },
-    { href: LINKS.partner, isDisabled: true, label: 'Future Partnerships' },
     { href: LINKS.filmfreeway, isDisabled: true, label: 'FilmFreeway' },
 ] as const;
 
@@ -107,7 +106,7 @@ describe('Footer', () => {
         }
     });
 
-    test('opens the pitch deck in a new tab and disables the future partnerships and filmfreeway links', () => {
+    test('opens the pitch deck in a new tab and disables the filmfreeway link', () => {
         for (const insiderLink of INSIDER_LINKS) {
             const link = findLink(html, insiderLink.label);
 

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import type { Page } from '@playwright/test';
 
-const DISABLED_LABELS = ['FilmFreeway', 'Future Partnerships', 'Store'] as const;
+const DISABLED_LABELS = ['FilmFreeway', 'Store'] as const;
 const FOCUS_OUTLINE = 'solid 2px rgb(255, 115, 94)';
 
 const FOCUS_TARGETS = [
@@ -94,7 +94,7 @@ test.describe('keyboard navigation', () => {
         expect([...remaining.values()]).toEqual([]);
     });
 
-    test('the store, future partnerships, and filmfreeway links carry tabindex -1 and never take focus while tabbing', async ({ page }) => {
+    test('the store and filmfreeway links carry tabindex -1 and never take focus while tabbing', async ({ page }) => {
         await page.goto('/');
 
         const disabledCount = await page.locator('a[aria-disabled="true"]').count();

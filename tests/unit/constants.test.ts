@@ -3,14 +3,13 @@ import { describe, expect, test } from 'vitest';
 import { LINKS, LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY, ROUTES } from '../../src/lib/constants';
 
 const EXTERNAL_LINK_KEYS = ['calendly', 'filmfreeway', 'instagram', 'review'] as const;
-const INTERNAL_LINK_KEYS = ['partner', 'pitchDeck'] as const;
+const INTERNAL_LINK_KEYS = ['pitchDeck'] as const;
 
 const LINK_KEYS = [
     'calendly',
     'email',
     'filmfreeway',
     'instagram',
-    'partner',
     'phone',
     'pitchDeck',
     'review',
@@ -21,7 +20,7 @@ const SHOP_URL = 'https://shop.atxmusicvideofilmfestival.com';
 const TEL_PATTERN = /^tel:\+\d{11}$/;
 
 describe('LINKS', () => {
-    test('exposes exactly the eight destination keys', () => {
+    test('exposes exactly the seven destination keys', () => {
         expect(Object.keys(LINKS)).toEqual([...LINK_KEYS]);
     });
 
@@ -36,10 +35,9 @@ describe('LINKS', () => {
         for (const key of EXTERNAL_LINK_KEYS) expect(LINKS[key].startsWith('https://'), key).toBe(true);
     });
 
-    test('points the partner placeholder and the pitch deck at internal paths', () => {
+    test('points the pitch deck at an internal path', () => {
         for (const key of INTERNAL_LINK_KEYS) expect(LINKS[key].startsWith('/'), key).toBe(true);
 
-        expect(LINKS.partner).toBe('/');
         expect(LINKS.pitchDeck.endsWith('.pdf')).toBe(true);
     });
 

@@ -11,7 +11,7 @@ const FAQ = [
     { answer: 'Yes. Food vendors served, and the full bar poured all night.', question: 'Was there food and drink?' },
     { answer: 'Cameras were everywhere. Guests shot the night from the floor, and several media members worked alongside them.', question: 'Were cameras allowed?' },
     { answer: 'Submissions for 2026 are closed. The official selections screened across the three blocks on July 18. Follow @atxmvff on Instagram for the next open call.', question: 'How do I submit a music video?' },
-    { answer: 'Sponsorships and partnerships are open for next year. Start with the pitch deck in the footer, then apply through Future Partnerships.', question: 'How do brands get involved?' },
+    { answer: 'Sponsorships and partnerships are open for next year. Start with the pitch deck in the footer, then reach out through any contact channel.', question: 'How do brands get involved?' },
 ] as const;
 
 const SCHEDULE = [

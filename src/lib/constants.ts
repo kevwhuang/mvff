@@ -3,7 +3,6 @@ export const LINKS = {
     email: 'mailto:contact@atxmusicvideofilmfestival.com',
     filmfreeway: 'https://filmfreeway.com/atxmusicvideofilmfestival',
     instagram: 'https://instagram.com/atxmvff',
-    partner: '/',
     phone: 'tel:+12814669387',
     pitchDeck: '/assets/austin_music_video_film_festival_pitch_deck.pdf',
     review: 'https://g.page/r/CdaZb_RsbGsEEBM/review',

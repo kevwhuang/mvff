@@ -58,21 +58,13 @@ import { getExternalLinkProps } from '@lib/utils';
             <span class="block">A red-carpet premiere for the music video.</span>
             <span class="block">Bold artists, from screen to stage.</span>
         </p>
-        <div class="hero__actions hero__reveal flex flex-wrap items-center gap-4">
+        <div class="hero__actions hero__reveal flex">
             <a
                 class="button button--primary"
                 href={LINKS.review}
                 {...getExternalLinkProps(LINKS.review)}
             >
                 Leave a Review
-            </a>
-            <a
-                class="button"
-                aria-disabled="true"
-                href={LINKS.partner}
-                tabindex="-1"
-            >
-                Future Partnerships
             </a>
         </div>
     </div>
@@ -234,7 +226,7 @@ import { getExternalLinkProps } from '@lib/utils';
 
 <script>
     import { REDUCED_MOTION_QUERY } from '@lib/constants';
-    import { initDisabledLinks, registerPageScript } from '@lib/utils';
+    import { registerPageScript } from '@lib/utils';
 
     const FADE_WINDOW = 0.7;
 
@@ -245,7 +237,6 @@ import { getExternalLinkProps } from '@lib/utils';
 
         if (video) video.addEventListener('timeupdate', () => syncVideoFade(video), { signal });
 
-        initDisabledLinks('.hero__actions .button[aria-disabled="true"]', signal);
         syncHeroVideo(reducedMotionQuery.matches);
         reducedMotionQuery.addEventListener('change', event => syncHeroVideo(event.matches), { signal });
     }

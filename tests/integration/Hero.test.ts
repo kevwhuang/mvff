@@ -12,7 +12,7 @@ const REVEAL_BLOCKS = [
     'class="hero__meta hero__reveal flex flex-wrap items-center gap-6 list-none"',
     'class="hero__reveal hero__title"',
     'class="hero__reveal subtitle font-serif italic text-cream-80"',
-    'class="hero__actions hero__reveal flex flex-wrap items-center gap-4"',
+    'class="hero__actions hero__reveal flex"',
 ] as const;
 
 describe('Hero', () => {
@@ -76,11 +76,11 @@ describe('Hero', () => {
         expect(html).toMatch(/<span class="block"[^>]*>Bold artists, from screen to stage\.<\/span>/);
     });
 
-    test('opens the review action in a new tab and renders the partnerships action disabled', () => {
+    test('opens the review action in a new tab as the only action', () => {
         expect(html).toContain(`href="${LINKS.review}" rel="noopener" target="_blank"`);
         expect(html).toMatch(/<a class="button button--primary"[^>]*>Leave a Review<\/a>/);
-        expect(html).toContain(`<a class="button" aria-disabled="true" href="${LINKS.partner}" tabindex="-1"`);
-        expect(html).toMatch(/<a class="button" aria-disabled="true"[^>]*>Future Partnerships<\/a>/);
+        expect(html.split('class="button').length - 1).toBe(1);
+        expect(html).not.toContain('aria-disabled');
     });
 
     test('marks the five content blocks for the load-time reveal instead of scroll animation', () => {
