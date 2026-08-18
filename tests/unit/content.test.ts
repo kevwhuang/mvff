@@ -15,7 +15,6 @@ const PREFIX_LENGTH = 2;
 const STEM_PATTERN = /^\d{2}_[a-z][a-z0-9_]*$/;
 
 const galleryParser = collections.gallery.schema as SchemaParser;
-
 const galleryRoot = join(process.cwd(), 'src/content/gallery');
 const imageRoot = join(process.cwd(), 'src/images/gallery');
 
@@ -62,13 +61,17 @@ describe('gallery', () => {
     });
 
     test('every entry has a matching webp in src/images/gallery', () => {
-        for (const { name, stem } of galleryEntries) expect(existsSync(join(imageRoot, `${stem}.webp`)), name).toBe(true);
+        for (const { name, stem } of galleryEntries) {
+            expect(existsSync(join(imageRoot, `${stem}.webp`)), name).toBe(true);
+        }
     });
 
     test('every webp in src/images/gallery has a matching entry', () => {
         const stems = galleryEntries.map(entry => entry.stem);
 
-        for (const stem of imageStems) expect(stems, stem).toContain(stem);
+        for (const stem of imageStems) {
+            expect(stems, stem).toContain(stem);
+        }
     });
 });
 
@@ -91,7 +94,9 @@ describe('schemas', () => {
 
 describe('json files', () => {
     test('files end without a trailing newline', () => {
-        for (const { name, raw } of galleryEntries) expect(raw.endsWith('\n'), name).toBe(false);
+        for (const { name, raw } of galleryEntries) {
+            expect(raw.endsWith('\n'), name).toBe(false);
+        }
     });
 
     test('keys and values contain no curly apostrophes', () => {

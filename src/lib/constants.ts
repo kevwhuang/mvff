@@ -8,9 +8,11 @@ export const LINKS = {
     review: 'https://g.page/r/CdaZb_RsbGsEEBM/review',
 } as const;
 
-export const LOADER_SHOWN_KEY = 'mvff-loader-shown';
+export const LOADER_SHOWN_KEY = 'mvff_loader_shown';
 
 export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
+export const RESIZE_SETTLE_DELAY = 150;
 
 export const ROUTES = [
     { href: '/', isDisabled: false, label: 'Home' },

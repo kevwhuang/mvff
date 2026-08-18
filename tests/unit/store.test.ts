@@ -25,6 +25,7 @@ describe('getFigures', () => {
 
     test('sorts the entries ascending by id', async () => {
         const figures = await getFigures();
+
         const expectedIds = listIds('gallery').sort((idA, idB) => idA.localeCompare(idB));
 
         expect(figures.map(figure => figure.id)).toEqual(expectedIds);

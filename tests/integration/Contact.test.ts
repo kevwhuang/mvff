@@ -48,7 +48,9 @@ describe('Contact', () => {
         expect(html).toMatch(/<span class="contact__channel-cue flex self-center"[^>]*><svg[^>]*viewBox="0 0 97 51"[^>]*>/);
         expect(html).toMatch(/<\/svg><\/span><\/span><\/a>/);
 
-        for (const channel of externalChannels) expect(html).toContain(`href="${channel.href}" rel="noopener" target="_blank"`);
+        for (const channel of externalChannels) {
+            expect(html).toContain(`href="${channel.href}" rel="noopener" target="_blank"`);
+        }
     });
 
     test('gives the mailto and tel links neither rel nor target', () => {

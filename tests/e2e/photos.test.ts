@@ -50,6 +50,8 @@ test.describe('gallery lightbox without reduced motion', () => {
     test.beforeEach(async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'no-preference' });
         await page.goto('/photos');
+
+        await expect(page.locator('.navbar__menu-link[href="/photos"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('opens the dialog with the frame source, alt, orientation, and label, locks page scroll, and focuses the close button', async ({ page }) => {
@@ -148,6 +150,8 @@ test.describe('gallery lightbox without reduced motion', () => {
 test.describe('gallery lightbox under reduced motion', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/photos');
+
+        await expect(page.locator('.navbar__menu-link[href="/photos"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('opens the dialog and focuses the close button', async ({ page }) => {

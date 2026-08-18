@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 
 import type { Page } from '@playwright/test';
 
+const DESKTOP_VIEWPORT = { height: 800, width: 1_280 } as const;
+const MOBILE_VIEWPORT = { height: 844, width: 390 } as const;
 const STORE_HREF = 'https://shop.atxmusicvideofilmfestival.com';
 
 function getRootOverflow(page: Page) {
@@ -44,6 +46,7 @@ test.describe('navbar desktop', () => {
 
         await expect(store).toHaveAttribute('aria-disabled', 'true');
         await expect(store).toHaveAttribute('tabindex', '-1');
+        await expect(page.locator('.navbar__menu-link[href="/info"]')).toHaveAttribute('aria-current', 'page');
 
         await store.click({ force: true });
 
@@ -61,10 +64,12 @@ test.describe('navbar desktop', () => {
 });
 
 test.describe('navbar mobile menu', () => {
-    test.use({ viewport: { height: 844, width: 390 } });
+    test.use({ viewport: MOBILE_VIEWPORT });
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/info');
+
+        await expect(page.locator('.navbar__menu-link[href="/info"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('shows the menu toggle with the drawer closed and the countdown hidden', async ({ page }) => {
@@ -196,7 +201,7 @@ test.describe('navbar mobile menu', () => {
 
         await expect(menu).toHaveAttribute('data-open', '');
 
-        await page.setViewportSize({ height: 800, width: 1_280 });
+        await page.setViewportSize(DESKTOP_VIEWPORT);
 
         await expect(menu).not.toHaveAttribute('data-open');
         await expect(toggle).toHaveAttribute('aria-expanded', 'false');
@@ -207,11 +212,13 @@ test.describe('navbar mobile menu', () => {
 });
 
 test.describe('navbar mobile menu under reduced motion', () => {
-    test.use({ viewport: { height: 844, width: 390 } });
+    test.use({ viewport: MOBILE_VIEWPORT });
 
     test.beforeEach(async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.goto('/info');
+
+        await expect(page.locator('.navbar__menu-link[href="/info"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('opens the drawer and focuses the close button', async ({ page }) => {

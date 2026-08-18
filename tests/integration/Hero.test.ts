@@ -39,7 +39,9 @@ describe('Hero', () => {
         expect(html).toContain('<div class="hero__background absolute inset-0 -z-1" aria-hidden="true"');
         expect(html).toContain('<div class="grain absolute" aria-hidden="true"');
 
-        for (const corner of CORNERS) expect(html).toContain(`<div class="hero__corner hero__corner--${corner} absolute border border-cream" aria-hidden="true"`);
+        for (const corner of CORNERS) {
+            expect(html).toContain(`<div class="hero__corner hero__corner--${corner} absolute border border-cream" aria-hidden="true"`);
+        }
 
         expect(html.split('aria-hidden="true"').length - 1).toBe(6);
     });
@@ -86,7 +88,9 @@ describe('Hero', () => {
     test('marks the five content blocks for the load-time reveal instead of scroll animation', () => {
         expect(html.split('hero__reveal').length - 1).toBe(REVEAL_BLOCKS.length);
 
-        for (const block of REVEAL_BLOCKS) expect(html).toContain(block);
+        for (const block of REVEAL_BLOCKS) {
+            expect(html).toContain(block);
+        }
 
         expect(html).not.toContain('data-scroll');
     });

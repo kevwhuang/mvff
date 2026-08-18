@@ -12,6 +12,7 @@ describe('Navbar', () => {
         const container = await AstroContainer.create();
 
         html = await container.renderToString(Navbar);
+
         menuLinks = html.match(/<a class="navbar__menu-link[^>]*>/g) ?? [];
     });
 
@@ -76,7 +77,7 @@ describe('Navbar', () => {
         expect(html).toMatch(/<span[^>]*>00:00:00:00<\/span>/);
     });
 
-    test('renders the menu toggle collapsed around the hamburger icon', () => {
+    test('renders the menu toggle collapsed with the hamburger icon', () => {
         expect(html).toMatch(/<button class="[^"]*navbar__toggle[^"]*" aria-expanded="false" aria-label="Open navigation" type="button"/);
         expect(html).toContain('<svg aria-hidden="true" fill="none" height="16" viewBox="0 0 21 16" width="21">');
         expect(html.split('<line stroke="currentColor" stroke-width="2"').length - 1).toBe(3);

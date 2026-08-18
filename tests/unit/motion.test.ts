@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
+import { RESIZE_SETTLE_DELAY } from '../../src/lib/constants';
+
 import type { Mock } from 'vitest';
 
 interface BatchConfig {
@@ -26,7 +28,6 @@ const INLINE_UNSET_OPACITY = '';
 const OFFSCREEN_TOP = 2_000;
 const ONSCREEN_TOP = 0;
 const PARALLAX_SELECTOR = '[data-parallax]';
-const RESIZE_SETTLE_DELAY = 150;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
 const SCROLL_SELECTOR = '[data-scroll]';
@@ -36,11 +37,6 @@ const VIEWPORT_WIDTH = 1_280;
 const VISIBLE_OPACITY = '1';
 
 const { gsapStub, scrollTriggerStub, state } = vi.hoisted(() => {
-    const state = {
-        scrollTriggers: [] as Killable[],
-        tweensOf: [] as Killable[],
-    };
-
     const gsapStub = {
         fromTo: vi.fn<(target: unknown, from: unknown, to: Record<string, unknown>) => { kill: Mock }>(() => ({ kill: vi.fn() })),
         getTweensOf: vi.fn(() => state.tweensOf),
@@ -54,16 +50,20 @@ const { gsapStub, scrollTriggerStub, state } = vi.hoisted(() => {
         getAll: vi.fn(() => state.scrollTriggers),
     };
 
+    const state = {
+        scrollTriggers: [] as Killable[],
+        tweensOf: [] as Killable[],
+    };
+
     return { gsapStub, scrollTriggerStub, state };
 });
 
-vi.mock('gsap', () => ({ default: gsapStub }));
-vi.mock('gsap/ScrollTrigger', () => ({ ScrollTrigger: scrollTriggerStub }));
+const htmlElementStub = { [Symbol.hasInstance]: (value: unknown) => value instanceof ElementStub };
 
 class ElementStub {
     children: ElementStub[];
     closest: (selector: string) => ElementStub | null;
-    contains: (target: unknown) => boolean;
+    contains: (target: ElementStub) => boolean;
     dataset: { scrollStagger?: string };
     getBoundingClientRect: () => { top: number };
     opacity = HIDDEN_OPACITY;
@@ -72,13 +72,11 @@ class ElementStub {
     constructor(children: ElementStub[] = [], scrollStagger?: string, top = OFFSCREEN_TOP) {
         this.children = children;
         this.closest = () => null;
-        this.contains = target => children.includes(target as ElementStub) || target === this;
+        this.contains = target => children.includes(target) || target === this;
         this.dataset = { scrollStagger };
         this.getBoundingClientRect = () => ({ top });
     }
 }
-
-const htmlElementStub = { [Symbol.hasInstance]: (value: unknown) => value instanceof ElementStub };
 
 function buildKillable(trigger?: ElementStub): Killable {
     return { kill: vi.fn(), trigger };
@@ -113,9 +111,9 @@ async function loadMotion({ durationValue = DURATION_VALUE, elements = [], prefe
     vi.stubGlobal('HTMLElement', htmlElementStub);
     vi.stubGlobal('document', documentStub);
 
-    vi.stubGlobal('getComputedStyle', (target: unknown) => ({
+    vi.stubGlobal('getComputedStyle', (target: Partial<ElementStub>) => ({
         getPropertyValue: (property: string) => property === DURATION_PROPERTY ? durationValue : '',
-        opacity: (target as ElementStub).opacity ?? HIDDEN_OPACITY,
+        opacity: target.opacity ?? HIDDEN_OPACITY,
     }));
 
     vi.stubGlobal('window', windowStub);
@@ -124,6 +122,9 @@ async function loadMotion({ durationValue = DURATION_VALUE, elements = [], prefe
 
     return { documentStub, initMotion, mediaQueryStub, windowStub };
 }
+
+vi.mock('gsap', () => ({ default: gsapStub }));
+vi.mock('gsap/ScrollTrigger', () => ({ ScrollTrigger: scrollTriggerStub }));
 
 afterEach(() => {
     vi.resetModules();
@@ -155,12 +156,15 @@ describe('module scope', () => {
 describe('initMotion', () => {
     test('kills every scroll trigger returned by getAll', async () => {
         const { initMotion } = await loadMotion();
+
         const triggers = [buildKillable(), buildKillable()];
 
         state.scrollTriggers = triggers;
         initMotion();
 
-        for (const trigger of triggers) expect(trigger.kill).toHaveBeenCalledTimes(1);
+        for (const trigger of triggers) {
+            expect(trigger.kill).toHaveBeenCalledTimes(1);
+        }
     });
 
     test('kills the animations pushed by a previous batch on the next run', async () => {
@@ -301,6 +305,7 @@ describe('initMotion without reduced motion', () => {
         initMotion();
 
         expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith(children, { opacity: 0 });
+
         expect(scrollTriggerStub.batch).toHaveBeenCalledExactlyOnceWith(children, {
             onEnter: expect.any(Function),
             once: true,
@@ -354,6 +359,19 @@ describe('initMotion without reduced motion', () => {
         expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith([element], { clearProps: 'transform', opacity: 1 });
     });
 
+    test('reveals an off-screen unstaggered element that computes to full opacity instantly on a second run', async () => {
+        const element = new ElementStub();
+
+        const { initMotion } = await loadMotion({ elements: [element] });
+
+        initMotion();
+        element.opacity = VISIBLE_OPACITY;
+        initMotion();
+
+        expect(gsapStub.fromTo).toHaveBeenCalledTimes(1);
+        expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith([element], { clearProps: 'transform', opacity: 1 });
+    });
+
     test('clears the transform of a staggered child carrying an inline full opacity instead of re-batching it on a second run', async () => {
         const child = new ElementStub();
 
@@ -381,6 +399,7 @@ describe('initMotion without reduced motion', () => {
         initMotion();
 
         expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith([child], { opacity: 0 });
+
         expect(scrollTriggerStub.batch).toHaveBeenCalledExactlyOnceWith([child], {
             onEnter: expect.any(Function),
             once: true,
@@ -401,11 +420,38 @@ describe('initMotion without reduced motion', () => {
         expect(gsapStub.set).toHaveBeenCalledWith(element, { opacity: 1 });
         expect(gsapStub.fromTo).not.toHaveBeenCalled();
     });
+
+    test('sets an off-screen staggered container that computes to full opacity instead of fading it on a second run', async () => {
+        const element = new ElementStub([new ElementStub()], '0.1');
+
+        const { initMotion } = await loadMotion({ elements: [element] });
+
+        initMotion();
+        element.opacity = VISIBLE_OPACITY;
+        gsapStub.fromTo.mockClear();
+        gsapStub.set.mockClear();
+        initMotion();
+
+        expect(gsapStub.set).toHaveBeenCalledWith(element, { opacity: 1 });
+        expect(gsapStub.fromTo).not.toHaveBeenCalled();
+    });
 });
 
 describe('focusin handling', () => {
+    test('ignores a focusin whose target is not an element', async () => {
+        const { documentStub } = await loadMotion();
+
+        const [[, focusIn]] = documentStub.addEventListener.mock.calls;
+
+        focusIn({ target: {} });
+
+        expect(scrollTriggerStub.getAll).not.toHaveBeenCalled();
+        expect(gsapStub.set).not.toHaveBeenCalled();
+    });
+
     test('ignores a focusin whose target has no data-scroll ancestor', async () => {
         const { documentStub } = await loadMotion();
+
         const target = new ElementStub();
 
         const [[, focusIn]] = documentStub.addEventListener.mock.calls;
@@ -457,6 +503,24 @@ describe('focusin handling', () => {
 
         expect(inside.kill).toHaveBeenCalledTimes(1);
         expect(outside.kill).not.toHaveBeenCalled();
+        expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith([container, child, sibling], { clearProps: 'transform', opacity: 1 });
+    });
+
+    test('reveals the container and all of its children when the container itself receives focus while a child is hidden', async () => {
+        const child = new ElementStub();
+        const sibling = new ElementStub();
+
+        const container = new ElementStub([child, sibling]);
+
+        container.closest = () => container;
+        container.opacity = VISIBLE_OPACITY;
+
+        const { documentStub } = await loadMotion();
+
+        const [[, focusIn]] = documentStub.addEventListener.mock.calls;
+
+        focusIn({ target: container });
+
         expect(gsapStub.set).toHaveBeenCalledExactlyOnceWith([container, child, sibling], { clearProps: 'transform', opacity: 1 });
     });
 });

@@ -20,29 +20,33 @@ function areAllRevealed(page: Page, selector: string) {
     );
 }
 
+function areInlineShown(page: Page) {
+    return page.locator('[data-scroll]').evaluateAll(elements => elements.every(
+        element => element instanceof HTMLElement && element.style.opacity === '1',
+    ));
+}
+
 function areLayersUntransformed(page: Page) {
     return page.locator('.starfield__layer').evaluateAll(elements => elements.every(
         element => element instanceof HTMLElement && element.style.transform === '' && getComputedStyle(element).transform === 'none',
     ));
 }
 
-async function expectScrollContentShown(page: Page) {
-    const areInlineShown = () => page.locator('[data-scroll]').evaluateAll(elements => elements.every(
-        element => element instanceof HTMLElement && element.style.opacity === '1',
-    ));
-
-    const areRevealed = () => page.locator('[data-scroll], [data-scroll-stagger] > *').evaluateAll(
+function areRevealed(page: Page) {
+    return page.locator('[data-scroll], [data-scroll-stagger] > *').evaluateAll(
         elements => elements.every((element) => {
             const style = getComputedStyle(element);
 
             return style.opacity === '1' && style.transform === 'none';
         }),
     );
+}
 
+async function expectScrollContentShown(page: Page) {
     expect(await page.locator('[data-scroll]').count()).toBeGreaterThan(1);
 
-    await expect.poll(areInlineShown, POLL).toBe(true);
-    await expect.poll(areRevealed, POLL).toBe(true);
+    await expect.poll(() => areInlineShown(page), POLL).toBe(true);
+    await expect.poll(() => areRevealed(page), POLL).toBe(true);
 }
 
 function getLeadFigureOpacities(page: Page) {

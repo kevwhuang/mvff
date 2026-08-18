@@ -41,9 +41,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     .loader[data-open] {
         opacity: 1;
         pointer-events: auto;
-        transition:
-            opacity var(--duration-slower) ease,
-            visibility 0s;
+        transition: opacity var(--duration-slower) ease;
         visibility: visible;
     }
 
@@ -63,7 +61,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     }
 
     .loader__progress {
-        animation: loader__sweep var(--duration-sweep) ease-in-out infinite;
+        animation: loader__sweep 1.4s ease-in-out infinite;
         animation-play-state: paused;
         width: 30%;
     }
@@ -176,7 +174,7 @@ import { LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY } from '@lib/constants';
     }
 
     function setSiblingsInert(isInert) {
-        document.body.querySelectorAll(':scope > header, :scope > main, :scope > footer').forEach((sibling) => {
+        document.body.querySelectorAll(':scope > footer, :scope > header, :scope > main').forEach((sibling) => {
             sibling.inert = isInert;
         });
     }

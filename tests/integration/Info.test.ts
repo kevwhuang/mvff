@@ -73,7 +73,9 @@ describe('Info', () => {
 
         expect(features.split('<li').length - 1).toBe(VENUE_FEATURES.length);
 
-        for (const feature of VENUE_FEATURES) expect(features).toContain(`>${feature}</li>`);
+        for (const feature of VENUE_FEATURES) {
+            expect(features).toContain(`>${feature}</li>`);
+        }
 
         expectAscending(VENUE_FEATURES.map(feature => features.indexOf(`>${feature}</li>`)));
     });

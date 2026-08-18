@@ -37,22 +37,14 @@
 
 :root {
     --duration-base: 0.3s;
-    --duration-blink: 1.1s;
     --duration-fast: 0.2s;
-    --duration-marquee: 28s;
     --duration-pulse: 1.8s;
     --duration-slow: 0.4s;
     --duration-slower: 0.6s;
-    --duration-sweep: 1.4s;
-    --duration-twinkle: 6s;
-    --duration-twinkle-slow: 8s;
-    --duration-twinkle-slower: 10s;
     --header-height: 80px;
     --measure-prose: 560px;
-    --measure-wide: 700px;
     --section-padding: clamp(96px, calc(53.33px + 13.33vw), 224px);
     --section-padding-sm: clamp(48px, calc(37.33px + 3.33vw), 80px);
-    --shell-max: 1280px;
     --shell-pad: clamp(20px, calc(8px + 3.75vw), 56px);
 }
 
@@ -77,6 +69,7 @@ html {
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--header-height) + 24px);
     scrollbar-gutter: stable;
+    touch-action: manipulation;
 }
 
 html[data-astro-transition] {
@@ -124,12 +117,11 @@ img {
     *::after,
     *::before {
         animation-delay: 0s !important;
-        animation-duration: 0.01s !important;
+        animation-duration: 0.00001s !important;
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
         transition-delay: 0s !important;
-        transition-duration: 0.01s !important;
-        transition-property: none !important;
+        transition-duration: 0.00001s !important;
     }
 
     ::view-transition-group(root),

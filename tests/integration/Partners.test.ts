@@ -14,6 +14,7 @@ describe('Partners', () => {
         const container = await AstroContainer.create();
 
         html = await container.renderToString(Partners);
+
         items = html.match(/<li class="partners__item[^>]*>/g) ?? [];
     });
 
@@ -33,9 +34,13 @@ describe('Partners', () => {
     });
 
     test('exposes only the first copy of the pair and hides every repeat from assistive tech', () => {
-        for (const item of items.slice(0, PARTNERS_PER_COPY)) expect(item).not.toContain('aria-hidden');
+        for (const item of items.slice(0, PARTNERS_PER_COPY)) {
+            expect(item).not.toContain('aria-hidden');
+        }
 
-        for (const item of items.slice(PARTNERS_PER_COPY)) expect(item).toContain('aria-hidden="true"');
+        for (const item of items.slice(PARTNERS_PER_COPY)) {
+            expect(item).toContain('aria-hidden="true"');
+        }
     });
 
     test('renders the madewell logo as decorative next to its wordmark and the cabana club logo with alt text', () => {

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 const CLOSED_SNAPSHOT = { ariaHidden: 'true', inertSiblings: 0, isOpen: false } as const;
-const LOADER_SHOWN_KEY = 'mvff-loader-shown';
+const LOADER_SHOWN_KEY = 'mvff_loader_shown';
 const MIN_DISPLAY_DURATION = 1_000;
 const OPEN_SNAPSHOT = { ariaHidden: null, inertSiblings: 3, isOpen: true } as const;
 const POLL_TIGHT = { intervals: [100], timeout: 10_000 };
@@ -57,6 +57,7 @@ test.describe('loader', () => {
         const closedAt = await waitForLoaderClose(page);
 
         expect(closedAt).toBeGreaterThanOrEqual(MIN_DISPLAY_DURATION);
+
         expect(await getLoaderSnapshot(page)).toEqual(CLOSED_SNAPSHOT);
     });
 

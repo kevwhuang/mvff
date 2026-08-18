@@ -4,7 +4,6 @@
     border: 1px solid var(--color-cream);
     color: var(--color-cream);
     display: inline-flex;
-    font-family: var(--font-mono);
     font-size: 12px;
     gap: 8px;
     justify-content: center;
@@ -38,6 +37,7 @@
 }
 
 .button--primary {
+    --button-primary-emphasis: color-mix(in oklab, var(--color-coral) 85%, var(--color-navy));
     background: var(--color-coral);
     border-color: var(--color-coral);
     color: var(--color-night);
@@ -45,14 +45,14 @@
 }
 
 .button--primary:focus-visible {
-    background: color-mix(in oklab, var(--color-coral) 85%, var(--color-navy));
-    border-color: color-mix(in oklab, var(--color-coral) 85%, var(--color-navy));
+    background: var(--button-primary-emphasis);
+    border-color: var(--button-primary-emphasis);
     color: var(--color-night);
 }
 
 .button--primary:hover {
-    background: color-mix(in oklab, var(--color-coral) 85%, var(--color-navy));
-    border-color: color-mix(in oklab, var(--color-coral) 85%, var(--color-navy));
+    background: var(--button-primary-emphasis);
+    border-color: var(--button-primary-emphasis);
     color: var(--color-night);
 }
 
@@ -119,7 +119,7 @@
 
 .shell {
     margin: 0 auto;
-    max-width: var(--shell-max);
+    max-width: 1280px;
     padding: 0 var(--shell-pad);
     width: 100%;
 }

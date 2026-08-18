@@ -58,6 +58,7 @@ test.describe('production pages', () => {
 
         expect(response.status()).toBe(404);
         expect(response.headers()['content-type']).toContain('text/html');
+
         expect(await response.text()).toContain('<title>404 \u2014 Austin Music Video Film Festival</title>');
     });
 
@@ -66,7 +67,9 @@ test.describe('production pages', () => {
 
         const headers = response.headers();
 
-        for (const [name, value] of Object.entries(SECURITY_HEADERS)) expect(headers[name]).toBe(value);
+        for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+            expect(headers[name]).toBe(value);
+        }
     });
 
     test('renders the home page hero in a real browser', async ({ page }) => {
@@ -95,6 +98,7 @@ test.describe('production api', () => {
 
         expect(response.status()).toBe(404);
         expect(response.headers()['content-type']).toContain('application/json');
+
         expect(await response.json()).toEqual({ error: 'Not found' });
     });
 });

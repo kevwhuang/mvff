@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { LINKS, LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY, ROUTES } from '../../src/lib/constants';
+import { LINKS, LOADER_SHOWN_KEY, REDUCED_MOTION_QUERY, RESIZE_SETTLE_DELAY, ROUTES } from '../../src/lib/constants';
 
 const EXTERNAL_LINK_KEYS = ['calendly', 'filmfreeway', 'instagram', 'review'] as const;
 const INTERNAL_LINK_KEYS = ['pitchDeck'] as const;
@@ -32,11 +32,15 @@ describe('LINKS', () => {
     });
 
     test('points every off-site destination at an https url', () => {
-        for (const key of EXTERNAL_LINK_KEYS) expect(LINKS[key].startsWith('https://'), key).toBe(true);
+        for (const key of EXTERNAL_LINK_KEYS) {
+            expect(LINKS[key].startsWith('https://'), key).toBe(true);
+        }
     });
 
     test('points the pitch deck at an internal path', () => {
-        for (const key of INTERNAL_LINK_KEYS) expect(LINKS[key].startsWith('/'), key).toBe(true);
+        for (const key of INTERNAL_LINK_KEYS) {
+            expect(LINKS[key].startsWith('/'), key).toBe(true);
+        }
 
         expect(LINKS.pitchDeck.endsWith('.pdf')).toBe(true);
     });
@@ -53,14 +57,20 @@ describe('LINKS', () => {
 });
 
 describe('LOADER_SHOWN_KEY', () => {
-    test('is the mvff-loader-shown session storage key', () => {
-        expect(LOADER_SHOWN_KEY).toBe('mvff-loader-shown');
+    test('is the mvff_loader_shown session storage key', () => {
+        expect(LOADER_SHOWN_KEY).toBe('mvff_loader_shown');
     });
 });
 
 describe('REDUCED_MOTION_QUERY', () => {
     test('is the prefers-reduced-motion reduce media query', () => {
         expect(REDUCED_MOTION_QUERY).toBe('(prefers-reduced-motion: reduce)');
+    });
+});
+
+describe('RESIZE_SETTLE_DELAY', () => {
+    test('is a 150 millisecond settle delay', () => {
+        expect(RESIZE_SETTLE_DELAY).toBe(150);
     });
 });
 
@@ -85,13 +95,17 @@ describe('ROUTES', () => {
     test('gives every enabled route an internal absolute path', () => {
         const enabledRoutes = ROUTES.filter(route => !route.isDisabled);
 
-        for (const route of enabledRoutes) expect(route.href.startsWith('/'), route.label).toBe(true);
+        for (const route of enabledRoutes) {
+            expect(route.href.startsWith('/'), route.label).toBe(true);
+        }
     });
 
     test('gives every route a non-empty label and a unique href', () => {
         const hrefs = ROUTES.map(route => route.href);
 
-        for (const route of ROUTES) expect(route.label.trim()).not.toBe('');
+        for (const route of ROUTES) {
+            expect(route.label.trim()).not.toBe('');
+        }
 
         expect(new Set(hrefs).size).toBe(ROUTES.length);
     });

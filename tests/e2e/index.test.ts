@@ -5,6 +5,7 @@ const DESCRIPTION_MIN = 120;
 const EXPERIENCE_TITLES = ['Live Music', 'Screenings', 'Q&A Panel', 'Awards', 'After Party'] as const;
 const TAGLINE_LINE_HEIGHT = 0.9;
 const TAGLINE_LINE_TOLERANCE = 1.5;
+const TAGLINE_VIEWPORT_HEIGHT = 900;
 const TAGLINE_VIEWPORT_WIDTHS = [320, 1440] as const;
 
 test.beforeEach(async ({ page }) => {
@@ -51,15 +52,14 @@ test.describe('index page', () => {
 
     test('keeps the tagline line box tight and the arrow vertically centered', async ({ page }) => {
         for (const width of TAGLINE_VIEWPORT_WIDTHS) {
-            await page.setViewportSize({ width, height: 900 });
+            await page.setViewportSize({ height: TAGLINE_VIEWPORT_HEIGHT, width });
             await page.locator('#tagline-title').scrollIntoViewIfNeeded();
             await expect(page.locator('#tagline-title')).toHaveAttribute('data-typed', '');
 
             const metrics = await page.evaluate(() => {
-                const title = document.querySelector('#tagline-title') as HTMLElement;
-
                 const arrow = (document.querySelector('.tagline__arrow svg') as SVGSVGElement).getBoundingClientRect();
                 const screen = (document.querySelector('.tagline__screen') as HTMLElement).getBoundingClientRect();
+                const title = document.querySelector('#tagline-title') as HTMLElement;
 
                 return {
                     arrowCenter: arrow.top + arrow.height / 2,

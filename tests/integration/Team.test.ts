@@ -41,7 +41,7 @@ describe('Team', () => {
         expect(html).not.toContain('section-header__marker');
     });
 
-    test('staggers the card grid for scroll animation behind the header', () => {
+    test('marks the header and the staggered card grid for scroll animation', () => {
         expect(html).toMatch(/<header class="section-header[^"]*" data-scroll/);
         expect(html).toMatch(/<ul class="team__grid grid grid-cols-4 list-none" data-scroll data-scroll-stagger="0\.04"/);
         expect(html.split('data-scroll').length - 1).toBe(3);

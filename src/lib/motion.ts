@@ -1,11 +1,10 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import { REDUCED_MOTION_QUERY } from '@lib/constants';
+import { REDUCED_MOTION_QUERY, RESIZE_SETTLE_DELAY } from '@lib/constants';
 import { initParallax } from '@lib/parallax';
 
 const PERCENT_SCALE = 100;
-const RESIZE_SETTLE_DELAY = 150;
 const SCROLL_DURATION = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-slower')) || 0.6;
 const SCROLL_EASE = 'power3.out';
 const SCROLL_OFFSET = 60;
@@ -103,7 +102,7 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
 
             gsap.set(hiddenChildren, { opacity: 0 });
 
-            const timelineBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
+            const tweensBefore = new Set(gsap.globalTimeline.getChildren(false, true, false));
 
             ScrollTrigger.batch(hiddenChildren, {
                 onEnter: batch => batchAnimations.push(gsap.fromTo(batch, fromState, { ...toState, stagger })),
@@ -111,7 +110,7 @@ function initScrollAnimations(prefersReducedMotion: boolean) {
                 start: SCROLL_START,
             });
 
-            batchAnimations.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !timelineBefore.has(tween)));
+            batchAnimations.push(...gsap.globalTimeline.getChildren(false, true, false).filter(tween => !tweensBefore.has(tween)));
         } else if (hasRevealed && (isPastScrollStart(element) || isRevealed(element))) {
             revealInstantly(element);
         } else {

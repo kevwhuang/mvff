@@ -42,7 +42,8 @@ test.describe('document structure', () => {
                 headingLevels: [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')].map(heading => Number(heading.tagName.slice(1))),
                 mainCount: document.querySelectorAll('main, [role="main"]').length,
                 missingAltCount: [...document.querySelectorAll('img')].filter(image => !image.hasAttribute('alt')).length,
-                nestedLandmarkCount: [...document.querySelectorAll('main footer, main header')].filter(element => !element.closest('article, aside, nav, section')).length,
+                nestedLandmarkCount: [...document.querySelectorAll('main footer, main header')]
+                    .filter(element => !element.closest('article, aside, nav, section')).length,
                 unresolvedLabelIds: [...document.querySelectorAll('[aria-labelledby]')]
                     .flatMap(element => (element.getAttribute('aria-labelledby') || '').split(/\s+/))
                     .filter(id => id && !document.getElementById(id)),
@@ -75,7 +76,7 @@ test.describe('keyboard navigation', () => {
             expect(baseline[target.selector], `resting outline on ${target.name}`).toMatch(/^none /);
         }
 
-        for (let press = 0; press < MAX_TAB_PRESSES && remaining.size > 0; press += 1) {
+        for (let press = 0; press < MAX_TAB_PRESSES && remaining.size > 0; press++) {
             await page.keyboard.press('Tab');
 
             for (const selector of [...remaining.keys()]) {
@@ -110,7 +111,7 @@ test.describe('keyboard navigation', () => {
 
         const focusedDisabledLabels: string[] = [];
 
-        for (let press = 0; press < TAB_SWEEP_PRESSES; press += 1) {
+        for (let press = 0; press < TAB_SWEEP_PRESSES; press++) {
             await page.keyboard.press('Tab');
 
             const label = await page.evaluate(() => {
@@ -140,6 +141,8 @@ test.describe('page titles', () => {
         expect(new Set(titles).size).toBe(titles.length);
         expect(titles[0]).toBe(HOME_TITLE);
 
-        for (const title of titles.slice(1)) expect(title).toMatch(TITLE_PATTERN);
+        for (const title of titles.slice(1)) {
+            expect(title).toMatch(TITLE_PATTERN);
+        }
     });
 });

@@ -5,6 +5,9 @@ import IconMenu from '@components/IconMenu.astro';
 import logo from '@images/logos/austin_music_video_film_festival.webp';
 import { ROUTES } from '@lib/constants';
 import { getExternalLinkProps } from '@lib/utils';
+
+const CLASS_COUNTDOWN = 'navbar__countdown flex items-center gap-2 px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none';
+const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-items-center size-12 border border-cream-15 font-mono leading-none text-2xl bg-navy text-cream select-none';
 ---
 
 <header
@@ -31,7 +34,7 @@ import { getExternalLinkProps } from '@lib/utils';
             aria-label="Primary"
         >
             <button
-                class="navbar__icon-button navbar__menu-close hidden place-items-center size-12 border border-cream-15 font-mono leading-none text-2xl bg-navy text-cream select-none"
+                class={CLASS_MENU_CLOSE}
                 aria-label="Close navigation"
                 type="button"
             >
@@ -55,7 +58,7 @@ import { getExternalLinkProps } from '@lib/utils';
         </nav>
         <div class="flex items-center justify-self-end gap-3">
             <div
-                class="navbar__countdown flex items-center gap-2 px-4 py-3 border border-cream-15 font-mono tracking-widest bg-navy text-cream select-none"
+                class={CLASS_COUNTDOWN}
                 aria-hidden="true"
             >
                 <span class="navbar__pulse inline-block size-1.5 rounded-full bg-coral" />
@@ -223,9 +226,7 @@ import { getExternalLinkProps } from '@lib/utils';
 
         .navbar__menu[data-open] {
             transform: translateX(0);
-            transition:
-                transform var(--duration-base) ease,
-                visibility 0s;
+            transition: transform var(--duration-base) ease;
             visibility: visible;
         }
 
@@ -316,18 +317,18 @@ import { getExternalLinkProps } from '@lib/utils';
 </style>
 
 <script>
+    import { RESIZE_SETTLE_DELAY } from '@lib/constants';
     import { initDisabledLinks, registerPageScript } from '@lib/utils';
 
     const HOVER_QUERY = '(hover: hover)';
     const MOBILE_QUERY = '(max-width: 1024px)';
     const POINTER_UNSET = -1;
-    const RESIZE_SETTLE_DELAY = 150;
 
     let pointerX = POINTER_UNSET;
     let pointerY = POINTER_UNSET;
     let resizeSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
-    function closeMenu(focusVisible: boolean, menu: HTMLElement, toggle: HTMLElement) {
+    function closeMenu(menu: HTMLElement, toggle: HTMLElement, focusVisible: boolean) {
         document.documentElement.style.overflow = '';
         resetMenu(menu, toggle);
         focusElement(toggle, focusVisible);
@@ -347,11 +348,11 @@ import { getExternalLinkProps } from '@lib/utils';
     function handleMenuKeydown(event: KeyboardEvent, menu: HTMLElement, toggle: HTMLElement) {
         if (!menu.hasAttribute('data-open')) return;
 
-        if (event.key === 'Escape') closeMenu(true, menu, toggle);
+        if (event.key === 'Escape') closeMenu(menu, toggle, true);
         else if (event.key === 'Tab') trapFocus(event, menu);
     }
 
-    function handleMenuTransitionEnd(event: TransitionEvent, closeButton: HTMLElement, menu: HTMLElement, toggle: HTMLElement) {
+    function handleMenuTransitionEnd(event: TransitionEvent, menu: HTMLElement, closeButton: HTMLElement, toggle: HTMLElement) {
         if (event.propertyName !== 'transform' || event.target !== menu) return;
 
         syncSwapHover(menu.hasAttribute('data-open') ? closeButton : toggle);
@@ -364,7 +365,7 @@ import { getExternalLinkProps } from '@lib/utils';
 
         if (event.matches || !menu.hasAttribute('data-open')) return;
 
-        closeMenu(true, menu, toggle);
+        closeMenu(menu, toggle, true);
 
         const brandLink = document.querySelector<HTMLElement>('.navbar__brand');
         const currentLink = menu.querySelector<HTMLElement>('.navbar__menu-link[aria-current="page"]');
@@ -400,15 +401,15 @@ import { getExternalLinkProps } from '@lib/utils';
 
         const mobileQuery = window.matchMedia(MOBILE_QUERY);
 
-        closeButton.addEventListener('click', event => closeMenu(event.detail === 0, menu, toggle), { signal });
+        closeButton.addEventListener('click', event => closeMenu(menu, toggle, event.detail === 0), { signal });
         document.addEventListener('keydown', event => handleMenuKeydown(event, menu, toggle), { signal });
-        menu.addEventListener('transitionend', event => handleMenuTransitionEnd(event, closeButton, menu, toggle), { signal });
+        menu.addEventListener('transitionend', event => handleMenuTransitionEnd(event, menu, closeButton, toggle), { signal });
         mobileQuery.addEventListener('change', event => handleMobileChange(event, menu, toggle), { signal });
         signal.addEventListener('abort', () => handleAbort(menu, toggle));
 
         toggle.addEventListener('click', (event) => {
-            if (menu.hasAttribute('data-open')) closeMenu(event.detail === 0, menu, toggle);
-            else openMenu(closeButton, event.detail === 0, menu, toggle);
+            if (menu.hasAttribute('data-open')) closeMenu(menu, toggle, event.detail === 0);
+            else openMenu(menu, toggle, closeButton, event.detail === 0);
         }, { signal });
     }
 
@@ -416,7 +417,7 @@ import { getExternalLinkProps } from '@lib/utils';
         return pathname.replace(/\/$/, '') || '/';
     }
 
-    function openMenu(closeButton: HTMLElement, focusVisible: boolean, menu: HTMLElement, toggle: HTMLElement) {
+    function openMenu(menu: HTMLElement, toggle: HTMLElement, closeButton: HTMLElement, focusVisible: boolean) {
         document.documentElement.style.overflow = 'hidden';
         menu.setAttribute('aria-modal', 'true');
         menu.setAttribute('data-open', '');

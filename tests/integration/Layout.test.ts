@@ -4,7 +4,7 @@ import { beforeAll, describe, expect, test, vi } from 'vitest';
 import Layout from '../../src/Layout.astro';
 
 const DESCRIPTION = 'Guest info for the Austin Music Video Film Festival. The program, venue details, and frequently asked questions, plus every way to reach the team.';
-const NOINDEX_DESCRIPTION = 'This frame isn\'t on the program. The page may have been moved or cut from the reel. Head back to the Austin Music Video Film Festival.';
+const NOINDEX_DESCRIPTION = 'This page isn\'t available on the Austin Music Video Film Festival site. Head back to the home page for the event recap, program, photos, and contact channels.';
 const NOINDEX_TITLE = '404 \u2014 Austin Music Video Film Festival';
 const OVERLAY = '<div data-slot="overlay">Overlay content</div>';
 const SITE = 'https://atxmusicvideofilmfestival.com';
@@ -41,7 +41,7 @@ describe('Layout', () => {
         expect(html).toContain('<html class="overflow-x-clip" lang="en"');
         expect(html).toContain('<head>');
         expect(html).toContain('</head>');
-        expect(html).toContain('<body class="flex flex-col overflow-x-clip relative isolate min-h-screen antialiased font-mono bg-night text-cream"');
+        expect(html).toContain('<body class="flex flex-col overflow-x-clip relative isolate min-h-svh antialiased font-mono bg-night text-cream"');
         expect(html).toContain('</body></html>');
     });
 
