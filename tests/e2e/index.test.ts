@@ -1,5 +1,17 @@
 import { expect, test } from '@playwright/test';
 
+import { ROUTES } from '../../src/lib/constants';
+
+interface StructuredData {
+    '@context': string;
+    '@graph': {
+        '@type': string;
+        'itemListElement'?: unknown[];
+        'name'?: string;
+        'url'?: string;
+    }[];
+}
+
 const DESCRIPTION_MAX = 160;
 const DESCRIPTION_MIN = 120;
 const EXPERIENCE_TITLES = ['Live Music', 'Screenings', 'Q&A Panel', 'Awards', 'After Party'] as const;
@@ -88,11 +100,15 @@ test.describe('index page', () => {
     test('embeds parseable json-ld website data', async ({ page }) => {
         const raw = await page.locator('script[type="application/ld+json"]').textContent();
 
-        const data = JSON.parse(String(raw)) as { '@type': string; 'name': string; 'url': string };
+        const data = JSON.parse(String(raw)) as StructuredData;
 
-        expect(data['@type']).toBe('WebSite');
-        expect(data.name).toBe('Austin Music Video Film Festival');
-        expect(data.url).toBe('https://atxmusicvideofilmfestival.com/');
+        const itemList = data['@graph'].find(node => node['@type'] === 'ItemList');
+        const website = data['@graph'].find(node => node['@type'] === 'WebSite');
+
+        expect(data['@context']).toBe('https://schema.org');
+        expect(itemList?.itemListElement).toHaveLength(ROUTES.filter(route => !route.isDisabled).length);
+        expect(website?.name).toBe('Austin Music Video Film Festival');
+        expect(website?.url).toBe('https://atxmusicvideofilmfestival.com/');
     });
 
     test('fits the default viewport without horizontal overflow', async ({ page }) => {
