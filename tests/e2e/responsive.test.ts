@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
     { name: 'home', path: '/' },
     { name: 'info', path: '/info' },
-    { name: 'photos', path: '/photos' },
+    { name: 'team', path: '/team' },
+    { name: 'gallery', path: '/gallery' },
     { name: 'server error', path: '/500' },
     { name: 'not found', path: '/nonexistent-404' },
 ] as const;

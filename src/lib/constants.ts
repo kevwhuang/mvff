@@ -15,8 +15,9 @@ export const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 export const RESIZE_SETTLE_DELAY = 150;
 
 export const ROUTES = [
-    { href: '/', isDisabled: false, label: 'Home' },
-    { href: '/info', isDisabled: false, label: 'Info' },
-    { href: '/photos', isDisabled: false, label: 'Photos' },
-    { href: 'https://shop.atxmusicvideofilmfestival.com', isDisabled: true, label: 'Store' },
+    { href: '/', label: 'Home' },
+    { href: '/info', label: 'Info' },
+    { href: '/team', label: 'Team' },
+    { href: '/gallery', label: 'Gallery' },
+    { href: 'https://shop.atxmusicvideofilmfestival.com', label: 'Store' },
 ] as const;

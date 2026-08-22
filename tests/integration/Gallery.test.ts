@@ -33,7 +33,7 @@ const figures = readdirSync(GALLERY_DIR)
 
 const portraitFigures = figures.filter(figure => figure.isPortrait);
 
-function escapeText(value: string): string {
+function escapeText(value: string) {
     return value
         .replace(/&/g, '&amp;')
         .replace(/"/g, '&quot;')
@@ -51,9 +51,11 @@ describe('Gallery', () => {
         html = await container.renderToString(Gallery);
     });
 
-    test('labels the section by the section header heading rendered as an h2', () => {
+    test('labels the section by a markerless wrap heading', () => {
         expect(html).toContain('<section class="gallery section" aria-labelledby="gallery-title"');
-        expect(html).toMatch(/<h2 id="gallery-title" class="section-header__title uppercase"[^>]*>The Wrap<\/h2>/);
+        expect(html).toContain('class="section-header section-header--bare');
+        expect(html).toMatch(/<h1 id="gallery-title" class="section-header__title uppercase"[^>]*>The Wrap<\/h1>/);
+        expect(html).not.toContain('section-header__marker');
     });
 
     test('marks the figure list for a staggered scroll reveal', () => {

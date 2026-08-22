@@ -1,27 +1,10 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { getExternalLinkProps, initDisabledLinks, pad, registerPageScript } from '../../src/lib/utils';
+import { getExternalLinkProps, pad, registerPageScript } from '../../src/lib/utils';
 
 import type { Mock } from 'vitest';
 
-interface LinkStub {
-    addEventListener: Mock<(type: string, handler: (event: Event) => void, options: { signal: AbortSignal }) => void>;
-}
-
-const DISABLED_SELECTOR = '.navbar__menu-link[aria-disabled="true"]';
 const EXTERNAL_PROPS = { rel: 'noopener', target: '_blank' } as const;
-
-function buildLink(): LinkStub {
-    return { addEventListener: vi.fn() };
-}
-
-function stubLinks(links: LinkStub[]) {
-    const querySelectorAll = vi.fn(() => links);
-
-    vi.stubGlobal('document', { querySelectorAll });
-
-    return querySelectorAll;
-}
 
 function stubPageEvents(init: Mock<(signal: AbortSignal) => void>) {
     const handlers = new Map<string, () => void>();
@@ -45,7 +28,7 @@ describe('getExternalLinkProps', () => {
 
     test('returns no props for internal, mailto, and tel hrefs', () => {
         expect(getExternalLinkProps('/')).toEqual({});
-        expect(getExternalLinkProps('/photos')).toEqual({});
+        expect(getExternalLinkProps('/team')).toEqual({});
         expect(getExternalLinkProps('mailto:contact@atxmusicvideofilmfestival.com')).toEqual({});
         expect(getExternalLinkProps('tel:+12814669387')).toEqual({});
     });
@@ -55,49 +38,6 @@ describe('getExternalLinkProps', () => {
         expect(getExternalLinkProps('httpd-notes')).toEqual({});
         expect(getExternalLinkProps('https')).toEqual({});
         expect(getExternalLinkProps('httpx://example.com')).toEqual({});
-    });
-});
-
-describe('initDisabledLinks', () => {
-    afterEach(() => {
-        vi.unstubAllGlobals();
-    });
-
-    test('queries the document once with the given selector', () => {
-        const querySelectorAll = stubLinks([]);
-
-        initDisabledLinks(DISABLED_SELECTOR, new AbortController().signal);
-
-        expect(querySelectorAll).toHaveBeenCalledExactlyOnceWith(DISABLED_SELECTOR);
-    });
-
-    test('registers auxclick and click listeners on every match with the given signal', () => {
-        const links = [buildLink(), buildLink()];
-        const { signal } = new AbortController();
-
-        stubLinks(links);
-        initDisabledLinks(DISABLED_SELECTOR, signal);
-
-        for (const link of links) {
-            expect(link.addEventListener).toHaveBeenCalledTimes(2);
-            expect(link.addEventListener).toHaveBeenNthCalledWith(1, 'auxclick', expect.any(Function), { signal });
-            expect(link.addEventListener).toHaveBeenNthCalledWith(2, 'click', expect.any(Function), { signal });
-        }
-    });
-
-    test('prevents the default action in both registered handlers', () => {
-        const link = buildLink();
-
-        stubLinks([link]);
-        initDisabledLinks(DISABLED_SELECTOR, new AbortController().signal);
-
-        for (const [, handler] of link.addEventListener.mock.calls) {
-            const event = { preventDefault: vi.fn() };
-
-            handler(event as unknown as Event);
-
-            expect(event.preventDefault).toHaveBeenCalledTimes(1);
-        }
     });
 });
 

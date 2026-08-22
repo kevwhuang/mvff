@@ -45,11 +45,17 @@ test.describe('production pages', () => {
         expect(html).toContain('contact__channels');
     });
 
-    test('serves the photos page with the team and gallery grids', async ({ request }) => {
-        const html = await fetchHtml(request, '/photos');
+    test('serves the team page with the team grid', async ({ request }) => {
+        const html = await fetchHtml(request, '/team');
 
-        expect(html).toContain('<title>Photos \u2014 Austin Music Video Film Festival</title>');
+        expect(html).toContain('<title>Team \u2014 Austin Music Video Film Festival</title>');
         expect(html).toContain('team__grid');
+    });
+
+    test('serves the gallery page with the gallery grid', async ({ request }) => {
+        const html = await fetchHtml(request, '/gallery');
+
+        expect(html).toContain('<title>Gallery \u2014 Austin Music Video Film Festival</title>');
         expect(html).toContain('gallery__grid');
     });
 
@@ -82,11 +88,11 @@ test.describe('production pages', () => {
     });
 
     test('renders every gallery figure from the content collection in a real browser', async ({ page }) => {
-        const response = await page.goto(`${BASE_URL}/photos`);
+        const response = await page.goto(`${BASE_URL}/gallery`);
 
         expect(response?.status()).toBe(200);
 
-        await expect(page).toHaveTitle('Photos \u2014 Austin Music Video Film Festival');
+        await expect(page).toHaveTitle('Gallery \u2014 Austin Music Video Film Festival');
         await expect(page.locator('.gallery__grid')).toBeVisible();
         await expect(page.locator('.gallery__figure')).toHaveCount(galleryCount);
     });

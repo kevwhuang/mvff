@@ -9,7 +9,7 @@ interface SchemaParser {
 }
 
 const CURLY_APOSTROPHE_PATTERN = /[\u2018\u2019]/;
-const ENTRY_COUNT = 22;
+const GALLERY_ENTRIES = 22;
 const GALLERY_FIELDS = ['alt', 'label'] as const;
 const PREFIX_LENGTH = 2;
 const STEM_PATTERN = /^\d{2}_[a-z][a-z0-9_]*$/;
@@ -39,7 +39,7 @@ const imageStems = readdirSync(imageRoot)
 
 describe('gallery', () => {
     test('holds twenty-two entries', () => {
-        expect(galleryEntries).toHaveLength(ENTRY_COUNT);
+        expect(galleryEntries).toHaveLength(GALLERY_ENTRIES);
     });
 
     test('every entry has non-empty alt and label strings and no other keys', () => {

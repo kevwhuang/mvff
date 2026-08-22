@@ -4,13 +4,6 @@ export function getExternalLinkProps(href: string): { rel?: 'noopener'; target?:
     return href.startsWith('https://') ? { rel: 'noopener', target: '_blank' } : {};
 }
 
-export function initDisabledLinks(selector: string, signal: AbortSignal): void {
-    document.querySelectorAll(selector).forEach((link) => {
-        link.addEventListener('auxclick', event => event.preventDefault(), { signal });
-        link.addEventListener('click', event => event.preventDefault(), { signal });
-    });
-}
-
 export function pad(value: number): string {
     return String(value).padStart(PAD_LENGTH, '0');
 }

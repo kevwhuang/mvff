@@ -11,7 +11,6 @@ interface GalleryFigure {
 const BACKDROP_OFFSET = 8;
 const GALLERY_DIR = fileURLToPath(new URL('../../src/content/gallery', import.meta.url));
 const IMAGE_DELAY = 750;
-const TEAM_NAMES = ['Anna', 'Jasmine', 'Amiri', 'Ashleigh', 'Dan', 'Greta', 'Jyme', 'Marissa', 'May', 'Rocky'] as const;
 
 const figures = readdirSync(GALLERY_DIR)
     .filter(file => file.endsWith('.json'))
@@ -24,23 +23,17 @@ test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
 });
 
-test.describe('photos page', () => {
+test.describe('gallery page', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto('/photos');
+        await page.goto('/gallery');
     });
 
-    test('loads with the photos title and the meet the team heading', async ({ page }) => {
-        await expect(page).toHaveTitle('Photos \u2014 Austin Music Video Film Festival');
-        await expect(page.locator('#team-title')).toHaveText('Meet the Team');
-    });
-
-    test('shows every team member name in the grid', async ({ page }) => {
-        await expect(page.locator('.team__card')).toHaveCount(TEAM_NAMES.length);
-        await expect(page.locator('.team__name')).toHaveText(TEAM_NAMES);
-    });
-
-    test('renders the wrap heading and a captioned figure for every gallery entry', async ({ page }) => {
+    test('loads with the gallery title and the wrap heading', async ({ page }) => {
+        await expect(page).toHaveTitle('Gallery \u2014 Austin Music Video Film Festival');
         await expect(page.locator('#gallery-title')).toHaveText('The Wrap');
+    });
+
+    test('renders a captioned figure for every gallery entry', async ({ page }) => {
         await expect(page.locator('.gallery__figure')).toHaveCount(figures.length);
         await expect(page.locator('.gallery__meta')).toHaveText(figures.map(figure => figure.label));
     });
@@ -49,9 +42,9 @@ test.describe('photos page', () => {
 test.describe('gallery lightbox without reduced motion', () => {
     test.beforeEach(async ({ page }) => {
         await page.emulateMedia({ reducedMotion: 'no-preference' });
-        await page.goto('/photos');
+        await page.goto('/gallery');
 
-        await expect(page.locator('.navbar__menu-link[href="/photos"]')).toHaveAttribute('aria-current', 'page');
+        await expect(page.locator('.navbar__menu-link[href="/gallery"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('opens the dialog with the frame source, alt, orientation, and label, locks page scroll, and focuses the close button', async ({ page }) => {
@@ -149,9 +142,9 @@ test.describe('gallery lightbox without reduced motion', () => {
 
 test.describe('gallery lightbox under reduced motion', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto('/photos');
+        await page.goto('/gallery');
 
-        await expect(page.locator('.navbar__menu-link[href="/photos"]')).toHaveAttribute('aria-current', 'page');
+        await expect(page.locator('.navbar__menu-link[href="/gallery"]')).toHaveAttribute('aria-current', 'page');
     });
 
     test('opens the dialog and focuses the close button', async ({ page }) => {

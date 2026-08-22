@@ -22,7 +22,7 @@ const TAGLINE = 'Austin\'s music video scene, staged like a premiere: live sets,
 
 const linkCount = ROUTES.length + CHANNELS.length + INSIDER_LINKS.length;
 
-function findLink(html: string, label: string): string {
+function findLink(html: string, label: string) {
     return html.match(new RegExp(`<a class="footer__link[^>]*>${label}</a>`))?.[0] ?? '';
 }
 
@@ -64,29 +64,21 @@ describe('Footer', () => {
         expect(html.split('class="footer__link').length - 1).toBe(linkCount);
     });
 
-    test('renders every site route with its href and disables only the store route', () => {
+    test('renders every site route focusable with its href and opens only the off-site store route in a new tab', () => {
         for (const route of ROUTES) {
             const link = findLink(html, route.label);
 
             expect(link).toContain(`href="${route.href}"`);
+            expect(link).not.toContain('aria-disabled');
+            expect(link).not.toContain('tabindex');
 
-            if (route.isDisabled) {
-                expect(link).toContain('aria-disabled="true"');
-                expect(link).toContain('tabindex="-1"');
+            if (route.href.startsWith('https://')) {
+                expect(link).toContain('rel="noopener"');
+                expect(link).toContain('target="_blank"');
             } else {
-                expect(link).not.toContain('aria-disabled');
-                expect(link).not.toContain('tabindex');
+                expect(link).not.toContain('rel=');
+                expect(link).not.toContain('target=');
             }
-        }
-    });
-
-    test('omits target and rel from every site route because only the disabled store route is external', () => {
-        for (const route of ROUTES) {
-            const link = findLink(html, route.label);
-
-            expect(link).toContain(`href="${route.href}"`);
-            expect(link).not.toContain('rel=');
-            expect(link).not.toContain('target=');
         }
     });
 

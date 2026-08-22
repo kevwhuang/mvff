@@ -16,6 +16,7 @@ const LINK_KEYS = [
 ] as const;
 
 const MAILTO_PATTERN = /^mailto:[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ROUTE_KEYS = ['href', 'label'] as const;
 const SHOP_URL = 'https://shop.atxmusicvideofilmfestival.com';
 const TEL_PATTERN = /^tel:\+\d{11}$/;
 
@@ -75,28 +76,29 @@ describe('RESIZE_SETTLE_DELAY', () => {
 });
 
 describe('ROUTES', () => {
-    test('lists home, info, photos, and store in navigation order', () => {
+    test('lists home, info, team, gallery, and store in navigation order', () => {
         expect(ROUTES).toEqual([
-            { href: '/', isDisabled: false, label: 'Home' },
-            { href: '/info', isDisabled: false, label: 'Info' },
-            { href: '/photos', isDisabled: false, label: 'Photos' },
-            { href: SHOP_URL, isDisabled: true, label: 'Store' },
+            { href: '/', label: 'Home' },
+            { href: '/info', label: 'Info' },
+            { href: '/team', label: 'Team' },
+            { href: '/gallery', label: 'Gallery' },
+            { href: SHOP_URL, label: 'Store' },
         ]);
     });
 
-    test('disables exactly one route and points it at the shop subdomain', () => {
-        const disabledRoutes = ROUTES.filter(route => route.isDisabled);
-
-        expect(disabledRoutes).toHaveLength(1);
-        expect(disabledRoutes[0].href).toBe(SHOP_URL);
-        expect(disabledRoutes[0].label).toBe('Store');
+    test('gives every route exactly an href and a label', () => {
+        for (const route of ROUTES) {
+            expect(Object.keys(route).sort(), route.label).toEqual([...ROUTE_KEYS]);
+        }
     });
 
-    test('gives every enabled route an internal absolute path', () => {
-        const enabledRoutes = ROUTES.filter(route => !route.isDisabled);
+    test('points only the store route off-site at the https shop subdomain', () => {
+        const externalRoutes = ROUTES.filter(route => !route.href.startsWith('/'));
 
-        for (const route of enabledRoutes) {
-            expect(route.href.startsWith('/'), route.label).toBe(true);
+        expect(externalRoutes).toEqual([{ href: SHOP_URL, label: 'Store' }]);
+
+        for (const route of externalRoutes) {
+            expect(route.href.startsWith('https://'), route.label).toBe(true);
         }
     });
 

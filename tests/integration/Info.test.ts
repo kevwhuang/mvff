@@ -36,7 +36,7 @@ const SCHEDULE = [
 const VENUE_DESCRIPTION = 'An indoor-outdoor club in East Austin, where an open-air screen lit the pool deck, a live stage carried the music, and high tables sat under the patio roof. A small red-carpet section set the tone, and the night ran 7 PM straight to the 2 AM close.';
 const VENUE_FEATURES = ['Big screen', 'Live stage', 'Outdoor pool', 'Full bar', '21+ only', 'ADA access'] as const;
 
-function escapeRegExp(value: string): string {
+function escapeRegExp(value: string) {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 

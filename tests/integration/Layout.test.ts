@@ -16,7 +16,7 @@ interface StructuredData {
 }
 
 const DESCRIPTION = 'Guest info for the Austin Music Video Film Festival. The program, venue details, and frequently asked questions, plus every way to reach the team.';
-const NOINDEX_DESCRIPTION = 'This page isn\'t available on the Austin Music Video Film Festival site. Head back to the home page for the event recap, program, photos, and contact channels.';
+const NOINDEX_DESCRIPTION = 'This page isn\'t available on the Austin Music Video Film Festival site. Head back home for the event recap, program, team, gallery, and contact channels.';
 const NOINDEX_TITLE = '404 \u2014 Austin Music Video Film Festival';
 const OVERLAY = '<div data-slot="overlay">Overlay content</div>';
 const SITE = 'https://atxmusicvideofilmfestival.com';
@@ -120,7 +120,7 @@ describe('Layout', () => {
         const website = jsonLd['@graph'].find(node => node['@type'] === 'WebSite');
 
         expect(jsonLd['@context']).toBe('https://schema.org');
-        expect(itemList?.itemListElement).toHaveLength(ROUTES.filter(route => !route.isDisabled).length);
+        expect(itemList?.itemListElement).toHaveLength(ROUTES.length);
         expect(website?.author).toEqual({ '@type': 'Person', 'name': 'Anna Madewell' });
         expect(website?.inLanguage).toBe('en');
         expect(website?.name).toBe('Austin Music Video Film Festival');

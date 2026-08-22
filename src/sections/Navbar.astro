@@ -45,10 +45,8 @@ const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-it
                     <li>
                         <a
                             class="navbar__menu-link block relative px-2 py-3 font-mono no-underline uppercase text-cream-60 select-none"
-                            aria-disabled={route.isDisabled ? 'true' : undefined}
                             href={route.href}
-                            tabindex={route.isDisabled ? '-1' : undefined}
-                            {...(route.isDisabled ? {} : getExternalLinkProps(route.href))}
+                            {...getExternalLinkProps(route.href)}
                         >
                             {route.label}
                         </a>
@@ -184,22 +182,6 @@ const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-it
         opacity: 1;
     }
 
-    .navbar__menu-link[aria-disabled='true'] {
-        color: var(--color-cream-60);
-        cursor: not-allowed;
-        opacity: 0.4;
-    }
-
-    .navbar__menu-link[aria-disabled='true']:active {
-        color: var(--color-cream-60);
-        transform: none;
-    }
-
-    .navbar__menu-link[aria-disabled='true']:hover {
-        color: var(--color-cream-60);
-        transform: none;
-    }
-
     .navbar__pulse {
         animation: navbar__pulse var(--duration-pulse) ease-in-out infinite;
     }
@@ -318,7 +300,7 @@ const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-it
 
 <script>
     import { RESIZE_SETTLE_DELAY } from '@lib/constants';
-    import { initDisabledLinks, registerPageScript } from '@lib/utils';
+    import { registerPageScript } from '@lib/utils';
 
     const HOVER_QUERY = '(hover: hover)';
     const MOBILE_QUERY = '(max-width: 1024px)';
@@ -384,8 +366,6 @@ const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-it
 
         if (!menu || !toggle) return;
 
-        initDisabledLinks('.navbar__menu-link[aria-disabled="true"]', signal);
-
         const currentPath = normalizePath(window.location.pathname);
 
         document.querySelectorAll('.navbar__menu-link').forEach((link) => {
@@ -445,7 +425,7 @@ const CLASS_MENU_CLOSE = 'navbar__icon-button navbar__menu-close hidden place-it
     }
 
     function trapFocus(event: KeyboardEvent, menu: HTMLElement) {
-        const focusables = menu.querySelectorAll<HTMLElement>('a:not([tabindex="-1"]), button');
+        const focusables = menu.querySelectorAll<HTMLElement>('a, button');
 
         const first = focusables[0];
         const isInCycle = Array.from(focusables).some(element => element === document.activeElement);

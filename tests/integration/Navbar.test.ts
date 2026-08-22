@@ -46,29 +46,21 @@ describe('Navbar', () => {
         });
     });
 
-    test('marks the disabled store route aria-disabled and unfocusable without new-tab props', () => {
-        const disabledLinks = menuLinks.filter((_, index) => ROUTES[index].isDisabled);
+    test('leaves every route focusable and opens only the off-site store route in a new tab', () => {
+        menuLinks.forEach((link, index) => {
+            const route = ROUTES[index];
 
-        expect(disabledLinks).toHaveLength(1);
+            expect(link, route.label).not.toContain('aria-disabled');
+            expect(link, route.label).not.toContain('tabindex');
 
-        for (const link of disabledLinks) {
-            expect(link).toContain('aria-disabled="true"');
-            expect(link).toContain('tabindex="-1"');
-            expect(link).not.toContain('rel="noopener"');
-            expect(link).not.toContain('target="_blank"');
-        }
-    });
-
-    test('leaves every enabled route focusable and free of disabled markup and new-tab props', () => {
-        const enabledLinks = menuLinks.filter((_, index) => !ROUTES[index].isDisabled);
-
-        expect(enabledLinks).toHaveLength(ROUTES.length - 1);
-
-        for (const link of enabledLinks) {
-            expect(link).not.toContain('aria-disabled');
-            expect(link).not.toContain('tabindex');
-            expect(link).not.toContain('target=');
-        }
+            if (route.href.startsWith('https://')) {
+                expect(link, route.label).toContain('rel="noopener"');
+                expect(link, route.label).toContain('target="_blank"');
+            } else {
+                expect(link, route.label).not.toContain('rel=');
+                expect(link, route.label).not.toContain('target=');
+            }
+        });
     });
 
     test('renders the post-event countdown as a zeroed readout hidden from assistive tech', () => {

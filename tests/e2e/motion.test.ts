@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 
 import type { Locator, Page } from '@playwright/test';
 
-const CONTACT_CHANNEL_COUNT = 4;
-const HIDDEN_LEAD_OPACITIES = [0, 0, 0, 0, 0, 0] as const;
+const CONTACT_CHANNELS = 4;
 const HIDDEN_TRANSFORM = 'matrix(1, 0, 0, 1, 0, 60)';
+const LOADED_LEAD_OPACITIES = [1, 0, 0, 0, 0, 0] as const;
 const PARALLAX_SCROLL = 900;
 const PARALLAX_TRANSFORMS = ['matrix(1, 0, 0, 1, 0, -135)', 'matrix(1, 0, 0, 1, 0, -315)', 'matrix(1, 0, 0, 1, 0, -585)'] as const;
 const PARALLAX_WRAP_SCROLL = 3_000;
@@ -52,7 +52,7 @@ async function expectScrollContentShown(page: Page) {
 function getLeadFigureOpacities(page: Page) {
     return page.locator('.gallery__figure').evaluateAll(
         (elements, count) => elements.slice(0, count).map(element => Number.parseFloat(getComputedStyle(element).opacity)),
-        HIDDEN_LEAD_OPACITIES.length,
+        LOADED_LEAD_OPACITIES.length,
     );
 }
 
@@ -115,7 +115,7 @@ test.describe('scroll motion', () => {
         const channelList = page.locator('.contact__channels');
         const channels = page.locator('.contact__channel');
 
-        await expect(channels).toHaveCount(CONTACT_CHANNEL_COUNT);
+        await expect(channels).toHaveCount(CONTACT_CHANNELS);
         await expect.poll(() => getOpacity(channels.first()), POLL).toBe('0');
 
         expect(await getOpacity(channelList)).toBe('0');
@@ -128,51 +128,47 @@ test.describe('scroll motion', () => {
     });
 
     test('staggers the gallery figures so the first is opaque while the sixth is still fading in', async ({ page }) => {
-        await page.goto('/photos');
+        await page.goto('/gallery');
 
         const grid = page.locator('.gallery__grid');
 
-        await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(HIDDEN_LEAD_OPACITIES);
+        await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(LOADED_LEAD_OPACITIES);
 
         await scrollToCenter(grid);
 
         await expect.poll(async () => {
             const opacities = await getLeadFigureOpacities(page);
 
-            return opacities[0] === 1 && opacities[opacities.length - 1] < 1;
+            return opacities[0] === 1 && opacities[opacities.length - 1] > 0 && opacities[opacities.length - 1] < 1;
         }, POLL_TIGHT).toBe(true);
 
         await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(REVEALED_LEAD_OPACITIES);
         await expect.poll(() => getOpacity(grid), POLL).toBe('1');
     });
 
-    test('hides the below-fold sections and staggers the gallery figures in on scroll after client router navigation to photos and back home', async ({ page }) => {
+    test('staggers the gallery figures in on scroll after client router navigation to the gallery and hides the below-fold details header back home', async ({ page }) => {
         await page.goto('/');
 
         await expect.poll(() => getOpacity(page.locator('.hero__title')), POLL).toBe('1');
 
-        await page.locator('.navbar__menu-link[href="/photos"]').click();
-        await expect(page).toHaveURL('/photos');
+        await page.locator('.navbar__menu-link[href="/gallery"]').click();
+        await expect(page).toHaveURL('/gallery');
 
         const galleryHeader = page.locator('.gallery .section-header');
         const grid = page.locator('.gallery__grid');
 
-        await expect.poll(() => getOpacity(page.locator('.team .section-header')), POLL).toBe('1');
-        await expect.poll(() => getTransform(galleryHeader), POLL).toBe(HIDDEN_TRANSFORM);
-        await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(HIDDEN_LEAD_OPACITIES);
-
-        expect(await getOpacity(galleryHeader)).toBe('0');
+        await expect.poll(() => getOpacity(galleryHeader), POLL).toBe('1');
+        await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(LOADED_LEAD_OPACITIES);
 
         await scrollToCenter(grid);
 
         await expect.poll(async () => {
             const opacities = await getLeadFigureOpacities(page);
 
-            return opacities[0] === 1 && opacities[opacities.length - 1] < 1;
+            return opacities[0] === 1 && opacities[opacities.length - 1] > 0 && opacities[opacities.length - 1] < 1;
         }, POLL_TIGHT).toBe(true);
 
         await expect.poll(() => getLeadFigureOpacities(page), POLL).toEqual(REVEALED_LEAD_OPACITIES);
-        await expect.poll(() => getOpacity(galleryHeader), POLL).toBe('1');
 
         await page.locator('.navbar__menu-link[href="/"]').click();
         await expect(page).toHaveURL('/');
@@ -302,8 +298,14 @@ test.describe('scroll motion under reduced motion', () => {
         await expectScrollContentShown(page);
     });
 
-    test('shows every photos page data-scroll element immediately', async ({ page }) => {
-        await page.goto('/photos');
+    test('shows every team page data-scroll element immediately', async ({ page }) => {
+        await page.goto('/team');
+
+        await expectScrollContentShown(page);
+    });
+
+    test('shows every gallery page data-scroll element immediately', async ({ page }) => {
+        await page.goto('/gallery');
 
         await expectScrollContentShown(page);
     });

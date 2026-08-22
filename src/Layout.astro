@@ -42,7 +42,7 @@ const structuredData = {
         ...(breadcrumbRoutes.length > 0 ? [breadcrumbList] : []),
         {
             '@type': 'ItemList',
-            'itemListElement': ROUTES.filter(route => !route.isDisabled).map((route, index) => ({
+            'itemListElement': ROUTES.map((route, index) => ({
                 '@type': 'SiteNavigationElement',
                 'name': route.label,
                 'position': index + 1,

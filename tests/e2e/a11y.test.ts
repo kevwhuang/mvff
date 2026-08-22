@@ -2,19 +2,21 @@ import { expect, test } from '@playwright/test';
 
 import type { Page } from '@playwright/test';
 
-const DISABLED_LABELS = ['FilmFreeway', 'Store'] as const;
+const DISABLED_LABELS = ['FilmFreeway'] as const;
 const FOCUS_OUTLINE = 'solid 2px rgb(255, 115, 94)';
 
 const FOCUS_TARGETS = [
     { name: 'brand link', selector: '.navbar__brand' },
     { name: 'home nav link', selector: '.navbar__menu-link[href="/"]' },
     { name: 'info nav link', selector: '.navbar__menu-link[href="/info"]' },
-    { name: 'photos nav link', selector: '.navbar__menu-link[href="/photos"]' },
+    { name: 'team nav link', selector: '.navbar__menu-link[href="/team"]' },
+    { name: 'gallery nav link', selector: '.navbar__menu-link[href="/gallery"]' },
+    { name: 'store nav link', selector: '.navbar__menu-link[href="https://shop.atxmusicvideofilmfestival.com"]' },
 ] as const;
 
 const HOME_TITLE = 'Austin Music Video Film Festival';
 const MAX_TAB_PRESSES = 12;
-const PUBLIC_PATHS = ['/', '/info', '/photos', '/500', '/nonexistent-404'] as const;
+const PUBLIC_PATHS = ['/', '/info', '/team', '/gallery', '/500', '/nonexistent-404'] as const;
 const TAB_SWEEP_PRESSES = 40;
 const TITLE_PATTERN = /^.+ \u2014 Austin Music Video Film Festival$/;
 
@@ -64,7 +66,7 @@ test.describe('document structure', () => {
 });
 
 test.describe('keyboard navigation', () => {
-    test('tab from body reaches the brand link and every enabled nav link with a solid coral outline absent when unfocused', async ({ page }) => {
+    test('tab from body reaches the brand link and every nav link with a solid coral outline absent when unfocused', async ({ page }) => {
         await page.goto('/');
 
         const baseline: Record<string, string> = {};
@@ -95,7 +97,7 @@ test.describe('keyboard navigation', () => {
         expect([...remaining.values()]).toEqual([]);
     });
 
-    test('the store and filmfreeway links carry tabindex -1 and never take focus while tabbing', async ({ page }) => {
+    test('the filmfreeway link carries tabindex -1 and never takes focus while tabbing', async ({ page }) => {
         await page.goto('/');
 
         const disabledCount = await page.locator('a[aria-disabled="true"]').count();

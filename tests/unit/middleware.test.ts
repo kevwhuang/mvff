@@ -28,7 +28,7 @@ describe('onRequest', () => {
     });
 
     test('passes page responses under 500 through', async () => {
-        const { context, rewrite } = createContext('/photos');
+        const { context, rewrite } = createContext('/gallery');
         const page = new Response('ok', { status: 200 });
 
         const next: MiddlewareNext = vi.fn(async () => page);
@@ -40,7 +40,7 @@ describe('onRequest', () => {
     });
 
     test('rewrites page responses with status 500 or above to /500', async () => {
-        const { context, rewrite, rewritten } = createContext('/photos');
+        const { context, rewrite, rewritten } = createContext('/gallery');
         const next: MiddlewareNext = vi.fn(async () => new Response(null, { status: 500 }));
 
         const response = await onRequest(context, next);
@@ -79,7 +79,7 @@ describe('onRequest', () => {
     });
 
     test('rewrites to /500 when next throws on a page path', async () => {
-        const { context, rewrite, rewritten } = createContext('/photos');
+        const { context, rewrite, rewritten } = createContext('/gallery');
 
         const next: MiddlewareNext = vi.fn(async () => {
             throw new Error('boom');

@@ -16,7 +16,8 @@ test.describe('navbar desktop', () => {
 
         await expect(page.locator('.navbar__menu-link[href="/"]')).toBeVisible();
         await expect(page.locator('.navbar__menu-link[href="/info"]')).toBeVisible();
-        await expect(page.locator('.navbar__menu-link[href="/photos"]')).toBeVisible();
+        await expect(page.locator('.navbar__menu-link[href="/team"]')).toBeVisible();
+        await expect(page.locator('.navbar__menu-link[href="/gallery"]')).toBeVisible();
         await expect(page.locator(`.navbar__menu-link[href="${STORE_HREF}"]`)).toBeVisible();
         await expect(page.locator('.navbar__countdown')).toBeVisible();
         await expect(page.locator('.navbar__toggle')).toBeHidden();
@@ -39,19 +40,15 @@ test.describe('navbar desktop', () => {
         await expect(home).not.toHaveAttribute('aria-current');
     });
 
-    test('keeps the disabled store link out of the tab order and blocks its navigation', async ({ page }) => {
+    test('renders the store link focusable and opening off-site in a new tab', async ({ page }) => {
         await page.goto('/info');
 
         const store = page.locator(`.navbar__menu-link[href="${STORE_HREF}"]`);
 
-        await expect(store).toHaveAttribute('aria-disabled', 'true');
-        await expect(store).toHaveAttribute('tabindex', '-1');
-        await expect(page.locator('.navbar__menu-link[href="/info"]')).toHaveAttribute('aria-current', 'page');
-
-        await store.click({ force: true });
-
-        await expect(page).toHaveURL('/info');
-        await expect(page.locator('#info-title')).toBeVisible();
+        await expect(store).toHaveAttribute('rel', 'noopener');
+        await expect(store).toHaveAttribute('target', '_blank');
+        await expect(store).not.toHaveAttribute('aria-disabled');
+        await expect(store).not.toHaveAttribute('tabindex');
     });
 
     test('navigates home from the brand link', async ({ page }) => {
@@ -100,11 +97,13 @@ test.describe('navbar mobile menu', () => {
         expect(await getRootOverflow(page)).toBe('hidden');
     });
 
-    test('cycles tab focus through the close button and enabled links without leaving the drawer', async ({ page }) => {
+    test('cycles tab focus through the close button and every link without leaving the drawer', async ({ page }) => {
         const close = page.locator('.navbar__menu-close');
+        const gallery = page.locator('.navbar__menu-link[href="/gallery"]');
         const home = page.locator('.navbar__menu-link[href="/"]');
         const info = page.locator('.navbar__menu-link[href="/info"]');
-        const photos = page.locator('.navbar__menu-link[href="/photos"]');
+        const store = page.locator(`.navbar__menu-link[href="${STORE_HREF}"]`);
+        const team = page.locator('.navbar__menu-link[href="/team"]');
 
         await page.locator('.navbar__toggle').click();
 
@@ -120,7 +119,15 @@ test.describe('navbar mobile menu', () => {
 
         await page.keyboard.press('Tab');
 
-        await expect(photos).toBeFocused();
+        await expect(team).toBeFocused();
+
+        await page.keyboard.press('Tab');
+
+        await expect(gallery).toBeFocused();
+
+        await page.keyboard.press('Tab');
+
+        await expect(store).toBeFocused();
 
         await page.keyboard.press('Tab');
 
@@ -128,7 +135,7 @@ test.describe('navbar mobile menu', () => {
 
         await page.keyboard.press('Shift+Tab');
 
-        await expect(photos).toBeFocused();
+        await expect(store).toBeFocused();
     });
 
     test('closes the drawer on escape and restores focus to the toggle', async ({ page }) => {
@@ -182,9 +189,9 @@ test.describe('navbar mobile menu', () => {
 
         await expect(page.locator('.navbar__menu-close')).toBeFocused();
 
-        await page.locator('.navbar__menu-link[href="/photos"]').click();
+        await page.locator('.navbar__menu-link[href="/team"]').click();
 
-        await expect(page).toHaveURL('/photos');
+        await expect(page).toHaveURL('/team');
         await expect(menu).toBeHidden();
         await expect(menu).not.toHaveAttribute('data-open');
         await expect(menu).not.toHaveAttribute('role');

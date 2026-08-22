@@ -13,7 +13,7 @@ const HIGHLIGHTS = [
 
 const INDICES = ['/ 01', '/ 02', '/ 03', '/ 04', '/ 05'] as const;
 
-function escapeText(value: string): string {
+function escapeText(value: string) {
     return value
         .replace(/&/g, '&amp;')
         .replace(/"/g, '&quot;')

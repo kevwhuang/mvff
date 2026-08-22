@@ -4,19 +4,21 @@ import { Image } from 'astro:assets';
 import SectionHeader from '@components/SectionHeader.astro';
 import amiri from '@images/team/amiri.webp';
 import anna from '@images/team/anna.webp';
+import ashleigh from '@images/team/ashleigh.webp';
 import dan from '@images/team/dan.webp';
 import greta from '@images/team/greta.webp';
+import jasmine from '@images/team/jasmine.webp';
 import jyme from '@images/team/jyme.webp';
 import may from '@images/team/may.webp';
 import rocky from '@images/team/rocky.webp';
 
-const EAGER_CARD_COUNT = 5;
+const EAGER_CARDS = 5;
 
 const TEAM = [
     { image: anna, name: 'Anna', role: 'Founder & Executive Producer' },
-    { name: 'Jasmine', role: 'Executive Coordinator' },
+    { image: jasmine, name: 'Jasmine', role: 'Administration Coordinator' },
     { image: amiri, name: 'Amiri', role: 'PR & Outreach Director' },
-    { name: 'Ashleigh', role: 'Social Media Marketing Director' },
+    { image: ashleigh, name: 'Ashleigh', role: 'Social Media Marketing Director' },
     { image: dan, name: 'Dan', role: 'Operations & Production Manager' },
     { image: greta, name: 'Greta', role: 'Content Strategist' },
     { image: jyme, name: 'Jyme', role: 'Film Programming Director' },
@@ -49,7 +51,7 @@ const TEAM = [
                                             class="team__image block object-cover h-full w-full"
                                             alt=""
                                             densities={[1, 2]}
-                                            loading={index < EAGER_CARD_COUNT ? 'eager' : 'lazy'}
+                                            loading={index < EAGER_CARDS ? 'eager' : 'lazy'}
                                             src={member.image}
                                             width={400}
                                         />

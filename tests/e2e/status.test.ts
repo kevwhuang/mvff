@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 const CONTENT_SECURITY_POLICY = 'base-uri \'none\'; connect-src \'self\' https://*.supabase.co; default-src \'self\'; font-src \'self\' data:; form-action \'none\'; frame-ancestors \'self\'; img-src \'self\' data:; script-src \'self\' \'unsafe-inline\' data:; style-src \'self\' \'unsafe-inline\'';
-const PAGE_PATHS = ['/', '/info', '/photos'] as const;
+const PAGE_PATHS = ['/', '/info', '/team', '/gallery'] as const;
 
 test.describe('pages', () => {
     test('serves the core pages as html', async ({ request }) => {

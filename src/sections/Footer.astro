@@ -25,10 +25,8 @@ import { getExternalLinkProps } from '@lib/utils';
                         <li>
                             <a
                                 class="footer__link block py-3 font-display no-underline text-cream select-none"
-                                aria-disabled={route.isDisabled ? 'true' : undefined}
                                 href={route.href}
-                                tabindex={route.isDisabled ? '-1' : undefined}
-                                {...(route.isDisabled ? {} : getExternalLinkProps(route.href))}
+                                {...getExternalLinkProps(route.href)}
                             >
                                 {route.label}
                             </a>
@@ -189,10 +187,13 @@ import { getExternalLinkProps } from '@lib/utils';
 </style>
 
 <script>
-    import { initDisabledLinks, registerPageScript } from '@lib/utils';
+    import { registerPageScript } from '@lib/utils';
 
     function initFooter(signal: AbortSignal) {
-        initDisabledLinks('.footer__link[aria-disabled="true"]', signal);
+        document.querySelectorAll('.footer__link[aria-disabled="true"]').forEach((link) => {
+            link.addEventListener('auxclick', event => event.preventDefault(), { signal });
+            link.addEventListener('click', event => event.preventDefault(), { signal });
+        });
     }
 
     registerPageScript(initFooter);

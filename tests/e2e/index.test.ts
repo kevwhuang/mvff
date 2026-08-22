@@ -106,7 +106,7 @@ test.describe('index page', () => {
         const website = data['@graph'].find(node => node['@type'] === 'WebSite');
 
         expect(data['@context']).toBe('https://schema.org');
-        expect(itemList?.itemListElement).toHaveLength(ROUTES.filter(route => !route.isDisabled).length);
+        expect(itemList?.itemListElement).toHaveLength(ROUTES.length);
         expect(website?.name).toBe('Austin Music Video Film Festival');
         expect(website?.url).toBe('https://atxmusicvideofilmfestival.com/');
     });

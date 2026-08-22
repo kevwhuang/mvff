@@ -3,13 +3,13 @@ import { beforeAll, describe, expect, test } from 'vitest';
 
 import Team from '../../src/sections/Team.astro';
 
-const EAGER_IMAGE_COUNT = 3;
+const EAGER_IMAGES = 5;
 
 const TEAM = [
     { image: 'anna.webp', loading: 'eager', name: 'Anna', role: 'Founder &amp; Executive Producer' },
-    { monogram: 'J', name: 'Jasmine', role: 'Executive Coordinator' },
+    { image: 'jasmine.webp', loading: 'eager', name: 'Jasmine', role: 'Administration Coordinator' },
     { image: 'amiri.webp', loading: 'eager', name: 'Amiri', role: 'PR &amp; Outreach Director' },
-    { monogram: 'A', name: 'Ashleigh', role: 'Social Media Marketing Director' },
+    { image: 'ashleigh.webp', loading: 'eager', name: 'Ashleigh', role: 'Social Media Marketing Director' },
     { image: 'dan.webp', loading: 'eager', name: 'Dan', role: 'Operations &amp; Production Manager' },
     { image: 'greta.webp', loading: 'lazy', name: 'Greta', role: 'Content Strategist' },
     { image: 'jyme.webp', loading: 'lazy', name: 'Jyme', role: 'Film Programming Director' },
@@ -21,7 +21,7 @@ const TEAM = [
 const imageMembers = TEAM.filter(member => 'image' in member);
 const monogramMembers = TEAM.filter(member => 'monogram' in member);
 
-function escapeRegExp(value: string): string {
+function escapeRegExp(value: string) {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
@@ -60,19 +60,19 @@ describe('Team', () => {
         expect(positions).toEqual([...positions].sort((positionA, positionB) => positionA - positionB));
     });
 
-    test('renders a decorative portrait for the seven members with photos, eager only within the first five cards', () => {
+    test('renders a decorative portrait for the nine members with photos, eager only within the first five cards', () => {
         expect(html.split('class="team__image').length - 1).toBe(imageMembers.length);
 
         for (const member of imageMembers) {
             expect(html).toMatch(new RegExp(`<img[^>]*${escapeRegExp(member.image)}[^>]*alt loading="${member.loading}"`));
         }
 
-        expect(html.split('loading="eager"').length - 1).toBe(EAGER_IMAGE_COUNT);
-        expect(html.split('loading="lazy"').length - 1).toBe(imageMembers.length - EAGER_IMAGE_COUNT);
+        expect(html.split('loading="eager"').length - 1).toBe(EAGER_IMAGES);
+        expect(html.split('loading="lazy"').length - 1).toBe(imageMembers.length - EAGER_IMAGES);
         expect(html.split(' 2x"').length - 1).toBe(imageMembers.length);
     });
 
-    test('renders an aria-hidden monogram initial for the three members without photos', () => {
+    test('renders an aria-hidden monogram initial for the one member without a photo', () => {
         expect(html.split('class="team__monogram').length - 1).toBe(monogramMembers.length);
 
         for (const member of monogramMembers) {

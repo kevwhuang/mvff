@@ -7,11 +7,11 @@ const CHANNELS = [
     { href: 'https://calendly.com/madewellanna99/30min', isExternal: true, label: 'Schedule Call', value: 'calendly.com/madewellanna99' },
 ] as const;
 
-const FAQ_COUNT = 8;
+const FAQ_ENTRIES = 8;
 const FAQ_FIRST_ANSWER = 'A one-night music video festival at Cabana Club in East Austin: live sets, three screening blocks, filmmaker Q&A panels, an awards ceremony, and an after party.';
 const FAQ_FIRST_QUESTION = 'What is the Austin Music Video Film Festival?';
 const FAQ_SECOND_ANSWER = 'Yes. 21+, doors to close.';
-const SCHEDULE_COUNT = 16;
+const SCHEDULE_ROWS = 16;
 const VENUE_FEATURES = ['Big screen', 'Live stage', 'Outdoor pool', 'Full bar', '21+ only', 'ADA access'] as const;
 
 test.beforeEach(async ({ page }) => {
@@ -40,7 +40,7 @@ test.describe('info page', () => {
     test('renders sixteen program rows opening at 7:00 PM and closing with lights up', async ({ page }) => {
         const rows = page.locator('.info__schedule-row');
 
-        await expect(rows).toHaveCount(SCHEDULE_COUNT);
+        await expect(rows).toHaveCount(SCHEDULE_ROWS);
 
         await expect(rows.first().locator('.info__schedule-time')).toHaveText('7:00 PM');
         await expect(rows.first().locator('.info__schedule-time')).toHaveAttribute('datetime', '2026-07-18T19:00-05:00');
@@ -52,9 +52,9 @@ test.describe('info page', () => {
     });
 
     test('renders eight faq entries closed on load', async ({ page }) => {
-        await expect(page.locator('.info__faq-item')).toHaveCount(FAQ_COUNT);
+        await expect(page.locator('.info__faq-item')).toHaveCount(FAQ_ENTRIES);
         await expect(page.locator('.info__faq-item[open]')).toHaveCount(0);
-        await expect(page.locator('.info__subheading-badge')).toHaveText(`${FAQ_COUNT} Entries`);
+        await expect(page.locator('.info__subheading-badge')).toHaveText(`${FAQ_ENTRIES} Entries`);
         await expect(page.locator('.info__faq-text').first()).toHaveText(FAQ_FIRST_QUESTION);
         await expect(page.locator('.info__faq-answer').first()).toBeHidden();
     });

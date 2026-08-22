@@ -4,7 +4,7 @@ import { readdirSync } from 'node:fs';
 
 import { getFigures } from '../../src/lib/store';
 
-const FIGURE_COUNT = 22;
+const FIGURES = 22;
 const FIGURE_KEYS = ['alt', 'id', 'label'] as const;
 
 const contentRoot = join(process.cwd(), 'src/content');
@@ -19,7 +19,7 @@ describe('getFigures', () => {
     test('returns all twenty-two gallery entries with filename-stem ids', async () => {
         const figures = await getFigures();
 
-        expect(figures).toHaveLength(FIGURE_COUNT);
+        expect(figures).toHaveLength(FIGURES);
         expect(figures.map(figure => figure.id).sort()).toEqual(listIds('gallery').sort());
     });
 
