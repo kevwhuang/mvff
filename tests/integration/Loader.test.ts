@@ -14,7 +14,7 @@ describe('Loader', () => {
     });
 
     test('renders the overlay as a status region that starts closed and hidden from assistive tech', () => {
-        expect(html).toContain('<div class="loader fixed flex inset-0 items-center justify-center z-300 bg-night" aria-hidden="true" aria-label="Loading" role="status"');
+        expect(html).toContain('<div class="loader fixed flex inset-0 items-center justify-center z-300 bg-night" aria-hidden="true" aria-label="Loading." role="status"');
         expect(html).not.toMatch(/<div class="loader [^>]*data-open/);
     });
 

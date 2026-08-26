@@ -21,18 +21,9 @@
     --color-night-90: #0a0a0fe6;
     --color-slate: #1a1a25;
     --color-teal: #00d1ef;
-    --font-display:
-        'Bebas Neue',
-        'Helvetica Neue',
-        sans-serif;
-    --font-mono:
-        'JetBrains Mono',
-        ui-monospace,
-        monospace;
-    --font-serif:
-        'Instrument Serif',
-        Georgia,
-        serif;
+    --font-display: var(--font-bebas-neue);
+    --font-mono: var(--font-jetbrains-mono);
+    --font-serif: var(--font-instrument-serif);
 }
 
 :root {

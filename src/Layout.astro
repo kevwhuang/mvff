@@ -1,10 +1,6 @@
 ---
-import '@fontsource/bebas-neue/400.css';
-import '@fontsource/instrument-serif/400-italic.css';
-import '@fontsource/instrument-serif/400.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/600.css';
 import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
 
 import '@/global.css';
 import '@/styles.css';
@@ -88,6 +84,9 @@ const structuredData = {
         <meta content={ogImageUrl} name="twitter:image" />
         <meta content={title} name="twitter:title" />
         <script is:inline set:html={JSON.stringify(structuredData)} type="application/ld+json" />
+        <Font cssVariable="--font-bebas-neue" preload />
+        <Font cssVariable="--font-instrument-serif" preload />
+        <Font cssVariable="--font-jetbrains-mono" preload />
         <ClientRouter />
     </head>
     <body class="flex flex-col overflow-x-clip relative isolate min-h-svh antialiased font-mono bg-night text-cream">
