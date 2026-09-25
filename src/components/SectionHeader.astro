@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { headingId, level: Heading = 'h1', marker } = Astro.props;
+const title = (await Astro.slots.render('default')).trim();
 ---
 
 <header
@@ -16,9 +17,8 @@ const { headingId, level: Heading = 'h1', marker } = Astro.props;
     <Heading
         id={headingId}
         class="section-header__title uppercase"
-    >
-        <slot />
-    </Heading>
+        set:html={title}
+    />
 </header>
 
 <style>
